@@ -1,0 +1,165 @@
+﻿@model SymViewModel.Common.FiscalYearVM
+
+@using (Html.BeginForm("Create", "FiscalYear", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmFiscalYear" }))
+{
+    @Html.ValidationSummary(true)
+
+
+    <div class="headrow">
+        <button type="button" title="Save Data" onclick="pageSubmit('frmFiscalYear')" class="sym-btn-save">&nbsp;Save</button>
+        <label class="pull-right">FiscalYear > Create</label>
+    </div>
+    
+    
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Fiscal Year</p>
+        </div>
+        @Html.HiddenFor(model => model.BranchId)
+        @Html.HiddenFor(model => model.YearStart)
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Year)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Year, new { @disabled = "disabled", @class = "form-control" })
+                    @Html.HiddenFor(model => model.Year)
+                    @Html.ValidationMessageFor(model => model.Year)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.YearStart)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.YearStart, new { @disabled = "disabled", @class = "customDatePicker required form-control" })
+                    @Html.HiddenFor(model => model.YearStart)
+                    @Html.ValidationMessageFor(model => model.YearStart)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.YearEnd)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.YearEnd, new { @disabled = "disabled", @class = "customDatePicker required form-control" })
+                    @Html.HiddenFor(model => model.YearEnd)
+                    @Html.ValidationMessageFor(model => model.YearEnd)
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.YearLock)
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBoxFor(model => model.YearLock, new { @class = " required form-control" })
+                    @Html.ValidationMessageFor(model => model.YearLock)
+                </div>
+            </div>
+            <div class="col-md-5">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div id="fiscalYearDRows">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FiscalYearDetailVM.FirstOrDefault().PeriodName)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FiscalYearDetailVM.FirstOrDefault().PeriodStart)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FiscalYearDetailVM.FirstOrDefault().PeriodEnd)
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FiscalYearDetailVM.FirstOrDefault().PeriodLock)
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FiscalYearDetailVM.FirstOrDefault().Remarks)
+                    </div>
+                </div>
+            </div>
+            @if (Model.FiscalYearDetailVM != null)
+            {
+                foreach (var item in Model.FiscalYearDetailVM)
+                {
+                    Html.RenderPartial("_period", item);
+                }
+            }
+        </div>
+    </div>
+    
+    <div class="headrow">
+        <button type="button" title="Save Data" onclick="pageSubmit('frmFiscalYear')" class="sym-btn-save">&nbsp;Save</button>
+    </div>
+}
+<script>
+    $(function () {
+        InitDatePickers();
+        valiDation("frmFiscalYear");
+        if ('@ViewBag.YearStart' != '') {
+            $("#YearStart").attr('disabled', true);
+        }
+    });
+    function SetFiscalyear(sender) {
+        var startDate = new Date(ParseDate($("#YearStart").val()));
+        var day = 01;
+        var mon = startDate.getMonth();
+        var yr = startDate.getFullYear();
+        var stDate = FormatDate(new Date(yr, mon, day));
+        $("#YearStart").val(stDate);
+        $("#Year").val(yr);
+        var months = ["January", "February", "March", "April", "May", "June",
+               "July", "August", "September", "October", "November", "December"];
+
+        alert(12);
+
+        var url = "/HRM/Loan/MonthCalculation?date=" + $("#YearStart").val() + "&number=12";
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (data) {
+                $.each(data, function (i, item) {
+                    var month = mon + i >= 12 ? mon + i - 12 : mon + i;
+                    $($(".countPeriods")[i]).find('.periodName').val(months[month] + "-" + yr);
+                    $($(".countPeriods")[i]).find('.Start').val(item.StartDate);
+                    $($(".countPeriods")[i]).find('.End').val(item.EndDate);
+                    $("#YearEnd").val(item.EndDate);
+                });
+            }
+        });
+    }
+    $("#YearLock").on('click', function () {
+        if ($(this).is(':checked')) {
+            $(".PeriodLock").attr('checked', true);
+        }
+        else {
+            $(".PeriodLock").attr('checked', false);
+        }
+    });
+    $(".PeriodLock").on('click', function () {
+        if ($('.PeriodLock:checkbox:not(:checked)').length > 0) {
+            $("#YearLock").attr('checked', false);
+        }
+        else {
+            $("#YearLock").attr('checked', true);
+        }
+    });
+</script>

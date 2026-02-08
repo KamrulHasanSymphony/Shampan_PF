@@ -1,0 +1,71 @@
+﻿@model SymViewModel.Enum.EnumBloodGroupVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Edit";
+    ViewBag.Location = "Edit"; 
+}
+
+@using (Html.BeginForm("Edit", "EnumBloodGroup", FormMethod.Post, FormMethod.Post, new { @Id = "frmBlood" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="EnumBloodGroup">
+                @Html.HiddenFor(model => model.Id)
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Name)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.Name, new { @placeholder = "Blood Group Name", @class =" required form-control" })
+            </div>
+        </div>
+            <div class="row">
+                    <label class="col-sm-3">
+                         @Html.LabelFor(model => model.IsActive)
+                    </label>
+                <div class="col-sm-1">
+                @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+            </div> 
+        </div>
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Remarks)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks",@rows="1", @class =" form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+            </div>
+        </div>
+              <div class="row">
+            <label class="col-sm-3">
+			<button type="button" title="Edit Data" onclick="Edit();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+              <button type="button" title="Save Data" onclick="pageSubmit('frmBlood');" class="Save sym-btn-save">&nbsp;Save</button>
+            </label>
+            <label class="col-sm-4">
+				 <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+            </label>
+        </div>
+        </div>
+    </div>
+}
+ 
+<script>
+    $(function () {
+        Edit();
+        valiDation("frmBlood");
+       @* $('.ac').autocomplete({ source: '@Url.Action("BloodGroup", "Autocomplete", new { area = "Config" })', minLength: 2 });*@
+    });
+    function Edit() {
+        fnReadOnly("EnumBloodGroup");
+        if ($(".EnumBloodGroup").hasClass("readOnly")) {
+            $(".Save").hide();
+            $(".Edit").show();
+        }
+        else {
+            $(".Save").show();
+            $(".Edit").hide();
+        }
+    }
+
+</script>

@@ -1,0 +1,68 @@
+﻿@model IEnumerable<SymViewModel.Common.BranchVM>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+    table.custom-table {
+        width: 60%; /* Adjust table width */
+        border-collapse: collapse;
+        margin: 20px 0;
+        font-size: 14px;
+        font-family: Arial, sans-serif;
+
+    }
+
+        table.custom-table th,
+        table.custom-table td {
+            border: 1px solid #ddd; /* Thin border */
+            padding: 8px; /* Space inside cell */
+            text-align: left;
+        }
+
+        table.custom-table th {
+            background-color: #4CAF50; /* Green header */
+            color: white;
+        }
+
+        table.custom-table tr:nth-child(even) {
+            background-color: #f9f9f9; /* Zebra effect */
+        }
+
+        table.custom-table tr:hover {
+            background-color: #f1f1f1; /* Hover effect */
+        }
+
+        table.custom-table a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+            table.custom-table a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+<center>
+   
+    <br /><label style="font-size: large; color: #007bff;">Please Select an Entity</label><br />
+    <table class="custom-table">
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Code)</th>
+            <th>@Html.DisplayNameFor(model => model.Name)</th>          
+            <th>@Html.DisplayNameFor(model => model.Mobile)</th>
+            <th>Action</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => item.Code)</td>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>                
+                <td>@Html.DisplayFor(modelItem => item.Mobile)</td>
+                <td>@Html.ActionLink("Select", "Select", new { id = item.Id }, new { @class = "sym-btn-post-row" })</td>
+            </tr>
+        }
+    </table>
+</center>

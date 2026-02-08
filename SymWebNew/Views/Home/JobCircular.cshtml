@@ -1,0 +1,78 @@
+﻿@{
+    ViewBag.Title = "JobCircular";
+}
+<div class="content">
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Job Circular List</p>
+    </div>
+    <p></p>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                      <tr>
+                            <th class="center">
+                                <input type="checkbox" class="chkAll" />Select All</th>
+                            <th>JobTitle</th>
+                            <th>Designation Name</th>
+                            <th>Expriance</th>
+                            <th>Deadline</th>
+                            <th>Description</th>
+                        </tr>
+                      
+                        </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+<script>
+    $(document).ready(function () {
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Home/_JobCircularindex",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "30%",
+                                "sClass":"center",
+                                "fnRender": function (oObj) {
+                                    return '<h3>Job Title :' + oObj.aData[0] + '</h3> ';
+                                
+                            }
+                                }
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "70%",
+                                "sClass":"center",
+                                "fnRender": function (oObj) {
+                                    return '<h3>Job Title :' + oObj.aData[0] + '</h3> <h5>Position :' + oObj.aData[0] + '</h5> <p>Expriance : ' + oObj.aData[0] + '</p> <p> Description :' + oObj.aData[0] + '</p> ';
+                                +' <p> <a title="Click on for Delete" style="text-decoration:none;"  data-url="/Home/Pblich" onclick="deletedData(this, myDataTable,' + oObj.aData[0] + ');"  class="sym-btn-remove-row"></a> </p>'
+                            }
+                                }
+                            
+                            //, { "sName": "JobTitle", "sWidth": "30%" }
+                            //, { "sName": "DesignationName", "sWidth": "15%" }
+                            //, { "sName": "Expriance", "sWidth": "10%" }
+                            //, { "sName": "Deadline", "sWidth": "10%" }
+                            //, { "sName": "Description", "sWidth": "30%" }
+                            //, { "sName": "Active", "sWidth": "10%" }
+            ]
+        });
+ 
+        SelectAllForDelete();
+    });
+    </script>

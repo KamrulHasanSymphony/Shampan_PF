@@ -1,0 +1,116 @@
+﻿    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Config/EnumDivision/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "Id",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "12%",
+                                    "sClass": "center",
+                                    "fnRender": function (oObj) {
+                                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;"   href=\"/Config/EnumDivision/Edit/' + oObj.aData[0] + '\" id="lnkEdit1"   class="lnkEdit sym-btn-edit-row"></a>' +
+                                        '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Config/EnumDivision/EnumDivisionDelete" onclick="deletedData(this, myDataTable,' + oObj.aData[0] + ');"  class="sym-btn-remove-row"></a>';
+                                    }
+                                }
+                                , { "sName": "Name", "sWidth": "40%" }
+                                , { "sName": "Country_E", "sWidth": "30%" }
+                                , { "sName": "IsActive", "sWidth": "20%" }
+                                //Name
+                                //IsActive
+                                //Country_E
+                ]
+            });
+            oTable.columnFilter({
+                sPlaceHolder: "head:after",
+                aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "select", values: ["Active", "Inactive"] }
+                           //, { type: "date-range" }
+                ]
+            });
+        });
+    </script>
+<div class="headrow">
+        <button type="button" title="Add New Division" data-url="/Config/EnumDivision/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Division" data-url="/Config/EnumDivision/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+        <label class="pull-right"> Division</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Division List</p>
+    </div>
+    <p></p>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Active/Inactive</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Name</th>
+                            <th>Country</th>
+                            <th>Active/Inactive</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="headrow">
+        <button type="button" title="Add New Division" data-url="/Config/EnumDivision/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Division" data-url="/Config/EnumDivision/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+</div>
+@*<script>
+    $(document).ready(function () {
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Config/EnumDivision/_index",
+            "bProcessing": true,
+            "aoColumns": [
+                            {
+                                "sName": "Name",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[1].split('~')[1] + '">'
+                                    ;
+                                }
+                            },
+                            {
+                                "sName": "Name",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "fnRender": function (oObj) {
+                                    return '<a id="lnkEdit1"  class="lnkEdit innerListLink" href=\"/Config/EnumDivision/Edit/' + oObj.aData[1].split('~')[1] + '\">' + oObj.aData[1].split('~')[0] + '</a>'
+                                    ;
+                                }
+                            },
+                            { "sName": "Country" },
+                            { "sName": "Remarks" },
+                            { "sName": "Active" }
+            ]
+        });
+        SelectAllForDelete();
+    });
+    </script>*@

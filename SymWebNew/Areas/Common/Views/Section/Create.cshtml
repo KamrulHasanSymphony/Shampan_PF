@@ -1,0 +1,81 @@
+﻿@model SymViewModel.Common.SectionVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create"; 
+}
+
+@using (Html.BeginForm("Create", "Section", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmSection" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="EnumSection">
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Code)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.Code, new {@placeholder = "Section Code", @class ="required form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Name)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.Name, new {@placeholder = "Section Name", @class ="required form-control" })
+
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.OrderNo)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.OrderNo, new { @placeholder = "Order No", @class = " form-control" })
+
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Remarks)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextAreaFor(model => model.Remarks, new {@placeholder = "Remarks", @class ="form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+            
+ <div class="row">
+            <label class="col-sm-3">
+              
+				  <button type="button" title="Save Data" onclick="pageSubmit('frmSection');" class="sym-btn-save">&nbsp;Save</button>
+            </label>
+            <label class="col-sm-4">
+			 <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+               
+            </label>
+        </div>
+		
+
+           @* <div class="row">
+                <div class="col-sm-3">
+                    <input type="button" onclick="pageSubmit('frmSection');" value="Add" class=" Save btn btn-primary" />
+                </div>
+
+                <div class="col-sm-4">
+                    <input type="button" value="Cancel" class="btncancel btn btn-primary" />
+                </div>
+            </div>*@
+        </div>
+    </div>
+}
+    <script>
+        $(function () {
+            valiDation("frmSection");
+        });
+
+    </script>

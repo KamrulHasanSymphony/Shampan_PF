@@ -1,0 +1,96 @@
+﻿@model SymViewModel.HRM.DesignationVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Edit";
+    ViewBag.Location = "Edit"; 
+}
+
+@using (Html.BeginForm("Edit", "Designation", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmDesignation" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="Designation">
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.BranchId)
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Code)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.Code, new { @placeholder = "Designation Code", @class = " required form-control" })
+              
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Name)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.Name, new { @placeholder = "Designation Name", @class = " required form-control" })
+              
+            </div>
+        </div>
+            
+              <div class="row">
+                    <label class="col-sm-3">
+                         @Html.LabelFor(model => model.IsActive)
+                    </label>
+                <div class="col-sm-1">
+                @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+            </div> 
+        </div>
+
+
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Remarks)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks",@rows="1", @class = " form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+            </div>
+        </div>
+            <div class="row">
+            <label class="col-sm-3">
+			<button type="button" title="Edit Data" onclick="Edit();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+              <button type="button" title="Save Data" onclick="pageSubmit('frmDesignation');" class="Save sym-btn-save">&nbsp;Save</button>
+            </label>
+            <label class="col-sm-4">
+				 <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+            </label>
+        </div>
+
+
+        @*<div class="row">
+                <div class="col-sm-3">
+                    <input type="button" value="Edit" onclick="Edit();" class="Edit btn btn-primary" />
+                    <input type="button" onclick="pageSubmit('frmDesignation');" value="Save" class=" Save btn btn-primary" />
+                </div>
+                <div class="col-sm-4">
+                    <input type="button" value="Cancel" class="btncancel btn btn-primary" />
+                </div>
+            </div>*@
+
+        </div>
+    </div>
+}
+ 
+    <script>
+        $(function () {
+            Edit();
+            valiDation("frmDesignation");
+        });
+        function Edit() {
+            fnReadOnly("Designation");
+            if ($(".Designation").hasClass("readOnly")) {
+                $(".Save").hide();
+                $(".Edit").show();
+            }
+            else {
+                $(".Save").show();
+                $(".Edit").hide();
+            }
+        }
+
+    </script>

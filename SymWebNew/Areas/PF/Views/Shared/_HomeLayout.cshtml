@@ -1,0 +1,496 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>ShampanERP-@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+
+    <script src="~/assets/javascripts/jQuery2.1.4.js"></script>
+    <link href="~/assets/NewFolder1/dataTables/demo_table.css" rel="stylesheet" />
+    <link href="@Url.Content("~/assets/css/demo_table.css")" rel="stylesheet" type="text/css" />
+
+    <link href="@Url.Content("~/assets/css/demo_table_jui.css")" rel="stylesheet" type="text/css" />
+    <link href="~/assets/stylesheets/dataTables.responsive.css" rel="stylesheet" />
+
+    <link href="~/assets/css/menu.css" rel="stylesheet" />
+
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+    <link href="~/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" />
+    <link href="~/assets/css/toastr.css" rel="stylesheet" />
+    <link href="~/assets/stylesheets/common.css" rel="stylesheet" />
+     <link href="~/assets/stylesheets/font-awesome.css" rel="stylesheet" />
+
+    <link href="~/assets/css/jquery.ptTimeSelect.css" rel="stylesheet" />
+    <link href="~/assets/css/SymphonyBtn.css" rel="stylesheet" />
+    <link href="~/assets/css/dataTables.colVis.css" rel="stylesheet" />
+    <link href="~/assets/css/select2.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css")
+    @*   @Scripts.Render("~/bundles/modernizr")*@
+    @*    @{
+        try
+        {
+            SymOrdinary.ShampanIdentity Identit = (SymOrdinary.ShampanIdentity)System.Threading.Thread.CurrentPrincipal.Identity;
+        }
+        catch (Exception)
+        {
+            
+        }
+    }*@
+    <style>
+        .LogoutButton {
+            width: 24px;
+            height: 24px;
+            border-radius: 5px;
+            padding-left: -3px !important;
+        }
+
+        .wth {
+            width: 15%;
+        }
+    </style>
+    <script>
+        $(document).ready(function () {
+            toastr.options.positionClass = 'toast-top-center';
+            var permission = '@Session["permission"]';
+            if (permission == "False") {
+                toastr.error('You Do not have permission to access', 'Permission deny')
+                @{ Session["permission"] = null; };
+            }
+            else {
+            }
+            var result = '@Session["result"]';
+            result = result.split("~");
+            if (result[0] == "Success") {
+                toastr.success(result[1], 'Shampan ERP')
+                   @{ Session["result"] = null; }
+            }
+            else if (result[0] == "Fail") {
+               
+                toastr.error(result[1], 'Shampan ERP')
+                @{ Session["result"] = null; };
+            }
+            else if (result[0] == "Info") {
+                toastr.info(result[1], 'Shampan ERP')
+                @{ Session["result"] = null; };
+            }
+            else if (result[0] == "Warning") {
+                toastr.warning(result[1], 'Shampan ERP')
+                @{ Session["result"] = null; };
+            }
+
+            $(".selectDropdown").select2();
+            $(".selectDropdown").trigger('change');
+            $(".selectDropdown").removeClass('form-control');
+            function goBack() {
+                window.history.back();
+            }
+            var url = "";
+            var width = "400";
+            $(".dialog-alert").dialog({
+                autoOpen: false,
+                resizable: false,
+                //height: 170,
+                title: 'Shampan ERP',
+                width: 350,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    var msg = '@Session["result"]';
+                    msg = msg.split("~");
+                    $(".ui-dialog").addClass('' + msg[0]);
+                    $(".msgg").html("" + msg[1]);
+                },
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                        window.location.reload(true);
+
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                        window.location.reload(true);
+                    }
+                }
+            });
+
+            if ('@Session["result"]' != "") {
+                //  $(".dialog-alert").dialog('open');
+                var msg = '@Session["result"]';
+
+                TempData.Remove("msg");
+                msg = msg.split("~");
+                ShowResult(msg[0], msg[1]);
+            }
+
+            $(".dialog-create").dialog({
+                title: 'Create',
+                autoOpen: false,
+                resizable: false,
+                width: 500,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    $(this).load(url);
+                }
+            });
+
+            $(".dialog-create-big").dialog({
+                title: 'Create',
+                autoOpen: false,
+                resizable: false,
+                width: 700,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    $(this).load(url);
+                }
+            });
+
+
+            $(".dialog-edit").dialog({
+                title: 'Update',
+                autoOpen: false,
+                resizable: false,
+                width: 400,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    $(this).load(url);
+                }
+            });
+            $(".dialog-confirm").dialog({
+                autoOpen: false,
+                resizable: false,
+                title: 'Shampan ERP',
+                height: 170,
+                width: 350,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+
+                },
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                        window.location.href = url;
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $(".dialog-detail").dialog({
+                title: 'View User',
+                autoOpen: false,
+                resizable: false,
+                width: 400,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(this).load(url);
+                },
+                buttons: {
+                    "Close": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+            $(".dialog-report").dialog({
+                title: 'Report',
+                autoOpen: false,
+                resizable: false,
+                width: 400,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    $(this).load(url);
+                }
+            });
+            $(".dialog-Report-new").dialog({
+                title: 'Report',
+                autoOpen: false,
+                resizable: false,
+                width: 700,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    $(this).load(url);
+                }
+            });
+
+            $(".lnkCreate").live("click", function (e) {
+                url = $(this).attr('href');
+                $(".dialog-create").dialog('open');
+
+                return false;
+            });
+            $(".btnCreate").live("click", function (e) {
+                url = $(this).attr('data-url');
+                $(".dialog-create").dialog('open');
+
+                return false;
+            });
+
+            $(".btnCreatebig").live("click", function (e) {
+               
+                url = $(this).attr('data-url');
+                $(".dialog-create-big").dialog('open');
+
+                return false;
+            });
+            $(".lnkEdit").live("click", function (e) {
+                url = $(this).attr('href');
+                if (!url) {
+                    url = $(this).attr('data-url');
+                }
+                $(".dialog-edit").dialog('open');
+
+                return false;
+            });
+
+
+            $(".linkReport").live("click", function (e) {
+                url = $(this).attr('href');
+                if (!url) {
+                    url = $(this).attr('data-url');
+                }
+
+                console.log(url)
+                $(".dialog-Report-new").dialog('open');
+
+                return false;
+            });
+
+
+            $(".lnkDelete").live("click", function (e) {
+                url = $(this).attr('href');
+                $(".dialog-confirm").dialog('open');
+
+                return false;
+            });
+
+            $(".lnkDetail").live("click", function (e) {
+                url = $(this).attr('href');
+                $(".dialog-detail").dialog('open');
+
+                return false;
+            });
+            $(".btncancel").live("click", function (e) {
+                $(".dialog-edit").dialog("close");
+                $(".dialog-create").dialog("close");
+                $(".dialog-create-big").dialog("close");
+                $(".dialog-Report-new").dialog("close");
+                return false;
+            });
+
+            $(".btnReport").live("click", function (e) {
+                url = $(this).attr('data-url');
+                $(".dialog-report").dialog('open');
+                return false;
+            });
+            $(".loading").fadeOut(200).hide("slow")
+        });
+
+        $(document).on('keydown', 'input.NumberCheck, input[type="number"]', function (e) {
+            if (e.key === "-" || e.keyCode === 189 || e.keyCode === 109) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $(document).on('input', 'input.NumberCheck, input[type="number"]', function () {
+
+            if (!this.value) return;
+            if (this.value.indexOf('-') !== -1) {
+                this.value = this.value.replace(/-/g, '');
+            }
+        });
+
+        function formatNumberWithCommas(value) {
+            //if (value == null || value === '') return '';
+            value = parseFloat(value).toFixed(2);
+            var parts = value.split('.');
+            parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return parts[0] + '.' + parts[1];
+        }
+    </script>
+</head>
+<body onload="window.scroll(0, 150)">
+    @{
+        string mySettingValue = System.Configuration.ConfigurationManager.AppSettings["Logo"];
+    }
+    <div class="loading">
+        <img src="~/Images/squares.gif" />
+    </div>
+    <div id="hrcss1">
+        <div class="content title">
+            <div class="row">
+                <div class="col-sm-6 ">
+                    <img src="~/Images/@mySettingValue" width="120" />
+                </div>
+                @*<div class="col-sm-6 log-top">
+                    <img style="float: right;" src="~/Images/BUYERCOMPANYLOGO.png" />
+                </div>*@
+            </div>
+        </div>
+        <!--/.content-->
+        @Html.Partial("_navbar")
+        @Html.Partial("_leftnav")
+        @Html.Partial("_rightNav")
+        <!--/.content-->
+        <div class="contentBody" style="min-height: 400px">
+
+            @RenderBody()
+            @Scripts.Render("~/bundles/jquery")
+            @RenderSection("scripts", required: false)
+        </div>
+        <style>
+            .back-to-top {
+                cursor: pointer;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                display: none;
+            }
+        </style>
+
+        <a id="back-to-top" href="#" class=" back-to-top" role="button" title="Click to return on the top page" data-toggle="tooltip" data-placement="left">
+            <img src="~/Images/gotop.png" style="width: 40px; height: 40px;" /></a>
+        <div>
+            <div class="dialog-alert" style="display: none">
+                <div class="msgg">jj</div>
+            </div>
+            <div class="dialog-confirm" style="display: none">
+                <p>
+                    <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+                    Are you sure to delete?
+                </p>
+            </div>
+            <div class="dialog-create" style="display: none">
+            </div>
+            <div class="dialog-create-big" style="display: none">
+            </div>
+            <div class="dialog-edit" style="display: none">
+            </div>
+            <div class="dialog-Report-new" style="display: none">
+            </div>
+            <div class="dialog-detail" style="display: none">
+            </div>
+        </div>
+        <br />
+        <div class="clearfix"></div>
+        <div class="content black">
+            <p><i class="fa fa-asterisk"></i>Powered By <a href="http://symphonysoftt.com/" target="_blank">Symphony</a>.</p>
+        </div>
+    </div>
+    <script src="~/assets/javascripts/toastr.js"></script>
+    <script src="~/assets/javascripts/custom.js"></script>
+    <script src="~/assets/javascripts/jquery.min.js"></script>
+    <script src="~/assets/javascripts/jquery.validate.js"></script>
+    <script src="~/assets/javascripts/jquery.validate.min.js"></script>
+    <script src="~/assets/javascripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/assets/javascripts/jquery-1.8.2.min.js"></script>
+    <script src="~/assets/javascripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/assets/javascripts/default.js"></script>
+
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/assets/NewFolder1/jquery.dataTables.min.js"></script>
+    <script src="~/assets/javascripts/jquery.ptTimeSelect.js"></script>
+    <script src="~/assets/javascripts/jquery.dataTables.columnFilter.js"></script>
+    <script src="~/assets/js/dataTables.colVis.js"></script>
+    <script src="~/assets/javascripts/select2.js"></script>
+    <script src="~/assets/plugins/chartjs/moment.js"></script>
+    <script src="~/assets/javascripts/chart.min.js"></script>
+</body>
+</html>

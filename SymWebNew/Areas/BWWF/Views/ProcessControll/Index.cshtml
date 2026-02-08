@@ -1,0 +1,79 @@
+﻿<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/BWWF/ProcessControll/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <a style="text-decoration:none;" title="Click on for Edit" class=" sym-btn-edit-row"   href=\"/BWWF/ProcessControll/Edit/' + oObj.aData[0] + '\"></a>' //+
+                                }
+                            }
+                            , { "sName": "Year", "sWidth": "25%" }
+                            , { "sName": "YearStart", "sWidth": "20%" }
+                            , { "sName": "YearEnd", "sWidth": "20%" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+            ]
+        });
+    });
+</script>
+<div class="headrow">
+    <label class="pull-right">FiscalYear</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Fiscal Year</p>
+    </div>
+    <div class="row">
+    </div>
+    <p></p>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th class="center">&nbsp;</th>
+                            <th>Year</th>
+                            <th>Year Start</th>
+                            <th>Year End</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Year</th>
+                            <th>Year Start</th>
+                            <th>Year End</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="headrow">
+    <div class="pull-left">
+        <button type="button" title="Add New FiscalYear" data-url="/Common/FiscalYear/Create" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    </div>
+</div>

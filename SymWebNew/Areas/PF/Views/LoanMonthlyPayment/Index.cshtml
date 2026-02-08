@@ -1,0 +1,139 @@
+﻿<div class="headrow">
+    <button type="button" title="Add New PF Bank Deposit" data-url="/@ViewBag.TransType/LoanMonthlyPayment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    <label class="pull-right">Lone RePayment </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Lone RePayment</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                
+                <th class="center">Action</th>
+                <th class="center">Code</th>
+                <th class="center">Date</th>
+                <th class="center">Amount</th>
+                <th class="center">Interest Amount</th>
+                <th class="center">Reference No</th>
+                <th class="center">Post Status</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New PF Bank Deposit" data-url="/@ViewBag.TransType/LoanMonthlyPayment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/LoanMonthlyPayment/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "16%",
+                                "sClass": "center",
+                                "bVisible": true,
+                                "fnRender": function (oObj) {
+                                    if (oObj.aData[6] == "Posted") {
+
+                                        return ' '
+                                       + '&nbsp; <a id=""  title="Click on for Edit"  style="text-decoration:none;"  href=\"/@ViewBag.TransType/LoanMonthlyPayment/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>'
+                                       + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/LoanMonthlyPayment/Post"  onclick=btnPostNoSplit(this);  data-Id="' + oObj.aData[0] + "~" + oObj.aData[6] + '\" class="sym-btn-post-row"></a>'
+                                       //+ '&nbsp; <a id=""  title="Click to view Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/LoanMonthlyPayment/GLTransactionReport?id=' + oObj.aData[0] + '\" class="  sym-btn-report-row"></a>'
+                                       + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/LoanMonthlyPayment/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
+                                       + '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=1' + '&TransactionForm=MonthlyLoanRepayment' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                    }
+                                    else
+                                    {
+
+                                    return ' '
+                                        + '&nbsp; <a id=""  title="Click on for Edit"  style="text-decoration:none;"  href=\"/@ViewBag.TransType/LoanMonthlyPayment/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>'
+                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/LoanMonthlyPayment/Post"  onclick=btnPostNoSplit(this);  data-Id="' + oObj.aData[0] + "~" + oObj.aData[6] + '\" class="sym-btn-post-row"></a>'
+                                        //+ '&nbsp; <a id=""  title="Click to view Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/LoanMonthlyPayment/GLTransactionReport?id=' + oObj.aData[0] + '\" class="  sym-btn-report-row"></a>'
+                                        + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/LoanMonthlyPayment/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
+                                        //+ '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=1' + '&TransactionForm=MonthlyLoanRepayment' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                    }
+
+                                    ;
+                                }
+                            }
+                            , { "sName": "Code", "sWidth": "15%" }
+                            , { "sName": "TransactionDate", "sWidth": "15%" }
+                            , { "sName": "Amount", "sWidth": "15%" }
+                            , { "sName": "InterestAmount", "sWidth": "15%" }
+                            , { "sName": "ReferenceNo", "sWidth": "15%" }
+                            , { "sName": "Post", "sWidth": "15%" }
+
+            ]
+        });
+    });
+</script>
+
+<script>
+    function btnPostNew(sender) {
+
+        var Id = $(sender).attr("data-Id").split('~')[0];
+        var post = $(sender).attr("data-Id").split('~')[1];
+        if (post=="Posted") {
+            ShowResult("Fail", "Data Already Posted!");
+            return true;
+        }
+        var getURL = "/@ViewBag.TransType/LoanMonthlyPayment/Post" + "?" + "ids=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Post Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+    function btnDeleteNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/LoanMonthlyPayment/GetLoanMonthlyPayment" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted! Can't Be Deleted!");
+                return true;
+            }
+            else if (vm.TransactionType != "Other") {
+                ShowResult("Fail", "Reference Data Can't Be Deleted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Delete Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+</script>

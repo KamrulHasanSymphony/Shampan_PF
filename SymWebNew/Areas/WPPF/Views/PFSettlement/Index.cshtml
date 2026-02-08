@@ -1,0 +1,102 @@
+﻿<div class="headrow">
+    <button type="button" title="New Employee Settlement" data-url="/@ViewBag.TransType/PFSettlement/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    <label class="pull-right">WPPF Settlement </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>WPPF Settlement List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All</th>
+                <th class="center">Code</th>
+                <th class="center">Name</th>
+                <th class="center">Designation</th>
+                <th class="center">Department</th>
+                <th class="center">Total Payable Amount</th>
+                <th class="center">Already Paid Amount</th>
+                <th class="center">Net Pay Amount</th>
+                <th class="center">Post Status</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="New Employee Settlement" data-url="/@ViewBag.TransType/PFSettlement/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/PFSettlement/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "16%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    var Code = encodeURIComponent(oObj.aData[1]);
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
+                                        @*+ '&nbsp; <a id=""  title="Click on for Edit"    href=\"/@ViewBag.TransType/PFSettlement/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></a>'*@
+                                        @*+ '&nbsp; <a id=""  title="Click to view GL Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/PFSettlement/PFSettlement_GLTransactionReport?id=' + oObj.aData[0] + '\" class="  sym-btn-detail-row"></a>'*@
+                                        + '&nbsp; <a title="Click on for Report" target="_blank" href="/@ViewBag.TransType/PFSettlement/ReportView?Id=' + oObj.aData[0] + '\" class="sym-btn-report-row"></a>'
+                                        + '&nbsp; <a title="Click on for Post"   data-url="/@ViewBag.TransType/PFSettlement/Post"   onclick=btnPostNew(this);       data-Post="' + oObj.aData[7] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                        + '<a title="Journal" class="sym-btn-bank-row" href="/@ViewBag.TransType/PFSettlement/JournalEntry/?Code=' + Code + '"></a>';
+                                     
+                                }
+                            }
+                            , { "sName": "Code", "sWidth": "10%" }
+                            , { "sName": "EmpName", "sWidth": "10%" }
+                            , { "sName": "Designation", "sWidth": "10%" }
+                            , { "sName": "Department", "sWidth": "10%" }
+                            , { "sName": "TotalPayableAmount", "sWidth": "10%" }
+                            , { "sName": "AlreadyPaidAmount", "sWidth": "10%" }
+                            , { "sName": "NetPayAmount", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "10%" }
+
+            ]
+        });
+    });
+</script>
+
+<script>
+    function btnPostNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/PFSettlement/GetPFSettlement" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Post Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+
+</script>

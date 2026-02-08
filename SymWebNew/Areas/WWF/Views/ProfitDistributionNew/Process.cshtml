@@ -1,0 +1,162 @@
+﻿@model SymViewModel.WWF.ProfitDistributionNewVM
+@using UIHelper.MVC
+@using (Html.BeginForm("ProcessDistribution", "ProfitDistributionNew", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmProfitDistribution" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.FiscalYearDetailId)
+    @Html.HiddenFor(model => model.PreDistributionFundId)
+
+    <div class="headrow">
+        <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmProfitDistribution')" class="sym-btn-save">&nbsp;Process</button>
+        <label class="pull-right">Profit Distribution > Distribution Process</label>
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistributionNew?PreDistributionFundId=@Model.PreDistributionFundId" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Pre Distribution Fund</p>
+        </div>
+        <div class="ProfitDistributionNew">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.PreDistributionFund.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.PreDistributionFund.Code, new { @placeholder = "Code", @class = "    form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.PreDistributionFund.TransactionDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.PreDistributionFund.TransactionDate, new { @placeholder = "Transaction Date", @class = "    form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+                
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.PreDistributionFund.TotalValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.PreDistributionFund.TotalValue, new { @placeholder = "Total Value ", @class = "    form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+
+             
+            </div>
+        </div>
+    </div>
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Profit Distribution</p>
+        </div>
+        <div class="ProfitDistributionNew">
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.DistributionDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.DistributionDate, new { @placeholder = "Distribution Date ", @class = " required customDatePicker   form-control", @readonly = "readonly" })
+
+
+
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+    </div>
+
+
+    <div class="headrow">
+        <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmProfitDistribution')" class="sym-btn-save">&nbsp;Process</button>
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistributionNew" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    </div>
+}
+
+
+<script>
+    $(function () {
+      //  valiDation("frmProfitDistribution");
+
+
+        //SubTotal();
+    });
+
+    function SubTotal() {
+        var EmployeeTotalContribution = 0;
+        var EmployerTotalContribution = 0;
+        var EmployeeProfitValue = 0;
+        var EmployerProfitValue = 0;
+        var amount = 0;
+
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployeeTotalContribution").val().replace(/\,/g, '')); EmployeeTotalContribution += amount; });
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployerTotalContribution").val().replace(/\,/g, '')); EmployerTotalContribution += amount; });
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployeeProfitValue").val().replace(/\,/g, '')); EmployeeProfitValue += amount; });
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployerProfitValue").val().replace(/\,/g, '')); EmployerProfitValue += amount; });
+
+
+        $(".employeeTotalContributionTotal").val(EmployeeTotalContribution);
+        $(".employerTotalContributionTotal").val(EmployerTotalContribution);
+        $(".employeeProfitValueTotal").val(EmployeeProfitValue);
+        $(".employerProfitValueTotal").val(EmployerProfitValue);
+
+
+        NumberFormatCheck();
+    }
+
+</script>
+
+<script>
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmProfitDistribution');
+    }
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/ProfitDistributionNew/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+</script>
+
+
+<script>
+    function CopyItem(sender) {
+        var tmpElement = $('<textarea style="opacity:0;"></textarea>');
+        ////var parent = $(sender).closest('td').siblings('td').not(this).not(":hidden").each(function () {
+        var parent = $(".dServiceLengthMonthWeight").each(function () {
+            tmpElement.text(tmpElement.text() + $(this).val() + '\t');
+        });
+
+        tmpElement.appendTo($('body')).focus().select();
+        document.execCommand("copy");
+        tmpElement.remove();
+
+        ////ShowResult("Info", "Data Copied to Clipboard!");
+
+    }
+
+
+
+</script>

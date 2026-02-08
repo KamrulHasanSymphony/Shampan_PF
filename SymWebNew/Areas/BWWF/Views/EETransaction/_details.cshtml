@@ -1,0 +1,38 @@
+﻿@model SymViewModel.BWWF.EETransactionDetailVM
+
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row Idn">
+    @using (Html.BeginCollectionItem("eeTransactionDetailVMs"))
+    {
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.EEHeadId, new { @class = "dEEHeadId" })
+        @Html.HiddenFor(model => model.EEHeadName)
+        @Html.HiddenFor(model => model.EETransactionId)
+        
+        <div class="col-md-1" style="margin-top: 4px;">
+            <a id="" onclick="RemoveItem(this);" class="sym-btn-remove-row "></a>&nbsp;
+            <a id="" onclick="EditItem(this);" class="sym-btn-edit-row"></a>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.EEHeadName, new { @placeholder = "Earning Expense Head", @class = "dEEHead form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.SubTotal, new { @placeholder = "Grand Total", @class = " right dSTotal   form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @rows = "1", @class = "  form-control" })
+            </div>
+        </div>
+    }
+</div>
+<script>
+</script>
+

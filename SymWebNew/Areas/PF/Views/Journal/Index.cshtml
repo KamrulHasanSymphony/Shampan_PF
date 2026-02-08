@@ -1,0 +1,187 @@
+﻿@model SymViewModel.PF.GLJournalVM
+@using System.Threading;
+@using NPOI.SS.Formula.Functions
+@using UIHelper.MVC
+@using SymOrdinary
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+<div style="padding-top: 14px !important;" class="headrow">
+
+    <a title="Delete Journal Entry" href="/@ViewBag.TransType/Journal/Create?JournalType=@Model.JournalType" id="" class="sym-btn-add">&nbsp;New</a>
+    <label class="pull-right">Journal Entry</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        @{
+            if (Model.JournalType == 1)
+            {
+                <p class="thinHead">Journal Voucher</p>
+
+            }
+            else if (Model.JournalType == 2)
+            {
+                <p class="thinHead">Payment Voucher</p>
+
+            }
+            else if (Model.JournalType == 3)
+            {
+                <p class="thinHead">Receipt Voucher</p>
+            }
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="editor-label">
+                @Html.HiddenFor(model => model.JournalType)
+            </div>
+
+        </div>
+
+        @*<div class="col-md-2">
+                <div class="editor-label">
+                    <label>&nbsp;</label>
+                </div>
+                <div class="editor-field">
+                    <button type="button" title="Click to Search" id="searchBtn" class="sym-btn-search">&nbsp;Search</button>
+                </div>
+            </div>*@
+    </div>
+    <br />
+
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+
+                <th class="center">Action</th>
+                <th class="center">Voucher No</th>
+                <th class="center">Voucher Date</th>
+                @*<th class="center">Transaction Type</th>*@
+                <th class="center">Value</th>
+                <th class="center">Post Status</th>
+                <th class="center">Approve Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/Journal/_index?JournalType=@Model.JournalType",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                {
+                    "sName": "Id",
+                    "bSearchable": false,
+                    "bSortable": false,
+                    "sWidth": "10%",
+                    "sClass": "center",
+                    "fnRender": function (oObj) {
+
+                        if ('@identity.IsAdmin'.toLowerCase() == "true") {
+
+                            if (oObj.aData[4] == "Posted") {
+                                return ''
+                                    + '&nbsp; <a title="Click on for Edit" style="text-decoration:none;" Id="" class="innerListLink sym-btn-edit-row" href="/@ViewBag.TransType/Journal/Edit/' + oObj.aData[0].split('~')[0] + '"></a>'
+                                    + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Journal/Post" onclick=btnPostNoSplit(this); data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row" style="opacity:0.45;pointer-events:none;cursor:default;"></a>'
+                                    + '&nbsp; <a title="Click on for Voucher" data-url="/@ViewBag.TransType/Journal/ReportView" onclick=reportData(this); data-Id="' + oObj.aData[0].split('~')[0] + '" class="sym-btn-report-row"></a>';
+                            } else {
+                                return ''
+                                    + '&nbsp; <a title="Click on for Edit" style="text-decoration:none;" Id="" class="innerListLink sym-btn-edit-row" href="/@ViewBag.TransType/Journal/Edit/' + oObj.aData[0].split('~')[0] + '"></a>'
+                                    // Show "Post" button only if IsAdmin is true
+                                    + ('@identity.IsAdmin'
+                                        ? '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Journal/Post" onclick=btnPostNoSplit(this); data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row"></a>'
+                                        : '') // If not Admin, don't show the "Post" button
+                                    + '&nbsp; <a title="Click on for Voucher" data-url="/@ViewBag.TransType/Journal/ReportView" onclick=reportData(this); data-Id="' + oObj.aData[0].split('~')[0] + '" class="sym-btn-report-row"></a>';
+                            }
+                        }
+                        else
+                        {
+                            if (oObj.aData[4] == "Posted") {
+                                return ''
+                                     + '&nbsp; <a title="Click on for Edit" style="text-decoration:none;" Id="" class="innerListLink sym-btn-edit-row" href="/@ViewBag.TransType/Journal/Edit/' + oObj.aData[0].split('~')[0] + '"></a>'
+                                    + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Journal/Post" onclick=btnPostNoSplit(this); data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row" style="opacity:0.45;pointer-events:none;cursor:default;"></a>'
+                                    + '&nbsp; <a title="Click on for Voucher" data-url="/@ViewBag.TransType/Journal/ReportView" onclick=reportData(this); data-Id="' + oObj.aData[0].split('~')[0] + '" class="sym-btn-report-row"></a>';
+
+                            } else {
+                                return ''
+                                  + '&nbsp; <a title="Click on for Edit" style="text-decoration:none;" Id="" class="innerListLink sym-btn-edit-row" href="/@ViewBag.TransType/Journal/Edit/' + oObj.aData[0].split('~')[0] + '"></a>'
+                                  + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Journal/Post" onclick=btnPostNoSplit(this); data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row"></a>'
+                                  + '&nbsp; <a title="Click on for Voucher" data-url="/@ViewBag.TransType/Journal/ReportView" onclick=reportData(this); data-Id="' + oObj.aData[0].split('~')[0] + '" class="sym-btn-report-row"></a>';
+                            }
+
+                        }
+
+
+                    }
+                }, { "sName": "Code ", "sWidth": "15%" }
+                , { "sName": "TransactionDate", "sWidth": "15%" }
+                , {
+                    "sName": "TransactionValue", "sWidth": "15%", "sClass": "right", "fnRender": function (oObj) {
+                        return formatNumberWithCommas(oObj.aData[3]);
+                    }
+                }
+                //, { "sName": "TransactionType", "sWidth": "15%" }
+                , { "sName": "Post", "sWidth": "12%" }
+                , { "sName": "Approve", "sWidth": "12%" }
+            ]
+        });
+        $('#searchBtn').click(function () {
+            var oParam = {
+                "branchId": "",
+                "tType": "",
+                "dtFrom": "",
+                "dtTo": ""
+            };
+            oParam.branchId = $(".branchId :selected").val();
+            oParam.tType = '@Model.TransactionType';
+            oParam.dtFrom = $(".dtFrom").val();
+            oParam.dtTo = $(".dtTo").val();
+
+            $.ajax({
+                url: "/Acc/JournalEntry/Index",
+                cache: false,
+                data: oParam,
+                success: function (html) {
+                    oTable.fnDraw();
+                }
+            });
+        });
+    });
+</script>
+<script>
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var code = $(sender).attr('data-Id');
+        rptObj = new Object();
+        rptObj.id = code;
+
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>
+

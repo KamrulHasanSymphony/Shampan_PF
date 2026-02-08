@@ -1,0 +1,232 @@
+﻿@model SymViewModel.WPPF.ProfitDistributionVM
+@using UIHelper.MVC
+
+<div class="headrow">
+    <button type="button" title="Distribute Pre Distribution Fund" data-url="/@ViewBag.TransType/ProfitDistribution/Create" onclick="SummationData(this, 'myDataTable');" id="" class="sym-btn-detail">&nbsp;Distribute</button>
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistribution" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    <label class="pull-right">Pre Distribution Fund </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Pre Distribution Fund List</p>
+    </div>
+
+    <div class="row">
+        <div class="col-md-1">
+            <div class="editor-label">
+                <label>Year</label>
+            </div>
+            <div class="editor-field">
+                <div>@Html.TextBox("Year", @Session["SessionYear"].ToString(), new { @Id = "fYear", @class = "fiscalyearCom form-control" }) </div>
+            </div>
+        </div>
+
+
+        <div class="col-md-2">
+            <div class="editor-label">
+                <label>Fiscal Period</label>
+            </div>
+            <div class="editor-field">
+                <div>
+                    @Html.SimpleDropDownFor(model => model.FiscalYearDetailId, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @Id = "iFiscalYearDetailId", @class = " fpDetailsCom required form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <div class="editor-label">
+                <label>Fiscal Period(To)</label>
+            </div>
+
+            <div class="editor-field">
+                <div>
+                    @Html.SimpleDropDownFor(model => model.FiscalYearDetailIdTo, "//", new { @Id = "iFiscalYearDetailIdTo", @class = "required fpDetailsComTo form-control  selectDropdown" })
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <p></p>
+
+
+
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All
+                </th>
+                <th>Funding Date</th>
+                <th>Total Funding Value</th>
+                <th>Post Status</th>
+                <th>Distribution</th>
+                <th>TransactionType</th>
+                
+
+
+                @*
+                    FundingDate
+                    FundingValue
+                    FundingReference
+                    Post
+                    IsDistribute
+                *@
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Distribute Pre Distribution Fund" data-url="/@ViewBag.TransType/ProfitDistribution/Create" onclick="SummationData(this, 'myDataTable');" id="" class="sym-btn-detail">&nbsp;Distribute</button>
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistribution" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+</div>
+
+@using (Html.BeginForm("Create", "ProfitDistribution", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmProfitDistributionGet" }))
+{
+    @Html.HiddenFor(model => model.TotalProfit, new { @class = "totalProfit" })
+    @Html.HiddenFor(model => model.PreDistributionFundIds, new { @class = "preDistributionFundIds" })
+    @Html.HiddenFor(model => model.FiscalYearDetailId, new { @class = " cFiscalYearDetailId" })
+    @Html.HiddenFor(model => model.FiscalYearDetailIdTo, new { @class = " cFiscalYearDetailIdTo" })
+    
+}
+
+
+
+
+<script lang="en" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/ProfitDistribution/_indexPreDistributionFund",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-value="' + oObj.aData[2] + '" data-Id="' + oObj.aData[0] + '">'
+                                        + '&nbsp; <a title="Click on for Distribute" data-url="/@ViewBag.TransType/ProfitDistribution/Create"  onclick=btnValue(this); data-value="' + oObj.aData[2] + '" data-Id="' + oObj.aData[0].split('~')[0] + '\" class="sym-btn-detail-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "FundingDate", "sWidth": "10%" }
+                            , { "sName": "TotalFundingValue", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "10%" }
+                            , { "sName": "IsDistribute", "sWidth": "10%" }
+                            , { "sName": "TransactionType", "sWidth": "10%" }
+
+            ]
+        });
+    });
+</script>
+
+
+
+
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    var FiscalYearDetailId = "";
+    var FiscalYearDetailIdTo = "";
+
+    function validations() {
+        FiscalYearDetailId = $("#iFiscalYearDetailId").val();
+        FiscalYearDetailIdTo = $("#iFiscalYearDetailIdTo").val();
+
+        if (FiscalYearDetailId == null || FiscalYearDetailId == "" || FiscalYearDetailId == "0") {
+            ShowResult("Fail", "Please Select the Fiscal Period From!");
+            return true;
+        }
+
+        if (FiscalYearDetailIdTo == null || FiscalYearDetailIdTo == "" || FiscalYearDetailIdTo == "0") {
+            ShowResult("Fail", "Please Select the Fiscal Period To!");
+            return true;
+        }
+
+         $(".cFiscalYearDetailId").val(FiscalYearDetailId);
+         $(".cFiscalYearDetailIdTo").val(FiscalYearDetailIdTo);
+    }
+
+
+
+    function btnValue(sender) {
+
+        if (validations()) {
+            return;
+        }
+
+
+        var Id = $(sender).attr('data-Id');
+        var TotalProfit = $(sender).attr('data-value');
+
+        $(".totalProfit").val(TotalProfit);
+        $(".preDistributionFundIds").val(Id);
+
+
+        ////var url = $(sender).attr("data-url") + "?ids=" + Id + '~' + "&TotalProfit=" + $(sender).attr("data-value");
+        Ask("Are you sure to Distribute!", function () {
+
+            $("#frmProfitDistributionGet").submit();
+
+            ////window.location = url;
+        }, function () { })
+    }
+
+
+    function SummationData(sender, checkboxId, id) {
+
+        if (validations()) {
+            return;
+        }
+
+        var SummationIds = "";
+        var TotalProfit = 0;
+        var value = 0;
+
+        if (typeof id === 'undefined') {
+            var length = $("#" + checkboxId + " tbody input:checkbox").length;
+            for (var i = 0; i < length; i++) {
+                if ($($("#" + checkboxId + " tbody input:checkbox")[i]).is(":checked")) {
+                    SummationIds += $($("#" + checkboxId + " tbody input:checkbox")[i]).attr("data-Id") + "~";
+                    value = $($("#" + checkboxId + " tbody input:checkbox")[i]).attr("data-value");
+                    TotalProfit += parseFloat(value);
+                }
+            }
+        }
+        else {
+            SummationIds = id + "~";
+        }
+
+        //////////var url = $(sender).attr("data-url") + "?ids=" + SummationIds + "&TotalProfit=" + TotalProfit;
+        if (SummationIds == "") {
+            ShowResult("Fail", "Select first to Distribute!");
+            return;
+        }
+
+        $(".totalProfit").val(TotalProfit);
+        $(".preDistributionFundIds").val(SummationIds);
+
+
+        Ask("Are you sure to Distribute!", function () {
+
+            $("#frmProfitDistributionGet").submit();
+
+
+            //////window.location = url;
+        }, function () { })
+    }
+
+</script>

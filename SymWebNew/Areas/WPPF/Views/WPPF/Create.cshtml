@@ -1,0 +1,91 @@
+﻿@model SymViewModel.WPPF.PFDetailVM
+
+@using UIHelper.MVC
+@Html.ValidationSummary(true)
+
+<style>
+    div > input[type="checkbox"] {
+        text-align: center;
+        margin: inherit;
+    }
+</style>
+<div class="headrow">
+    <button type="button" title="Save Data" id="" class="saveJSON sym-btn-save">&nbsp;Save</button>
+    <button type="button" title="Go To Index" data-url="/WPPF/WPPF/IndexFiscalPeriod" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    <label class="pull-right">Profit Value</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Profit Value</p>
+    </div>
+    <div class="PFProcess">
+        <div class="row">
+            <div class="col-md-1">
+                <div class="editor-label">
+                    <label>Year</label>
+                </div>
+                <div class="editor-field">
+                    @*<div>@Html.TextBox("Year", @Session["SessionYear"].ToString(), new { @Id = "fYear",  @class = "fiscalyearCom form-control" }) </div>*@
+                    @Html.SimpleDropDown("FiscalYear", "/Config/DropDown/DropDownYear", new { @Id = "FiscalYear", @class = " fiscalyearCom required form-control selectDropdown" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>Fiscal Period</label>
+                </div>
+                <div class="editor-field">
+                    <div>
+                        @Html.SimpleDropDown("FiscalPeriod", "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @Id = "FiscalPeriodDetailId", @class = " fpDetailsCom required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Total Profit</label>
+                </div>
+                <div class="editor-field">
+                    <div>
+                        @*@Html.SimpleDropDown("ProjectId", "/Config/DropDown/Project", new { @Id = "ProjectId", @class = "sectionsCom form-control" })*@
+                        @Html.TextBoxFor(model => model.TotalPF, new { @Id = "TotalProfit", @placeholder = "Total Profit", @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="headrow">
+    <button type="button" title="Save Data" id="" class="saveJSON sym-btn-save">&nbsp;Save</button>
+</div>
+
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    $('.saveJSON').click(function () {
+        debugger;
+        var FiscalYear = $("#FiscalYear").val();
+        var FiscalPeriodDetailId = $("#FiscalPeriodDetailId").val();
+        var TotalProfit = $("#TotalProfit").val();
+        if (FiscalPeriodDetailId == "") {
+            ShowResult("Fail", "Please Select the Fiscal Period");
+            return;
+        }
+        if (TotalProfit == "") {
+            ShowResult("Fail", "Please Enter Valid Total Profit");
+            return;
+        }
+        if (FiscalYear == "") {
+            ShowResult("Fail", "Please Select the Fiscal Year");
+            return;
+        }
+        var url = "/WPPF/WPPF/Create"
+        + "?fydid=" + FiscalPeriodDetailId
+        + "&TotalProfit=" + TotalProfit
+        + "&FiscalYear=" + FiscalYear;
+
+
+        submit(url);
+    });
+</script>

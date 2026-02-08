@@ -1,0 +1,78 @@
+﻿@model SymViewModel.Common.AssetVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "Asset", FormMethod.Post, new { @Id = "frmAsset" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="thinbox">
+        <div class="Asset">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Code)
+            </div>
+            <div class="col-md-8">
+                @Html.TextBoxFor(model => model.Code, null, new { @placeholder = "Asset Code", @class = "required form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="col-md-8">
+                @Html.TextBoxFor(model => model.Name, null, new { @placeholder = "Asset Name", @class = "required form-control" })
+            </div>
+        </div>
+             <div class="row">
+                    <label class="col-sm-4">
+                         @Html.LabelFor(model => model.IsActive)
+                    </label>
+                <div class="col-sm-1">
+                @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+            </div> 
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                @Html.LabelFor(model => model.Remarks)
+            </div>
+            <div class="col-md-8">
+                @Html.TextBoxFor(model => model.Remarks, null, new { @placeholder = "Remarks", @class = " form-control" })
+            </div>
+        </div>
+
+            <div style="margin-left:-2px;" class="row">
+                <label class="col-sm-3">
+                    <button type="button" title="Edit Data" onclick="Edit();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+                    <button type="button" title="Save Data" onclick="pageSubmit('frmAsset');" class="Save sym-btn-save">&nbsp;Save</button>
+                </label>
+                <label class="col-sm-4">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+        </div>
+    @Html.HiddenFor(model => model.Id)
+
+       
+
+    </div>
+}
+<script>
+    $(function () {
+        Edit();
+        valiDation("frmAsset");
+    });
+    function Edit() {
+        fnReadOnly("Asset");
+        if ($(".Asset").hasClass("readOnly")) {
+            $(".Save").hide();
+            $(".Edit").show();
+        }
+        else {
+            $(".Save").show();
+            $(".Edit").hide();
+        }
+    }
+</script>

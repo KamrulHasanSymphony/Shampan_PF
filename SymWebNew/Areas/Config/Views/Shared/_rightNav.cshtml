@@ -1,0 +1,114 @@
+﻿
+@using SymOrdinary
+@using System.Threading;
+@{ 
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+
+<div class="" style="position:relative">
+    <div class="rnavmain">
+    <div id="Rnav" class="rnav">
+    <img src="~/Files/EmployeeInfo/@Session["PhotoName"].ToString()"  id="" class="img-circle" style="text-align:center!important;border:2px solid #808080; width:60px;height:60px;float:right"   />
+                    <div style="font-size:15px; text-align: center; float: left; ">
+                        @try
+                        {
+                            if (identity.IsAdmin || identity.IsHRM)
+{
+                              <label style="float:right">@Session["FullName"].ToString() (Admin)</label> 
+                            }
+                            else
+                            {
+                            <label>@Session["FullName"].ToString() (User)</label> 
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    </div>
+        </div>
+     <div class="Rbox">
+          <div class="LogoutButton" style="text-align:center;margin:10px;">
+
+                        <a title="Log Out" href="/Home/LogOut" style="text-align:center">
+                            <img src="~/assets/Images/exit.png" alt="Log Out" /></a>
+                    </div>
+    </div>
+        </div>
+</div>
+<style>
+    .RboxScroll {
+          position:fixed;
+           top:-125px;
+    }
+    .rnavmain {
+         top:-125px;
+         transition:0.5s;
+         z-index:9999;
+        right:320px;
+        position:fixed;
+
+    }
+    .rnav {
+        position:absolute;
+       -webkit-box-shadow: 1px 1px 12px 0px rgba(50, 50, 50, 0.88);
+-moz-box-shadow:    1px 1px 12px 0px rgba(50, 50, 50, 0.88);
+box-shadow:         1px 1px 12px 0px rgba(50, 50, 50, 0.88);
+ border-radius:0px 0px 5px 5px;
+        height:120px;
+        width:300px;
+        text-align:center;
+       background-color:#ffd800;
+    }
+    .Rbox {
+        position:absolute;
+        background-color:#FE5621;
+        border-radius:0px 0px 22px 22px;
+        height:40px;
+        width:40px;
+      left:250px;
+      top:120px;
+      text-align:center;
+    }
+    .RboxScroll {
+         top:-120px;
+         transition:0.5s;
+
+        right:320px;
+           position:fixed;
+    }
+    .intop {
+         top:0px;
+        transition:0.5s;
+    }
+</style>
+<script>
+    $(function () {
+        var rnav = document.getElementById('rnav');
+        var ssm = document.getElementById('scroll-side-menu');
+        $(window).scroll(function () {
+            if ($(this).scrollTop() > 0) {
+                //$("#a").slideUp(600);
+                //$("#scroll-side-menu").css("cssText", "left: -168px;");
+                $(".rnavmain").addClass('RboxScroll');
+            }
+            else {
+                //$("#scroll-side-menu").css("cssText", "left: -168px;");
+                //$("#a").slideDown(600);
+                //$("#logo-two").removeClass('log-act');
+                $(".rnavmain").removeClass('RboxScroll');
+            }
+        });
+        $(".rnavmain").hover(function () {
+            $(".rnavmain").toggleClass("intop");
+        });
+    });
+</script>

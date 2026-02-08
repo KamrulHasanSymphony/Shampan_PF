@@ -1,0 +1,95 @@
+﻿@model SymViewModel.Common.UserLogsVM
+@using UIHelper.MVC
+@using (Html.BeginForm("Create", "User", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmUser" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.EmployeeId)
+
+<div class="thinbox">
+         <div class="th_thinbox">
+            <p>User Create</p>   
+            </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LogID)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.LogID, new { @placeholder = "User ID", @class = "required form-control",})
+                    @Html.ValidationMessageFor(model => model.LogID)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.FullName)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.FullName, new { @placeholder = "Full Name", @readonly="readonly",  @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.FullName)
+                </div>
+            </div>
+             <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.GroupId)
+                </div>
+                <div class="editor-field">
+           
+                @Html.SimpleDropDownFor(model => model.GroupId, "/Config/DropDown/UserGroup", new { @class = "required form-control" })
+
+                    @Html.ValidationMessageFor(model => model.GroupId)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Email)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+            <div class="passwordAreaA">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Password)
+                    </div>
+                    <div class="editor-field">
+                        @Html.PasswordFor(model => model.Password, new { @placeholder = "Password",  @class = "passW required form-control" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Confirm Password</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.PasswordFor(model => model.confirmPassword, new { @placeholder = "Confirm Password",  @class = "conpassW required form-control" })
+                        @Html.ValidationMessageFor(model => model.confirmPassword)
+                    </div>
+                </div>
+            </div>
+         
+        </div>
+                  
+
+            <button type="button" title="Save Data" onclick="CreateUser();" class=" Save sym-btn-save">&nbsp;Save</button>
+</div>
+}
+<script>
+
+    $(function(){
+        $('#FullName').autocomplete({ source: '@Url.Action("EmployeeCode", "Autocomplete", new { area = "Config" })', minLength: 2 });
+        });
+
+    function CreateUser() {
+        var pass = $(".passW").val();
+        var conpass = $(".conpassW").val();
+        if (pass != conpass) {
+            ShowResult("Fail", "Pass Doesn't Match");
+            return;
+        }
+        pageSubmit('frmUser');
+    }
+     
+</script>

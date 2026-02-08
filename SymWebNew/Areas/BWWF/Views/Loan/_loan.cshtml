@@ -1,0 +1,126 @@
+﻿@model SymViewModel.Loan.EmployeeLoanDetailVM
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+
+@using (Html.BeginCollectionItem("employeeLoanDetails"))
+{
+    <tr class=" countInstallments">
+
+        <td>@Html.DisplayFor(model => model.PaymentScheduleDate, new { @class = " form-control", @readonly = "readonly" })</td>
+        <td>
+            @if (Model.HaveDuplicate || Model.IsHold || Model.IsPaid)
+            { 
+                @Html.TextBoxFor(model => model.PrincipalAmount, new { @onChange = "LoanChange(this); valueCheck(this);", @class = "principalAmount right Start  required form-control", @readonly = "readonly" })
+            }
+            else
+            {
+                @Html.TextBoxFor(model => model.PrincipalAmount, new { @onChange = "LoanChange(this); valueCheck(this);", @class = "principalAmount right Start  required form-control" })
+             
+            }
+
+        </td>
+
+        <td>
+            @Html.HiddenFor(model => model.Id, new { @class = "loanDetailsId" })
+            @Html.HiddenFor(model => model.EmployeeId, new { @class = "employeeId" })
+            @Html.HiddenFor(model => model.EmployeeLoanId, new { @class = "loanId" })
+            @Html.HiddenFor(model => model.PaymentScheduleDate, new { @class = "cPaymentScheduleDate" })
+            @if (Model.HaveDuplicate || Model.IsHold || Model.IsPaid)
+            {
+                @Html.TextBoxFor(model => model.InterestAmount, new { @onChange = "LoanChange(this)", @class = " interestAmount right Start  required form-control", @readonly = "readonly" })
+            }
+            else
+            { 
+                @Html.TextBoxFor(model => model.InterestAmount, new { @onChange = "LoanChange(this)", @class = " interestAmount right Start  required form-control" })
+            }
+        </td>
+
+        <td>@Html.TextBoxFor(model => model.InstallmentAmount, new { @class = " installmentAmount right Start  required form-control", @readonly = "readonly" })</td>
+        @*  <td>
+           
+        </td>*@
+        <td>
+            @Html.TextAreaFor(model => model.Remarks, new { @class = "remarks form-control" })
+        </td>
+        <td>
+            @if (!Model.IsPaid)
+            {
+@*<a title="Click on for Edit" style="text-decoration:none;"   href="Payroll/Loan/PaidEdit?Id=@Model.Id&emploanId=@Model.EmployeeLoanId" class="lnkEdit sym-btn-save">Paid</a>*@
+                <a  title="Paid" class="lnkEdit sym-btn-update sym-min" href="/BWWF/loan/PaidEdit?Id=@Model.Id&emploanId=@Model.EmployeeLoanId"  >UnPaid</a>
+@*<label>Paid</label>*@
+            }
+            else
+            {
+@* <a title="Click on for Edit" style="text-decoration:none;"   href="Payroll/Loan/PaidEdit?Id=@Model.Id&emploanId=@Model.EmployeeLoanId"  class="lnkEdit sym-btn-save">Un Paid</a>*@
+                
+                <label>Paid</label>
+            }
+        </td>
+        <td>
+            @if (Model.HaveDuplicate)
+            {
+                <label>Duplicate</label>
+            }
+            else
+            {
+                <label>Not Duplicate</label>
+                    
+            }
+        </td>
+        <td>
+            @if (Model.IsHold)
+            {
+                <label>Hold</label>
+            }
+            else
+            {
+                <label>Not Hold</label>
+                    
+            }
+        </td>
+        <td>
+            @if (!Model.HaveDuplicate)
+            {
+                if (!Model.IsPaid)
+                {
+                    if (!Model.IsHold)
+                    {
+                <button type="button" title="Hold Data" class=" holdbtn sym-btn-save" value="Hold" onclick="LoanEdit(this,true,false);">Hold</button>
+                    }
+                    else
+                    {
+                <button type="button" title="Un Hold Data" class=" holdbtn sym-btn-save" value="Un Hold" onclick="LoanEdit(this,false,false);">Un Hold</button>
+                    
+                    }
+                }
+            }
+        </td>
+        <td>
+            @if (!Model.HaveDuplicate)
+            {
+                if (!Model.IsPaid)
+                {
+                <button type="button" title="Make Duplicate" class=" holdbtn sym-btn-duplicate" value="Duplicate" onclick="LoanEdit(this,false,true);">Duplicate</button>
+                }
+            }
+
+        </td>
+        @* <td>
+              @if (!Model.HaveDuplicate)
+             {
+                 if (!Model.IsPaid)
+                 {
+                <button type="button" title="Update Information" class=" sym-btn-edit"  value="Update" onclick="LoanUpdate(this);">Update</button>
+                 }
+             }
+                
+
+        </td>*@
+    </tr>
+        
+}
+
+
+

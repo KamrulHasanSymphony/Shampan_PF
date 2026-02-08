@@ -1,0 +1,68 @@
+﻿@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>BWWF Bank Statement</p>
+    </div>
+    <div class="PFBankStatementReport">
+        <div class="row">
+
+            <div class="col-md-3">
+                    <div class="editor-label">
+                <label>Deposit Date From</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateFrom", "", new { @placeholder = "Date From", @class = " dtFrom customDatePicker form-control" })
+                    </div>
+                </div>
+
+             <div class="col-md-3">
+                    <div class="editor-label">
+                <label>Deposit Date To</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateTo", "", new { @placeholder = "Date To", @class = " dtTo customDatePicker form-control" })
+                    </div>
+                </div>
+              <div class="col-md-4">
+                    <div class="editor-label">
+                         <label>Bank Branch Name</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("BankBranchId", "/Config/DropDown/PF_BankBranchName", new { @class = " required bankBranchId form-control" })
+                    </div>
+                </div>
+
+            </div>
+    </div>
+</div>
+<div class="headrow">
+    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PFReport/PFBankStatementReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Detail</button>
+</div>
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+
+        var dtFrom = $(".dtFrom").val();
+        var dtTo = $(".dtTo").val();
+        var bankBranchId = $(".bankBranchId").val();
+
+
+        if (bankBranchId == "") {
+            ShowResult("Fail", "Please Select the Bank Branch First!");
+            return;
+        }
+        
+        rptObj = new Object();
+        rptObj.dtFrom = dtFrom;
+        rptObj.dtTo = dtTo;
+        rptObj.bankBranchId = bankBranchId;
+        
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>

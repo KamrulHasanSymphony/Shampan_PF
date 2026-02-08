@@ -1,0 +1,55 @@
+﻿@model SymViewModel.Common.DepartmentVM
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm("Create", "Department", FormMethod.Post, new { @Id = "frmDepartment" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="thinbox">
+        <div class="row">
+            <div class="col=md-4">
+                @Html.LabelFor(model => model.Code)
+            </div>
+            <div class="col=md-8">
+                @Html.TextBoxFor(model => model.Code, null, new { @placeholder = "Department Code", @class = "required form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col=md-4">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="col=md-8">
+                @Html.TextBoxFor(model => model.Name, null, new { @placeholder = "Department Name", @class = "required form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col=md-4">
+                @Html.LabelFor(model => model.Remarks)
+            </div>
+            <div class="col=md-8">
+                @Html.TextBoxFor(model => model.Remarks, null, new { @placeholder = "Remarks", @class = " form-control" })
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <label class="col-sm-3">
+            <button type="button" title="Save Data" onclick="pageSubmit('frmDepartment');" class="sym-btn-save">&nbsp;Save</button>
+        </label>
+        <label class="col-sm-4">
+            <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+        </label>
+    </div>
+}
+
+      <script>
+
+      $(function () {
+          valiDation("frmDepartment");
+        
+      });
+ 
+  </script>

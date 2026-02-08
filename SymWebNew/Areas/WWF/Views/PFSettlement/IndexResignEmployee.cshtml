@@ -1,0 +1,102 @@
+﻿@model SymViewModel.WWF.PFSettlementVM
+@using UIHelper.MVC
+@using UIHelper.MVC
+
+<div class="headrow">
+    @*<button type="button" title="Process Employee Settlement" data-url="/@ViewBag.TransType/PFSettlement/Process" onclick="ProcessData(this, 'myDataTable');" id="" class="sym-btn-save">&nbsp;Process</button>*@
+    <label class="pull-right">WWF Settlement > Resign Employee</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Resign Employee List</p>
+    </div>
+@using (Html.BeginForm("Create", "PFSettlement", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPFSettlementCreate"}))
+{
+    @Html.HiddenFor(model => model.EmployeeId)
+    
+    <div class="row">
+        <div class="col-md-2">
+            <div class="editor-label">
+                @Html.LabelFor(model => model.SettlementDate)
+            </div>
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.SettlementDate, new { @placeholder = "Settlement Date", @class = " cSettlementDate required customDatePicker form-control" })
+            </div>
+        </div>
+        </div>
+}
+
+
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th>Action</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Resign Date</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+        <br />
+    </div>
+    <div class="headrow">
+    </div>
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/@ViewBag.TransType/PFSettlement/_indexResignEmployee",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "EmployeeId",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "12%",
+                                    "sClass": "center",
+                                    "fnRender": function (oObj) {
+
+                                        return ''
+                                        + '&nbsp; <a title="Click on for Process" style="text-decoration:none;" data-url="/@ViewBag.TransType/PFSettlement/Create" onclick="ProcessData(this, \'' + oObj.aData[0] + '\');"  class="sym-btn-save-row"></a>'
+                                        ////;
+                                    }
+                                }
+                                , { "sName": "Code", "sWidth": "10%" }
+                                , { "sName": "EmpName", "sWidth": "10%" }
+                                , { "sName": "Designation", "sWidth": "10%" }
+                                , { "sName": "Department", "sWidth": "10%" }
+                                , { "sName": "EmpResignDate", "sWidth": "10%" }
+
+                ]
+            });
+        });
+    </script>
+
+
+    <script>
+        $(function () {
+            valiDation("frmPFSettlementCreate");
+        });
+
+
+        function ProcessData(sender, id) {
+
+            Ask("Are you sure to Settlement!", function () {
+
+                $("#EmployeeId").val(id);
+                pageSubmit('frmPFSettlementCreate')
+
+            }, function () { })
+        }
+    </script>

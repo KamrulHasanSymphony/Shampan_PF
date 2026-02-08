@@ -1,0 +1,211 @@
+﻿    <script language="javascript" type="text/javascript">
+        //$(document).ready(function () {
+        //    SelectAllForDelete();
+        //    $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        //    $.datepicker.setDefaults($.datepicker.regional['']);
+        //    var oTable = $('#myDataTable').dataTable({
+        //        "bServerSide": true,
+        //        "sAjaxSource": "/Common/Designation/_index",
+        //        "bProcessing": true,
+        //        "aLengthMenu": tablelength(),
+        //        "bJqueryUI": true,
+        //        "bAutoWidth": false,
+        //        "sScrollX": '200%',
+        //        "aoColumns": [
+
+        //                        {
+        //                            "sName": "Id",
+        //                            "bSearchable": false,
+        //                            "bSortable": false,
+        //                            "sWidth": "5%",
+        //                            "sClass": "center",
+        //                            "fnRender": function (oObj) {
+        //                                return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a id=""  title="Click on for Edit" style="text-decoration:none;"   href=\"/Common/Designation/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></i></a>' +
+        //                                '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/Designation/Delete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>';
+        //                            }
+        //                        }
+        //                        , { "sName": "Code", "sWidth": "5%" }
+        //                        , { "sName": "Name", "sWidth": "7%" }
+        //                        , { "sName": "AttendenceBonus", "sWidth": "7%", "sClass": "right" }
+        //                        , { "sName": "EPZ", "sWidth": "7%", "sClass": "right" }
+        //                        , { "sName": "Other", "sWidth": "7%", "sClass": "right" }
+        //                        , { "sName": "IfterAmount", "sWidth": "7%", "sClass": "right" }
+        //                        , { "sName": "DinnerAmount", "sWidth": "7%", "sClass": "right" }
+        //                        , { "sName": "TiffinAmount", "sWidth": "7%", "sClass": "right" }
+        //                        , { "sName": "ETiffinAmount", "sWidth": "7%", "sClass": "right" }
+        //                        , { "sName": "OTAlloawance", "sWidth": "5%" }
+        //                        , { "sName": "OTOrginal", "sWidth": "5%" }
+        //                        , { "sName": "OTBayer", "sWidth": "5%" }
+        //                        , { "sName": "ExtraOT", "sWidth": "5%" }
+        //                        , { "sName": "Active", "sWidth": "4%" }
+        //                        , { "sName": "OrderNo", "sWidth": "4%" }
+        //                        , { "sName": "Remarks", "sWidth": "4%" }
+        //        ]
+        //    });
+        //    oTable.columnFilter({
+        //        sPlaceHolder: "head:after",
+        //        aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+        //                   , { type: "text" }
+        //                   , { type: "text" }
+        //                    , { type: "number-range" }
+        //                   , { type: "number-range" }
+        //                   , { type: "number-range" }
+        //                   , { type: "number-range" }
+        //                   , { type: "number-range" }
+        //                   , { type: "number-range" }
+        //                   , { type: "number-range" }
+        //                   , { type: "select", values: ["Y", "No"] }
+        //                   , { type: "select", values: ["Y", "No"] }
+        //                   , { type: "select", values: ["Y", "No"] }
+        //                   , { type: "select", values: ["Y", "No"] }
+        //                   , { type: "select", values: ["Active", "Inactive"] }
+        //                   , { type: "text" }
+        //                   , { type: "text" }
+        //        ]
+        //    });
+        //});
+
+
+        $(document).ready(function () {
+            // Handle the "Select All" checkbox functionality
+            $(document).on('click', '.chkAll', function () {
+                // Get the checked state of the "Select All" checkbox
+                var isChecked = $(this).is(':checked');
+
+                // Set the checked state for all checkboxes in the table
+                $('#myDataTable tbody input[type="checkbox"]').prop('checked', isChecked);
+            });
+
+            // Your existing table initialization code...
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Common/Designation/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "sScrollX": '200%',
+                "aoColumns": [
+                    {
+                        "sName": "Id",
+                        "bSearchable": false,
+                        "bSortable": false,
+                        "sWidth": "5%",
+                        "sClass": "center",
+                        "fnRender": function (oObj) {
+                            return '<input type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a id=""  title="Click on for Edit" style="text-decoration:none;"   href="/Common/Designation/Edit/' + oObj.aData[0] + '" class="sym-btn-edit-row"></a>' +
+                            '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/Designation/Delete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');" class="sym-btn-remove-row"></a>';
+                        }
+                    },
+                    { "sName": "Code", "sWidth": "5%" },
+                    { "sName": "Name", "sWidth": "7%" },
+                    { "sName": "AttendenceBonus", "sWidth": "7%", "sClass": "right" },
+                    { "sName": "EPZ", "sWidth": "7%", "sClass": "right" },
+                    { "sName": "Other", "sWidth": "7%", "sClass": "right" },
+                    { "sName": "IfterAmount", "sWidth": "7%", "sClass": "right" },
+                    { "sName": "DinnerAmount", "sWidth": "7%", "sClass": "right" },
+                    { "sName": "TiffinAmount", "sWidth": "7%", "sClass": "right" },
+                    { "sName": "ETiffinAmount", "sWidth": "7%", "sClass": "right" },
+                    { "sName": "OTAlloawance", "sWidth": "5%" },
+                    { "sName": "OTOrginal", "sWidth": "5%" },
+                    { "sName": "OTBayer", "sWidth": "5%" },
+                    { "sName": "ExtraOT", "sWidth": "5%" },
+                    { "sName": "Active", "sWidth": "4%" },
+                    { "sName": "OrderNo", "sWidth": "4%" },
+                    { "sName": "Remarks", "sWidth": "4%" }
+                ]
+            });
+            oTable.columnFilter({
+                sPlaceHolder: "head:after",
+                aoColumns: [
+                    { type: "checkbox", "sClass": "chkAll" },
+                    { type: "text" },
+                    { type: "text" },
+                    { type: "number-range" },
+                    { type: "number-range" },
+                    { type: "number-range" },
+                    { type: "number-range" },
+                    { type: "number-range" },
+                    { type: "number-range" },
+                    { type: "number-range" },
+                    { type: "select", values: ["Y", "No"] },
+                    { type: "select", values: ["Y", "No"] },
+                    { type: "select", values: ["Y", "No"] },
+                    { type: "select", values: ["Y", "No"] },
+                    { type: "select", values: ["Active", "Inactive"] },
+                    { type: "text" },
+                    { type: "text" }
+                ]
+            });
+        });
+
+    </script>
+
+<div class="headrow">
+        <button type="button" title="Add New Designation" data-url="/Common/Designation/Create" id="" onclick="GoTo(this)"  class=" sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Designation" data-url="/Common/Designation/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <button type="button" title="Add New" data-url="/Common/Designation/Import" onclick="GoTo(this)" id="" class=" sym-btn-Excel-Export ">&nbsp;Export/Emport</button>
+		<label class="pull-right"> Designation</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Designation List</p>
+    </div>
+<div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                         <tr>
+                            <th class="center"><input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Attendance Bonus</th>
+                            <th>EPZ</th>
+                            <th>Other</th>
+                            <th>Ifter Amount</th>
+                            <th>Dinner Amount</th>
+                            <th>Tiffin Amount</th>
+                            <th>ETiffin Amount</th>
+                            <th>OT Allowance</th>
+                            <th>OT Orginal</th>
+                            <th>OT Buyer</th>
+                            <th>Extra OT</th>
+                             <th>Active/Inactive</th>
+                            <th>OrderNo</th>
+                            <th>Remarks</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                             <th>Code</th>
+                             <th>Name</th>
+                            <th style="text-align:left!important">Attendance Bonus</th>
+                            <th style="text-align:left!important">EPZ</th>
+                            <th style="text-align:left!important">Other</th>
+                            <th style="text-align:left!important">Ifter Amount</th>
+                            <th style="text-align:left!important">Dinner Amount</th>
+                            <th style="text-align:left!important">Tiffin Amount</th>
+                            <th style="text-align:left!important">ETiffin Amount</th>
+                            <th>OT Allowance</th>
+                            <th>OT Orginal</th>
+                            <th>OT Buyer</th>
+                            <th>Extra OT</th>
+                            <th>Active/Inactive</th>
+                            <th>OrderNo</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+</div>
+<div class="headrow">
+        <button type="button" title="Add New Designation" data-url="/Common/Designation/Create" id="" class="sym-btn-add "  onclick="GoTo(this)">&nbsp;New</button>
+        <button type="button" title="Delete Designation" data-url="/Common/Designation/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+</div>

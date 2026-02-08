@@ -1,0 +1,86 @@
+﻿@model SymViewModel.BWWF.PFReportVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create";
+}
+
+
+
+@using (Html.BeginForm("EmployeeBreakMonthPF_Statement", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmStatement" }))
+{
+   @Html.ValidationSummary(true)
+    @*@Html.HiddenFor(model => model.Id)*@
+    <h4>Employee Break Month Report</h4>
+    <div class="thinbox">
+        <div class="EnumEEHead">
+            @*<div class="row">
+                    <label class="col-sm-3">
+                        <label>Code</label>
+                    </label>
+                    <div class="col-sm-9">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = " form-control" })
+                    </div>
+                </div>*@
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="editor-label">
+                        <label>Employee Code</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.EmployeeId, "/Config/DropDown/EmployeeCodeNameAll", new { @class = "codeFCom form-control selectDropdown" })
+                    </div>
+
+                </div>
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @*<button type="button" title="Report Preview" onclick="pageSubmit('frmCOAGroup');" class="sym-btn-save">&nbsp;Preview</button>*@
+                    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PFReport/EmployeeStatement" onclick="reportData(this);" id="" class="sym-btn-Excel-Export">&nbsp;Download</button>
+
+                </label>
+                <label class="col-sm-4">
+                    &nbsp;<button type="button" title="Clear the Entries" id="Clear" class="sym-btn-clear">&nbsp;Clear</button>
+
+                </label>
+                <label class="col-sm-4">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $(".selectDropdown").select2();
+        $(".selectDropdown").removeClass('form-control');
+        InitDropDowns();
+        InitDropDowns();
+        InitDateTimePickers();
+
+        $("#Clear").on('click', function () {
+            // Clear all input, select, and textarea fields within the form
+            $("#frmStatement").find("input[type=text], select, textarea").val("");
+            $("#frmStatement").find("select").val(null).trigger('change'); // Reset select2 dropdowns
+        });
+
+        //$("#Clear").on('click', function () {
+        //    //$("#Code").val("");
+        //    $("#Id").val("");
+        //    $("#PFHeaderId").val("");
+        //    $("#DateFrom").val("");
+        //    $("#DateTo").val("");
+
+        //});
+    });
+
+    function reportData(sender) {
+        $("#frmStatement").submit();
+    }
+
+</script>

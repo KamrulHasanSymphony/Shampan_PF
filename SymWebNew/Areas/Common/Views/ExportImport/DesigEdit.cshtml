@@ -1,0 +1,81 @@
+﻿@model SymViewModel.HRM.EmployeeInfoVM
+@using UIHelper.MVC
+
+@{
+    ViewBag.Title = "DesigEdit";
+    Layout = "~/Areas/HRM/Views/Shared/_HomeLayout.cshtml";
+}
+
+<h2>DesigEdit</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="color">
+            <div class="row">
+                <div class="col-sm-2">
+                    <div class="display-label">
+                        @Html.LabelFor(model => model.designationVM.Id)
+                    </div>
+                    <div>
+                        @Html.TextBoxFor(model => model.designationVM.Id, new { @placeholder = "Id", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.designationVM.Id)
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="display-label">
+                        @Html.LabelFor(model => model.designationVM.Code)
+                    </div>
+                    <div class="display-field">
+                        @Html.TextBoxFor(model => model.designationVM.Code, null, new { @placeholder = "Code", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.designationVM.Code)
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="display-label">
+                        @Html.LabelFor(model => model.designationVM.Code)
+                    </div>
+                    <div class="display-field">
+                        @Html.TextBoxFor(model => model.designationVM.Code, new { @id = "datsepicker", @placeholder = "Code", @class = "StartTimef1" })
+                        @Html.DatePickerFor(model => model.designationVM.Code)
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="display-label">
+                        @Html.LabelFor(model => model.designationVM.Remarks)
+                    </div>
+                    <div class="display-field">
+                        @*@Html.SimpleDropDownFor(model => model.designation.Remarks, "/Common/Enum/ENGetTrainingPlaceList", new { @placeholder = "Code", @class = "form-control" })*@
+                        @Html.ValidationMessageFor(model => model.designationVM.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p>
+ <button type="submit" title="Save Data" class="sym-btn-save">&nbsp;Save</button>
+    </p>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+<script>
+    $(function () {
+        $("#datepicker").datepicker();
+        showButtonPanel: true
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        // find the input fields and apply the time select to them.
+        $('.StartTimef1').ptTimeSelect();
+    });
+</script>
+

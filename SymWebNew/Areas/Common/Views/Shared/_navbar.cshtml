@@ -1,0 +1,128 @@
+﻿@using SymOrdinary
+@using System.Threading;
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;       
+        
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+@{
+    string CompanyName = System.Configuration.ConfigurationManager.AppSettings["CompanyName"];
+    string BranchName = Session["BranchName"] != null ? Session["BranchName"].ToString() : "No Branch Selected";
+}
+<div class="content white menuheight">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!--/.navbar-header-->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="Transfer"><a href="/Common/Home/">Home</a></li>
+                <li class="Home dropdown">               
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Module<b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        @if (identity.IsAdmin)
+                        {
+                            <li><a class="btn btn-info" href="/Common/Home/">Admin</a></li>
+                        }                      
+                        @if (identity.IsAdmin || identity.IsPF)
+                        {
+                            <li><a class="btn btn-info" href="/PF/Home/">PF</a></li>
+                        }
+                        @if (CompanyName == "Meghna")
+                        {
+                            if (identity.IsAdmin || identity.IsPF)
+                            {
+                                <li><a class="btn btn-info" href="/WPPF/Home/Index">WPPF</a></li>
+                            }                        
+                            if (identity.IsAdmin || identity.IsPF)
+                            {
+                                <li><a class="btn btn-info" href="/WWF/Home/Index">WWF</a></li>
+                            }        
+                        }            
+                     
+                    </ul>
+                </li>
+                 
+                <li class="User"><a href="/Common/User/">User </a></li>
+                <li class="dropdown Setup">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setup<b class="caret"></b></a>
+                    <ul class="dropdown-menu multi-column columns-1">
+                        <div class="row">
+                            <div class="col-sm-12">
+
+
+                                <ul class="multi-column-dropdown">
+
+                                    <li class="dropdown dropdown-submenu">
+                                        <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Master Data</a>
+                                        <ul class="dropdown-menu">
+
+                                            <li><a class="btn btn-info" href="/Common/DesignationGroup">Designation Group</a></li>
+                                            <li><a class="btn btn-info" href="/Common/Branch">Branch</a></li>
+                                            <li><a class="btn btn-info" href="/Common/Section">@Session["SectionLabel"]</a></li>
+                                            <li><a class="btn btn-info" href="/Common/ExportImport">Export/Import</a></li>
+                                            <li><a class="btn btn-info" href="/Common/Department">@Session["DepartmentLabel"]</a></li>
+                                            <li><a class="btn btn-info" href="/Common/Designation">Designation</a></li>
+                                            <li><a class="btn btn-info" href="/Common/Bank">Bank</a></li>
+                                            <li><a class="btn btn-info" href="/Common/Project">@Session["ProjectLabel"]</a></li>
+                                            <li><a class="btn btn-info" href="/Common/Company">Company</a></li>
+
+                                        </ul>
+                                    </li>
+
+                                        
+                                    <li><a class="btn btn-info" href="/Common/FiscalYear">Fiscal Year</a></li>
+                                    <li><a class="btn btn-info" href="/Common/Settings">Settings</a></li>
+                                    <li><a class="DBUpdate btn btn-info" href="/Common/DBUpdate/DBUpdate">DB Update </a></li>  
+                                   
+                                                              
+                                </ul>
+                            </div>
+                        </div>
+                    </ul>
+
+                </li>
+                <li class="dropdown Setup">
+                    <a style="color: blue; margin-left: 400px;">(@BranchName)</a>
+
+                </li>
+</ul>
+            <ul class="nav navbar-nav navbar-right" style="border-left: 5px solid #fff">
+                <li class="dropdown1">
+                    <a href="#" class="dropdown-toggle sym-btn-back" title="Go Back" onclick="goBack()" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">&nbsp;Back</a>
+                </li>
+                <li class="dropdown1">
+                    <a href="#" class="dropdown-toggle btn btn-warning" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin </a>
+                </li>
+            </ul>
+        </div>
+        <!--/.navbar-collapse-->
+    </nav>
+    <!--/.navbar-->
+</div>
+<style>
+    .navbar-default .navbar-nav > li.dropdown:hover > a,
+    .navbar-default .navbar-nav > li.dropdown:hover > a:hover,
+    .navbar-default .navbar-nav > li.dropdown:hover > a:focus {
+        /*background-color: rgb(231, 231, 231);*/
+        color: rgb(85, 85, 85);
+    }
+
+    li.dropdown:hover > .dropdown-menu {
+        display: block;
+    }
+</style>

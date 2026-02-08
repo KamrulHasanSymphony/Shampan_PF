@@ -1,0 +1,123 @@
+﻿@model IEnumerable<SymViewModel.HRM.DesignationGroupVM>
+@{
+    ViewBag.Title = "Index";
+}
+
+<div class="headrow">
+    <button type="button" title="Add New Designation Group" data-url="/Common/DesignationGroup/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+    <button type="button" title="Delete Designation Group" data-url="/Common/DesignationGroup/DepartmentDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <button type="button" title="Add New" data-url="/Common/DesignationGroup/Import" onclick="GoTo(this)" id="" class=" sym-btn-Excel-Export ">&nbsp;Export/Emport</button>
+    <label class="pull-right">Designation Group</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Designation Group List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All
+                </th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Active/Inactive</th>
+                <th>Remarks</th>
+            </tr>
+            <tr>
+                <th class="center">Actions</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Active/Inactive</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <div class="pull-left">
+        <button type="button" title="Add New Designation Group" data-url="/Common/DesignationGroup/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Designation Group" data-url="/Common/DesignationGroup/DepartmentDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+        <button type="button" title="Delete Designation Group" id="CheckDt" class="sym-btn-remove">&nbsp;Check</button>
+    </div>
+</div>
+
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/DesignationGroup/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit"  style="text-decoration:none;" id="lnkEdit1"class=" lnkEdit sym-btn-edit-row"  href=\"/Common/DesignationGroup/Edit/' + oObj.aData[0] + '\"></a>' +
+                                    '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/DesignationGroup/DepartmentDelete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>';
+                                }
+                            }
+                            //,
+                            //                            {
+                            //                                "sName": "Id",
+                            //                                "bSearchable": false,
+                            //                                "bSortable": false,
+                            //                                "sWidth": "12%",
+                            //                                "sClass": "center",
+                            //                                "fnRender": function (oObj) {
+                            //                                    return ' <input   type="text" data-Id="' + oObj.aData[1] + '">';
+                            //                                }
+                            //                            }
+                            , { "sName": "Code", "sWidth": "20%" }
+                            , { "sName": "Name", "sWidth": "25%" }
+                            , { "sName": "Active", "sWidth": "15%" }
+                            , { "sName": "Remarks", "sWidth": "25%" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "select", values: ["Active", "Inactive"] }
+                       , { type: "text" }
+                       , { type: "text" }
+            ]
+        });
+    });
+</script>
+
+<script>
+    $('#CheckDt').click(function () {
+        var table = $('#myDataTable').DataTable();
+        ////alert(table);
+        var data = table.$('input, select').serialize();
+        ////alert(data);
+        //alert(
+        //    "The following data would have been submitted to the server: \n\n" +
+        //    data.substr(0, 120) + '...'
+        //);
+        return false;
+        //$('button').click(function () {
+        //    var data = table.$('input, select').serialize();
+        //    alert(
+        //        "The following data would have been submitted to the server: \n\n" +
+        //        data.substr(0, 120) + '...'
+        //    );
+        //    return false;
+        //});
+    }
+    );
+</script>

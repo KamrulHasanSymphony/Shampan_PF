@@ -1,0 +1,161 @@
+﻿<div class="headrow">
+    <button type="button" title="Add From (Pre Distribution Fund)" data-url="/@ViewBag.TransType/ProfitDistribution/IndexPreDistributionFund" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New From (Pre Distribution Fund)</button>
+    <label class="pull-right">Profit Distribution </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Profit Distribution List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All</th>
+                <th class="center">Distribution Date</th>
+                <th class="center">Total EmployeeContri bution</th>
+                <th class="center">Total Employer Contribution</th>
+                <th class="center">Total Profit</th>
+                <th class="center">Post Status</th>
+                <th class="center">Payment Status</th>
+
+
+
+                @*  
+FundingDate
+FundingValue
+FundingReference
+Post
+IsDistribute
+*@
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add From (Pre Distribution Fund)" data-url="/@ViewBag.TransType/ProfitDistribution/IndexPreDistributionFund" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New From (Pre Distribution Fund)</button>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/ProfitDistribution/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "20%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
+                                        + '&nbsp; <a id=""  title="Click on for Edit"    href=\"/@ViewBag.TransType/ProfitDistribution/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>'
+                                        + '&nbsp; <a title="Click on for Post"   data-url="/@ViewBag.TransType/ProfitDistribution/Post"   onclick=btnPostNew(this);   data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                        + '&nbsp; <a title="Click on for Delete" data-url="/@ViewBag.TransType/ProfitDistribution/Delete" onclick=btnDeleteNew(this);   data-Id="' + oObj.aData[0] + '\" class="sym-btn-remove-row"></a>'
+                                        + '&nbsp; <a title="Click on for Payment" data-url="/@ViewBag.TransType/ProfitDistribution/Payment" onclick=btnPayment(this);   data-Id="' + oObj.aData[0] + '\" class="sym-btn-payment-row"></a>'
+                                        + '&nbsp; <a title="Click on for Download" target="_blank"  href=\"/@ViewBag.TransType/ProfitDistribution/ExcelReport/' + oObj.aData[0] + '\" class="  sym-btn-download-row"></a>'
+
+
+                                    ;
+                                }
+                            }
+                            , { "sName": "DistributionDate", "sWidth": "10%" }
+                            , { "sName": "TotalEmployeeContribution", "sWidth": "10%" }
+                            , { "sName": "TotalEmployerContribution", "sWidth": "10%" }
+                            , { "sName": "TotalProfit", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "10%" }
+                            , { "sName": "IsPaid", "sWidth": "10%" }
+
+
+
+            ]
+        });
+    });
+</script>
+
+
+<script>
+    function btnPostNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/ProfitDistribution/GetProfitDistribution" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Post Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+    function btnDeleteNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/ProfitDistribution/GetProfitDistribution" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted! Can't Be Deleted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Delete Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+
+    function btnPayment(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/ProfitDistribution/GetProfitDistribution" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (!vm.Post) {
+                ShowResult("Fail", "Do Post before Payment!");
+                return;
+            }
+            else if (vm.IsPaid) {
+                ShowResult("Fail", "Payment Already Done!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to do Payment!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+
+</script>
+

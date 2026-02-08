@@ -1,0 +1,147 @@
+﻿
+@model SymViewModel.WPPF.COAGroupVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "COAGroup", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmCOAGroup" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    string PF_COATypeOfReportUrl = "/Config/DropDown/PF_COATypeOfReport?TransType=" + @ViewBag.TransType;
+    string PF_COAGroupTypeUrl = "/Config/DropDown/PF_COAGroupType?TransType=" + @ViewBag.TransType;
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmCOAGroup')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">COA Group > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <label class="pull-right">COA Group > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/COAGroup" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>COA Group</p>
+        </div>
+        <div class="COAGroup">
+            <div class="row">
+
+                @*<div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.COATypeOfReportId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.COATypeOfReportId, PF_COATypeOfReportUrl, new { @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.COATypeOfReportId)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.COAGroupTypeId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.COAGroupTypeId, PF_COAGroupTypeUrl, new { @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.COAGroupTypeId)
+                    </div>
+                </div>*@
+                
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Name)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Name, new { @placeholder = "Name", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.GroupSL)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.GroupSL, new { @placeholder = "Serial", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.GroupSL)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "   form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsActive)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>
+               
+
+            </div>
+            @*<div class="row">
+
+                
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsActive)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>
+
+
+            </div>*@
+        </div>
+    </div>
+
+
+
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmCOAGroup')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/COAGroup" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmCOAGroup");
+    });
+
+
+
+    function UpdateData() {
+        //pageSubmit('frmLoan');
+        pageSubmit('frmCOAGroup');
+    }
+
+    $(document).ready(function () {
+        $('#frmCOAGroup').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+
+
+</script>

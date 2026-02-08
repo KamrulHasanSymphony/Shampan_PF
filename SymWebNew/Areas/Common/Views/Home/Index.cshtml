@@ -1,0 +1,112 @@
+﻿@model SymViewModel.Common.AdminInfoDashboardVM
+
+<div id="mainDashbord">
+
+    <center>
+        Now You are login with : @Model.BranchVM.Name
+    </center>
+
+    <div class="row">
+        <div class="col-12 col-xs-6 col-sm-4 col-md-4">
+        </div>
+            <div class="col-12 col-xs-6 col-sm-4 col-md-4">
+                <div class="flex-item">
+                    <div class="flex-item-inner">
+                        <a href="#">
+                            <div class="card-front">
+                                <div class="card-top" style="background: #899d23">
+                                    <h2>Last Month PF</h2>
+                                </div>
+                                <div class="char_canva">
+                                    <canvas id="myChartPF" style="width: 420px !important; height: 200px !important;"></canvas>
+                                </div>
+                                <div class="cardMain">
+                                    <div class="card-flex">
+                                        @Html.LabelFor(model => model.PfInfoDashboardVMS.TotalPerson)
+                                        <span>@Html.TextBoxFor(model => model.PfInfoDashboardVMS.TotalPerson, new { @placeholder = "TotalPerson", @class = "form-control" })</span>
+                                    </div>
+                                    <div class="card-flex">
+                                        @Html.LabelFor(model => model.PfInfoDashboardVMS.PFValue)
+                                        <span>@Html.TextBoxFor(model => model.PfInfoDashboardVMS.PFValue, new { @placeholder = "PFValue", @class = "form-control" })</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </a>
+                        <!-- /card -->
+                    </div>
+                </div>
+            </div>
+        <div class="col-12 col-xs-6 col-sm-4 col-md-4">
+        </div>
+        </div>
+</div>
+
+<script>
+    $(function () {
+        var backgroundColor = ["#2ecc71", "#3498db", "#95a5a6", "#e74c3c"];
+
+        setTimeout(function () { loadsPie() }, 0);     
+        setTimeout(function () { loadsPiePF() }, 0);
+    
+
+        function loadsPie() {
+            var labels = [];
+            var datas = [];
+            $.ajax({
+                url: "@Url.Action("AdminInfo", "Home", new { area = "Common" })",
+                type: 'GET',
+                beforeSend: function () { $(".loading").show(); },
+                complete: function () { $(".loading").fadeOut(200).hide("slow") },
+                success: function (data) {
+
+                    var labels = ["Present", "Absent", "Late", "InMiss"];
+                    var datas = [data.Present, data.Absent, data.Late, data.InMiss];
+
+                    var ctx = document.getElementById("myChartPie").getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                backgroundColor: backgroundColor,
+                                data: datas
+                            }],
+                        }
+                    });
+                },
+            });
+        }
+      
+        function loadsPiePF() {
+            var labels = [];
+            var datas = [];
+            $.ajax({
+                url: "@Url.Action("PFInfo", "Home", new { area = "Common" })",
+                type: 'GET',
+                beforeSend: function () { $(".loading").show(); },
+                complete: function () { $(".loading").fadeOut(200).hide("slow") },
+                success: function (data) {
+
+                    var labels = ["TotalPerson", "PFValue"];
+                    var datas = [data.TotalPerson, data.PFValue];
+
+                    var ctx = document.getElementById("myChartPF").getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                backgroundColor: backgroundColor,
+                                data: datas
+                            }],
+                        }
+                    });
+                },
+            });
+        }
+
+
+    });
+
+</script>

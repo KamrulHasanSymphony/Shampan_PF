@@ -1,0 +1,115 @@
+﻿@model IEnumerable<SymViewModel.HRM.EmployeeInfoVM>
+@{
+    ViewBag.Title = "Employee List";
+    ViewBag.Location = "Employee List"; 
+}
+<!DOCTYPE html>
+<html>
+    <head>
+       
+    </head>
+    <body>
+
+        <div class="headrow">
+             <label class="pull-right">Employee Loan > New</label>
+</div>
+          <div class="thinbox">
+        <div class="th_thinbox">
+        <p>Employee List for Loan</p>   
+        </div>
+        <div  id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                         <tr>
+                            <th></th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th >Designation</th>
+                            <th >Join Date</th>
+                        </tr>
+
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Join Date</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+</div>
+
+@*         <div class="headrow">
+</div>*@
+    </body>
+</html>
+ 
+ 
+<script>
+
+    $(document).ready(function () {
+        //InitCustomDialog();
+
+        if ('@Session["result"]' != "") {
+            var tt = '@Session["result"]';
+            var tt1 = tt.split("~");
+            // $(".dialog-alert").dialog('open');
+            $("#dialog-msg").append('' + tt1[1]);
+            $(".ui-dialog").addClass('' + tt1[0]);
+        }
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/PF/Loan/_EmployeeInfoForLoan",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+         {
+             "sName": "Id",
+             "bSearchable": false,
+             "bSortable": false,
+             "sWidth": "12%",
+             "sClass": "center",
+             "fnRender": function (oObj) {
+
+                 return '   <a id="lnkEdit1"  title="Click for Entry" style="text-decoration:none;"  href="/PF/Loan/Create?employeeId=' + oObj.aData[0] + '\" class="btn btn-warning btn-xs "><i class="fa fa-list-ul"></i></a>' //+
+                 ;
+             }
+         }
+                                , { "sName": "Code", "sWidth": "15%" }
+                                , { "sName": "EmpName", "sWidth": "20%" }
+                                , { "sName": "Department", "sWidth": "15%" }
+                                , { "sName": "Designation", "sWidth": "15%" }
+                                , { "sName": "JoinDate", "sWidth": "20%" }
+
+        //Code
+        //EmpName 
+        //Department 
+        //Designation
+        //JoinDate
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "date-range" }
+            ]
+
+        });
+
+    });
+  
+    </script>

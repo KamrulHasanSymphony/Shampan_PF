@@ -1,0 +1,300 @@
+﻿@*
+    InvestmentType
+    InvestmentAddress
+    InvestmentDate
+    FromDate
+    ToDate
+    MaturityDate
+    InvestmentRate
+    InvestmentValue
+*@
+
+@model SymViewModel.BWWF.InvestmentVM
+@using NPOI.SS.Formula.Functions
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "Investment", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmInvestment" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+    @Html.HiddenFor(model => model.ReferenceId)
+    @Html.HiddenFor(model => model.IsEncashed)
+    string InvestmentNameUrl = "/Config/DropDown/PF_InvestmentName?TransType=" + @ViewBag.TransType;
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmInvestment')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Investment > Create</label>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=Investment&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+            }
+            
+    @*<button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/Investment/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>*@
+
+
+
+            <label class="pull-right">Investment > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Investment" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Investment" data-url="/@ViewBag.TransType/Investment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Investment</p>
+        </div>
+        <div class="Investment">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionCode)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionCode, new { @placeholder = "Transaction Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TransactionCode)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentName)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.InvestmentNameId, InvestmentNameUrl, new { @class = "vInvestmentNameId required form-control" })
+                        @Html.ValidationMessageFor(model => model.InvestmentNameId)
+                    </div>
+                </div>
+
+                <div class="col-md-1">
+                    <div class="editor-label">
+                        <label>&nbsp;</label>
+                    </div>
+                    <div class="editor-field">
+                        <button  type="button" title="Load All" onclick="InvestmentNameInfoLoad()" class=" fa fa-download">&nbsp;</button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentType)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.InvestmentTypeId, "/Config/DropDown/PF_EnumInvestmentType", new { @readonly = "readonly", @class = " cInvestmentTypeId   form-control" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ReferenceNo)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ReferenceNo, new { @placeholder = "Reference No.", @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.ReferenceNo)
+                    </div>
+                </div>
+               
+            </div>
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.InvestmentDate, new { @readonly = "readonly", @placeholder = "Investment Date", @class = " cInvestmentDate  form-control", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.InvestmentDate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FromDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.FromDate, new {@readonly="readonly", @placeholder = "From Date", @class = "cFromDate   form-control" })
+                        @Html.ValidationMessageFor(model => model.FromDate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ToDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ToDate, new { @readonly = "readonly", @placeholder = "To Date", @class = "cToDate     form-control" })
+                        @Html.ValidationMessageFor(model => model.ToDate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.MaturityDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.MaturityDate, new { @readonly = "readonly", @placeholder = "Maturity Date", @class = "cMaturityDate    form-control" })
+                        @Html.ValidationMessageFor(model => model.MaturityDate)
+                    </div>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.InvestmentValue, new { @placeholder = "Investment Value", @class = " cInvestmentValue required NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.InvestmentValue)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentRate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.InvestmentRate, new { @placeholder = "Investment Rate", @class = " required  form-control" })
+                        @Html.ValidationMessageFor(model => model.InvestmentRate)
+                    </div>
+                </div>
+                @*<div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentRate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.InvestmentRate, new { @placeholder = "Investment Rate", @class = " required  form-control" })
+                        @Html.ValidationMessageFor(model => model.InvestmentRate)
+                    </div>
+                </div>*@
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmInvestment')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=Investment&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+            @*<button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/Investment/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>*@
+
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Investment" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Investment" data-url="/@ViewBag.TransType/Investment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmInvestment");
+    });
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmInvestment');
+    }
+
+    function PostData(sender) {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/Investment/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+
+</script>
+
+<script>
+
+    $('.cInvestmentValue').on('change', function () {
+
+        DebitCreditLoad();
+    });
+
+
+    function DebitCreditLoad() {
+        var $elm = $(".row.cInvestmentDetail")
+
+        var $investmentRow = $elm.eq(0);
+        var $bankRow = $elm.eq(1);
+        var $creditRow = $elm.eq(2);
+
+        var CreditAmount = parseFloat($creditRow.find(".dCreditAmount").val().replace(/\,/g, ''));
+
+        var InvestmentValue = parseFloat($(".cInvestmentValue").val().replace(/\,/g, ''));
+
+        var BankAmount = CreditAmount - InvestmentValue;
+
+        $investmentRow.find(".dDebitAmount").val(InvestmentValue);
+        $bankRow.find(".dDebitAmount").val(BankAmount);
+
+
+        NumberFormatCheck();
+
+    }
+    function InvestmentNameInfoLoad() {
+
+        //alert(1);
+
+        var vInvestmentNameId = $(".vInvestmentNameId").val();
+
+        var url = "/@ViewBag.TransType/InvestmentName/InvestmentNameInfoLoad?id=" + vInvestmentNameId;
+        $.ajax({
+            type: "GET",
+            url: url,
+            error: function (xhr, status, error) {
+                //"test"
+            },
+            success: function (vm) {
+                //alert(vm.InvestmentTypeId);
+                $('.cMaturityDate').val(vm.MaturityDate);
+                $('.cInvestmentDate').val(vm.InvestmentDate);
+                //alert(vm.InvestmentDate);
+                $('.cFromDate').val(vm.FromDate);
+                $('.cToDate').val(vm.ToDate);
+                $('.cInvestmentTypeId').val(vm.InvestmentTypeId);
+                
+            },
+            complete: function () {
+                //alert(4);
+                $(".loading").fadeOut(500).hide("slow");
+            }
+        })
+
+    }
+    $(document).ready(function () {
+        $('#frmInvestment').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+
+</script>

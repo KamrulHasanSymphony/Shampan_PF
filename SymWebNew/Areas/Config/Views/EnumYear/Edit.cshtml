@@ -1,0 +1,73 @@
+﻿@model SymViewModel.Enum.EnumYearVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Edit";
+    ViewBag.Location = "Edit"; 
+}
+
+@using (Html.BeginForm("Edit", "EnumYear", FormMethod.Post, new { @Id = "frmYear" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="EnumYear">
+                @Html.HiddenFor(model => model.Id)
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Name)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.Name, new { @placeholder = "Year", @class ="required form-control" })
+              
+            </div>
+        </div>
+            <div class="row">
+                    <label class="col-sm-3">
+                         @Html.LabelFor(model => model.IsActive)
+                    </label>
+                <div class="col-sm-1">
+                @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+            </div> 
+        </div>
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Remarks)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks",@rows="1", @class ="  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+            </div>
+        </div>
+       <div class="row">
+            <label class="col-sm-3">
+			<button type="button" title="Edit Data" onclick="Edit();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+              <button type="button" title="Save Data" onclick="pageSubmit('frmYear');" class="Save sym-btn-save">&nbsp;Save</button>
+              
+            </label>
+            <label class="col-sm-4">
+          
+				 <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+            </label>
+        </div>
+        </div>
+    </div>
+}
+ 
+<script>
+    $(function () {
+        Edit();
+        valiDation("frmYear");
+    });
+    function Edit() {
+        fnReadOnly("EnumYear");
+        if ($(".EnumYear").hasClass("readOnly")) {
+            $(".Save").hide();
+            $(".Edit").show();
+        }
+        else {
+            $(".Save").show();
+            $(".Edit").hide();
+        }
+    }
+
+</script>

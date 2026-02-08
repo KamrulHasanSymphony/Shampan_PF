@@ -1,0 +1,49 @@
+﻿@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Pre Distribution Fund</p>
+    </div>
+    <div class="PreDistributionFund">
+        <div class="row">
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>Funding Date From</label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBox("FundingDateFrom", "", new { @placeholder = "Date From", @class = "fundDateFrom customDatePicker form-control" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>Funding Date To</label>
+            </div>
+            <div class="editor-field">
+                @Html.TextBox("FundingDateTo", "", new { @placeholder = "Date To", @class = "fundDateTo customDatePicker form-control" })
+            </div>
+        </div>
+            </div>
+    </div>
+</div>
+
+<div class="headrow">
+    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PreDistributionFund/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Detail</button>
+</div>
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var dtFrom = $(".fundDateFrom").val();
+        var dtTo = $(".fundDateTo").val();
+
+        rptObj = new Object();
+        rptObj.dtFrom = dtFrom;
+        rptObj.dtTo = dtTo;
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>

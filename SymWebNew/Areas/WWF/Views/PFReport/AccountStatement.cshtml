@@ -1,0 +1,61 @@
+﻿@model SymViewModel.WWF.PFParameterVM
+@using UIHelper.MVC
+@*@using (Html.BeginForm("AccountStatementReport", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmAccountStatement", @target = "_blank" }))*@
+@using (Html.BeginForm("AccountLedgerReport", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmAccountStatement", @target = "_blank" }))
+    {
+    @Html.ValidationSummary(true)
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Account Statement</p>
+        </div>
+        <div class="Withdraw">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.AccountId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.AccountId, "/Config/DropDown/PF_Account", new { @class = " required  form-control" })
+                        @Html.ValidationMessageFor(model => model.AccountId)
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>Date From</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateFrom", "", new { @placeholder = "Date From", @class = " dtFrom customDatePicker form-control" })
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>Date To</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateTo", "", new { @placeholder = "Date To", @class = " dtTo customDatePicker form-control" })
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="headrow">
+        <button type="button" title="Click to View Report" onclick="pageSubmit('frmAccountStatement');" class="sym-btn-detail">&nbsp;Report</button>
+    </div>
+}
+
+<script>
+
+    $(function () {
+        valiDation("frmAccountStatement");
+    });
+</script>

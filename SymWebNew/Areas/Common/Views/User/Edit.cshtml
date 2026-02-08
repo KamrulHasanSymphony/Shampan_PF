@@ -1,0 +1,84 @@
+﻿@model SymViewModel.Common.UserLogsVM
+@using UIHelper.MVC
+@using (Html.BeginForm("Edit", "User", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmUser" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.Hidden("UserRoles")
+    @Html.HiddenFor(model => model.EmployeeId)
+
+<div class="thinbox">
+         <div class="th_thinbox">
+            <p>User Create</p>   
+            </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LogID)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.LogID, new { @placeholder = "User ID", @class = "required form-control",@readonly="readonly"})
+                    @Html.ValidationMessageFor(model => model.LogID)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.FullName)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.FullName, new { @placeholder = "Full Name",  @class = " form-control",@readonly="readonly" })
+                    @Html.ValidationMessageFor(model => model.FullName)
+                </div>
+            </div>
+               <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.GroupId)
+                </div>
+                <div class="editor-field">
+                     @Html.SimpleDropDownFor(model => model.GroupId, "/Config/DropDown/UserGroup", new { @class = "required form-control" })
+                    @Html.ValidationMessageFor(model => model.GroupId)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Email)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email",  @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+
+            
+            
+            @*<div class="passwordAreaB">
+                <label>&nbsp;</label>
+                <div class="col-md-2"><input onchange="ResetPassword(this);" type="checkbox" class="role togglecheckbox" id="resetPassword" name="resetPassword" /><label for="resetPassword"> Re-set Password</label></div>
+            </div>*@
+        </div>
+                    @Html.HiddenFor(model => model.IsAdmin, new { @class = "form-control" })
+
+            <button type="submit" title="Save Data" onclick="pageSubmit('frmUser');" class=" Save sym-btn-update">&nbsp;Update</button>
+            @*<button type="button" title="Cancel Data" onclick="CancleUser();" class=" Cancle sym-btn-cancel">&nbsp;Cancel</button>*@
+</div>
+}
+<script>
+
+    $(function(){
+        $('#FullName').autocomplete({ source: '@Url.Action("EmployeeCode", "Autocomplete", new { area = "Config" })', minLength: 2 });
+        });
+
+    function CreateUser() {
+        //var passW = $(".passW");
+        //var conpassW = $(".conpassW");
+        //alert(passW + " " + conpassW);
+        //if (passW != conpassW) {
+        //    ShowResult("Fail", "Password are not matched!");
+        //    return;
+        //}
+
+        pageSubmit('frmUser');
+    }
+     
+</script>

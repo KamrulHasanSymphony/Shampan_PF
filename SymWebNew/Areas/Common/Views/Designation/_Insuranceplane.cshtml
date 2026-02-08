@@ -1,0 +1,72 @@
+﻿@model SymViewModel.HRM.DesignationVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "Designation", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "afrmSchedule1Salary" }))
+{
+
+
+
+    <div class="headrow">
+
+        <button type="button" title="Save Data" id="" class="saveJSONSchedule1Salary Save sym-btn-save">&nbsp;Save</button>
+
+    </div>
+}
+
+<script>
+    $(function () {
+        valiDation("afrmSchedule1Salary");
+        //var isChange = false;
+        //$('.form-control').change(function () {
+        //    isChange = true;
+        //});
+
+        $(".NumberCheck").each(function () {
+            this.value = parseFloat(this.value).toFixed(2);
+        });
+
+        @*   var TotalTaxPayAmount = 0;
+        var TotalTaxPayAmountFromServer = 0;
+
+        $(".TaxTk").each(function () {
+            TotalTaxPayAmountFromServer = parseFloat('@Model.schedule1SalaryVM.TotalTaxPayAmount');
+            TotalTaxPayAmount = parseFloat(TotalTaxPayAmount) + parseFloat(this.value);
+
+            if (TotalTaxPayAmount <= 0) {
+                TotalTaxPayAmount = TotalTaxPayAmountFromServer;
+            }
+        });
+
+
+        $(".TotalTaxPayAmount").val(TotalTaxPayAmount);*@
+
+
+        $('.saveJSONSchedule1Salary').click(function () {
+            var FiscalPeriodDetailId = $("#FiscalPeriodDetailId").val();
+            var fYear = $("#fYear").val();
+            if (FiscalPeriodDetailId == "") {
+                ShowResult("Fail", "Please Select the Fiscal Period");
+                return;
+            }
+
+
+            var a = pageSubmitJSON('afrmSchedule1Salary');
+            if (a != 0) {
+                return;
+            }
+            //if (isChange == false) {
+            //    ShowResult("Success", "You have no changes for save");
+            //    return;
+            //}
+            if (pageSubmitJSON('afrmSchedule1Salary') == 0) {
+                var myData = $('#afrmSchedule1Salary').serialize();
+                var url = "/Tax/TaxSchedule/CreateEdit?fydid=" + FiscalPeriodDetailId + "&fYear=" + fYear;
+                submit(url, myData);
+                window.location.reload();
+                $("#FinalTaxAmount").focus();
+            }
+        });
+    });
+
+
+
+</script>

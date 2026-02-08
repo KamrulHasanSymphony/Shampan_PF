@@ -1,0 +1,59 @@
+﻿@model SymViewModel.Common.BankVM
+
+@{
+    ViewBag.Title = "Create";
+}
+
+@using (Html.BeginForm("Create", "Bank", FormMethod.Post, new { @Id = "frmBank" }))
+{
+    @Html.ValidationSummary(true)
+
+                @Html.HiddenFor(model => model.Id)
+                @Html.HiddenFor(model => model.BranchId)
+                @Html.LabelFor(model => model.Code)
+
+    <div class="thinbox">
+        <div class="row">
+            <div class="col=md-4">
+                @Html.LabelFor(model => model.Code)
+            </div>
+            <div class="col=md-8">
+                @Html.TextBoxFor(model => model.Code, null, new { @placeholder = "Bank Code", @class = "required form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col=md-4">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="col=md-8">
+                @Html.TextBoxFor(model => model.Name, null, new { @placeholder = "Bank Name", @class = "required form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="col=md-4">
+                @Html.LabelFor(model => model.Remarks)
+            </div>
+            <div class="col=md-8">
+                @Html.TextBoxFor(model => model.Remarks, null, new { @placeholder = "Remarks", @class = " form-control" })
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <label class="col-sm-3">
+            <button type="button" title="Save Data" onclick="pageSubmit('frmBank');" class="sym-btn-save">&nbsp;Save</button>
+        </label>
+        <label class="col-sm-4">
+            <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+        </label>
+    </div>
+}
+
+      <script>
+
+      $(function () {
+          valiDation("frmBank");
+        
+      });
+ 
+  </script>

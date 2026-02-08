@@ -1,0 +1,269 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F6A7A269-8DCF-4FE3-83DA-DB8B0E389EE0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SymRepository</RootNamespace>
+    <AssemblyName>SymRepository</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CommonRepo.cs" />
+    <Compile Include="Common\DesignationRepo.cs" />
+    <Compile Include="Common\EmployeeInfoRepo.cs" />
+    <Compile Include="Common\ExportImportRepo.cs" />
+    <Compile Include="Common\GradeRepo.cs" />
+    <Compile Include="Common\HomePageInfoDashboardRepo.cs" />
+    <Compile Include="Common\DesignationGroupRepo.cs" />
+    <Compile Include="Common\DBUpdateRepo.cs" />
+    <Compile Include="Common\GroupRepo.cs" />
+    <Compile Include="Common\SageRepo.cs" />
+    <Compile Include="Common\SymUserRoleRepo.cs" />
+    <Compile Include="Common\UserGroupRepo.cs" />
+    <Compile Include="Enum\EnumReportRepo.cs" />
+    <Compile Include="Enum\EnumOderByRepo.cs" />
+    <Compile Include="Loan\EmployeeLoanRepo.cs" />
+    <Compile Include="Common\BranchRepo.cs" />
+    <Compile Include="Common\CompanyRepo.cs" />
+    <Compile Include="Common\BankRepo.cs" />
+    <Compile Include="PF\AutoJournalSetupRepo.cs" />
+    <Compile Include="PF\COACategoryRepo.cs" />
+    <Compile Include="PF\COASubCategoryRepo.cs" />
+    <Compile Include="PF\COASubGroupRepo.cs" />
+    <Compile Include="PF\EmployeeInfoForPFRepo.cs" />
+    <Compile Include="PF\EmployeeLeftInformationRepo.cs" />
+    <Compile Include="PF\EmployeePFPaymentRepo.cs" />
+    <Compile Include="PF\EmployeePFRepo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PF\EmployeeTransferRepo.cs" />
+    <Compile Include="PF\InvestmentAccruedRepo.cs" />
+    <Compile Include="PF\LoanSattlementRepo.cs" />
+    <Compile Include="PF\LoanRepaymentToBankRepo.cs" />
+    <Compile Include="PF\LoanMonthlyPaymentRepo.cs" />
+    <Compile Include="PF\LoanRepo.cs" />
+    <Compile Include="PF\EmployeeForfeitureRepo.cs" />
+    <Compile Include="PF\EmployeeBreakMonthPFRepo.cs" />
+    <Compile Include="PF\EnumJournalTypeRepo.cs" />
+    <Compile Include="PF\COAGroupRepo.cs" />
+    <Compile Include="PF\COARepo.cs" />
+    <Compile Include="PF\EmployeePFOpeinigRepo.cs" />
+    <Compile Include="PF\GLJournalRepo.cs" />
+    <Compile Include="PF\BankChargeRepo.cs" />
+    <Compile Include="PF\InvestmentRenewRepo.cs" />
+    <Compile Include="PF\WPPFRepo.cs" />
+    <Compile Include="PF\PFStructureRepo.cs" />
+    <Compile Include="PF\ProfitDistributionNewRepo.cs" />
+    <Compile Include="PF\PFSettlementDetailRepo.cs" />
+    <Compile Include="PF\BankBranchRepo.cs" />
+    <Compile Include="PF\PFReportRepo.cs" />
+    <Compile Include="PF\TransactionMediaRepo.cs" />
+    <Compile Include="PF\InvestmentNameRepo.cs" />
+    <Compile Include="PF\BankNameRepo.cs" />
+    <Compile Include="PF\PFSettlementRepo.cs" />
+    <Compile Include="PF\EnumInvestmentTypeRepo.cs" />
+    <Compile Include="PF\InvestmentRepo.cs" />
+    <Compile Include="PF\PFBankDepositRepo.cs" />
+    <Compile Include="PF\PFDetailRepo.cs" />
+    <Compile Include="PF\PreDistributionFundRepo.cs" />
+    <Compile Include="PF\ReturnOnBankInterestRepo.cs" />
+    <Compile Include="PF\SettlementPolicyRepo.cs" />
+    <Compile Include="Common\ProjectRepo.cs" />
+    <Compile Include="Common\RoleRepo.cs" />
+    <Compile Include="Common\SectionRepo.cs" />
+    <Compile Include="Common\DepartmentRepo.cs" />
+    <Compile Include="Common\SettingRoleRepo.cs" />
+    <Compile Include="PF\WithdrawRepo.cs" />
+    <Compile Include="Common\UserInformationRepo.cs" />
+    <Compile Include="Common\FiscalYearRepo.cs" />
+    <Compile Include="Common\SettingRepo.cs" />
+    <Compile Include="Common\SetupRepo.cs" />
+    <Compile Include="Enum\EnumYearRepo.cs" />
+    <Compile Include="Enum\EnumGenderRepo.cs" />
+    <Compile Include="Enum\EnumCountryRepo.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TransferIssueDetailRepo.cs" />
+    <Compile Include="TransferIssueRepo.cs" />
+    <Compile Include="UserRoleRepo.cs" />
+    <Compile Include="BWWF\AutoJournalSetupRepo.cs" />
+    <Compile Include="BWWF\BankBranchRepo.cs" />
+    <Compile Include="BWWF\BankChargeRepo.cs" />
+    <Compile Include="BWWF\BankNameRepo.cs" />
+    <Compile Include="BWWF\COACategoryRepo.cs" />
+    <Compile Include="BWWF\COAGroupRepo.cs" />
+    <Compile Include="BWWF\COARepo.cs" />
+    <Compile Include="BWWF\COASubCategoryRepo.cs" />
+    <Compile Include="BWWF\COASubGroupRepo.cs" />
+    <Compile Include="BWWF\EmployeeBreakMonthPFRepo.cs" />
+    <Compile Include="BWWF\EmployeeForfeitureRepo.cs" />
+    <Compile Include="BWWF\EmployeeInfoForPFRepo.cs" />
+    <Compile Include="BWWF\EmployeePFOpeinigRepo.cs" />
+    <Compile Include="BWWF\EmployeePFPaymentRepo.cs" />
+    <Compile Include="BWWF\EmployeePFRepo.cs" />
+    <Compile Include="BWWF\EmployeeTransferRepo.cs" />
+    <Compile Include="BWWF\EnumInvestmentTypeRepo.cs" />
+    <Compile Include="BWWF\EnumJournalTypeRepo.cs" />
+    <Compile Include="BWWF\GLJournalRepo.cs" />
+    <Compile Include="BWWF\InvestmentAccruedRepo.cs" />
+    <Compile Include="BWWF\InvestmentNameRepo.cs" />
+    <Compile Include="BWWF\InvestmentRenewRepo.cs" />
+    <Compile Include="BWWF\InvestmentRepo.cs" />
+    <Compile Include="BWWF\LoanMonthlyPaymentRepo.cs" />
+    <Compile Include="BWWF\LoanRepaymentToBankRepo.cs" />
+    <Compile Include="BWWF\LoanRepo.cs" />
+    <Compile Include="BWWF\LoanSattlementRepo.cs" />
+    <Compile Include="BWWF\PFBankDepositRepo.cs" />
+    <Compile Include="BWWF\PFDetailRepo.cs" />
+    <Compile Include="BWWF\PFReportRepo.cs" />
+    <Compile Include="BWWF\PFSettlementDetailRepo.cs" />
+    <Compile Include="BWWF\PFSettlementRepo.cs" />
+    <Compile Include="BWWF\PFStructureRepo.cs" />
+    <Compile Include="BWWF\PreDistributionFundRepo.cs" />
+    <Compile Include="BWWF\ProfitDistributionNewRepo.cs" />
+    <Compile Include="BWWF\ReturnOnBankInterestRepo.cs" />
+    <Compile Include="BWWF\SettlementPolicyRepo.cs" />
+    <Compile Include="BWWF\TransactionMediaRepo.cs" />
+    <Compile Include="BWWF\WithdrawRepo.cs" />
+    <Compile Include="WWF\AutoJournalSetupRepo.cs" />
+    <Compile Include="WWF\BankBranchRepo.cs" />
+    <Compile Include="WWF\BankChargeRepo.cs" />
+    <Compile Include="WWF\BankNameRepo.cs" />
+    <Compile Include="WWF\COACategoryRepo.cs" />
+    <Compile Include="WWF\COAGroupRepo.cs" />
+    <Compile Include="WWF\COARepo.cs" />
+    <Compile Include="WWF\COASubCategoryRepo.cs" />
+    <Compile Include="WWF\COASubGroupRepo.cs" />
+    <Compile Include="WWF\EmployeeBreakMonthPFRepo.cs" />
+    <Compile Include="WWF\EmployeeForfeitureRepo.cs" />
+    <Compile Include="WWF\EmployeeInfoForPFRepo.cs" />
+    <Compile Include="WWF\EmployeePFOpeinigRepo.cs" />
+    <Compile Include="WWF\EmployeePFPaymentRepo.cs" />
+    <Compile Include="WWF\EmployeePFRepo.cs" />
+    <Compile Include="WWF\EmployeeTransferRepo.cs" />
+    <Compile Include="WWF\EnumInvestmentTypeRepo.cs" />
+    <Compile Include="WWF\EnumJournalTypeRepo.cs" />
+    <Compile Include="WWF\GLJournalRepo.cs" />
+    <Compile Include="WWF\InvestmentAccruedRepo.cs" />
+    <Compile Include="WWF\InvestmentNameRepo.cs" />
+    <Compile Include="WWF\InvestmentRenewRepo.cs" />
+    <Compile Include="WWF\InvestmentRepo.cs" />
+    <Compile Include="WWF\LoanMonthlyPaymentRepo.cs" />
+    <Compile Include="WWF\LoanRepaymentToBankRepo.cs" />
+    <Compile Include="WWF\LoanRepo.cs" />
+    <Compile Include="WWF\LoanSattlementRepo.cs" />
+    <Compile Include="WWF\PFBankDepositRepo.cs" />
+    <Compile Include="WWF\PFDetailRepo.cs" />
+    <Compile Include="WWF\PFReportRepo.cs" />
+    <Compile Include="WWF\PFSettlementDetailRepo.cs" />
+    <Compile Include="WWF\PFSettlementRepo.cs" />
+    <Compile Include="WWF\PFStructureRepo.cs" />
+    <Compile Include="WWF\PreDistributionFundRepo.cs" />
+    <Compile Include="WWF\ProfitDistributionNewRepo.cs" />
+    <Compile Include="WWF\ReturnOnBankInterestRepo.cs" />
+    <Compile Include="WWF\SettlementPolicyRepo.cs" />
+    <Compile Include="WWF\TransactionMediaRepo.cs" />
+    <Compile Include="WWF\WithdrawRepo.cs" />
+    <Compile Include="WPPF\AutoJournalSetupRepo.cs" />
+    <Compile Include="WPPF\BankBranchRepo.cs" />
+    <Compile Include="WPPF\BankChargeRepo.cs" />
+    <Compile Include="WPPF\BankNameRepo.cs" />
+    <Compile Include="WPPF\COACategoryRepo.cs" />
+    <Compile Include="WPPF\COAGroupRepo.cs" />
+    <Compile Include="WPPF\COARepo.cs" />
+    <Compile Include="WPPF\COASubCategoryRepo.cs" />
+    <Compile Include="WPPF\COASubGroupRepo.cs" />
+    <Compile Include="WPPF\EmployeeBreakMonthPFRepo.cs" />
+    <Compile Include="WPPF\EmployeeForfeitureRepo.cs" />
+    <Compile Include="WPPF\EmployeeInfoForPFRepo.cs" />
+    <Compile Include="WPPF\EmployeePFOpeinigRepo.cs" />
+    <Compile Include="WPPF\EmployeePFPaymentRepo.cs" />
+    <Compile Include="WPPF\EmployeePFRepo.cs" />
+    <Compile Include="WPPF\EmployeeTransferRepo.cs" />
+    <Compile Include="WPPF\EnumInvestmentTypeRepo.cs" />
+    <Compile Include="WPPF\EnumJournalTypeRepo.cs" />
+    <Compile Include="WPPF\GLJournalRepo.cs" />
+    <Compile Include="WPPF\InvestmentAccruedRepo.cs" />
+    <Compile Include="WPPF\InvestmentNameRepo.cs" />
+    <Compile Include="WPPF\InvestmentRenewRepo.cs" />
+    <Compile Include="WPPF\InvestmentRepo.cs" />
+    <Compile Include="WPPF\LoanMonthlyPaymentRepo.cs" />
+    <Compile Include="WPPF\LoanRepaymentToBankRepo.cs" />
+    <Compile Include="WPPF\LoanRepo.cs" />
+    <Compile Include="WPPF\LoanSattlementRepo.cs" />
+    <Compile Include="WPPF\PFBankDepositRepo.cs" />
+    <Compile Include="WPPF\PFDetailRepo.cs" />
+    <Compile Include="WPPF\PFReportRepo.cs" />
+    <Compile Include="WPPF\PFSettlementDetailRepo.cs" />
+    <Compile Include="WPPF\PFSettlementRepo.cs" />
+    <Compile Include="WPPF\PFStructureRepo.cs" />
+    <Compile Include="WPPF\PreDistributionFundRepo.cs" />
+    <Compile Include="WPPF\ProfitDistributionNewRepo.cs" />
+    <Compile Include="WPPF\ReturnOnBankInterestRepo.cs" />
+    <Compile Include="WPPF\SettlementPolicyRepo.cs" />
+    <Compile Include="WPPF\TransactionMediaRepo.cs" />
+    <Compile Include="WPPF\WithdrawRepo.cs" />
+    <Compile Include="WPPF\WPPFRepo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SymServices\SymServices.csproj">
+      <Project>{d45367b5-20cb-40f0-8b22-3730f0bacbf0}</Project>
+      <Name>SymServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SymViewModel\SymViewModel.csproj">
+      <Project>{b98cc664-34bd-4405-b815-ce6f1d9d7b66}</Project>
+      <Name>SymViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,93 @@
+﻿
+@{
+    ViewBag.Title = "ExcelImport";
+}
+
+@using UIHelper.MVC
+<div class="headrow">
+
+    <button type="button" title="Import" data-url="/Common/ExportImport/Index" onclick="GoTo(this)" id="" class="sym-btn-ExportImport ">&nbsp;Export</button>
+    <label class="pull-right"> Import </label>
+</div>
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Import</p>
+    </div>
+    <div class="row">
+           
+            <div class="row">
+                @using (Html.BeginForm("ImportExcel", "ExportImport", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmImportExcel" }))
+                {
+                    <div class="col-md-3">
+                        <div class="editor-label">
+                            <label>Type</label>
+                        </div>
+
+                        <div class="editor-field">
+                            <div>
+                                @Html.SimpleDropDown("Type", "/Config/DropDown/Import", new { @class = "required fpDetailsCom form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        @*<div class="col-md-6"></div>*@
+                        <label>File</label>
+                        <input type="file" accept=".xlsx" name="file" id="FileUpload" style="width: 200px;" class="required" />
+
+                    </div>
+                    <div class="col-md-2">
+                        @*<label>&nbsp;</label>*@
+                        <button type="button" title="Import Data" onclick="ImportExcell()" class="sym-btn-file-upload" value="Upload" style="width: 50%; text-align: center; margin-top:25px;">&nbsp;Upload</button>
+
+                    </div>
+                }
+
+            </div>
+
+
+    </div>
+</div>
+
+
+    <script>
+        $(function () {
+            InitDropdownsCommon();
+            valiDation("frmImportExcel");
+        });
+
+        $("#Clear").on('click', function () {
+            $(".Dropdown").select2("val", "");
+            $(".form-control").val("");
+        });
+
+
+        function ImportExcell() {
+
+            var ImportType = $("#Type :selected").val();
+
+            if (ImportType == "" || ImportType == null) {
+                ShowResult("Fail", "You are requested to Select Type  before Import!");
+                return;
+                
+            }
+            pageSubmit('frmImportExcel');
+            //var url = '/Common/ExportImport/ExportExcell';
+
+            //var form = $('<form action="' + url + '"></form>');
+
+            //IDs.forEach(function (item) {
+            //    form.append($('<input  value="' + item + '" name="Ids" />'))
+
+            //})
+
+            //form.append($('<input  value="' + ImportType + '" name="Type" />'))
+
+
+            //form.appendTo('frmImportExcel').submit()
+
+
+        };
+
+    </script>

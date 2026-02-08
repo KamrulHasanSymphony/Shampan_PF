@@ -1,0 +1,72 @@
+﻿@model SymViewModel.WPPF.InvestmentNameVM
+@{
+    Layout = null;
+}
+@using UIHelper.MVC
+@using (Html.BeginForm("AccruedProcess", "InvestmentName", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmInvestmentName" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.InvestmentTypeId)
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Accrued</p>
+        </div>
+        <div id="ProductDetail" class="  formDesign">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.InvestmentAccrued.TransactionDate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.InvestmentAccrued.TransactionDate, new { @placeholder = "Accrued Date", @class = " customDatePicker  required  form-control" })
+                            @Html.ValidationMessageFor(model => model.InvestmentAccrued.TransactionDate)
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.InvestmentAccrued.ReferenceNo)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.InvestmentAccrued.ReferenceNo, new { @placeholder = "ReferenceNo", @class = "    required  form-control" })
+                            @Html.ValidationMessageFor(model => model.InvestmentAccrued.ReferenceNo)
+                        </div>
+                    </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.InvestmentAccrued.Remarks)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.InvestmentAccrued.Remarks, new { @placeholder = "Remarks", @class = "    required  form-control" })
+                            @Html.ValidationMessageFor(model => model.InvestmentAccrued.Remarks)
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    
+     <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="submit" name="btnName" value="Save" title="Save Data"  class="sym-btn-save">&nbsp;Process</button>
+             <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+        }
+
+    </div>
+}
+<script>
+    $(function () {
+        InitDateTimePickers();
+
+        valiDation("frmInvestmentName");
+    });
+
+</script>

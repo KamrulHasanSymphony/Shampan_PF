@@ -1,0 +1,75 @@
+﻿<div class="headrow">
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFDetail/IndexFiscalPeriod" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFDetail/PFContributionDetailsReport?id=@ViewBag.id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+    <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFDetail/PFContributionDetailsDownload?id=@ViewBag.id')" id="" class=" sym-btn-Excel-Export ">&nbsp;Download</button>
+    <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFDetail/PFContributionSummarysReport?id=@ViewBag.id')" id="" class=" sym-btn-report ">&nbsp;Report(Summary)</button>
+
+    <label class="pull-right">Employee List</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p class="thinHead">Employee List (BWWF - @ViewBag.PeriodName)</p>
+    </div>
+    <p>
+    </p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th style="text-align: center"></th>
+                <th>Emp Code</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>@Session["DepartmentLabel"]</th>
+                <th style="text-align:left">Basic Salary</th>
+                <th style ="text-align:left">Member Contribution</th>
+                <th style="text-align:left">Company Contribution</th>
+            </tr>
+          
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        customToollip();
+        InitDateTimePickers();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/PFDetail/_index?id=@ViewBag.id",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "0%",
+                                "sClass": "center",
+                                "sHidden": true,
+
+                                //"fnRender": function (oObj) {
+                                //}
+                            }
+                            ,
+                            { "sName": "Code", "sWidth": "10%" }
+                    , { "sName": "EmpName", "sWidth": "15%" }
+                    , { "sName": "Designation", "sWidth": "15%" }
+                    , { "sName": "Department ", "sWidth": "15%" }
+                    , { "sName": "BasicSalary", "sWidth": "10%", "sClass": "right" }
+                    , { "sName": "EmployeePFValue", "sWidth": "10%", "sClass": "right" }
+                    , { "sName": "EmployeerPFValue", "sWidth": "10%", "sClass": "right" }
+            ]
+        });
+
+
+       
+    });
+
+</script>

@@ -1,0 +1,68 @@
+﻿@model SymViewModel.PF.GLJournalDetailVM
+
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row details">
+    @using (Html.BeginCollectionItem("GLJournalDetails"))
+    {
+        
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.COAId, new { @class = "dAccountId" })
+        @Html.HiddenFor(model => model.GLJournalId)
+        
+        <div class="col-md-1" style="margin-top: 4px;">
+               
+            <a id="" onclick="RemoveProduct(this);" class="sym-btn-remove-row "></a>&nbsp;
+            <a id="" onclick="EditProduct(this);" class="sym-btn-edit-row"></a>          
+         
+        </div>
+        <div class="col-md-4">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.AccountName, new { @placeholder = "Account Name", @class = "dAccName form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.DrAmount, new { @class = " right dDrAmount  form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.CrAmount, new { @class = " right dCrAmount  form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Remarks, new { @placeholder = "Description", @rows = "1", @class = "  form-control" })
+            </div>
+        </div>
+       
+         
+    }
+</div>
+<script>
+    $(function () {
+
+    });
+    $(document).ready(function () {
+        //$(".row.details").each(function () {
+        //    if (this.checked)
+        //        $('#autoUpdate').fadeIn('slow');
+        //    else
+        //        $('#autoUpdate').fadeOut('slow');
+        //});
+
+        //$('.isCheque').change(function () {
+        //    if (this.checked)
+        //        $('.chequeDiv').fadeIn('slow');
+        //    else
+        //        $('.chequeDiv').fadeOut('slow');
+
+        //});
+    });
+
+</script>
+

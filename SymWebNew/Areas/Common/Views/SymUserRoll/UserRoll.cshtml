@@ -1,0 +1,209 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+@model SymViewModel.Common.UserGroupVM
+@using UIHelper.MVC
+
+<div class="UserDetail">
+     
+    <div class="thinbox panel">
+        <div class="th_thinbox panel-actions">
+            <p class="row"><span style="float: left; padding-left: 13px;">User Roll Filter</span> 	<span class=" clickable" data-parent="#accordion" data-toggle="collapse" data-target="#demo4"></span></p>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.GroupName)
+                    @Html.HiddenFor(model => model.Id, new {@class="gid" })
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.GroupName, new { @class = "groupName form-control",@readonly="readonly" })
+                </div>
+            </div>                     
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.Label("Module")
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDown("symArea", "/Config/DropDown/ModuleDropDown", new { @class = "form-control",@onchange="SelectRoll()" })
+                </div>
+            </div>
+            <div class="col-sm-3">&nbsp;</div>                    
+            <div style="text-align: center;" class="col-md-1">
+                <div class="editor-label">
+                    @Html.Label("All Index")
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBox("IsIndex", new { @placeholder = "IsIndex", @class = "AllIIndex form-control" })
+                </div>
+            </div>
+            <div style="text-align: center;" class="col-md-1">
+                <div class="editor-label">
+                    @Html.Label("All Add")
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBox("IsAdd", new { @placeholder = "IsAdd", @class = "AllIsAdd form-control" })
+                </div>
+            </div>
+            <div style="text-align: center;" class="col-md-1">
+                <div class="editor-label">
+                    @Html.Label("All Edit")
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBox("IsEdit", new { @placeholder = "IsEdit", @class = "AllIEdit form-control" })
+                </div>
+            </div>
+            <div style="text-align: center;" class="col-md-1">
+                <div class="editor-label">
+                    @Html.Label("All Delete")
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBox("IsDelete", new { @placeholder = "IsDelete", @class = "AllDelete form-control" })
+                </div>
+            </div>
+            <div style="text-align: center;" class="col-md-1">
+                <div class="editor-label">
+                    @Html.Label("All Process")
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBox("IsProcess", new { @placeholder = "IsProcess", @class = " AllProcess form-control" })
+                </div>
+            </div>
+            <div style="text-align: center;" class="col-md-1">
+                <div class="editor-label">
+                    @Html.Label("All Report")
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBox("IsRepot", new { @placeholder = "IsProcess", @class = " AllProcess form-control" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+<div class="row">
+
+</div>
+<div Id="Detaildiv1"></div>
+@*@Html.Partial("_userList")*@
+<script>
+    function submitdata() {
+        var model = @Html.Raw(Json.Encode(Model))
+     
+        $.ajax({
+            url: "@Url.Action("Create", "SymUserRoll", new { area = "Common" })",
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                data: JSON.stringify(model)
+            })
+            .done(function(data){
+                console.log(data);
+            });
+      
+    }
+    $(function () {
+        InitDropDowns();
+        if ('@Model.Id' != null || typeof '@Model.Id' == 'undefined') {
+            $(".UserDetail").show();
+          @*  Selectemployee('@Model.UserId')*@
+        }
+        else {
+            $(".UserDetail").hide();
+        }
+        var userid = $('.userid').val();
+        $("#symArea").change(function () {
+            $(".UserDetail").show();
+            var Module = $("#symArea").val();
+            //var Menu = $("#Menu").val();
+            var empId = $('.userid').val();
+            //Selectemployee(empId)
+        })
+        $("#Menu").change(function () {
+            var Module = $("#Module").val();
+            //var Menu = $("#Menu").val();
+            var empId = $('.userid').val();
+            Selectemployee(empId);
+        })
+        
+        $(".AllIsAdd").click(function () {
+            if ($('.AllIsAdd').prop('checked') == false) {
+                $('.IsAdd').prop('checked', false);
+            }
+            else {
+                $('.IsAdd').prop('checked', true);
+            }
+        });
+        $(".AllIIndex").click(function () {
+            if ($('.AllIIndex').prop('checked') == false) {
+                $('.IsIndex').prop('checked', false);
+            }
+            else {
+                $('.IsIndex').prop('checked', true);
+            }
+        });
+        $(".AllIEdit").click(function () {
+            if ($('.AllIEdit').prop('checked') == false) {
+                $('.IsEdit').prop('checked', false);
+            }
+            else {
+                $('.IsEdit').prop('checked', true);
+            }
+        });
+        $(".AllDelete").click(function () {
+            if ($('.AllDelete').prop('checked') == false) {
+                $('.IsDelete').prop('checked', false);
+            }
+            else {
+                $('.IsDelete').prop('checked', true);
+            }
+            $(".AllProcess").click(function () {
+                if ($('.AllProcess').prop('checked') == false) {
+                    $('.IsProcess').prop('checked', false);
+                }
+                else {
+                    $('.IsProcess').prop('checked', true);
+                }
+            });
+        });
+    })
+
+    $(function () {
+        setTimeout(function(){SelectRoll();},200);
+    
+    //function SelectemployeeFilter() {
+    //    var Id = $("#Id").val();
+    //    var gid = $(".gid").val();
+    //    alert(gid);
+    //    var url = "/Common/SymUserRoll/SelectUserForRollSearch?gid=" + gid;
+    //    $.ajax({
+    //        url: url,
+    //        type: 'GET',
+    //        beforeSend: function () { $(".loading").show(); },
+    //        complete: function () { $(".loading").fadeOut(200).hide("slow") },
+    //        success: function (data) {
+    //            $('#Detaildiv1').html(data);
+    //        },
+    //    });
+    //}
+    function SelectRoll() {
+        var Id = $("#Id").val();
+        var gid = '@Model.Id';
+        var symarea = $("#symArea").val();
+        var url = "/Common/SymUserRoll/SelectUserForRollSearch?gid=" + gid + "&SymArea=" + symarea;
+        $.ajax({
+            url: url,
+            type: 'GET',
+            beforeSend: function () { $(".loading").show(); },
+            complete: function () { $(".loading").fadeOut(200).hide("slow") },
+            success: function (data) {
+                $('#Detaildiv1').html(data);
+            },
+        });
+    }
+   })
+</script>
+
+

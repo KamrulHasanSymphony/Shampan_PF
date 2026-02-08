@@ -1,0 +1,126 @@
+﻿@model SymViewModel.WWF.EETransactionVM
+@using UIHelper.MVC
+
+@using SymOrdinary
+@using System.Threading;
+@{ 
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+@{
+    Layout = null;
+    ViewBag.Title = "Report";
+    ViewBag.Location = "Report"; 
+}
+
+@using (Html.BeginForm("ReportView", "EETransaction", FormMethod.Get, new { enctype = "multipart/form-data", @Id = "frmEETransaction" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+
+    <div class="thinbox">
+         @if (identity.IsAdmin || identity.IsHRM)
+{
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.BranchId)
+                </label>
+                <div class="col-sm-8">
+                    @Html.SimpleDropDown("bid", "/Config/DropDown/VMS_BranchName", new { @class = "rptBranchId form-control " })
+                    @Html.ValidationMessageFor(model => model.BranchId)
+                </div>
+            </div>
+        }
+        <div class="row">
+            <label class="col-sm-4">
+                @Html.LabelFor(model => model.Code)
+            </label>
+            <div class="col-sm-8">
+                @Html.SimpleDropDownFor(model => model.Code, "/Config/DropDown/EETransactionCode?tType="+@Model.TransactionType, new { @class = "code  form-control selectDropdown" })
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4">
+                <label>Date From</label>
+            </label>
+            <div class="col-sm-8">
+                @Html.TextBoxFor(model => model.TransactionDateTimeFrom, new { @placeholder = "Date From", @class = "trDateFrom customDatePicker form-control" })
+                @Html.ValidationMessageFor(model => model.TransactionDateTimeFrom)
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4">
+                <label>Date To</label>
+            </label>
+            <div class="col-sm-8">
+                @Html.TextBoxFor(model => model.TransactionDateTimeTo, new { @placeholder = "Date To", @class = "trDateTo customDatePicker form-control" })
+                @Html.ValidationMessageFor(model => model.TransactionDateTimeTo)
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-4">
+                <label>Post Status</label>
+            </label>
+            <div class="col-sm-8">
+                @Html.SimpleDropDown("PostStatus", "/Config/DropDown/PostStatus", new { @class = "postStatus form-control " })
+            </div>
+        </div>
+        <br />
+
+        <div class="row">
+            &nbsp;            
+            <label class="col-sm-3">
+                <button type="button" title="Click for Report" onclick="reportData('M');" id="" class="sym-btn-report">&nbsp;Summary</button>
+            </label>
+            &nbsp;             
+            <label class="col-sm-3">
+                <button type="button" title="Click for Report" onclick="reportData('D');" id="" class="sym-btn-report">&nbsp;Details</button>
+            </label>
+            &nbsp;             
+            <label class="col-sm-3">
+                <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+            </label>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $(".selectDropdown").select2();
+        $(".selectDropdown").trigger('change');
+        $(".selectDropdown").removeClass('form-control');
+        InitDateTimePickers();
+        InitDropDowns();
+        sessionDateTime();
+        valiDation("frmEETransaction");
+    });
+
+    function reportData(sender) {
+        var reportType = sender;
+        var code = $("#Code").val().replace("Select","");
+        var transactionDateFrom = $(".trDateFrom").val();
+        var transactionDateTo = $(".trDateTo").val();
+        var branchId = $(".rptBranchId :selected").val();
+        var postStatus = $(".postStatus").val();
+        rptObj = new Object();
+        rptObj.Code = code;
+        rptObj.TDF = transactionDateFrom;
+        rptObj.TDT = transactionDateTo;
+        rptObj.RT = reportType;
+        rptObj.tType = '@Model.TransactionType';
+        rptObj.branchId = branchId;
+        rptObj.postStatus = postStatus;
+        var rptParam = $.param(rptObj);
+        var url = "/@ViewBag.TransType/EETransaction/ReportView?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+
+</script>

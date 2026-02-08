@@ -1,0 +1,109 @@
+﻿@model IEnumerable<SymViewModel.Common.DepartmentVM>
+
+@{
+    ViewBag.Title = "Index";
+}
+@*<div class="row">
+    <div class="col-md-2 ">
+        <input type="text" class="areearDate customDatePicker form-control">
+    </div>
+</div>*@
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Department</p>
+    </div>
+    <input type="button" style="width: 65px;" data-url="/Common/Department/Create" id="" class="btnCreate btn btn-info  " value="Add" />
+    <input type="button" style="width: 65px;" data-url="/Common/Department/DepartmentDelete" onclick="deletedData(this, 'myDataTable');" id="" class=" btn btn-info  " value="Delete" />
+    <p></p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />
+                </th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Remark</th>
+                <th>Value</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+<script>
+    $(function () {
+        $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/Department/_index",
+            "bProcessing": true,
+            "aoColumns": [
+                            {
+                                "sName": "Code",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth":"12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[1].split('~')[1] + '">'
+                                    ;
+                                }
+                            },
+                            {
+                                "sName": "Code",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "fnRender": function (oObj) {
+                                    return '<a  class="lnkEdit innerListLink"  href=\"/Common/Department/Edit/' + oObj.aData[1].split('~')[1] + '\">' + oObj.aData[1].split('~')[0] + '</a>'
+                                    ;
+                                }
+                            },
+                            { "sName": "Name" },
+                            { "sName": "Remark" },
+                            {
+                                "sName": "Value",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <Input Type="text"  class="arrerValue form-control">';
+                                }
+                            },
+                            {
+                                "sName": "Value",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "fnRender": function (oObj) {
+                                    InitDatePickers();
+                                    return ' <Input Type="button" onclick="Areer(this);" class="btn -btn-info" value="Submit">';
+                                }
+                            }
+
+
+            ]
+        });
+        SelectAllForDelete();
+        InitDatePickers();
+    });
+    function Areer(sender) {
+        var date = $(".areearDate").val();
+        var value = $(sender).closest('tr').find('.arrerValue').val();
+        var employeeId = $(sender).closest('tr').find('td:first input').attr('data-id');
+        if (date == "" || value <= 0) {
+            ShowResult("Fail","Please check input value");
+            return;
+        }
+        var url = "/Common/Department/Areer?value=" + value + "&date=" + date + "&employeeId=" + employeeId;
+        $.ajax({
+            type: "GET",
+            url: url,
+            success: function (response) {
+                //alert((response);
+            }
+        });
+    }
+</script>
+

@@ -1,0 +1,192 @@
+﻿@model SymViewModel.Common.UserLogsVM
+@using (Html.BeginForm("User", "User", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmUser" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.Id)
+    @Html.Hidden("UserRoles")
+    @Html.HiddenFor(model => model.EmployeeId)
+
+    <div class="thinbox">
+         <div class="th_thinbox">
+            <p>User Create</p>   
+            </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LogID)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.LogID, new { @placeholder = "User ID", @class = "required form-control",})
+                    @Html.ValidationMessageFor(model => model.LogID)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.FullName)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.FullName, new { @placeholder = "Full Name",  @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.FullName)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Email)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email",  @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+            <div class="passwordAreaA">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Password)
+                    </div>
+                    <div class="editor-field">
+                        @Html.PasswordFor(model => model.Password, new { @placeholder = "Password",  @class = "password required form-control" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Confirm Password</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.PasswordFor(model => model.Password, new { @placeholder = "Confirm Password",  @class = "password required form-control" })
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                </div>
+            </div>
+            <div class="passwordAreaB">
+                <label>&nbsp;</label>
+                <div class="col-md-2"><input onchange="ResetPassword(this);" type="checkbox" class="role togglecheckbox" id="resetPassword" name="resetPassword" /><label for="resetPassword"> Re-set Password</label></div>
+            </div>
+        </div>
+                    @Html.HiddenFor(model => model.IsAdmin, new { @class = "form-control" })
+        <p> 
+            <button type="button" title="Save Data" onclick="CreateUser();" class=" Save sym-btn-save">&nbsp;Save</button>
+ <button type="button" title="Cancel Data" onclick="CancleUser();" class=" Cancle sym-btn-cancel">&nbsp;Cancel</button>
+
+@*            <input type="button" onclick="CreateUser();" value="Save" class="Save btn btn-info" />
+            <input type="button" value="Cancle" onclick="CancleUser();" class="Cancle btn btn-info" />*@
+        </p>
+        <div class="row">
+            <div class="col-md-3 center">
+        <h3>Super Admin</h3>
+                <div title="Super Admin" id="SuperAdmin"></div>
+            </div>
+            <div class="col-md-3 center">
+        <h3>Admin</h3>
+                <div title="Admin"  id="rolesAdmin"></div>
+            </div>
+            <div class="col-md-3 center">
+         <h3>Account</h3>
+                <div title="Account"  id="rlesAccount"></div>
+            </div>
+            <div class="col-md-3 center">
+        <h3>Employee</h3>
+                <div title="Employee"  id="rlesEmployee"></div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+         var UserStatus = '@ViewBag.UserStatus';
+
+        if ($("#Id").val() == "0") {
+            $(".passwordAreaB").hide();
+        }
+        else {
+            $(".password").removeClass('required');
+            $(".passwordAreaA").hide();
+        }
+    });
+
+    function ResetPassword(sender) {
+        if ($(sender).is(":checked")) {
+            $(".passwordAreaA").show();
+            $(".password").addClass('required');
+        }
+        else {
+            $(".passwordAreaA").hide();
+            $(".password").removeClass('required');
+        }
+    }
+
+    valiDation("frmUser");
+    var roles = eval('@Html.Raw(ViewBag.RoleList)');
+    var userroles = eval('@Html.Raw(ViewBag.UserRoleList)');
+
+    var roleListItems = { Super_Admin:"",Admin: "",Account: "",  Employee: ""};
+
+    $.each(roles, function (i, role) {
+        roleListItems[role.Category] += "<div class='col-md-12'><input type='checkbox' class='role togglecheckbox' id='" + role.Id + "' name='" + role.Id + "' /><label for='" + role.Id + "'>" + role.Description + "</label></div>";
+    });
+
+    $("#SuperAdmin").html(roleListItems["Super_Admin"]);
+    $("#rolesAdmin").html(roleListItems["Admin"]);
+    $("#rlesAccount").html(roleListItems["Account"]);
+    $("#rlesEmployee").html(roleListItems["Employee"]);
+
+    $.each(roles, function (i, role) {
+        $.each(userroles, function (j, userrole) {
+            if (userrole.RoleInfoId == role.Id) {
+                $("#" + role.Id).prop("checked", true).change();
+                alert('roles');
+            }
+        });
+    });
+
+    var userRolesList = [];
+
+    function Roles()
+    {
+        userRolesList = [];
+        $.each(roles, function (i, role) {
+            if ($("#" + role.Id).is(':checked')) {
+                userRolesList.push(role.Id);
+            }
+        });
+        $("#UserRoles").val(JSON.stringify(userRolesList));
+        $("#IsAdmin").val($("#Admin").is(":checked"))
+    }
+    function CreateUser() {
+        var IdVal = $("#Id").val();
+        var passW = $($("#Password")[0]).val();
+        if ($("#Id").val() == "0" || $("#resetPassword").is(":checked")) {
+            if ($($("#Password")[0]).val() != $($("#Password")[0]).val()) {
+                ShowResult("Fail", "Password are not matched!");
+                return
+            }
+            if ($($("#Password")[0]).val() == "" || $($("#Password")[0]).val() == "") {
+                ShowResult("Fail", "Please set password!");
+                return
+            }
+        }
+        if ($($("#Password")[0]).val() != $($("#Password")[0]).val()) {
+                ShowResult("Fail", "Password are not matched!");
+                return
+            }
+
+        pageSubmit('frmUser');
+
+         ////Roles();
+
+        for (var i = 0; i < $("[name='empId']").length; i++) {
+            if ($($("[name='empId']")[i]).is(':checked')) {
+                $("#EmployeeId").val($($("[name='empId']")[i]).val());
+                alert('brole');
+                Roles();
+               
+                break;
+            }
+        }
+        if ($("#EmployeeId").val() == "0") {
+            ShowResult("Fail", "Please select employee!");
+            return;
+        }
+    }
+</script>

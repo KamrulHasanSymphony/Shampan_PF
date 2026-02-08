@@ -1,0 +1,75 @@
+﻿<div class="headrow">
+    <button type="button" title="Add New COA" data-url="/@ViewBag.TransType/COA/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    <label class="pull-right">COA </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>COA List</p>
+    </div>
+    <p>
+    </p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+               
+                <th class="center">Action </th>
+                <th class="left">Code </th>
+                <th class="left">Name </th>
+                <th class="left">Group Name </th>
+                <th class="left">Type </th>
+                <th class="left">Nature </th>
+                <th class="left">Retained Earning </th>
+                <th class="left">Net Profit </th>
+                <th class="left">Depreciation </th>
+                <th class="left">COASL </th>
+                <th class="left">Active/Inactive</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <div class="pull-left">
+        <button type="button" title="Add New COA" data-url="/@ViewBag.TransType/COA/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+  </div>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/COA/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "8%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <a id=""  title="Click on for Edit"  style="text-decoration:none;"  href=\"/@ViewBag.TransType/COA/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>' +
+                                   ' ';
+                                }
+                            }
+                            , { "sCode": "Code ", "sWidth": "7%" }
+                            , { "sName": "Name ", "sWidth": "10%" }
+                            , { "sGroupName": "GroupName ", "sWidth": "8%" }
+                            , { "sCOAType": "COAType ", "sWidth": "6%" }
+                            , { "sNature": "Nature ", "sWidth": "7%" }
+                            , { "sIsRetainedEarning": "IsRetainedEarning ", "sWidth": "10%" }
+                            , { "sIsNetProfit": "IsNetProfit ", "sWidth": "10%" }
+                            , { "sIsDepreciation": "IsDepreciation ", "sWidth": "12%" }
+                            , { "sCOASL": "COASL ", "sWidth": "10%" }
+                            , { "sIsActive": "IsActive", "sWidth": "12%" }
+            ]
+        });
+    });
+</script>
+

@@ -1,0 +1,70 @@
+﻿<div class="thinbox">
+        <div class="th_thinbox">
+        <p>User List</p>   
+        </div>
+<div class="row">
+        <div id="container">
+            <div id="demo">
+    <table id="myDataTable" class="display">
+         <thead>
+                      <tr>
+                            <th class="center"> Select All</th>
+                            <th>Log Id</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                             <th>Log Id</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+                </div>
+                </div>
+                </div>
+                </div>
+<script>
+    $(function () {
+        $(".EditPlace").hide();
+        customToollip();
+        InitDateTimePickers();
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/SymUserRoll/_indexUserlist",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <a title="tt Click for Details" style="text-decoration:none" value="' + oObj.aData[0] + '" Onclick="SelectemployeeFilter(\'' + oObj.aData[0] + '\')"      class="sym-btn-detail-row"></a>';
+                                }
+                            }
+                                , { "sName": "LogId", "sWidth": "15%" }
+                                , { "sName": "FullName", "sWidth": "20%" }
+                                , { "sName": "Email", "sWidth": "15%" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+            ]
+        });
+    });
+    function CancleUser() {
+        $(".EditPlace").hide();
+    }
+    </script>

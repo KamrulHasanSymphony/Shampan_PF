@@ -1,0 +1,332 @@
+﻿@*
+    WithdrawDate
+    WithdrawAmount
+    Remarks
+*@
+
+@model SymViewModel.WWF.WithdrawVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "Withdraw", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmWithdraw" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+
+    string PF_BankBranchNameUrl = "/Config/DropDown/PF_BankBranchName?TransType=" + @ViewBag.TransType;
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="SaveData()" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Withdraw > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+    <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/Withdraw/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=BankWIthdraw&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+
+            <label class="pull-right">Withdraw > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Withdraw" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Withdraw" data-url="/@ViewBag.TransType/Withdraw/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Withdraw</p>
+        </div>
+        <div class="Withdraw">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Auto Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankBranchId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.BankBranchId, PF_BankBranchNameUrl, new { @class = "required  form-control" })
+                        @Html.ValidationMessageFor(model => model.BankBranchId)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.WithdrawDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.WithdrawDate, new { @placeholder = "Withdraw Date", @class = " required customDatePicker form-control", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.WithdrawDate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionMedia)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.TransactionMediaId, "/Config/DropDown/PF_TransactionMedia", new { @class = "  required form-control" })
+                        @Html.ValidationMessageFor(model => model.TransactionMedia)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ReferenceNo)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ReferenceNo, new { @placeholder = "Reference No", @class = "required  form-control" })
+                        @Html.ValidationMessageFor(model => model.ReferenceNo)
+                    </div>
+                </div>
+               
+              
+               
+            </div>
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.WithdrawAmount)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.WithdrawAmount, new { @placeholder = "Withdraw Amount", @class = " cWithdrawAmount right NumberCheck required  form-control" })
+                        @Html.ValidationMessageFor(model => model.WithdrawAmount)
+                    </div>
+                </div>
+               
+
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+ 
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="SaveData()" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+    <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/Withdraw/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=BankWIthdraw&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Withdraw" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Withdraw" data-url="/@ViewBag.TransType/Withdraw/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmWithdraw");
+
+        @*var BankBranchId = $(".cBankBranchId").val();
+        if ('@Model.Post'.toLowerCase != 'true' && '@Model.Operation' != "add") {
+            AvailableBalance(BankBranchId);
+        }*@
+    });
+
+    $('.cTransactionTypeId').on('change', function () {
+
+        DebitAccountHeadLoad();
+    });
+
+    function DebitAccountHeadLoad() {
+        var cTransactionTypeId = $('.cTransactionTypeId').val();
+        var $elm = $(".row.cWithdrawDetail")
+        var $debitRow = $elm.eq(0);
+        var $debitDropdown = $debitRow.find(".dAccountId");
+        var url = "/Config/DropDown/PF_WithdrawDebitHead?WithdrawTypeId=" + cTransactionTypeId;
+        DropdownLoad($debitDropdown, url);
+    }
+
+
+    function DropdownLoad($dropdown, url) {
+        $dropdown.html("");
+        $dropdown.append($("<option />").val("").text("Select"));
+
+        $.ajax({
+            url: url
+            , type: 'GET'
+            , beforeSend: function () { $(".loading").show(); }
+            , success: function (data) {
+                $.each(data, function (i, state) {
+                    $dropdown.append($("<option />").val(state.Value).text(state.Text));
+                });
+                @*if ('@Model.ACCTID' != "") {
+                    $(".accTID").select2("val", '@Model.ACCTID');
+                }*@
+            }
+            , complete: function () { $(".loading").fadeOut(200).hide("slow") }
+
+        });
+    }
+
+
+
+
+    $('.cWithdrawAmount').on('change', function () {
+
+        DebitCreditLoad();
+    });
+
+
+    function DebitCreditLoad() {
+        var WithdrawAmount = parseFloat($(".cWithdrawAmount").val().replace(/\,/g, ''));
+        var $elm = $(".row.cWithdrawDetail")
+
+        var $debitRow = $elm.eq(0);
+        var $creditRow = $elm.eq(1);
+
+        $debitRow.find(".dDebitAmount").val(WithdrawAmount);
+
+        $creditRow.find(".dCreditAmount").val(WithdrawAmount);
+
+
+        NumberFormatCheck();
+
+    }
+
+</script>
+<script>
+
+
+    @*$('.cBankBranchId').on('change', function () {
+
+
+        var BankBranchId = $(this).val();
+        if ('@Model.Post'.toLowerCase != 'true') {
+            AvailableBalance(BankBranchId);
+        }
+    });
+
+    function AvailableBalance(BankBranchId) {
+
+        var getURL = "/@ViewBag.TransType/Withdraw/GetAvailableBalance" + "?" + "BankBranchId=" + BankBranchId;
+
+        $.getJSON(getURL, function (vm) {
+            $(".cAvailableBalance").val(vm.AvailableBalance);
+            NumberFormatCheck();
+        });
+
+    }
+
+
+
+    $('.cWithdrawAmount').on('change', function () {
+
+        BalanceCheck();
+    });*@
+
+
+    //function BalanceCheck() {
+    //    var WithdrawAmount = parseFloat($(".cWithdrawAmount").val().replace(/\,/g, ''));
+
+    //    if (!$.isNumeric(WithdrawAmount)) {
+    //        ShowResult("Fail", "Withdraw Amount: " + WithdrawAmount + " Format Not Valid!");
+    //        $(".cWithdrawAmount").val(0);
+    //        return false;
+    //    }
+
+    //    var AvailableBalance = parseFloat($(".cAvailableBalance").val().replace(/\,/g, ''));
+
+    //    if (WithdrawAmount > AvailableBalance) {
+    //        ShowResult("Fail", "Withdraw Amount: " + WithdrawAmount + " can't be greater than Available Balance: " + AvailableBalance + "!");
+    //        $(".cWithdrawAmount").val(0);
+    //        return false;
+
+    //    }
+    //    NumberFormatCheck();
+    //    return true;
+    //}
+</script>
+
+<script>
+
+    function SetTransactionType() {
+        var TransactionType = $(".cTransactionTypeId :selected").text();
+        $("#TransactionType").val(TransactionType);
+    }
+
+    function SaveData() {
+        SetTransactionType();
+
+
+        ////if (!BalanceCheck()) {
+        ////    return;
+        ////}
+
+
+        pageSubmit('frmWithdraw');
+
+
+    }
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+
+        SetTransactionType();
+
+        ////if (!BalanceCheck()) {
+        ////    return;
+        ////}
+
+        pageSubmit('frmWithdraw');
+
+    }
+
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/Withdraw/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+
+    //$(document).keypress(function (e) {
+    //    if (e.which == 13) {
+    //        //var url = "/Home/Login";
+    //        pageSubmit('frmWithdraw')
+    //        //submit(url);
+    //    }
+    //});
+    $(document).ready(function () {
+        $('#frmWithdraw').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+
+</script>

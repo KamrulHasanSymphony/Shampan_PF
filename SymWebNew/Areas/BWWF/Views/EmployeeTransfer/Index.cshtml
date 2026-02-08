@@ -1,0 +1,75 @@
+﻿@using UIHelper.MVC
+@{
+    ViewBag.Title = "Index";
+}
+<div class="headrow">
+    <button type="button" title="Add New Employee BWWF Opeinig" data-url="/@ViewBag.TransType/EmployeeTransfer/SingleEmployeePFTransferEdit" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+   
+     <label class="pull-right">Employee Transfer
+ </label>
+</div>
+<div class="thinbox">
+   
+    <div id="container">
+        <table id="myDataTable" class="display">
+            <thead>
+                <tr>
+                    <th class="center" style="display:none;"></th>  
+                    <th class="center">Employee Code</th>                   
+                    <th class="center">Employee Name</th>
+                    <th class="center">From Branch</th>
+                    <th class="center">To Branch</th>                   
+                    <th class="center">Date</th>
+                </tr>
+               
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New Employee BWWF Opeinig" data-url="/@ViewBag.TransType/EmployeeTransfer/SingleEmployeePFTransferEdit" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+
+</div>
+<script>
+    $(function () {
+
+        SelectAllForDelete();
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/EmployeeTransfer/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                     //{
+                     //    "sName": "Id",
+                     //    "bSearchable": false,
+                     //    "bSortable": false,
+                     //    "sWidth": "10%",
+                     //    "sClass": "center",
+                     //    "fnRender": function (oObj) {
+                     //        return '  &nbsp;  <a title="Click on for Edit" id="lnkEdit1" style="text-decoration:none;" Onclick="otherearningEdit(this);"  class="hidden  sym-btn-edit-row"  data-Id="' + oObj.aData[0] + '"></a>'                              
+                     //        ;
+                     //    }
+                     //},
+                                { "sName": "Id", "bVisible": false },               
+                                { "sName": "Code", "sWidth": "15%", "sClass": "center" },
+                                { "sName": "EmpName", "sWidth": "25%" },
+                                { "sName": "FromBranch", "sWidth": "20%", "sClass": "center" },
+                                { "sName": "ToBranch", "sWidth": "20%", "sClass": "center" },
+                                { "sName": "TransferDate", "sWidth": "20%", "sClass": "center" }
+                              
+                               
+                ]
+            });
+            
+        });
+        function otherearningEdit(sender) {
+            window.location = "/@ViewBag.TransType/EmployeeTransfer/SingleEmployeePFTransferEdit?PFOpeinigId=" + $(sender).attr('data-Id');
+        }
+</script>
+
+

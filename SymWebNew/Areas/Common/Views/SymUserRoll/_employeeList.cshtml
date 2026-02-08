@@ -1,0 +1,81 @@
+﻿<div class="thinbox">
+        <div class="th_thinbox">
+        <p>User List</p>   
+        </div>
+<div class="row">
+        <div id="container">
+            <div id="demo">
+    <table id="myDataTable" class="display">
+         <thead>
+                      <tr>
+                            <th class="center"> Select All</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th >Designation</th>
+                            <th >Join Date</th>
+                        </tr>
+
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Join Date</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+                </div>
+                </div>
+                </div>
+                </div>
+<script>
+    $(function () {
+        $(".EditPlace").hide();
+        customToollip();
+        InitDateTimePickers();
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/SymUserRoll/_indexUserlist",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <a title="Click for Details" style="text-decoration:none" value="' + oObj.aData[0] + '"  href=\"/Common/SymUserRoll/SelectEmployee/' + oObj.aData[0] + '\"     class="sym-btn-detail-row"></a>';
+                                    //onclick = "Selectemployee(\'' + oObj.aData[0] + '\')"
+                                }
+                            }
+                                , { "sName": "Code", "sWidth": "15%" }
+                                , { "sName": "EmpName", "sWidth": "20%" }
+                                , { "sName": "Department", "sWidth": "15%" }
+                                , { "sName": "Designation", "sWidth": "15%" }
+                                , { "sName": "JoinDate", "sWidth": "20%" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "date-range" }
+            ]
+
+        });
+    });
+    function CancleUser() {
+        $(".EditPlace").hide();
+    }
+    </script>

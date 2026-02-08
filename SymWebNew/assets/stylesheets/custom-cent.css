@@ -1,0 +1,185 @@
+.OneCent {
+    float: left;
+    width: 1%;
+}
+
+.TwoCent {
+    float: left;
+    width: 2%;
+}
+
+.ThreeCent {
+    float: left;
+    width: 3%;
+}
+
+.FourCent {
+    float: left;
+    width: 4%;
+}
+
+.FiveCent {
+    float: left;
+    width: 5%;
+}
+
+.SixCent {
+    float: left;
+    width: 6%;
+}
+
+.SevenCent {
+    float: left;
+    width: 7%;
+}
+
+.EightCent {
+    float: left;
+    width: 8%;
+}
+
+.NineCent {
+    float: left;
+    width: 9%;
+}
+
+.TenCent {
+    float: left;
+    width: 10%;
+}
+
+.ElevenCent {
+    float: left;
+    width: 11%;
+}
+
+.TwelveCent {
+    float: left;
+    width: 12%;
+}
+
+.ThirteenCent {
+    float: left;
+    width: 13%;
+}
+
+.FifteenCent {
+    float: left;
+    width: 14%;
+}
+
+.SixteenCent {
+    float: left;
+    width: 15%;
+}
+
+.SeventeenCent {
+    float: left;
+    width: 16%;
+}
+
+.EighteenCent {
+    float: left;
+    width: 17%;
+}
+
+.NineteenCent {
+    float: left;
+    width: 18%;
+}
+
+.TwentyCent {
+    float: left;
+    width: 19%;
+}
+
+.TwentyFiveCent {
+    float: left;
+    width: 24%;
+}
+
+.ThirtyCent {
+    float: left;
+    width: 30%;
+}
+
+.ThirtyFiveCent {
+    float: left;
+    width: 35%;
+}
+
+.FortyCent {
+    float: left;
+    width: 40%;
+}
+
+.FortyFieCent {
+    float: left;
+    width: 45%;
+}
+
+.FiftyCent {
+    float: left;
+    width: 50%;
+}
+
+.FiftyFiveCent {
+    float: left;
+    width: 55%;
+}
+
+.SixtyCent {
+    float: left;
+    width: 60%;
+}
+
+.SixtyFiveCent {
+    float: left;
+    width: 65%;
+}
+
+.SeventyCent {
+    float: left;
+    width: 70%;
+}
+
+.SeventyFiveCent {
+    float: left;
+    width: 75%;
+}
+
+.EightyCent {
+    float: left;
+    width: 80%;
+}
+
+.EightyFiveCent {
+    float: left;
+    width: 85%;
+}
+
+.NinetyCent {
+    float: left;
+    width: 90%;
+}
+
+.NinetyFiveCent {
+    float: left;
+    width: 95%;
+}
+
+.HundredCent {
+    float: left;
+    width: 100%;
+}
+
+.AutoCent {
+    float: left;
+    width: auto;
+}
+
+.AutoCentRight {
+    float: right;
+    text-align: right;
+    width: auto;
+}

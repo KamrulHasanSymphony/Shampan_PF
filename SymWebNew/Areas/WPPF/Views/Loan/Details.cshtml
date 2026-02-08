@@ -1,0 +1,223 @@
+﻿@model SymViewModel.Loan.EmployeeLoanVM
+@using UIHelper.MVC
+@using (Html.BeginForm("Details", "Loan", FormMethod.Post, new { @Id = "frmLoan" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Loan</p>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Employee)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Employee, new {@placeholder = "Employee Name", @class ="  form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Employee)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LoanType_E)
+                    @Html.HiddenFor(model => model.EmployeeId)
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDownFor(model => model.LoanType_E, "/Config/DropDown/LoanType", new { @class = "required form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.LoanType_E)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.PrincipalAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.PrincipalAmount, new { @onchange = "LoanSchudele();",@placeholder = "Principal Amount", @class =" right required form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.PrincipalAmount)
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.NumberOfInstallment)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.NumberOfInstallment, new { @onchange = "LoanSchudele()",@placeholder = "Number Of Installment", @class =" right  required form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.NumberOfInstallment)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.StartDate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.StartDate, new { @onchange = "LoanSchudele()",@placeholder = "Start Date", @class ="customDatePicker required form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.StartDate)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.EndDate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.EndDate, new { @disabled = "disabled",@placeholder = "End Date", @class ="customDatePicker required form-control" })
+                    @Html.ValidationMessageFor(model => model.EndDate)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.IsFixed)
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBoxFor(model => model.IsFixed, new { @onchange = "IsFixedAmount(this)",@placeholder = "Is it Fixed?", @class ="form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.IsFixed)
+                </div>
+            </div>
+            <div class="col-md-2 InterestRate">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InterestRate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.InterestRate, new { @disabled = "disabled",@placeholder = "Interest Rate", @class =" right form-control" })
+                    @Html.ValidationMessageFor(model => model.InterestRate)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InterestAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.InterestAmount, new {@placeholder = "Interest Amount", @class =" right form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.InterestAmount)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.TotalAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.TotalAmount, new {@placeholder = "Total Amount", @class =" right form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.TotalAmount)
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Remarks, new {@placeholder = "Remarks",@rows="1", @class ="form-control", @disabled = "disabled" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div id="">
+            <div id="fiscalYearDRows">
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.employeeLoanDetails.FirstOrDefault().PaymentScheduleDate)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.employeeLoanDetails.FirstOrDefault().InstallmentAmount)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.employeeLoanDetails.FirstOrDefault().Remarks)
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.employeeLoanDetails.FirstOrDefault().IsPaid)
+                        </div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.employeeLoanDetails.FirstOrDefault().IsHold)
+                        </div>
+                    </div>
+                </div>
+                @if (Model.employeeLoanDetails != null)
+                {
+                    foreach (var item in Model.employeeLoanDetails)
+                    {
+                        Html.RenderPartial("_dloan", item);
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        InitDatePickers();
+        LoanSchudele();
+    });
+
+    function IsFixedAmount(sender) {
+        if ($(sender).is(":checked")) {
+            $(".InterestRate").hide();
+            $("#InterestRate").val('0');
+            $("#InterestAmount").attr('readonly', false);
+        }
+        else {
+            $(".InterestRate").show();
+            $("#InterestAmount").attr('readonly', true);
+        }
+        LoanSchudele();
+    }
+    function LoanSchudele() {
+
+        $("#loanDetails").html("");
+
+
+        var installment = parseFloat($("#NumberOfInstallment").val());
+        var PrincipalAmount = parseFloat($("#PrincipalAmount").val());
+        var InterestRate = parseFloat($("#InterestRate").val());
+        var InterestAmount = 0;
+        if ($("#IsFixed").is(":checked")) {
+            InterestAmount = parseFloat($("#InterestAmount").val());
+        }
+        else {
+            InterestAmount = (PrincipalAmount * InterestRate) / 100;
+            $("#InterestAmount").val(InterestAmount)
+        }
+        $("#TotalAmount").val(InterestAmount + PrincipalAmount);
+        var startDate = $("#StartDate").val();
+        if (installment <= 0 || PrincipalAmount <= 0 || startDate == "") {
+            return;
+        }
+        // details
+        var dPAmount = PrincipalAmount / installment;
+        var dIAmount = InterestAmount / installment;
+        var dTAmount = (PrincipalAmount + InterestAmount) / installment;
+
+        //
+        if (PrincipalAmount <= 0 || installment <= 0 || startDate == "") {
+            return;
+        }
+        var html = "";
+        var url = "/Payroll/Loan/MonthCalculation?date=" + $("#StartDate").val() + "&number=" + parseInt(installment);
+        $.ajax({
+            type: "GET",
+            url: url,
+            error: function (xhr, status, error) {
+                //"test"
+            },
+            success: function (response) {
+                html += "<table border='0'><thead><tr><th>No.</th><th>Date</th><th>Amount</th><th>Interest</th><th>Total</th></tr></thead><tbody>"
+                $.each(response, function (i, item) {
+                    html += "<tr><td>" + (i + 1) + "</td><td>" + item.StartDate + "</td><td>" + dPAmount + "</td><td>" + dIAmount + "</td><td>" + dTAmount + "</td></tr>";
+                    $("#EndDate").val(item.StartDate)
+                });
+                html += "</tbody></table>";
+                $("#loanDetails").html(html);
+            }
+        });
+    }
+
+</script>

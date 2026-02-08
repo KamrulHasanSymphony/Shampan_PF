@@ -1,0 +1,84 @@
+﻿@model SymViewModel.BWWF.PFReportVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create";
+}
+
+
+
+@using (Html.BeginForm("PreDistributionFundReport", "PreDistributionFund", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmVAT6_3", @target = "_blank" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(m => m.Id)
+    @*@Html.HiddenFor(model => model.Operation)*@
+    <div class="thinbox">
+        <div class="EnumEEHead">
+            <div class="row">
+                <label class="col-sm-3">
+                    @*@Html.LabelFor(model => model.GroupName)*@
+                    <label>Code</label>
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = " form-control" })
+                </div>
+            </div>
+           
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.DateFrom)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.DateFrom, new { @placeholder = "Date From", @class = "customDatePicker form-control" })
+                    @Html.ValidationMessageFor(model => model.DateFrom)
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.DateTo)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.DateTo, new { @placeholder = "Date To", @class = "customDatePicker form-control"})
+                    @Html.ValidationMessageFor(model => model.DateTo)
+                </div>
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+                <div class="row">
+                    <label class="col-sm-4">
+                        @*<button type="button" title="Report Preview" onclick="pageSubmit('frmCOAGroup');" class="sym-btn-save">&nbsp;Preview</button>*@
+                        <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PreDistributionFund/PreDistributionFundReport" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Preview</button>
+
+                    </label>
+                    <label class="col-sm-4">
+                        &nbsp;<button type="button" title="Clear the Entries" id="Clear" class="sym-btn-clear">&nbsp;Clear</button>
+
+                    </label>
+                    <label class="col-sm-4">
+                        <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                    </label>
+                </div>
+            </div>
+    </div>
+}
+<script>
+    $(function () {
+        InitDropDowns();
+        InitDateTimePickers();
+        $("#Clear").on('click', function () {
+            $("#Code").val("");
+            $("#Id").val("");
+            $("#DateFrom").val("");
+            $("#DateTo").val("");
+
+        });
+    });
+   
+    function reportData(sender) {
+        $("#frmVAT6_3").submit();
+    }
+
+</script>

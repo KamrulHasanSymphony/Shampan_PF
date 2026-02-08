@@ -1,0 +1,139 @@
+
+2025-09-25 16:17:05 +06:00
+ Source : LoginStart , Method : HomeController
+LoginStart
+
+2025-09-25 16:17:10 +06:00
+ Source : LogID , Method : UserInformationDAL
+Login As: admin
+2025-09-25 16:17:10 +06:00
+ Source : Password , Method : UserInformationDAL
+Login As: b1JXpoXo6qdggBV0qXQnBw==
+
+2025-09-25 16:17:10 +06:00
+ Source : ConnectionString , Method : UserInformationDAL
+Login As: data source=192.168.15.100\MSSQLSERVER2019,1419;Initial catalog=Dekko_PF_DB;user id=sa;Integrated Security=False;connect Timeout=600;MultipleActiveResultSets=True; pooling=no;
+
+
+2025-10-30 17:56:48 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\PF_Single\ShampanPF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766
+
+2025-10-30 18:05:28 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\PF_Single\ShampanPF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766
+
+2025-11-23 11:20:16 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\PF_Single\ShampanPF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766
+
+2025-11-23 11:25:13 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\PF_Single\ShampanPF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766
+
+2025-11-23 13:06:36 +06:00
+ Source : WPPFReport , Method : WPPFController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.WPPFController.AllWPPFReport(PFHeaderVM vm) in d:\PF_Single\ShampanPF\SymWebNew\Areas\PF\Controllers\WPPFController.cs:line 334
+
+2025-11-23 14:34:02 +06:00
+ Source : DownloadAllWPPFReport , Method : WPPFController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.WPPFController.DownloadAllWPPFReport() in d:\PF_Single\ShampanPF\SymWebNew\Areas\PF\Controllers\WPPFController.cs:line 501
+
+2025-11-23 14:39:00 +06:00
+ Source : DownloadAllWPPFReport , Method : WPPFController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.WPPFController.DownloadAllWPPFReport()
+
+2025-11-23 14:41:29 +06:00
+ Source : DownloadAllWPPFReport , Method : WPPFController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.WPPFController.DownloadAllWPPFReport()
+
+2025-11-23 16:49:58 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 16:50:04 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:29:14 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:31:18 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:32:18 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:34:40 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:34:44 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:36:36 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+SQL:Select a.Id, b.Code As WPPFCode, c.Name, a.DistributionDate, a.EmployeeProfit, a.Post  From WPPFProfitDistribution a  left join WPPFHeader b on a.WPPFHeaderId = b.Id  left join EmployeeInfo c on a.EmployeeId = c.Id WHERE  1=1 AND a.IsArchive = 0  AND b.Code=@Code ORDER BY c.Name~The transaction operation cannot be performed because there are pending requests working on this transaction.
+
+2025-11-23 17:39:05 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:42:53 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:46:52 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:48:17 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:48:35 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-11-23 17:48:55 +06:00
+ Source : DownloadAllWPPFProfitDistributionReport , Method : WPPFController
+Object reference not set to an instance of an object.
+
+2025-12-29 16:35:09 +06:00
+ Source : WPPFReport , Method : WPPFController
+SQL:
+SELECT 
+    pfd.Id
+    ,pfd.Code
+    ,pfd.FiscalYearDetailId
+    ,p.Name AS ProjectName
+    ,p.Id AS ProjectId
+    ,fyd.PeriodName
+    ,fyd.PeriodStart
+    ,pfd.Post 
+    ,pfd.TotalProfitValue AS TotalPF
+    ,pfd.WPPFValue
+    ,pfd.WWFValue
+    ,pfd.BWWF
+FROM WPPFHeader pfd
+ LEFT OUTER JOIN [dbo].[Project] p ON pfd.ProjectId = p.Id LEFT OUTER JOIN [dbo].[FiscalYearDetail] fyd ON pfd.FiscalYearDetailId = fyd.Id WHERE 1 = 1 AND pfd.IsArchive = 0 ORDER BY fyd.PeriodStart DESC~Invalid column name 'WWFValue'.
+Invalid column name 'BWWF'.
+   at SymRepository.WPPF.WPPFRepo.SelectAll() in d:\Meghna_WPPF\ShampanPF\SymRepository\WPPF\WPPFRepo.cs:line 75
+   at SymWebUI.Areas.WPPF.Controllers.WPPFController.AllWPPFReport(PFHeaderVM vm) in d:\Meghna_WPPF\ShampanPF\SymWebNew\Areas\WPPF\Controllers\WPPFController.cs:line 318
+
+2026-01-15 17:19:53 +06:00
+ Source : DownloadAllWPPFReport , Method : WPPFController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.WPPF.Controllers.WPPFController.DownloadAllWPPFReport() in d:\Meghna_WPPF\SymWebNew\Areas\WPPF\Controllers\WPPFController.cs:line 492

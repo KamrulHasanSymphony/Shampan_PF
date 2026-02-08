@@ -1,0 +1,288 @@
+﻿@model SymViewModel.PF.PFSettlementVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "PFSettlement", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPFSettlement" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.FiscalYearDetailId)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+    
+    
+    @Html.HiddenFor(model => model.FiscalYearDetailId)
+    @Html.HiddenFor(model => model.ProjectId)
+    @Html.HiddenFor(model => model.DepartmentId)
+    @Html.HiddenFor(model => model.SectionId)
+    @Html.HiddenFor(model => model.DesignationId)
+    @Html.HiddenFor(model => model.EmployeeId)
+    @Html.HiddenFor(model => model.EmployeeTotalContribution)
+    @Html.HiddenFor(model => model.EmployerTotalContribution)
+    @Html.HiddenFor(model => model.EmployeeProfitValue)
+    @Html.HiddenFor(model => model.EmployerProfitValue)
+    @Html.HiddenFor(model => model.EmployeeActualContribution)
+    @Html.HiddenFor(model => model.EmployerActualContribution)
+    @Html.HiddenFor(model => model.EmployeeActualProfitValue)
+    @Html.HiddenFor(model => model.EmployerActualProfitValue)
+    @Html.HiddenFor(model => model.EmpDOJ)
+    @Html.HiddenFor(model => model.EmpResignDate)
+    @Html.HiddenFor(model => model.SettlementDate)
+    @Html.HiddenFor(model => model.SettlementPolicyId)
+    @Html.HiddenFor(model => model.JobAgeInMonth)
+    @Html.HiddenFor(model => model.EmployeeContributionRatio)
+    @Html.HiddenFor(model => model.EmployerContributionRatio)
+    @Html.HiddenFor(model => model.EmployeeProfitRatio)
+    @Html.HiddenFor(model => model.EmployerProfitRatio)
+    @Html.HiddenFor(model => model.PFStartDate)
+    @Html.HiddenFor(model => model.PFEndDate)
+    @Html.HiddenFor(model => model.EmployeeContributionForfeitValue)
+    @Html.HiddenFor(model => model.EmployeeProfitForfeitValue)
+    @Html.HiddenFor(model => model.EmployerContributionForfeitValue)
+    @Html.HiddenFor(model => model.EmployerProfitForfeitValue )
+    @*@Html.HiddenFor(model => model.TotalForfeitValue)*@
+    @Html.HiddenFor(model => model.TotalPayableAmount)
+    @Html.HiddenFor(model => model.AlreadyPaidAmount)
+    @*@Html.HiddenFor(model => model.NetPayAmount)*@
+    @*@Html.HiddenFor(model => model.ProvidentFundAmount)*@
+
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPFSettlement')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">PF Settlement > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+    @*<button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFSettlement/PFSettlement_GLTransactionReport?id=@Model.Id')" id="" class=" sym-btn-detail ">&nbsp;Report</button>*@
+
+            @*<button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>*@
+            <label class="pull-right">PF Settlement > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFSettlement" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="Add New PF Settlement" data-url="/@ViewBag.TransType/PFSettlement/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>PF Settlement</p>
+        </div>
+        <div class="PFSettlement">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmpName)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmpName, new { @placeholder = "EmpName", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.EmpName)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Designation)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Designation, new { @placeholder = "Designation", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Designation)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Department)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Department, new { @placeholder = "Department", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Department)
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.TransactionCode)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.TransactionCode, new { @placeholder = "Auto Code", @class = "  form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.TransactionCode)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.SettlementDate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.SettlementDate, new { @placeholder = "Settlement Date", @class = "  required customDatePicker form-control" })
+                            @Html.ValidationMessageFor(model => model.SettlementDate)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.TransactionType)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.TransactionType, new { @placeholder = "Transaction Type", @class = "  form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.TransactionType)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.TotalForfeitValue)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.TotalForfeitValue, new { @placeholder = "Total Forfeit Value", @class = " NumberCheck right form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.TotalForfeitValue)
+                        </div>
+                    </div>                   
+                    
+                </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployeeTotalContribution)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployeeTotalContribution, new { @placeholder = "Net Pay Amount", @class = " NumberCheck right form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.EmployeeTotalContribution)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployerTotalContribution)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployerTotalContribution, new { @placeholder = "Provident Fund Amount", @class = " NumberCheck right form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.EmployerTotalContribution)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployeeProfitValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployeeProfitValue, new { @placeholder = "Employee Profit Value", @class = " NumberCheck right form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.EmployeeProfitValue)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployerProfitValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployerProfitValue, new { @placeholder = "Employer Profit Value", @class = " NumberCheck right form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.EmployerProfitValue)
+                    </div>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.Remarks)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "   form-control" })
+                            @Html.ValidationMessageFor(model => model.Remarks)
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+    @*<div class="thinbox">
+        <div class="th_thinbox">
+            <p>Detail</p>
+        </div>
+        <div id="detail">
+            <div id="editorItemRows4">
+                @if (Model.detailVMs != null && Model.detailVMs.Count > 0)
+                {
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="editor-label">
+                                <label>Account Head</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">
+                                <label>Debit Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">
+                                <label>Credit Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="editor-label">
+                                <label>Narration</label>
+                            </div>
+                        </div>
+                    </div>
+                    foreach (var item in Model.detailVMs)
+                    {
+                        Html.RenderPartial("~/Areas/PF/Views/PFSettlement/_details.cshtml", item);
+                    }
+                }
+            </div>
+        </div>
+    </div>*@
+
+
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPFSettlement')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            @*<button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>*@
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFSettlement" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="Add New PF Settlement" data-url="/@ViewBag.TransType/PFSettlement/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmPFSettlement");
+    });
+
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmPFSettlement');
+    }
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/PFSettlement/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+    $(document).ready(function () {
+        $('#frmPFSettlement').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+
+</script>

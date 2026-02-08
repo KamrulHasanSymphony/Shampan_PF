@@ -1,0 +1,590 @@
+﻿@model SymViewModel.HRM.DesignationVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Edit";
+    ViewBag.Location = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "Designation", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmDesignation" }))
+{
+    @Html.ValidationSummary(true)
+    <div class=" tabMenu">
+        <ul style="font-size: 1.4em;" class="tabDesign nav nav-tabs">
+            <li class="tabDefault active"><a data-toggle="tab" href="#Deposit">Basic</a></li>
+            <li class="tabDefault"><a data-toggle="tab" href="#VDS" class="vdsInfoTab">Insurance Plan</a></li>
+            <li class="tabDefault"><a data-toggle="tab" href="#ENT" class="ENTInfoTab">Entitlement</a></li>
+            <li class="tabDefault"><a data-toggle="tab" href="#ME" class="MEInfoTab">Mobile Expense</a></li>
+            <li class="tabDefault"><a data-toggle="tab" href="#ITE" class="ITEInfoTab">International Travel</a></li>
+            <li class="tabDefault"><a data-toggle="tab" href="#DTE" class="ITEInfoTab">Domestic Travel</a></li>
+        </ul>
+    </div>
+    <div class="tab-content">
+        <div id="Deposit" class="tab-pane fade  in active">
+            <div class="thinbox">
+                <div class="th_thinbox">
+                    <p>Designation Edit</p>
+                </div>
+                <div class="Designation">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Code)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = " required form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Name)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.Name, new { @placeholder = "Name", @class = "required form-control" })
+                            </div>
+                        </div>
+
+                        @*<div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DesignationGroupId)
+                            </div>
+                            <div class="editor-field">
+                                @Html.SimpleDropDownFor(model => model.DesignationGroupId, "/Config/DropDown/DesignationGroupDropDown", new { @class = " cDesignationGroupId required form-control" })
+
+                            </div>
+                        </div>*@
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.GradeId)
+                            </div>
+                            <div class="editor-field">
+                                @Html.SimpleDropDownFor(model => model.GradeId, "/Config/DropDown/Grade", new { @class = " cGradeId required form-control" })
+
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.EPZ)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.EPZ, new { @placeholder = "EPZ", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Other)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.Other, new { @placeholder = "Other", @class = " form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DinnerAmount)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DinnerAmount, new { @placeholder = "Dinner Amount", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.IfterAmount)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.IfterAmount, new { @placeholder = "Ifter Amount", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.TiffinAmount)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.TiffinAmount, new { @placeholder = "Tiffin Amount", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ETiffinAmount)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.ETiffinAmount, new { @placeholder = "ETiffin Amount", @class = " form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.AttendenceBonus)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.AttendenceBonus, new { @placeholder = "Attendence Bonus", @class = "required form-control" })
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OTAlloawance)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.OTAlloawance, new { @placeholder = "OT Alloawance", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OTOrginal)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.OTOrginal, new { @placeholder = "OT Orginal", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OTBayer)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.OTBayer, new { @placeholder = "OT Bayer", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ExtraOT)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.ExtraOT, new { @placeholder = "Extra OT", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.PriorityLevel)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.PriorityLevel, new { @placeholder = "Priority Level", @class = " NumberCheck form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OrderNo)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.OrderNo, new { @placeholder = "Order No", @class = " NumberCheck form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Remarks)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.Remarks, new { @placeholder = "Remarks", @class = " form-control" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="VDS" class="tab-pane fade">
+            <div class="thinbox">
+                <div class="th_thinbox">
+                    <p>Insurance Edit</p>
+                </div>
+                <div class="Designation">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row">
+                        @*<div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Code)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.Code, new { @placeholder = " Code", @class = " required form-control" })
+                            </div>
+                        </div>*@
+
+                        
+
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.HospitalPlanC1)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.HospitalPlanC1, new { @placeholder = "Hospital Benefit insured Per Incident", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.HospitalPlanC2)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.HospitalPlanC2, new { @placeholder = "Hospital Room & Board Limit", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.HospitalPlanC3)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.HospitalPlanC3, new { @placeholder = "Hospital Daily Room Limit", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.HospitalPlanC4)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.HospitalPlanC4, new { @placeholder = "Intensive Care Unit", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.HospitalPlanC5)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.HospitalPlanC5, new { @placeholder = "H. Servicees/Surgical Anestheisa Charge", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DeathCoveragePlanC6)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DeathCoveragePlanC6, new { @placeholder = "Death Plan Coverage", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MaternityPlanC7)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.MaternityPlanC7, new { @placeholder = "In Patient Maternity Plan", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MaternityPlanC8)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.MaternityPlanC8, new { @placeholder = "In Patient Maternity Plan", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MaternityPlanC9)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.MaternityPlanC9, new { @placeholder = "In Patient Maternity Plan", @class = "NumberCheck form-control" })
+                            </div>
+                        </div>
+
+
+
+
+                        @*<div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DinnerAmount)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DinnerAmount, new { @placeholder = "Dinner Amount", @class = " form-control" })
+                            </div>
+                        </div>*@
+                    </div>
+                    <div class="row">
+                        @*<div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.GradeId)
+                            </div>
+                            <div class="editor-field">
+                                @Html.SimpleDropDownFor(model => model.GradeId, "/Config/DropDown/Grade", new { @class = " cGradeId required form-control" })
+
+                            </div>
+                        </div>*@
+
+                    </div>
+                    @*<div class="row">
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OTAlloawance)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.OTAlloawance, new { @placeholder = "OT Alloawance", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OTOrginal)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.OTOrginal, new { @placeholder = "OT Orginal", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OTBayer)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.OTBayer, new { @placeholder = "OT Bayer", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.ExtraOT)
+                            </div>
+                            <div class="editor-field">
+                                @Html.CheckBoxFor(model => model.ExtraOT, new { @placeholder = "Extra OT", @class = " form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.PriorityLevel)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.PriorityLevel, new { @placeholder = "Priority Level", @class = " NumberCheck form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.OrderNo)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.OrderNo, new { @placeholder = "Order No", @class = " NumberCheck form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Remarks)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.Remarks, new { @placeholder = "Remarks", @class = " form-control" })
+                            </div>
+                        </div>
+                    </div>*@
+                </div>
+            </div>
+
+        </div>
+        <div id="ENT" class="tab-pane fade">
+            <div class="thinbox">
+                <div class="th_thinbox">
+                    <p>Entitlement Plan Edite</p>
+                </div>
+                <div class="Designation">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.EntitlementC1)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.EntitlementC1, new { @placeholder = "Company Car", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.EntitlementC2)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.EntitlementC2, new { @placeholder = "Car Allowance(Incl.EMI,Maintenance)", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.EntitlementC3)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.EntitlementC3, new { @placeholder = "Fuel", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.EntitlementC4)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.EntitlementC4, new { @placeholder = "Maintenance", @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.EntitlementC5)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.EntitlementC5, new { @placeholder = "Driver", @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="ME" class="tab-pane fade">
+            <div class="thinbox">
+                <div class="th_thinbox">
+                    <p>Mobile Expense Edit</p>
+                </div>
+                <div class="Designation">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MobileExpenseC1)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.MobileExpenseC1, new { @placeholder = "Title", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MobileExpenseC2)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.MobileExpenseC2, new { @placeholder = "Hand SET", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MobileExpenseC3)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.MobileExpenseC3, new { @placeholder = "Monthly Limit(Operations)", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.MobileExpenseC4)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.MobileExpenseC4, new { @placeholder = "Monthly Limit(Others)", @class = "form-control" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="ITE" class="tab-pane fade">
+            <div class="thinbox">
+                <div class="th_thinbox">
+                    <p>International Travel Edit</p>
+                </div>
+                <div class="Designation">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.InternationalTravelC1)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.InternationalTravelC1, new { @placeholder = "Air Fare", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.InternationalTravelC2)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.InternationalTravelC2, new { @placeholder = "Hotel", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.InternationalTravelC3)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.InternationalTravelC3, new { @placeholder = "Daily Expenses Limit(Food, laundry,etc)", @class = "form-control" })
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div id="DTE" class="tab-pane fade">
+            <div class="thinbox">
+                <div class="th_thinbox">
+                    <p>Domestic Travel Edit</p>
+                </div>
+                <div class="Designation">
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DomesticlTravelC1)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DomesticlTravelC1, new { @placeholder = "Transportation", @class = " form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DomesticTravelC2)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DomesticTravelC2, new { @placeholder = "Accommodation", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DomesticTravelC3)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DomesticTravelC3, new { @placeholder = "Daily Expenses limit for Day Tip", @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DomesticTravelC4)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DomesticTravelC4, new { @placeholder = "Daily Expenses Overnight for Day Tip", @class = "form-control" })
+                            </div>
+                        </div>
+                        @*<div class="col-sm-3">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.DomesticTravelC5)
+                            </div>
+                            <div class="editor-field">
+                                @Html.TextBoxFor(model => model.DomesticTravelC5, new { @placeholder = "Domestic Travel C5", @class = "form-control" })
+                            </div>
+                        </div>*@
+
+                    </div>
+
+                    <div class="row">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        </div>
+    <div class="headrow">
+        <button type="button" title="Save Data" onclick="pageSubmit('frmDesignation');" class="sym-btn-update">&nbsp;Update</button>
+        @*<button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>*@
+    </div>
+}
+
+<script>
+    $(function () {
+        valiDation("frmDesignation");
+    });
+</script>

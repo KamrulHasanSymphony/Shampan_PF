@@ -1,0 +1,47 @@
+﻿@model SymViewModel.PF.ProfitDistributionDetailVM
+
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row FormA">
+    @using (Html.BeginCollectionItem("profitDistributionDetailVMs"))
+    {
+        // @Html.HiddenFor(model => model.Id, new { @class = "dId" })
+
+        @Html.HiddenFor(model => model.ProjectId)
+        @Html.HiddenFor(model => model.DepartmentId)
+        @Html.HiddenFor(model => model.SectionId)
+        @Html.HiddenFor(model => model.DesignationId)
+        @Html.HiddenFor(model => model.EmployeeId)
+        @Html.HiddenFor(model => model.ServiceLengthMonth)
+        
+
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.Code, new { @class = "    form-control", @readonly = "readonly" }) </div></div>
+        <div class="col-md-2"><div class="editor-field">@Html.TextBoxFor(model => model.EmpName, new { @class = "    form-control", @readonly = "readonly" }) </div></div>
+        @*<div class="col-md-2"><div class="editor-field">@Html.TextAreaFor(model => model.Designation, new { @class = "    form-control", @readonly = "readonly" }) </div></div>
+            <div class="col-md-2"><div class="editor-field">@Html.TextAreaFor(model => model.Department, new { @class = "    form-control", @readonly = "readonly" }) </div></div>*@
+
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.EmployeeTotalContribution, new { @class = " dEmployeeTotalContribution NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.EmployerTotalContribution, new { @class = " dEmployerTotalContribution   NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.IndividualTotalContribution, new { @class = "    NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+        
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.ServiceLengthMonthWeight, new { @class = " dServiceLengthMonthWeight   NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.IndividualWeightedContribution, new { @class = "    NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.MultiplicationFactor, new { @class = "      right form-control", @readonly = "readonly" }) </div></div>
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.IndividualProfitValue, new { @class = "    NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.EmployeeProfitValue, new { @class = " dEmployeeProfitValue   NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+        <div class="col-md-1"><div class="editor-field">@Html.TextBoxFor(model => model.EmployerProfitValue, new { @class = " dEmployerProfitValue   NumberCheck TwoDecimal right form-control", @readonly = "readonly" }) </div></div>
+        @*<div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @rows = "1", @class = "  form-control" })
+            </div>
+        </div>*@
+    }
+</div>
+
+
+
+
+

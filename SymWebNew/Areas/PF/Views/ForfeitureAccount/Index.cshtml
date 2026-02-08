@@ -1,0 +1,71 @@
+﻿<div class="headrow">
+    <button type="button" title="New Forfeiture Account" data-url="/@ViewBag.TransType/ForfeitureAccount/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    <label class="pull-right">Forfeiture Account</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Forfeiture Account List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All</th>
+                <th class="center">Code</th>
+                <th class="center">Name</th>
+                <th class="center">Designation</th>
+                <th class="center">Department</th>
+                <th class="center">Total Forfeit Value</th>
+                <th class="center">Post Status</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="New Forfeiture Account" data-url="/@ViewBag.TransType/ForfeitureAccount/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/ForfeitureAccount/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
+                                        + '&nbsp; <a id=""  title="Click on for Edit" style="text-decoration:none;"    href=\"/@ViewBag.TransType/ForfeitureAccount/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>'
+                                        ////+ '&nbsp; <a title="Click on for Report" target="_blank" href="/@ViewBag.TransType/ForfeitureAccount/ReportView?Id=' + oObj.aData[0] + '\" class="sym-btn-report-row"></a>'
+                                        + '&nbsp; <a title="Click on for Post"   data-url="/@ViewBag.TransType/ForfeitureAccount/Post"   onclick=btnPostNoSplit(this);       data-Post="' + oObj.aData[6] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                        + '&nbsp; <a title="Click on for Delete" data-url="/@ViewBag.TransType/ForfeitureAccount/Delete" onclick=btnDeleteNoSplit(this);    data-Post="' + oObj.aData[6] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-remove-row"></a>'
+                                    ////;
+                                }
+                            }
+                            , { "sName": "Code", "sWidth": "10%" }
+                            , { "sName": "EmpName", "sWidth": "10%" }
+                            , { "sName": "Designation", "sWidth": "10%" }
+                            , { "sName": "Department", "sWidth": "10%" }
+                            , { "sName": "TotalForfeitValue", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "10%" }
+
+            ]
+        });
+    });
+</script>

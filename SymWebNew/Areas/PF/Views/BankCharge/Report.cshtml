@@ -1,0 +1,52 @@
+﻿@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Return on Bank Interest</p>
+    </div>
+    <div class="BankCharge">
+        <div class="row">
+                   <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Date From</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("ROBIDateFrom", "", new { @placeholder = "Date From", @class = "robiDateFrom customDatePicker form-control" })
+                </div>
+            </div>
+             <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Date To</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("ROBIDateTo", "", new { @placeholder = "Date To", @class = "robiDateTo customDatePicker form-control" })
+                </div>
+            </div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+<div class="headrow">
+    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/BankCharge/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Detail</button>
+</div>
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var dtFrom = $(".robiDateFrom").val();
+        var dtTo = $(".robiDateTo").val();
+
+        rptObj = new Object();
+        rptObj.dtFrom = dtFrom;
+        rptObj.dtTo = dtTo;
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>

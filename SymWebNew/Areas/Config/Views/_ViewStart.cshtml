@@ -1,0 +1,31 @@
+﻿  
+        @try
+        {
+            SymOrdinary.ShampanIdentity Identity = (SymOrdinary.ShampanIdentity)System.Threading.Thread.CurrentPrincipal.Identity;
+            if (Identity.IsAdmin )
+            {
+                Layout = "~/Areas/Config/Views/Shared/_HomeLayout.cshtml";
+            }
+            else
+            {
+                Layout = "~/Areas/Common/Views/Shared/_AuthorizationLayout.cshtml";
+              
+            }
+        
+        }
+        catch (Exception)
+        {
+            Layout = "~/Areas/Common/Views/Shared/_AuthorizationLayout.cshtml";
+
+        }
+        
+
+
+    
+  
+ 
+
+
+
+       
+ 

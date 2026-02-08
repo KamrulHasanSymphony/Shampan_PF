@@ -1,0 +1,72 @@
+﻿<div class="headrow">
+    @*<button type="button" title="Add New COA" data-url="/@ViewBag.TransType/COAGroup/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>*@
+    <button type="button" title="Add New COAGroup" data-url="/@ViewBag.TransType/COAGroup/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    @*<button type="button" title="Delete COA" data-url="/@ViewBag.TransType/COAGroup/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>*@
+    <label class="pull-right">COA Group </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>COA Group List</p>
+    </div>
+    <p>
+    </p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All
+                </th>
+                <th class="center">Group   Name </th>
+                @*<th>GroupType </th>*@                
+                <th class="center">Active/Inactive</th>
+                <th class="center">Remarks</th>
+                @*<th class="center">Serial</th>*@
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <div class="pull-left">
+        @*<button type="button" title="Add New COAGroup" data-url="/@ViewBag.TransType/COAGroup/Createe" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>*@
+        <button type="button" title="Add New COAGroup" data-url="/@ViewBag.TransType/COAGroup/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+        @*<button type="button" title="Delete COAGroup" data-url="/@ViewBag.TransType/COAGroup/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>*@
+    </div>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/COAGroup/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "10%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a id=""  title="Click on for Edit" style="text-decoration:none;"    href=\"/@ViewBag.TransType/COAGroup/Edit/' + oObj.aData[0] + '\" class="sym-btn-edit-row"></a>' + ' ';
+                                   //'&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/@ViewBag.TransType/COAGroup/Delete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>';
+                                }
+                            }
+                            , { "sGroupName": "GroupName ", "sWidth": "15%" }
+                            , { "sIsActive": "IsActive", "sWidth": "10%" }
+                            , { "sRemarks": "Remarks", "sWidth": "20%" }
+                            //, { "sGroupSL": "GroupSL", "sWidth": "10%" }
+            ]
+        });
+    });
+</script>
+

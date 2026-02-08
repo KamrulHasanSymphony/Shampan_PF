@@ -1,0 +1,166 @@
+﻿@model SymViewModel.Common.BranchVM
+
+@{
+    ViewBag.Title = "Create";
+}
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.CompanyId)
+
+ <div class="headrow">
+    <button type="submit" title="Save Data" class="sym-btn-save">&nbsp;Save</button>
+ <label class="pull-right"> Branch > Create</label>
+</div>
+        
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Branch</p>
+        </div>
+        <div class="branch">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Code)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Code, new {@placeholder = "Branch Code", @class ="required form-control" })
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Name)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Name, new {@placeholder = "Branch Name", @class ="required form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Address)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Address, new { @placeholder = "Address", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.Address)
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Country)
+                </div>
+                <div class="editor-field">
+                    <select id="Country" name="Country" data-val="" data-url="/Config/DropDown/CountryEN/" class=" country form-control"></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Division)
+                </div>
+                <div class="editor-field">
+                    <select id="Division" name="Division" data-val="" data-url="/Config/DropDown/Division/" class=" division form-control"></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.District)
+                </div>
+                <div class="editor-field">
+                    <select id="District" name="District" data-val="" data-url="/Config/DropDown/District/" class=" district form-control"></select>
+                </div>
+            </div>
+
+        </div>
+        
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.PostalCode)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.PostalCode, new { @placeholder = "Postal Code", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.PostalCode)
+                </div>
+            </div>
+           
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.City)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.City, new {@placeholder = "City", @class =" form-control" })
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+            </div>
+           
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Phone)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Phone, new { @placeholder = "Phone", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.Phone)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Mobile)
+                </div>
+
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Mobile, new { @placeholder = "Mobile", @class = "required  form-control" })
+                    @Html.ValidationMessageFor(model => model.Mobile)
+                </div>
+            </div>
+            <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Fax)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Fax, new { @placeholder = "Fax", @class = " form-control" })
+                        @Html.ValidationMessageFor(model => model.Fax)
+                    </div>
+                </div>
+            <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = " form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+           
+        </div>
+       
+        </div>
+    </div>@*
+    
+    <p>
+        <input class="btn btn-info" type="submit" value="Create" />
+        <input type="button" class="btn btn-info" data-url="/Common/Branch" onclick="BackToList(this)" value="Back" />
+    </p>*@
+    
+    
+<div class="headrow">
+    <button type="submit" title="Save Data" class="sym-btn-save">&nbsp;Save</button>
+</div>
+
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+<script>
+    $(function () {
+        Country();
+        Division();
+        District();
+        //valiDation("frmDependent");
+        fromWriteColor("branch");
+    });
+</script>
+}

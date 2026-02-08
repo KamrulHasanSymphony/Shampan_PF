@@ -1,0 +1,102 @@
+﻿
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Common/Branch/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "Id",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "12%",
+                                    "sClass": "center",
+                                    "fnRender": function (oObj) {
+                                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;"   href=\"/Common/Branch/Edit/' + oObj.aData[0] + '\" class="sym-btn-edit-row"></a>' +
+                                        '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/Branch/BranchDelete" onclick="deletedData(this, myDataTable,' + oObj.aData[0] + ');"  class="sym-btn-remove-row"></a>';
+                                    }
+                                }
+                                , { "sName": "Code", "sWidth": "20%" }
+                                , { "sName": "Name", "sWidth": "25%" }
+                                , { "sName": "City", "sWidth": "20%" }
+                                , { "sName": "Mobile", "sWidth": "20%" }
+                                //, { "sName": "Remarks", "sWidth": "10%" }
+
+                                //City
+                                //Mobile
+                ]
+            });
+            oTable.columnFilter({
+                sPlaceHolder: "head:after",
+                aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           //, { type: "text" }
+                           //, { type: "date-range" }
+
+                ]
+
+            });
+
+        });
+    </script>
+
+
+<div class="headrow">
+        <button type="button" title="Add New Branch" data-url="/Common/Branch/Create" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Branch" data-url="/Common/Branch/BranchDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <button type="button" title="Add New" data-url="/Common/Branch/Import" onclick="GoTo(this)" id="" class=" sym-btn-Excel-Export ">&nbsp;Export/Emport</button>
+ <label class="pull-right"> Branch</label>
+</div>
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+        <p>Branch List</p>   
+        </div>
+@*    <input type="button" style="width:65px;" data-url="/Common/Branch/Create"  onclick="GoTo(this)" id="" class=" btn btn-info  " value="Add" />
+    <input type="button" style="width:65px;" data-url="/Common/Branch/BranchDelete" onclick="deletedData(this, 'myDataTable');" id="" class=" btn btn-info  " value="Delete" />
+<p></p>*@
+<table id="myDataTable" class="display">
+    <thead>
+        <tr>
+            <th class="center">
+                <input type="checkbox" class="chkAll" />Select All</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Mobile</th>
+        </tr>
+
+        <tr>
+            <th class="center">Actions</th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Mobile</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+        <br />
+        </div>
+
+
+<div class="headrow">
+    <div class="pull-left">
+        <button type="button" title="Add New Branch" data-url="/Common/Branch/Create" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Branch" data-url="/Common/Branch/BranchDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+        <button type="button" title="Add New" data-url="/Common/Branch/Import" onclick="GoTo(this)" id="" class=" sym-btn-Excel-Export ">&nbsp;Export/Emport</button>
+    </div>
+</div>
+ 

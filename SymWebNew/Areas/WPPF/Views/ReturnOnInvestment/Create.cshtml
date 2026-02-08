@@ -1,0 +1,382 @@
+﻿@*
+    InvestmentType
+    ROIDate
+    ROIRate
+    TotalInterestValue
+    Post
+
+*@
+
+@model SymViewModel.WPPF.ReturnOnInvestmentVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "ReturnOnInvestment", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmReturnOnInvestment" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+    @Html.HiddenFor(model => model.IsTransferPDF)
+    @Html.HiddenFor(model => model.ReferenceId)
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmReturnOnInvestment')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Return On Investment > Create</label>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/ReturnOnInvestment/ROI_GLTransactionReport?id=@Model.Id')" id="" class=" sym-btn-detail ">&nbsp;Report</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            <label class="pull-right">Return On Investment > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ReturnOnInvestment" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Return On Investment" data-url="/@ViewBag.TransType/ReturnOnInvestment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Return On Investment</p>
+        </div>
+        <div class="ReturnOnInvestment">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionCode)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionCode, new { @placeholder = "Auto Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TransactionCode)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentType)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.InvestmentTypeId, "/Config/DropDown/PF_EnumInvestmentType", new { @class = " invTypeId required form-control" })
+                        @Html.ValidationMessageFor(model => model.InvestmentTypeId)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ReferenceNo)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.InvestmentId, "/Config/DropDown/PF_Investment", new { @class = " invId required  form-control" })
+                        @*@Html.SimpleDropDownFor(model => model.InvestmentId, "#", new { @class = " invId required  form-control" })*@
+                        @Html.ValidationMessageFor(model => model.InvestmentId)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ROIDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ROIDate, new { @placeholder = "RO Investment Date", @class = " cDatePickerEdit required  form-control", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.ROIDate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionType)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionType, new { @placeholder = "TransactionType", @class = " form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TransactionType)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.Label("", "Investment Value")
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ROITotalValue, new { @placeholder = "RO Investment Total Value", @class = "  roiTotalValue right NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.ROITotalValue)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsFixed)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsFixed, new { @class = "   cIsFixed form-control" })
+                        @Html.ValidationMessageFor(model => model.IsFixed)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ROIRate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ROIRate, new { @placeholder = "RO Investment Rate", @class = "   roiRate right NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.ROIRate)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ActualInterestAmount)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ActualInterestAmount, new { @placeholder = "Interest Amount", @class = "  cActualInterestAmount right NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.ActualInterestAmount)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ServiceChargeAmount)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ServiceChargeAmount, new { @placeholder = "Service Charge", @class = "  cServiceChargeAmount right NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.ServiceChargeAmount)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalInterestValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalInterestValue, new { @placeholder = "Net Interest", @class = "  totalInterestValue right NumberCheck form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalInterestValue)
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="thinbox">
+        <div class="th_thinbox">
+            <p>Detail</p>
+        </div>
+        <div id="detail">
+            <div id="editorItemRows4">
+                @if (Model.detailVMs != null && Model.detailVMs.Count > 0)
+                {
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="editor-label">
+                                <label>Account Head</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">
+                                <label>Debit Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">
+                                <label>Credit Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 ">
+                            <div class="editor-label">
+                                <label>Narration</label>
+                            </div>
+                        </div>
+                    </div>
+                    foreach (var item in Model.detailVMs)
+                    {
+                        Html.RenderPartial("_details", item);
+                    }
+                }
+            </div>
+        </div>
+    </div>*@
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmReturnOnInvestment')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ReturnOnInvestment" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Return On Investment" data-url="/@ViewBag.TransType/ReturnOnInvestment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmReturnOnInvestment");
+    });
+
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmReturnOnInvestment');
+    }
+
+    function PostData(sender) {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/ReturnOnInvestment/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+</script>
+
+<script>
+    $(function () {
+        //////InvestmentDropDown();
+    });
+
+    //$(window).on('load', function () {
+    //    InvestmentDropDown();
+
+    $('.invTypeId').change(function () {
+        InvestmentDropDown();
+    });
+
+    $('.invId').change(function () {
+        InvestmentChange();
+    });
+
+    $('.roiTotalValue, .roiRate, .cServiceChargeAmount, .cActualInterestAmount, .cIsFixed').change(function () {
+        TotalInterestValue();
+    });
+
+
+
+
+
+    //});
+
+    function InvestmentDropDown() {
+        $('select.invId').html("");
+        var DropDownItem = "";
+        var invTypeId = $('.invTypeId').val();
+
+
+        var url = "/Config/DropDown/PF_Investment?InvestmentTypeId=" + invTypeId;
+
+        DropDownItem = '<option value="">Select</option>';
+
+
+        $.getJSON(url, function (data) {
+            $.each(data, function (i, state) {
+                DropDownItem += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+            });
+            $('select.invId').html(DropDownItem);
+
+
+        });
+
+    }
+
+
+
+    function InvestmentChange() {
+        var investementId = $('.invId').val();
+        var url = "/@ViewBag.TransType/Investment/GetInvestment/?id=" + investementId;
+
+        $.getJSON(url, function (vm) {
+
+            $(".roiTotalValue").val(vm.InvestmentValue);
+            $(".roiRate").val(vm.InvestmentRate);
+
+            TotalInterestValue();
+        });
+
+    }
+
+
+    function TotalInterestValue() {
+        var totalInterestValue = 0;
+        var roiTotalValue = parseFloat($(".roiTotalValue").val().replace(/\,/g, ''));
+        var roiRate = parseFloat($(".roiRate").val().replace(/\,/g, ''));
+
+        var Fixed = $('.cIsFixed').is(":checked") ? true : false;
+
+        var ActualInterestAmount = parseFloat($(".cActualInterestAmount").val().replace(/\,/g, ''));
+
+        if (!Fixed) {
+
+            ActualInterestAmount = roiTotalValue * roiRate / 100;
+        }
+
+        var ServiceChargeAmount = parseFloat($(".cServiceChargeAmount").val().replace(/\,/g, ''));
+
+        totalInterestValue = ActualInterestAmount - ServiceChargeAmount;
+
+        $(".cActualInterestAmount").val(ActualInterestAmount);
+
+
+        $(".totalInterestValue").val(totalInterestValue);
+
+        NumberFormatCheck();
+
+
+        DebitCreditLoad();
+    }
+
+
+    //});
+
+
+</script>
+
+
+<script>
+
+    ////$('.roiTotalValue, .totalInterestValue').on('input propertychange paste', function () {
+
+    ////    DebitCreditLoad();
+    ////});
+
+
+    function DebitCreditLoad() {
+        var $elm = $(".row.cROIDetail")
+
+        var $roiRow = $elm.eq(0);
+        var $interestRow = $elm.eq(1);
+        var $creditRow = $elm.eq(2);
+
+
+
+        var InterestAmount = parseFloat($(".totalInterestValue").val().replace(/\,/g, ''));
+
+        var CreditAmount = parseFloat($(".roiTotalValue").val().replace(/\,/g, ''));
+
+        var ROIAmount = InterestAmount + CreditAmount;
+
+
+        $roiRow.find(".dDebitAmount").val(ROIAmount);
+        $interestRow.find(".dCreditAmount").val(InterestAmount);
+        $creditRow.find(".dCreditAmount").val(CreditAmount);
+
+
+        NumberFormatCheck();
+
+    }
+
+</script>

@@ -1,0 +1,129 @@
+﻿@model SymViewModel.BWWF.PreDistributionFundVM
+@using UIHelper.MVC
+
+<div class="headrow">
+    <button type="button" title="Distribute Reserved Fund" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="SummationData(this, 'myDataTable');" id="" class="sym-btn-detail">&nbsp;Distribute</button>
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    <label class="pull-right">Forfeiture Account</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Forfeiture Account List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All
+                </th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Total Forfeit Value</th>
+                <th>Post Status</th>
+
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Distribute Reserved Fund" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="SummationData(this, 'myDataTable');" id="" class="sym-btn-detail">&nbsp;Distribute</button>
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+</div>
+
+@using (Html.BeginForm("Create", "PreDistributionFund", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPreDistributionFundGet" }))
+{
+    @Html.HiddenFor(model => model.FundingReferenceIds, new { @class = "cFundingReferenceIds" })
+    @Html.HiddenFor(model => model.TransactionType, new { @class = " cTransactionType" })
+}
+
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/PreDistributionFund/_indexForfeitureAccount?",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
+                                        + '&nbsp; <a title="Click on for Distribute" data-url="/@ViewBag.TransType/PreDistributionFund/Create"  onclick=btnValue(this); data-value="' + oObj.aData[2] + '" data-Id="' + oObj.aData[0].split('~')[0] + '\" class="sym-btn-detail-row"></a>'
+                                    ////+ '&nbsp; <a title="Click on for Report" target="_blank" href="/@ViewBag.TransType/ForfeitureAccount/ReportView?Id=' + oObj.aData[0] + '\" class="sym-btn-report-row"></a>'
+                                    ////;
+                                }
+                            }
+                            , { "sName": "Code", "sWidth": "10%" }
+                            , { "sName": "EmpName", "sWidth": "10%" }
+                            , { "sName": "Designation", "sWidth": "10%" }
+                            , { "sName": "Department", "sWidth": "10%" }
+                            , { "sName": "TotalForfeitValue", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "10%" }
+
+            ]
+        });
+    });
+</script>
+
+
+<script>
+    function btnValue(sender) {
+        var Id = $(sender).attr('data-Id');
+        $(".cFundingReferenceIds").val(Id);
+
+        Ask("Are you sure to Pre-Distribute!", function () {
+            $("#frmPreDistributionFundGet").submit();
+
+            //////window.location = url;
+        }, function () { })
+    }
+
+
+    function SummationData(sender, checkboxId, id) {
+        var SummationIds = "";
+        var TotalInterestValues = 0;
+        if (typeof id === 'undefined') {
+            var length = $("#" + checkboxId + " tbody input:checkbox").length;
+            for (var i = 0; i < length; i++) {
+                if ($($("#" + checkboxId + " tbody input:checkbox")[i]).is(":checked")) {
+                    SummationIds += $($("#" + checkboxId + " tbody input:checkbox")[i]).attr("data-Id") + "~";
+                }
+            }
+        }
+        else {
+            SummationIds = id + "~";
+        }
+
+        var url = $(sender).attr("data-url") + "?ids=" + SummationIds + "&tType=" + '@Model.TransactionType';;
+        if (SummationIds == "") {
+            ShowResult("Fail", "Select first to Pre-Distribute!");
+            return;
+        }
+
+        $(".cFundingReferenceIds").val(SummationIds);
+
+
+        Ask("Are you sure to Pre-Distribute!", function () {
+            $("#frmPreDistributionFundGet").submit();
+
+            ////window.location = url;
+        }, function () { })
+    }
+
+</script>

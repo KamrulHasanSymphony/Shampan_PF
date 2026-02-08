@@ -1,0 +1,70 @@
+﻿@using UIHelper.MVC
+@{
+    ViewBag.Title = "EmployeeLoanSettelment";
+}
+
+@using (Html.BeginForm("EmployeeLoanSettelment", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmEmployeeLoanSettelment", @target = "_blank" }))
+{
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Employee PF Statement</p>
+        </div>
+        <div class="Withdraw">
+            <div class="row">
+                             
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>From Date</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateFrom", "", new { @placeholder = "From Date", @class = " dtFrom customDatePicker form-control" })
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>To Date</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateTo", "", new { @placeholder = "To Date", @class = " dtTo customDatePicker form-control" })
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="headrow">
+        <button type="button" title="Click to View Report Summary" class="sym-btn-report btnSummary">&nbsp;Report</button>       
+    </div>
+}
+
+<script>
+
+    $(function () {
+
+
+        $('.btnSummary').click(function () {
+
+       
+            var ToDate = $('.dtTo').val();
+            var FromDate = $('.dtFrom').val();
+          
+            if (FromDate == "") {
+                ShowResult("Fail", "Please select From Date !");
+                return;
+            }
+            if (ToDate == "") {
+                ShowResult("Fail", "Please select To Date !");
+                return;
+            }
+            //alert(empId);
+
+            var url = "/@ViewBag.TransType/PFReport/EmployeeLoanSettelment?rType=" + "Summary" + '&ToDate=' + ToDate + '&FromDate=' + FromDate;
+            var win = window.open(url, '_blank');
+        });      
+    });
+</script>
+

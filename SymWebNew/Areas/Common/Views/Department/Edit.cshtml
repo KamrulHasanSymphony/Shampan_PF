@@ -1,0 +1,81 @@
+﻿@model SymViewModel.Common.DepartmentVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "Department", FormMethod.Post, new { @Id = "frmDepartment" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="thinbox">
+        <div class="department">
+        <div class="row">
+            <div style=" margin-top: 13px;" class="col-md-4">
+                @Html.LabelFor(model => model.Code)
+            </div>
+            <div class="col-md-8">
+                @Html.TextBoxFor(model => model.Code, null, new { @placeholder = "Department Code", @class = "required form-control" })
+            </div>
+        </div>
+        <div class="row">
+            <div style=" margin-top: 13px;" class="col-md-4">
+                @Html.LabelFor(model => model.Name)
+            </div>
+            <div class="col-md-8">
+                @Html.TextBoxFor(model => model.Name, null, new { @placeholder = "Department Name", @class = "required form-control" })
+            </div>
+        </div>
+             <div class="row">
+                 <label style=" margin-top: 5px;" class="col-sm-4">
+                     @Html.LabelFor(model => model.IsActive)
+                 </label>
+                <div class="col-sm-1">
+                @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+            </div> 
+        </div>
+        <div class="row">
+            <div style=" margin-top: 13px;" class="col-md-4">
+                @Html.LabelFor(model => model.Remarks)
+            </div>
+            <div class="col-md-8">
+                @Html.TextBoxFor(model => model.Remarks, null, new { @placeholder = "Remarks", @class = " form-control" })
+            </div>
+        </div>
+
+             <div class="row">
+            <label class="col-sm-3">
+			<button type="button" title="Edit Data" onclick="Edit();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+              <button type="button" title="Save Data" onclick="pageSubmit('frmDepartment');" class="Save sym-btn-save">&nbsp;Save</button>
+            </label>
+                 <label  class="col-sm-4">
+                     <button @*style="background-color: #d9534f;border-color: #d43f3a;"*@ type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">
+                         &nbsp;Cancel
+                     </button>
+                 </label>
+        </div>
+        </div>
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.BranchId)
+
+       
+
+    </div>
+}
+<script>
+    $(function () {
+        Edit();
+        valiDation("frmDepartment");
+    });
+    function Edit() {
+        fnReadOnly("department");
+        if ($(".department").hasClass("readOnly")) {
+            $(".Save").hide();
+            $(".Edit").show();
+        }
+        else {
+            $(".Save").show();
+            $(".Edit").hide();
+        }
+    }
+</script>

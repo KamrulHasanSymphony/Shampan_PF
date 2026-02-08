@@ -1,0 +1,125 @@
+﻿@*  
+BankName      
+BranchName
+BranchAddress 
+BankAccountType
+BankAccountNo  
+*@
+
+@model SymViewModel.WPPF.BankBranchVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "BankBranch", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmBankBranch" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    string BankNameUrl = "/Config/DropDown/PF_BankName?TransType=" + @ViewBag.TransType;
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmBankBranch')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Bank Branch > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmBankBranch')" class="sym-btn-update">&nbsp;Update</button>
+            <label class="pull-right">Bank Branch > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/BankBranch" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Bank Branch" data-url="/@ViewBag.TransType/BankBranch/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Bank Branch</p>
+        </div>
+        <div class="BankBranch">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankName)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.BankId, BankNameUrl, new { @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.BankName)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BranchName)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.BranchName, new { @placeholder = "Branch Name", @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.BranchName)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BranchAddress)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.BranchAddress, new { @placeholder = "Branch Address", @class = "required  form-control" })
+                        @Html.ValidationMessageFor(model => model.BranchAddress)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankAccountType)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.BankAccountType, new { @placeholder = "Bank Account Type", @class = "required   form-control" })
+                        @Html.ValidationMessageFor(model => model.BankAccountType)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankAccountNo)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.BankAccountNo, new { @placeholder = "Bank Account No", @class = " required  form-control" })
+                        @Html.ValidationMessageFor(model => model.BankAccountNo)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmBankBranch')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmBankBranch')" class="sym-btn-update">&nbsp;Update</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/BankBranch" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Bank Branch" data-url="/@ViewBag.TransType/BankBranch/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+
+        valiDation("frmBankBranch");
+    });
+
+    //$(document).keypress(function (e) {
+    //    if (e.which == 13) {
+    //        //var url = "/Home/Login";
+    //        pageSubmit('frmBankBranch')
+    //        //submit(url);
+    //    }
+    //});
+</script>

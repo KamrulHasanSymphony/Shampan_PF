@@ -1,0 +1,53 @@
+﻿@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>PF Detail</p>
+    </div>
+    <div class="PFDetail">
+        <div class="row">
+        <div class="col-md-1">
+            <div class="editor-label">
+                <label>Year</label>
+            </div>
+            <div class="editor-field">
+                <div>@Html.TextBox("Year", @Session["SessionYear"].ToString(), new { @Id = "fYear", @class = "fiscalyearCom form-control" }) </div>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-label">
+                <label>Fiscal Period</label>
+            </div>
+            <div class="editor-field">
+                <div>
+                    @Html.SimpleDropDown("FiscalPeriod", "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @Id = "FiscalPeriodDetailId", @class = " fpDetailsCom required form-control" })
+                </div>
+            </div>
+        </div>
+</div>
+    </div>
+</div>
+
+<div class="headrow">
+    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PFDetail/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Detail</button>
+</div>
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var FiscalPeriodDetailId = $("#FiscalPeriodDetailId").val();
+        if (FiscalPeriodDetailId == "") {
+            ShowResult("Fail", "Please Select the Fiscal Period");
+            return;
+        }
+
+        rptObj = new Object();
+        rptObj.fydid = FiscalPeriodDetailId;
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>

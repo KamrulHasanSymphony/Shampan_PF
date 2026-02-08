@@ -1,0 +1,167 @@
+﻿@{
+    ViewBag.Title = "EmployeeLoanReport";
+}
+@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Employee Loan</p>
+    </div>
+
+    <div class="row">
+
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>@Session["DepartmentLabel"]</label>
+            </div>
+            <div class="editor-field">
+                @Html.SimpleDropDown("DepartmentId", "/Config/DropDown/Department", new { @class = " form-control" })
+            </div>
+
+        </div>
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>@Session["SectionLabel"]</label>
+            </div>
+            <div class="editor-field">
+                @Html.SimpleDropDown("SectionId", "/Config/DropDown/Section", new { @class = " form-control" })
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>@Session["ProjectLabel"]</label>
+            </div>
+            <div class="editor-field">
+                @Html.SimpleDropDown("ProjectId", "/Config/DropDown/Project", new { @class = " form-control" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>Designation</label>
+            </div>
+            <div class="editor-field">
+                @Html.SimpleDropDown("DesignationId", "/Config/DropDown/Designation", new { @class = " form-control" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>Employee Code(From)</label>
+            </div>
+            <div class="editor-field">
+                @Html.SimpleDropDown("CodeF", "/Config/DropDown/EmployeeCodeName", new { @class = "codeFCom form-control selectDropdown" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-label">
+                <label>Employee Code(To)</label>
+            </div>
+            <div class="editor-field">
+                @Html.SimpleDropDown("CodeT", "/Config/DropDown/EmployeeCodeName", new { @class = "codeTCom form-control selectDropdown" })
+            </div>
+        </div>
+    </div>
+
+                
+
+
+    <div class="col-md-2">
+       </div>
+</div>
+
+<div class=" headrow">
+        @Html.ActionLink(" Report", "EmployeeLoanReport", null, new { target = "_blank", id = "sendRpt", @class = "btn sym-btn-report" })
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+
+            $('#DepartmentId').click(function () {
+                $('#ProjectId').html("");
+                $('#SectionId').html("");
+                var sections = "";
+                var did = $('#DepartmentId').val();
+                var url1 = "/Config/DropDown/SectionByDepartment/?departmentId=" + did;
+                sections += "<option value=0>Select</option>";
+                sections += "<option value=0_0>=ALL=</option>";
+
+                $.getJSON(url1, function (data) {
+                    $.each(data, function (i, state) {
+                        sections += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                    });
+                    $('#SectionId').html(sections);
+                });
+            });
+
+            $('#SectionId').click(function () {
+                $('#ProjectId').html("");
+                var projects = "";
+                var sid = $('#SectionId').val();
+                var did = $('#DepartmentId').val();
+                var url1 = "/Config/DropDown/ProjectByDepartment/?departmentId=" + did + "&sectionId=" + sid;
+                projects += "<option value=0>Select</option>";
+                projects += "<option value=0_0>=ALL=</option>";
+
+                $.getJSON(url1, function (data) {
+                    $.each(data, function (i, state) {
+                        projects += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                    });
+                    $('#ProjectId').html(projects);
+                });
+            });
+
+            $('#CodeF').change(function () {
+                $('#CodeT').html("");
+                var CodeT = "";
+                var CodeF = $('#CodeF').val();
+
+                var url1 = "/Config/DropDown/EmployeeCodeNext/?currentCode=" + CodeF;
+                CodeT += "<option value=0>Select</option>";
+                CodeT += "<option value=0_0>=ALL=</option>";
+
+                $.getJSON(url1, function (data) {
+                    $.each(data, function (i, state) {
+                        CodeT += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                    });
+                    $('#CodeT').html(CodeT);
+                });
+            });
+
+        });
+      
+
+        $(function(){
+            $('#sendRpt').click(function () {
+
+                var ProjectId = $("#ProjectId").val();
+                var DepartmentId = $("#DepartmentId").val();
+                var SectionId = $("#SectionId").val();
+                var DesignationId = $("#DesignationId").val();
+                var CodeF = $("#CodeF").val();
+                var CodeT = $("#CodeT").val();
+
+
+                this.href = this.href.split('?')[0] + '?ProjectId=' + ProjectId
+                                + '&DepartmentId=' + DepartmentId
+                                + '&SectionId=' + SectionId
+                                + '&DesignationId=' + DesignationId
+                                + '&CodeF=' + CodeF
+                                + '&CodeT=' + CodeT
+                                + '&view=N'
+            });
+        });
+
+        $("#Clear").on('click', function () {
+            $("#ProjectId").val("1");
+            $("#DepartmentId").val("1");
+            $("#DesignationId").val("1");
+            $("#CodeF").val("1");
+            $("#CodeT").val("1");
+        });
+
+    </script>
+}
+
+

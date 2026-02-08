@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "JsonSalesCollection";
+    Layout = null;
+}
+
+<h2>JsonSalesCollection</h2>
+<script type="text/javascript">
+    var gridDataUrl = '/Common/Bank/Test';
+// use date.js to calculate the values for this month
+var startDate = '01012016';// Date.parse('today').moveToFirstDayOfMonth();
+var endDate = '01012016';// Date.parse('today');
+
+jQuery("#list").jqGrid({
+
+     url: gridDataUrl + '?startDate=' + startDate.toJSONString() + '&endDate=' +endDate.toJSONString(),
+     datatype: "json",
+     mtype: 'GET',
+     colNames: ['Sale Id', 'Quantity', 'Product', 'Customer', 'Date', 'Amount'],
+     colModel: [
+                  { name: 'Id', index: 'Id', width: 50, align: 'left' },
+                  { name: 'BranchId', index: 'BranchId', width: 100, align: 'left' },
+                  { name: 'Code', index: 'Code', width: 100, align: 'left' },
+                  { name: 'fileName', index: 'fileName', width: 100, align: 'left' },
+                  { name: 'MiddleName', index: 'MiddleName', width: 100, align: 'left' } ],
+     rowNum: 20,
+     rowList: [10, 20, 30],
+     imgpath: gridimgpath,
+     height: 'auto',
+     width: '700',
+     pager: jQuery('#pager'),
+     sortname: 'Id',
+     viewrecords: true,
+     sortorder: "desc",
+     caption: "Sales"
+});
+
+</script>

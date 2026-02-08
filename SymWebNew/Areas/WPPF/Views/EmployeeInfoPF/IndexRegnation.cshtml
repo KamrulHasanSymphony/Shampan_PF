@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "IndexRegnation";
+}
+
+<h2>IndexRegnation</h2>
+<style>
+    .dataTable tbody td:nth-child(2) {
+        padding-right: 20px;
+    }
+</style>
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>WPPF Resign Employee List</p>
+    </div>
+
+    <br />
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    Re-Active
+                </th>
+
+                <th>Code</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>DateOfBirth</th>
+                <th>JoinDate</th>
+            </tr>
+            <tr>
+                <th class="center">Actions</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>DateOfBirth</th>
+                <th>JoinDate</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/WPPF/EmployeeInfoPF/_indexRegnation",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+               {
+                   "sName": "Id",
+                   "bSearchable": false,
+                   "bSortable": false,
+                   "sWidth": "9%",
+                   "sClass": "center",
+                   "fnRender": function (oObj) {
+                       return '&nbsp; <a title="Click on for Reactive"  href="/WPPF/EmployeeInfoPF/ReActive?Id=' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+
+                       ;
+                   }
+               },
+                { "sName": "Code", "sWidth": "10%" },
+                { "sName": "Name", "sWidth": "15%" },
+                { "sName": "Department", "sWidth": "15%" },
+                { "sName": "DateOfBirth", "sWidth": "10%" },
+                { "sName": "JoinDate", "sWidth": "10%" },
+            ]
+        });
+
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [
+                null, // No filter for the first column
+                { type: "text" },
+                { type: "text" },
+                { type: "text" },
+                { type: "text" },
+                { type: "text" },
+            ]
+        });
+
+    });
+</script>
+

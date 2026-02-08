@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+}  
+ @model SymViewModel.Common.SymUserRollVM
+@using UIHelper.MVC
+       <div class="row">
+@using (Html.BeginCollectionItem("SymUserRollVMs"))
+    {
+      @Html.HiddenFor(model => model.Id)
+      @Html.HiddenFor(model => model.GroupId)
+        @Html.HiddenFor(model => model.symArea)
+        @Html.HiddenFor(model => model.symController)
+            <div class="col-md-2">
+               
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.symArea, new { @placeholder = "symArea", @class = " form-control",@Disabled="Disabled" })
+                </div>
+            </div>
+            <div class="col-md-4">
+                
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.symController, new { @placeholder = "sym Controller", @class = " form-control",@Disabled="Disabled" })
+                </div>
+            </div>
+            <div class="col-md-1">
+                
+                <div class="editor-field">
+                    @Html.CheckBoxFor(model=> model.IsAdd, new {@class = "IsAdd form-control" })
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="editor-field">
+                     @Html.CheckBoxFor(model => model.IsIndex, new { @placeholder = "Is Index", @class = "IsIndex form-control" })
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="editor-field">
+                    @Html.CheckBoxFor(model => model.IsEdit, new { @placeholder = "IsEdit", @class = "IsEdit form-control" })
+                </div>
+            </div>
+            <div class="col-md-1">
+              
+                <div class="editor-field">
+                    @Html.CheckBoxFor(model => model.IsDelete, new { @placeholder = "IsDelete", @class = "IsDelete form-control" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-field">
+                    @Html.CheckBoxFor(model => model.IsProcess, new { @placeholder = "IsProcess", @class = "IsProcess required form-control" })
+                </div>
+            </div> 
+    }
+</div>

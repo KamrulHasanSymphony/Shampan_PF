@@ -1,0 +1,263 @@
+﻿@model SymViewModel.Payroll.GradeVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create";
+}
+<style>
+    div > input[type="checkbox"] {
+        text-align: center;
+        margin: 0;
+    }
+</style>
+@using (Html.BeginForm("Create", "Grade", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmGrade" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="EnumGrade">
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.Code)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Grade Code", @class = "required form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.Name)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.Name, new { @placeholder = "Grade Name", @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.Area)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.Area, new { @placeholder = "Area", @class = "required form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.GradeNo)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.GradeNo, new { @onchange = "NumberCheck(this)", @placeholder = "  Grade No", @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.CurrentBasic)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.CurrentBasic, new { @placeholder = "Current Basic", @class = "required form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.BasicNextYearFactor)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.BasicNextYearFactor, new { @placeholder = "Basic Next Year Factor", @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.BasicNextStepFactor)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.BasicNextStepFactor, new { @placeholder = "Basic Next Step Factor", @class = "required form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.HouseRentFactor)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.HouseRentFactor, new { @placeholder = "House Rent Factor", @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.TAFactor)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.TAFactor, new { @placeholder = "Travelling Allowance Factor", @class = "required form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.MedicalFactor)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.MedicalFactor, new { @placeholder = "Medical Factor", @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.MinSalary)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.MinSalary, new { @placeholder = "Minimum Salary", @onchange = "ValueCheck(this)", @class = " right required form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.MaxSalary)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.MaxSalary, new { @placeholder = "Maximum Salary", @onchange = "ValueCheck(this)", @class = " right required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.IsFixedHouseRent)
+                    </label>
+                    <div class="editor-field">
+                        <div class="col-md-1">
+                            @Html.CheckBoxFor(model => model.IsFixedHouseRent, new { @onchange = "FixedCheck(this);", @class = "IsFixed required form-control" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fr">Rate(% of Basic)</label>
+                        </div>
+                    </div>
+                </div> <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.HouseRentAllowance)
+                    </label>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.HouseRentAllowance, new { @placeholder = "House Rent Allowance", @class = " right Portion required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        &nbsp;
+                    </label>
+                    <div class="editor-field">
+                        <div class="col-md-1">
+                            @Html.CheckBoxFor(model => model.IsFixedSpecialAllowance, new { @onchange = "FixedCheck(this);", @class = "IsFixed required form-control" })
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fr">Rate(% of Basic)</label>
+                        </div>
+                    </div>
+                </div> <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.SpecialAllowance)
+                    </label>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.SpecialAllowance, new { @placeholder = "House Rent Allowance", @class = " right Portion required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="">
+                        @Html.LabelFor(model => model.LowerLimit)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.LowerLimit, new { @placeholder = "Lower Limit", @class = " right  form-control" })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="">
+                        @Html.LabelFor(model => model.MedianLimit)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.MedianLimit, new { @placeholder = "Median Limit", @class = " right  form-control" })
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <label class="">
+                        @Html.LabelFor(model => model.UpperLimit)
+                    </label>
+                    <div class="">
+                        @Html.TextBoxFor(model => model.UpperLimit, new { @placeholder = "Upper Limit", @class = " right  form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.Remarks)
+                    </label>
+                    <div class="">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.IsMedicalFactorFromBasic)
+                    </label>
+                    <div class="">
+                        @Html.CheckBoxFor(model => model.IsMedicalFactorFromBasic, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.IsHouseRentFactorFromBasic)
+                    </label>
+                    <div class="">
+                        @Html.CheckBoxFor(model => model.IsHouseRentFactorFromBasic, new { @class = "form-control" })
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="">
+                        @Html.LabelFor(model => model.IsTAFactorFromBasic)
+                    </label>
+                    <div class="">
+                        @Html.CheckBoxFor(model => model.IsTAFactorFromBasic, new { @class = "form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                    <button type="button" title="Save Data" onclick="pageSubmit('frmGrade');" class="sym-btn-save">&nbsp;Save</button>
+                </label>
+                <label class="col-sm-4">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmGrade");
+    });
+
+    function ValueCheck(sender) {
+        var maxSalary = parseFloat($('#MaxSalary').val());
+        var minSalary = parseFloat($('#MinSalary').val());
+        if (maxSalary != '') {
+            if (maxSalary < minSalary) {
+                ShowResult("Fail", "Max Salary can't be less than Min Salary!");
+                $(sender).val("");
+            }
+        }
+    }
+</script>

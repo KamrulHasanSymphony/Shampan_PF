@@ -1,0 +1,314 @@
+﻿@model SymViewModel.WPPF.PFReportVM
+
+@using UIHelper.MVC
+@using SymOrdinary
+@using System.Threading;
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+
+@{
+    ViewBag.Title = "Index";
+}
+@using (Html.BeginForm("IFRSReport", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmFR", @target = "_blank" }))
+{
+    
+     @Html.HiddenFor(model => model.ReportType)
+            @Html.HiddenFor(model => model.TransType)
+
+    <div class="thinbox">
+        @*<div class="th_thinbox">
+            <p>Financial Report</p>
+        </div>*@
+           
+        @if (Model.ReportType.ToUpper() == "BS")
+        {
+             <div class="th_thinbox">
+            <p>Balance Sheet Report</p>
+        </div>
+           
+             <div class="row">
+            <div class="col-md-1">
+                <div class="editor-label">
+                    <label>&nbsp</label>
+                </div>
+            </div>
+                 <div class="col-md-1">
+                     <div class="editor-label">
+                         <label>Year </label>
+                     </div>
+                 </div>
+                 <div class="col-md-1">
+                     <div class="editor-label">
+                         <label>Month</label>
+                     </div>
+                 </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-1">
+                         <div class="editor-label">
+                             <label>As of </label>
+                         </div>
+                     </div>
+                     <div class="col-md-1">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDown("FiscalYear", "/Config/DropDown/DropDownYear", new { @class = " fiscalyearCom required form-control selectDropdown" })
+                                 @*@Html.SimpleDropDownFor(model => model.YearTo, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearTo required form-control selectDropdown" })*@
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-md-2">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDownFor(model => model.MonthTo, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsCom required form-control selectDropdown" })
+                                 @*@Html.SimpleDropDownFor(model => model.MonthTo, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsTo required form-control selectDropdown" })*@
+                             </div>
+                         </div>
+                     </div>
+                 </div>     
+        }
+        else if (Model.ReportType.ToUpper() == "IS")
+        {
+            <div class="th_thinbox">
+            <p>Income Statement (P/L) Report</p>
+        </div>
+             <div class="row">
+            <div class="col-md-1">
+                <div class="editor-label">
+                    <label>&nbsp</label>
+                </div>
+            </div>
+                 <div class="col-md-1">
+                     <div class="editor-label">
+                         <label>Year </label>
+                     </div>
+                 </div>
+                 <div class="col-md-1">
+                     <div class="editor-label">
+                         <label>Month</label>
+                     </div>
+                 </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-1">
+                         <div class="editor-label">
+                             <label>As of </label>
+                         </div>
+                     </div>
+                     <div class="col-md-1">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDown("FiscalYear", "/Config/DropDown/DropDownYear", new { @class = " fiscalyearCom required form-control selectDropdown" })
+                                 @*@Html.SimpleDropDownFor(model => model.YearTo, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearTo required form-control selectDropdown" })*@
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-md-2">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDownFor(model => model.MonthTo, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsCom required form-control selectDropdown" })
+                                 @*@Html.SimpleDropDownFor(model => model.MonthTo, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsTo required form-control selectDropdown" })*@
+                             </div>
+                         </div>
+                     </div>
+                 </div>     
+        }
+         else if (Model.ReportType.ToUpper() == "TB")
+        {
+             <div class="th_thinbox">
+            <p>Trail Balance Report</p>
+        </div>
+             <div class="row">
+            <div class="col-md-1">
+                <div class="editor-label">
+                    <label>&nbsp</label>
+                </div>
+            </div>
+                 <div class="col-md-1">
+                     <div class="editor-label">
+                         <label>Year </label>
+                     </div>
+                 </div>
+                 <div class="col-md-2">
+                     <div class="editor-label">
+                         <label>Month From</label>
+                     </div>
+                 </div>
+                 <div class="col-md-2">
+                     <div class="editor-label">
+                         <label>Month To</label>
+                     </div>
+                 </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-1">
+                         <div class="editor-label">
+                             <label>As on </label>
+                         </div>
+                     </div>
+                     <div class="col-md-1">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDown("FiscalYear", "/Config/DropDown/DropDownYear", new { @class = " fiscalyearCom required form-control selectDropdown" })
+                                 @*@Html.SimpleDropDownFor(model => model.YearTo, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearTo required form-control selectDropdown" })*@
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-md-2">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDownFor(model => model.MonthFrom, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsCom required form-control selectDropdown" })                              
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="col-md-2">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDownFor(model => model.MonthTo, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsCom required form-control selectDropdown" })                               
+                             </div>
+                         </div>
+                     </div>
+                 </div>     
+        }
+        else if (Model.ReportType.ToUpper() == "NC")
+        {
+            <div class="th_thinbox">
+            <p>Trail Balance (Net Change) Report</p>
+        </div>
+             <div class="row">
+            <div class="col-md-1">
+                <div class="editor-label">
+                    <label>&nbsp</label>
+                </div>
+            </div>
+                 <div class="col-md-1">
+                     <div class="editor-label">
+                         <label>Year </label>
+                     </div>
+                 </div>
+                 <div class="col-md-2">
+                     <div class="editor-label">
+                         <label>Month From</label>
+                     </div>
+                 </div>
+                 <div class="col-md-1">
+                     <div class="editor-label">
+                         <label>Month To</label>
+                     </div>
+                 </div>
+                 </div>
+                 <div class="row">
+                     <div class="col-md-1">
+                         <div class="editor-label">
+                             <label>As of </label>
+                         </div>
+                     </div>
+                     <div class="col-md-1">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDownFor(model => model.YearTo, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearTo required form-control selectDropdown" })
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-md-2">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDownFor(model => model.MonthFrom, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsTo required form-control selectDropdown" })
+                             </div>
+                         </div>
+                     </div>
+                     <div class="col-md-2">
+                         <div class="editor-field">
+                             <div>
+                                 @Html.SimpleDropDownFor(model => model.MonthTo, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsTo required form-control selectDropdown" })
+                             </div>
+                         </div>
+                     </div>
+                 </div>     
+        }
+        else
+        { 
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>Fiscal Year From</label>
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDownFor(model => model.YearFrom, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearCom required form-control selectDropdown" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>Fiscal Period From</label>
+                </div>
+                <div class="editor-field">
+                    <div>
+                        @Html.SimpleDropDownFor(model => model.MonthFrom, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsCom required form-control selectDropdown" })
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>Fiscal Year To</label>
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDownFor(model => model.YearTo, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearTo required form-control selectDropdown" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>Fiscal Period To</label>
+                </div>
+                <div class="editor-field">
+                    <div>
+                        @Html.SimpleDropDownFor(model => model.MonthTo, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsTo required form-control selectDropdown" })
+                    </div>
+                </div>
+            </div>
+        </div>     
+        }  
+    </div>
+                   
+    <div class="headrow">
+        <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PFReport/IFRSRepor?ReportType=IS" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Preview</button>
+
+
+
+    </div>
+}
+
+<script>
+    $(function () {
+
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        debugger;
+        var MonthTo = $("#MonthTo").val();
+
+        if (MonthTo == "") {
+            ShowResult("Fail", "Please select the Period To");
+            return true;
+        }
+
+        $("#frmFR").submit();
+    }
+
+</script>
+
+
+

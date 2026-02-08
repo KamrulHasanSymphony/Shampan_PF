@@ -1,0 +1,57 @@
+﻿@using UIHelper.MVC
+@{
+    ViewBag.Title = "EmployeePFSettlementReport";
+}
+
+@using (Html.BeginForm("EmployeePFSettlementReports", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmEmployeePFStatement", @target = "_blank" }))
+{
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Employee BWWF Settlement</p>
+        </div>
+        <div class="Withdraw">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>Employee Name</label>
+                    </div>
+                    <div class="editor-field">
+                        @*@Html.SimpleDropDownFor(model => "EmployeeId", "/Config/DropDown/EmployeeCodeName", new { @id = "FiscalYearDetailId", @class = "form-control selectDropdown empId" })*@
+                        @Html.SimpleDropDown("EmployeeId", "/Config/DropDown/ExEmployeeCodeName", new { @id = "EmployeeId", @class = " EmpId required form-control" })
+
+
+                        @*@Html.TextBox("DateFrom", "", new { @placeholder = "Date From", @class = " dtFrom customDatePicker form-control" })*@
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="headrow">
+        <button type="button" title="Click to View Report" class="sym-btn-report btnSummary">&nbsp;Report</button>      
+    </div>
+}
+
+<script>
+
+    $(function () {
+
+
+        $('.btnSummary').click(function () {
+
+            var empId = $('.EmpId').val();         
+            if (empId=="") {
+                ShowResult("Fail", "Please select Employee !");
+                return;
+            }          
+          
+            var url = "/@ViewBag.TransType/PFReport/EmployeePFSettlementReports?EmployeeId=" + empId ;
+            var win = window.open(url, '_blank');
+        });
+       
+    });
+</script>

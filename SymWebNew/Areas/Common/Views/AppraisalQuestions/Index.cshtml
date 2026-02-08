@@ -1,0 +1,153 @@
+﻿@using UIHelper.MVC
+
+<div class="headrow">
+    <button type="button" title="Add New Appraisal Questions" data-url="/Common/AppraisalQuestions/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    @*<button type="button" title="Delete Appraisal Questions " data-url="/Common/AppraisalQuestions/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>*@
+    @*<button type="button" title="Report Pre-Employement Information" data-url="/Common/PreEmployementInformation/ReportView" onclick="ReportData(this, 'myDataTable');" id="" class="sym-btn-report">&nbsp;Report</button>*@
+    <label class="pull-right">Appraisal Questions </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Appraisal Questions List</p>
+    </div>
+
+    @*<div class="row">
+        <div class="col-md-2">
+            <div class="editor-label">
+                <label>Letter Name</label>
+            </div>
+            <div class="editor-field">
+                @Html.SimpleDropDown("LetterName", "/Config/DropDown/DropDownReport?ReportType=PreEmployLetter", new { @class = "required form-control " })
+            </div>
+        </div>
+    </div>*@
+    <br />
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All
+                </th>
+                <th>Department</th>
+                <th>Question</th>
+                <th>User</th>
+                <th>Supervisor</th>
+                <th>Department Head</th>
+                <th>Management   </th>
+                <th>HR </th>
+                <th>FeedBack Year</th>
+                @*<th>FeedBack Month</th>*@
+                <th>FeedBack Month</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New AppraisalQuestions" data-url="/Common/AppraisalQuestions/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    <button type="button" title="Delete AppraisalQuestions" data-url="/Common/AppraisalQuestions/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    @*<button type="button" title="Report Pre-Employement Information" data-url="/Common/PreEmployementInformation/ReportView" onclick="ReportData(this, 'myDataTable');" id="" class="sym-btn-report">&nbsp;Report</button>*@
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/AppraisalQuestions/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
+                                        + '&nbsp; <a id="lnkEdit1"  title="Click on for Edit" style="text-decoration:none;"    href=\"/Common/AppraisalQuestions/Edit/' + oObj.aData[0] + '\" class=" innerListLink sym-btn-edit-row"></a>'
+                                        + '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/AppraisalQuestions/AppraisalQuestionsDelete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>'
+                                        //+ '&nbsp; <a title="Click on for Report" style="text-decoration:none;" data-url="/Common/PreEmployementInformation/ReportView" onclick="ReportData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-report-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "DepartmentId", "sWidth": "10%" }
+                            , { "sName": "Question", "sWidth": "10%" }
+                            , { "sName": "IsUser", "sWidth": "10%" }
+                            , { "sName": "IsSupervisor", "sWidth": "10%" }
+                            , { "sName": "IsDepartmentHead", "sWidth": "10%" }
+                            , { "sName": "IsManagement", "sWidth": "10%" }
+                            , { "sName": "IsHR", "sWidth": "10%" }
+                            , { "sName": "FeedBackYear", "sWidth": "10%" }
+                            //, { "sName": "FeedBackMonthId", "sWidth": "10%" }
+                            , { "sName": "FeedBackMonth", "sWidth": "10%" }
+
+            ]
+        });
+    });
+</script>
+
+<script>
+    function ReportData(sender, checkboxId, id) {
+        debugger;
+        var ids = "";
+        if (typeof id === 'undefined') {
+            var length = $("#" + checkboxId + " tbody input:checkbox").length;
+            for (var i = 0; i < length; i++) {
+                if ($($("#" + checkboxId + " tbody input:checkbox")[i]).is(":checked")) {
+                    ids += $($("#" + checkboxId + " tbody input:checkbox")[i]).attr("data-Id") + "~";
+                }
+            }
+        }
+        else {
+            ids = id + "~";
+        }
+        var letterName = $("#LetterName").val();
+        if (letterName == "") {
+            ShowResult("Fail", "Select First to Letter Name!");
+            return;
+        }
+
+        var url = $(sender).attr("data-url") + "?ids=" + ids + "&letterName=" + letterName;
+        if (ids == "") {
+            ShowResult("Fail", "Select First to Report!");
+            return;
+        }
+        var win = window.open(url, '_blank');
+    }
+
+    function deletedData(sender, checkboxId, id) {
+        debugger;
+        var ids = "";
+        if (typeof id === 'undefined') {
+            var length = $("#" + checkboxId + " tbody input:checkbox").length;
+            for (var i = 0; i < length; i++) {
+                if ($($("#" + checkboxId + " tbody input:checkbox")[i]).is(":checked")) {
+                    ids += $($("#" + checkboxId + " tbody input:checkbox")[i]).attr("data-Id") + "~";
+                }
+            }
+        }
+        else {
+            ids = id + "~";
+        }
+        var letterName = $("#LetterName").val();
+        if (letterName == "") {
+            ShowResult("Fail", "Select First to Letter Name!");
+            return;
+        }
+
+        var url = $(sender).attr("data-url") + "?ids=" + ids + "&letterName=" + letterName;
+        if (ids == "") {
+            ShowResult("Fail", "Select First to Report!");
+            return;
+        }
+        var win = window.open(url, '_blank');
+    }
+
+</script>

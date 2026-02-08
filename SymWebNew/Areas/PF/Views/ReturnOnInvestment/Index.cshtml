@@ -1,0 +1,183 @@
+﻿@model SymViewModel.PF.PFBankDepositVM
+@using UIHelper.MVC
+
+<div class="headrow">
+    @*<button type="button" title="Add New Return On Investment" data-url="/@ViewBag.TransType/ReturnOnInvestment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+    <button type="button" title="Post Checked Issue" data-url="/@ViewBag.TransType/ReturnOnInvestment/Post" onclick="postedData(this, 'myDataTable');" id="" class="sym-btn-post">&nbsp;Post</button>
+    @*<button type="button" title="Delete Return On Investment" data-url="/@ViewBag.TransType/ReturnOnInvestment/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>*@
+    <label class="pull-right">Return On Investment </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Return On Investment List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All
+                </th>
+
+                <th class="center">Investment Type</th>
+                <th class="center">Reference No.</th>
+                <th class="center">RO Investment Date</th>
+                <th class="center">RO Investment Rate</th>
+                <th class="center">Total Interest Value</th>
+                <th class="center">Post Status</th>
+                <th class="center">Bank Deposit</th>
+
+
+
+
+                @*
+                    InvestmentType
+                    ReferenceNo
+                    ROIDate
+                    ROIRate
+                    TotalInterestValue
+                    Post
+                *@
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    @*<button type="button" title="Add New Return On Investment" data-url="/@ViewBag.TransType/ReturnOnInvestment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+    <button type="button" title="Post Checked Issue" data-url="/@ViewBag.TransType/ReturnOnInvestment/Post" onclick="postedData(this, 'myDataTable');" id="" class="sym-btn-post">&nbsp;Post</button>
+    @*<button type="button" title="Delete Return On Investment" data-url="/@ViewBag.TransType/ReturnOnInvestment/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>*@
+</div>
+
+@using (Html.BeginForm("Create", "PFBankDeposit", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPFBankDepositGet" }))
+{
+    @Html.HiddenFor(model => model.TransactionType)
+    @Html.HiddenFor(model => model.ReferenceId)
+
+}
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/ReturnOnInvestment/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "20%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
+                                        + '&nbsp; <a id=""  title="Click on for Edit"   href=\"/@ViewBag.TransType/ReturnOnInvestment/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></a>'
+                                        + '&nbsp; <a id=""  title="Click to view GL Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/ReturnOnInvestment/ROI_GLTransactionReport?id=' + oObj.aData[0] + '\" class="  sym-btn-detail-row"></a>'
+                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/ReturnOnInvestment/Post"  onclick=btnPostNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                        + '&nbsp; <a title="Click on for Delete" data-url="/@ViewBag.TransType/ReturnOnInvestment/Delete"  onclick=btnDeleteNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-remove-row"></a>'
+                                        + '&nbsp; <a title="Click on for Bank Deposit"  onclick=btnBankDeposit(this);  data-Id="' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "InvestmentType", "sWidth": "10%" }
+                            , { "sName": "ReferenceNo", "sWidth": "10%" }
+                            , { "sName": "ROIDate", "sWidth": "10%" }
+                            , { "sName": "ROIRate", "sWidth": "10%" }
+                            , { "sName": "TotalInterestValue", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "10%" }
+                            , { "sName": "IsBankDeposited", "sWidth": "12%" }
+
+
+
+            ]
+        });
+    });
+</script>
+
+
+<script>
+    function btnPostNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/ReturnOnInvestment/GetReturnOnInvestment" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Post Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+    function btnDeleteNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/ReturnOnInvestment/GetReturnOnInvestment" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted! Can't Be Deleted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Delete Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+</script>
+
+<script>
+    function btnBankDeposit(sender) {
+        var id = $(sender).attr("data-Id");
+
+
+        var getURL = "/@ViewBag.TransType/ReturnOnInvestment/GetReturnOnInvestment" + "?" + "id=" + id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (!vm.Post) {
+                ShowResult("Fail", "Do Post before Bank Deposit!");
+                return;
+            }
+
+            if (vm.IsBankDeposited) {
+                ShowResult("Fail", "Already Deposited to Bank!");
+                return;
+            }
+
+
+            $("#ReferenceId").val(id);
+            $("#TransactionType").val("ReturnOnInvestment");
+
+            $("#frmPFBankDepositGet").submit();
+
+        });
+
+
+
+    }
+
+
+</script>

@@ -1,0 +1,109 @@
+﻿@model SymViewModel.WPPF.PFBankDepositVM
+@using UIHelper.MVC
+
+<div class="headrow">
+    <button type="button" title="Go To Index" data-url="/WPPF/WPPF/IndexFiscalPeriod" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    @*<button type="button" data-url="/PF/WPPF/AllWPPFProfitDistributionReport" title="Click to see the Report" id="" class=" sendRpt sym-btn-report">&nbsp;Report</button>*@
+    <button type="button"
+            class="sendRpt sym-btn-report"
+            data-code=""
+            data-url="/WPPF/WPPF/AllWPPFProfitDistributionReport">
+        Report
+    </button>
+
+    <button type="button" data-url="/WPPF/WPPF/DownloadAllWPPFProfitDistributionReport" class=" sendRpt sym-btn-Excel-Export" data-code="">&nbsp;Download</button>
+    <label class="pull-right">WPPF Profit Distribution</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p class="thinHead">WPPF Profit Distribution</p>
+    </div>
+    <p>
+    </p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+
+                @*<th class="center">Action</th>*@
+                <th class="center">WPPF Code</th>
+                <th class="center">Employee Name</th>
+                <th class="center">Employee Profit</th>
+                <th class="center">Post Status</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Go To Index" data-url="/WPPF/WPPF/IndexFiscalPeriod" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    <button type="button"
+            class="sendRpt sym-btn-report"
+            data-code=""
+            data-url="/WPPF/WPPF/AllWPPFProfitDistributionReport">
+        Report
+    </button>
+    <button type="button" data-url="/WPPF/WPPF/DownloadAllWPPFProfitDistributionReport" class=" sendRpt sym-btn-Excel-Export" data-code="">&nbsp;Download</button>
+</div>
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        InitDateTimePickers();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/WPPF/WPPF/_indexProfitDistribution?code=@ViewBag.code",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+
+                             { "sName": "Code", "sWidth": "10%" }
+                            , { "sName": "ProjectName", "sWidth": "20%" }
+                            , {
+                                "sName": "TotalPF",
+                                "sWidth": "10%", "sClass": "right",
+                                "fnRender": function (oObj) {
+                                    return formatNumberWithCommas(oObj.aData[2]);
+                                }
+                            }                         
+                            , { "sName": "Post", "sWidth": "12%", "sClass": "center" }
+            ]
+        });
+
+    });
+    function formatNumberWithCommas(value) {
+        if (value == null || value === '') return '';
+        value = parseFloat(value).toFixed(2);
+        var parts = value.split('.');
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        return parts[0] + '.' + parts[1];
+    }
+
+    function getQueryStringCode() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get("code");
+    }
+
+    $(".sendRpt").on("click", function () {
+        debugger;
+
+        var code = getQueryStringCode(); // get code from URL
+
+        $(document).on("click", ".sendRpt", function () {
+
+            var baseUrl = $(this).data("url");
+
+            var finalUrl = baseUrl + "?code=" + encodeURIComponent(code);
+
+            window.location.href = finalUrl; // go to report
+        });
+
+    });
+
+</script>
+
+

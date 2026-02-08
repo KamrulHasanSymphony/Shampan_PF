@@ -1,0 +1,85 @@
+﻿@model SymViewModel.BWWF.PFReportVM
+@using UIHelper.MVC
+@{
+    ViewBag.Title = "YearClosingReportVeiw";
+}
+@using (Html.BeginForm("Year_Closing", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmYearClosing" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.JournalType)
+    @Html.HiddenFor(model => model.TransType)
+
+
+    <div class="thinbox">
+        <div class="EnumEEHead">
+
+
+            <div class="th_thinbox">
+                <p>Year Closing For Financial Report</p>
+            </div>
+            <div class="row">
+                <label class="col-sm-3 Right">
+                   
+                </label>
+                <div class="col-sm-4">
+                <label class="col-sm-2">
+                    <label>Year</label>
+                </label>
+                <div class="col-sm-5">
+                    @Html.SimpleDropDownFor(model => model.YearTo, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearTo required form-control selectDropdown" })
+                </div>
+            </div>
+                </div>
+
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                <label class="col-sm-2 Right">
+
+                </label>
+                <label class="col-sm-2">
+                    @*<button type="button" title="Report Preview" onclick="pageSubmit('frmCOAGroup');" class="sym-btn-save">&nbsp;Preview</button>*@
+                   
+
+                </label>
+                <label class="col-sm-4">
+                    <button type="button" title="Save Data" id="" class="saveJSON sym-btn-save">&nbsp;Process</button>
+
+                </label>
+                <label class="col-sm-2 hidden">
+                    &nbsp;<button type="button" title="Clear the Entries" id="Clear" class="sym-btn-clear">&nbsp;Clear</button>
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+
+                </label>
+                <label class="col-sm-2 hidden">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        InitDropDowns();
+        $("#Clear").on('click', function () {
+            $("#DateFrom").val("");
+        });
+    });
+
+    $('.saveJSON').click(function () {
+        Ask("Do you want to Process the year end?", function () {
+
+            var FiscalPeriodDetailId = $("#YearTo").val();
+            if (FiscalPeriodDetailId == "") {
+                ShowResult("Fail", "Please Select the Fiscal Period");
+                return;
+            }
+        
+            var url = "/BWWF/PFReport/Year_Closing?fydid=" + FiscalPeriodDetailId;
+
+            submit(url);
+        });
+    });
+
+</script>

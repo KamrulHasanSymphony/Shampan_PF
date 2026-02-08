@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Excel Import";
+}
+
+@using UIHelper.MVC
+<div class="headrow">
+     
+    <label class="pull-right"> Import </label>
+</div>
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Import Excel File</p>
+    </div>
+    <div class="row">
+
+        <div class="row">
+            @using (Html.BeginForm("ImportExcel", "UploadPFJournal", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmImportExcel" }))
+            {
+                <div class="col-md-3">
+                    <div class="editor-label">
+                       
+                    </div>
+
+                    <div class="editor-field">
+                        <div>
+                           
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    @*<div class="col-md-6"></div>*@
+                    <label>File</label>
+                    <input type="file" accept=".xlsx" name="file" id="FileUpload" style="width: 200px;" class="required" />
+
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <button type="button" title="Import Data" onclick="ImportExcell()" class="sym-btn-file-upload" value="Upload" style="width: 50%; text-align: center;">&nbsp;Upload</button>
+
+                </div>
+            }
+
+        </div>
+
+
+    </div>
+</div>
+
+
+<script>
+    $(function () {
+        InitDropdownsCommon();
+        valiDation("frmImportExcel");
+    });
+
+    function ImportExcell() {
+      
+        pageSubmit('frmImportExcel'); 
+
+    };
+
+</script>

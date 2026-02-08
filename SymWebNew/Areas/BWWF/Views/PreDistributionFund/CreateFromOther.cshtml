@@ -1,0 +1,109 @@
+﻿@*  
+BankName      
+BranchName
+BranchAddress 
+BankAccountType
+BankAccountNo  
+*@
+
+@model SymViewModel.BWWF.PreDistributionFundVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateFromOther", "PreDistributionFund", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPreDistributionFund" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.FundingReferenceIds)
+
+    <div class="headrow">
+        <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPreDistributionFund')" class="sym-btn-save">&nbsp;Save</button>
+        <label class="pull-right">Pre Distribution Fund > Create</label>
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Pre Distribution Fund" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Pre Distribution Fund</p>
+        </div>
+        <div class="PreDistributionFund">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalFundingValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalFundingValue, new { @placeholder = "Total Funding Value", @class = "right  totalFundingValue form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalFundingValue)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ReservedFundingValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ReservedFundingValue, new { @placeholder = "Reserved Funding Value", @class = " right NumberCheck reservedFundingValue form-control" })
+                        @Html.ValidationMessageFor(model => model.ReservedFundingValue)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FundingValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.FundingValue, new { @placeholder = "Funding Value", @class = "right fundingValue form-control" })
+                        @Html.ValidationMessageFor(model => model.FundingValue)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.FundingDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.FundingDate, new { @placeholder = "Funding Date", @class = " customDatePicker required  form-control" })
+                        @Html.ValidationMessageFor(model => model.FundingDate)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPreDistributionFund')" class="sym-btn-save">&nbsp;Save</button>
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Pre Distribution Fund" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmPreDistributionFund");
+
+        $('.reservedFundingValue').change(function () {
+            SetFundingValue()
+        });
+
+        var SetFundingValue = function () {
+            var totalFundingValue = parseFloat($('.totalFundingValue').val());
+            var reservedFundingValue = parseFloat($('.reservedFundingValue').val());
+            var fundingValue = totalFundingValue - reservedFundingValue;
+            $('.fundingValue').val(fundingValue)
+        }
+    });
+</script>

@@ -1,0 +1,177 @@
+﻿@model SymViewModel.WWF.InvestmentVM
+@using UIHelper.MVC
+
+
+<div class="headrow">
+    <button type="button" title="Add New Withdraw" data-url="/@ViewBag.TransType/Withdraw/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    <label class="pull-right">Withdraw </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Withdraw List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                
+                <th class="center">Action</th>
+                <th class="center">Code</th>
+                <th class="center">Withdraw Date</th>
+                <th class="center">Withdraw Amount</th>
+                <th class="center">Post Status</th>
+
+
+
+                @*
+                    WithdrawDate
+                    WithdrawAmount
+                    TransactionType
+                    Remarks
+                *@
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New Withdraw" data-url="/@ViewBag.TransType/Withdraw/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+</div>
+@using (Html.BeginForm("Create", "Investment", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmInvestmentGet" }))
+{
+    @Html.HiddenFor(model => model.TransactionType)
+    @Html.HiddenFor(model => model.ReferenceId)
+
+}
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/Withdraw/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "left",
+                                "fnRender": function (oObj) {
+                                    if (oObj.aData[4] == "Posted") {
+                                        return ''
+                                       + '&nbsp; <a id=""  title="Click on for Edit"      href=\"/@ViewBag.TransType/Withdraw/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>'
+                                       //+ '&nbsp; <a id=""  title="Click to view Transaction Report"   href=\"/@ViewBag.TransType/Withdraw/reportVeiw?id=' + oObj.aData[0] + '\" class="  sym-btn-report-row"></a>'
+                                       + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/Withdraw/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
+                                       + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Withdraw/Post"  onclick=btnPostNew(this);  data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                       + '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=2' + '&TransactionForm=BankWIthdraw' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                        ;
+                                    }
+                                    else {
+                                        return ''
+                                                                             + '&nbsp; <a id=""  title="Click on for Edit"      href=\"/@ViewBag.TransType/Withdraw/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>'
+                                                                             //+ '&nbsp; <a id=""  title="Click to view Transaction Report"   href=\"/@ViewBag.TransType/Withdraw/reportVeiw?id=' + oObj.aData[0] + '\" class="  sym-btn-report-row"></a>'
+                                                                             + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/Withdraw/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
+                                                                             + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Withdraw/Post"  onclick=btnPostNew(this);  data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                                                           //  + '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=2' + '&TransactionForm=BankWIthdraw' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                        ;
+                                    }
+
+                                   
+                                }
+                            }
+                            , { "sName": "Code", "sWidth": "15%" }
+                            , { "sName": "WithdrawDate", "sWidth": "15%" }
+                            , { "sName": "WithdrawAmount", "sWidth": "15%" }
+                            , { "sName": "Post", "sWidth": "15%" }
+
+            ]
+        });
+    });
+</script>
+
+<script>
+    function btnPostNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/Withdraw/GetWithdraw" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Post Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+    function btnDeleteNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/Withdraw/GetWithdraw" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted! Can't Be Deleted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Delete Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+</script>
+
+<script>
+    function btnInvestment(sender) {
+        var id = $(sender).attr("data-Id");
+
+
+        var getURL = "/@ViewBag.TransType/Withdraw/GetWithdraw" + "?" + "id=" + id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (!vm.Post) {
+                ShowResult("Fail", "Do Post before Investment!");
+                return;
+            }
+
+            if (vm.IsInvested) {
+                ShowResult("Fail", "Already Invested!");
+                return;
+            }
+
+            $("#ReferenceId").val(id);
+            $("#TransactionType").val("Investment");
+
+            $("#frmInvestmentGet").submit();
+
+        });
+
+
+
+    }
+
+
+</script>

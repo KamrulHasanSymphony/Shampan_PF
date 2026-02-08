@@ -1,0 +1,90 @@
+﻿@using UIHelper.MVC
+@Html.ValidationSummary(true)
+
+<style>
+    div > input[type="checkbox"] {
+        text-align: center;
+        margin: inherit; 
+    }
+</style>
+<div class="headrow">
+    <button type="button" title="Save Data" id="" class="saveJSON sym-btn-save">&nbsp;Save</button>
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFDetail/IndexFiscalPeriod" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    <label class="pull-right">PF Process</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>PF Process</p>
+    </div>
+    <div class="PFProcess">
+        <div class="row">
+            <div class="col-md-1">
+                <div class="editor-label">
+                    <label>Year</label>
+                </div>
+                <div class="editor-field">
+                    @*<div>@Html.TextBox("Year", @Session["SessionYear"].ToString(), new { @Id = "fYear",  @class = "fiscalyearCom form-control" }) </div>*@
+                    @Html.SimpleDropDown("FiscalYear", "/Config/DropDown/DropDownYear", new { @class = " fiscalyearCom required form-control selectDropdown" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>Fiscal Period</label>
+                </div>
+                <div class="editor-field">
+                    <div>
+                        @Html.SimpleDropDown("FiscalPeriod", "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @Id = "FiscalPeriodDetailId", @class = " fpDetailsCom required form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Project</label>
+                </div>
+                <div class="editor-field">
+                    <div>
+                        @Html.SimpleDropDown("ProjectId", "/Config/DropDown/Project", new { @Id = "ProjectId", @class = "sectionsCom form-control" })
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    All Project
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBox("chkAll", new { @class = "form-control" })                 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="headrow">
+    <button type="button" title="Save Data" id="" class="saveJSON sym-btn-save">&nbsp;Save</button>
+</div>
+
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    $('.saveJSON').click(function () {
+        debugger;
+        var FiscalPeriodDetailId = $("#FiscalPeriodDetailId").val();
+        var ProjectId = $("#ProjectId").val();
+        var chkAll = $("#chkAll").prop("checked") ? true : false;
+        if (FiscalPeriodDetailId == "") {
+            ShowResult("Fail", "Please Select the Fiscal Period");
+            return;
+        }
+        if (!chkAll && ProjectId=="") {
+            ShowResult("Fail", "Please Select the Project");
+            return;
+        }
+        var url = "/@ViewBag.TransType/PFDetail/PFProcess?fydid=" + FiscalPeriodDetailId + "&ProjectId=" + ProjectId + "&chkAll=" + chkAll;
+
+        submit(url);
+    });
+
+
+</script>

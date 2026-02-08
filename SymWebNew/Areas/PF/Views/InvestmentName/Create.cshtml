@@ -1,0 +1,506 @@
+﻿@*  
+BankName      
+BranchName
+BranchAddress 
+BankAccountType
+BankAccountNo  
+*@
+
+@model SymViewModel.PF.InvestmentNameVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "InvestmentName", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmInvestmentName" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmInvestmentName')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Investment Name> Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmInvestmentName')" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Add New Accrued"
+                    data-url="/@ViewBag.TransType/InvestmentName/AccruedProcessView?InvestmentNameId=@Model.Id&InvestmentTypeId=@Model.InvestmentTypeId"
+                    id="lnkEdit1" class="lnkEdit sym-btn-add">
+                &nbsp;Accrued
+            </button>
+
+            <label class="pull-right">Investment Name> Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/InvestmentName" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Investment Name" data-url="/@ViewBag.TransType/InvestmentName/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Investment</p>
+        </div>
+        <div class="InvestmentName">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Name)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Name, new { @placeholder = "Name", @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InvestmentTypeId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.InvestmentTypeId, "/Config/DropDown/PF_EnumInvestmentType", new { @class = "  required form-control" })
+                    </div>
+                </div>
+                </div>
+                <div class="row">
+
+
+                    <div class="col-md-2 hidden">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.InvestmentDate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.InvestmentDate, new { @placeholder = "Investment Date", @class = " customDatePicker form-control", @autocomplete = "off" })
+                            @Html.ValidationMessageFor(model => model.InvestmentDate)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.FromDate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.FromDate, new { @placeholder = "From Date", @class = " customDatePicker  required  form-control" })
+                            @Html.ValidationMessageFor(model => model.FromDate)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.ToDate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.ToDate, new { @placeholder = "To Date", @class = " customDatePicker  required  form-control" })
+                            @Html.ValidationMessageFor(model => model.ToDate)
+                        </div>
+                    </div>
+                    <div class="col-md-2 hidden">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.MaturityDate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.MaturityDate, new { @placeholder = "Maturity Date", @class = " customDatePicker form-control" })
+                            @Html.ValidationMessageFor(model => model.MaturityDate)
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.AitRate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.AitRate, new { @placeholder = "Ait Rate", @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.AitRate)
+                        </div>
+                    </div>
+                </div>
+            <div class="row">
+               
+                <div class="col-md-4">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankBranchId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.BankBranchId, "/Config/DropDown/PF_BankBranchName", new { @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.BankBranchId)
+                    </div>
+                </div>
+                <div class="col-md-3 hidden">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankNameId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.BankNameId, "/Config/DropDown/PF_BankName", new { @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.BankNameId)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+
+            </div>
+            
+            </div>
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Interest Policy</p>
+        </div>
+        <div id="ProductDetail" class="row formDesign">
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">                  
+                    @Html.LabelFor(model => model.InvestmentNameDetails.FirstOrDefault().FromMonth)
+                </div>
+                <div >
+                    @Html.TextBox("FromMonth", null, new { @placeholder = "From Month", @class = "  NumberCheck right drFromMonth  form-control" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InvestmentNameDetails.FirstOrDefault().ToMonth)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("ToMonth", null, new { @placeholder = "To Month", @class = "  NumberCheck right  drToMonth  form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InvestmentNameDetails.FirstOrDefault().InterestRate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("InterestRate", null, new { @placeholder = "Interest Rate", @class = " NumberCheck crInterestRate  form-control" })
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InvestmentNameDetails.FirstOrDefault().Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextArea("Remarks", null, new { @placeholder = "Remarks", @class = "  drRemarks  form-control" })
+                </div>
+            </div>
+
+
+
+            <div style="margin-top: 7px;" class="col-md-1">
+                <div class="editor-label">
+                    &nbsp;
+                </div>
+                <div class="editor-field">
+                    <div id="ItemExist"  title="Add Investment Name Detail" class="sym-btn-add-row AddRow" data-container="editorItemRows4">Add Row</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                &nbsp
+            </div>
+
+
+        </div>
+        <div class="formDesign" id="detail" >
+            <hr />
+            <div id="editorItemRows4">
+                @if (Model.InvestmentNameDetails != null)
+                {
+                    <div class="row">
+                        <div class="col-md-1">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Accrued From</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>To Month</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Interest Rate</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4 ">
+                            <div class="editor-label">
+                                <label>Remarks</label>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    foreach (var item in Model.InvestmentNameDetails)
+                    {
+                        Html.RenderPartial("~/Areas/PF/Views/InvestmentName/_details.cshtml", item);
+                    }
+                }
+            </div>
+           
+
+
+        </div>
+
+
+    </div>
+    
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Investment Accrued</p>
+        </div>
+        <div class="formDesign" id="detailAccrued">
+            <div id="editorItemRows4">
+                @if (Model.InvestmentAccrueds != null)
+                {
+                    <div class="row">
+                        <div class="col-md-1">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Period</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Process Date</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Investment Value</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Accrued Month</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Accrued Rate</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Accrued Interest</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>AIT Interest</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <div class="editor-label">
+                                <label>Net Interest</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1 ">
+                            <div class="editor-label">
+                                <label>ReferenceNo</label>
+                            </div>
+                        </div>
+                        <div class="col-md-1 ">
+                            <div class="editor-label">
+                                <label>Post</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    foreach (var item1 in Model.InvestmentAccrueds)
+                    {
+                        Html.RenderPartial("~/Areas/PF/Views/InvestmentName/_detailsAccrued.cshtml", item1);
+                    }
+                }
+            </div>
+
+
+
+        </div>
+
+
+    </div>
+    
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmInvestmentName')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmInvestmentName')" class="sym-btn-update">&nbsp;Update</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/InvestmentName" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Investment Name" data-url="/@ViewBag.TransType/InvestmentName/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+
+        valiDation("frmInvestmentName");
+    });
+
+</script>
+<script>
+    $('.AddRow:not(.AddRowInited)').on("click", function () {
+        var container = $(this).attr('data-container');
+        AddRow(container)
+        return false;
+    }).addClass("AddRowInited");
+
+    function AddRow(container) {
+        var ItemExist = 0;
+        var url = '/@ViewBag.TransType/InvestmentName/BlankItem';
+        var oParam = { "FromMonth": "", "ToMonth": "", "InterestRate": "", "Remarks": "", };
+
+        var FromMonth = $('.drFromMonth').val();
+        var ToMonth = $('.drToMonth').val();
+
+        var InterestRate = $(".crInterestRate").val();
+        var Remarks = $(".drRemarks").val();
+
+
+        if (InterestRate == "") {
+            ShowResult("Fail", "Please select the Item!");
+            return;
+        }
+
+        //if ((debitAmount != "") && (creditAmount != "")) {
+        //    ShowResult("Fail", "Please Enter Either Debit or Credit Amount, Not Both!");
+        //    return;
+        //}
+
+       
+
+
+
+        if (InterestRate == "" ) {
+            ShowResult("Fail", "Please Enter Interest Rate!");
+            return;
+        }
+        if ( InterestRate < 1) {
+            ShowResult("Fail", "Interest Rate Zero Not Allowed!");
+            return;
+        }
+
+
+        oParam.FromMonth = FromMonth;
+        oParam.ToMonth = ToMonth;
+        oParam.InterestRate = InterestRate;
+        oParam.Remarks = Remarks;
+
+
+        //$.each($("input.dAccountId"), function (i, item) {
+        //    var addedItem = $(item).val();
+        //    if (accountId == addedItem) {
+        //        ItemExist = 1;
+        //    }
+        //});
+        //if (ItemExist == "1") {
+        //    ShowResult("Fail", "This Item Already Added!");
+        //    return;
+        //}
+
+        $.ajax({
+            url: url,
+            //type: 'POST',
+            cache: false,
+            data: oParam,
+            success: function (html) {
+                $("#" + container).append(html);
+            }
+        });
+        $('#detail').show();
+        $(".drFromMonth").val("");
+        $(".drToMonth").val("");
+        $(".crInterestRate").val("");
+        $(".drRemarks").val("");
+    }
+    function EditProduct(sender) {
+     
+        $(".drFromMonth").val($(sender).parents().parents().find('.dFromMonth').val());
+        $(".drToMonth").val($(sender).parents().parents().find('.dToMonth').val());
+        $(".crInterestRate").val($(sender).parents().parents().find('.dInterestRate').val());
+        $(".drRemarks").val($(sender).parents().parents().find('.dRemarks').val());
+        $(sender).parents("div.row:first").remove();
+        //ShowHide();
+    }
+
+    function RemoveProduct(sender) {
+        Ask("Are you sure to delete the item!", function () {
+            $(sender).parents("div.row:first").remove();
+            //ShowHide();
+        });
+    }
+
+    function ShowHide() {
+        //var accName = $('.dInterestRate').val();
+        //if (accName == null) {
+        //    $('#detail').hide();
+        //}
+        //else {
+        //    $('#detail').show();
+        //}
+    }
+
+
+    function btnPostNew(sender) {
+   
+
+        var Id = $(sender).attr("data-Id").split('~')[0];
+        var post = $(sender).attr("data-Id").split('~')[1];
+        //if (post == "Posted") {
+        //    ShowResult("Fail", "Data Already Posted!");
+        //    return true;
+        //}
+        var getURL = "/@ViewBag.TransType/InvestmentName/AccruedPost" + "?" + "ids=" + Id;
+
+        //if (vm.Post) {
+        //    ShowResult("Fail", "Data Already Posted!");
+        //    return true;
+        //}
+        //else {
+        //    //var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+
+        //}
+
+        var questionMSG = "Are you sure to Post Data!";
+        singleOperation(questionMSG, getURL);
+
+    }
+
+
+
+    function AccruedDelete(sender) {
+
+
+        var Id = $(sender).attr("data-Id").split('~')[0];
+        var getURL = "/@ViewBag.TransType/InvestmentName/AccruedDelete" + "?" + "ids=" + Id;
+
+        var questionMSG = "Are you sure to Delete Data!";
+
+        singleOperation(questionMSG, getURL);
+
+    }
+
+    $(document).ready(function () {
+        $('#frmInvestmentName').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+</script>

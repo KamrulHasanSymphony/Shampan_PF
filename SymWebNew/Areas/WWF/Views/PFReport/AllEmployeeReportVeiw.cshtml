@@ -1,0 +1,67 @@
+﻿@model SymViewModel.WWF.PFReportVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create";
+}
+
+
+
+@using (Html.BeginForm("AllEmployee", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmStatement" }))
+{
+    @Html.ValidationSummary(true)
+
+    @Html.HiddenFor(model => model.ReportType)
+    <h4>All Employee Report</h4>
+    <div class="thinbox">
+        <div class="EnumEEHead">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="editor-label">
+                        <label>Employee Code</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.EmployeeId, "/Config/DropDown/EmployeeCodeNameAll", new { @class = "  form-control selectDropdown" })
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                &nbsp;
+            </div>
+
+
+            <div style="font-size:14px; margin-left:7px;" class="row">
+
+                <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PFReport/AllEmployee" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Report PDF</button>
+                <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+
+            </div>
+
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        $(".selectDropdown").select2();
+        $(".selectDropdown").removeClass('form-control');
+        InitDropDowns();
+        InitDropdownsCommon();
+        InitDateTimePickers();
+
+        $("#Clear").on('click', function () {
+            $("#frmStatement").find("input[type=text], select, textarea").val("");
+            $("#frmStatement").find("select").val(null).trigger('change');
+        });
+
+    });
+
+    function reportData(sender) {
+        $("#ReportType").val("");
+
+        $("#frmStatement").attr('target', '_blank').submit();
+
+    }
+</script>

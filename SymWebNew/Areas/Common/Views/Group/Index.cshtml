@@ -1,0 +1,77 @@
+﻿<div class="headrow">
+    <button type="button" title="Add New Group" data-url="/Common/Group/Create" id="" class="btnCreate sym-btn-add">&nbsp;New</button>
+    <button type="button" title="Delete Group" data-url="/Common/Group/GroupDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <label class="pull-right">Employee Group</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Employee Group List</p>
+    </div>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Remarks</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="headrow">
+        <button type="button" title="Add New Group" data-url="/Common/Group/Create" id="" class="btnCreate sym-btn-add">&nbsp;New</button>
+        <button type="button" title="Delete Group" data-url="/Common/Group/GroupDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+</div>
+<script>
+    $(document).ready(function () {
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/Group/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                {
+                    "sName": "Id",
+                    "bSearchable": false,
+                    "bSortable": false,
+                    "sWidth": "12%",
+                    "sClass": "center",
+                    "fnRender": function (oObj) {
+                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a  title="Click on for Edit"  style="text-decoration:none;" id="lnkEdit1" class=" lnkEdit sym-btn-edit-row"  href=\"/Common/Group/Edit/' + oObj.aData[0] + '\"></a>' +
+                        '&nbsp; <a title="Click on for Delete" style="text-decoration:none;"  data-url="/Common/Group/GroupDelete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>';
+                    }
+                },
+
+                            { "sName": "Code", "sWidth": "25%" },
+                            { "sName": "Name", "sWidth": "35%" },
+                            { "sName": "Remarks", "sWidth": "25%" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+            ]
+        });
+        SelectAllForDelete();
+    });
+</script>

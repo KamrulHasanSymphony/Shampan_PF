@@ -1,0 +1,49 @@
+﻿@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>ReservedFund</p>
+    </div>
+    <div class="ReservedFund">
+        <div class="row">
+                   <div class="col-md-3">
+                <div class="editor-label">
+                    <label>ReservedFund Date From</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("ReservedDateFrom", "", new { @placeholder = "Date From", @class = "rDateFrom customDatePicker form-control" })
+                </div>
+            </div>
+             <div class="col-md-3">
+                <div class="editor-label">
+                    <label>ReservedFund Date To</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("ReservedDateTo", "", new { @placeholder = "Date To", @class = "rDateTo customDatePicker form-control" })
+                </div>
+            </div>
+            </div>
+        </div>
+    </div>
+
+<div class="headrow">
+    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/ReservedFund/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Detail</button>
+</div>
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var dtFrom = $(".rDateFrom").val();
+        var dtTo = $(".rDateTo").val();
+
+        rptObj = new Object();
+        rptObj.dtFrom = dtFrom;
+        rptObj.dtTo = dtTo;
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>

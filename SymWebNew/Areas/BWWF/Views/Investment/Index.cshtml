@@ -1,0 +1,189 @@
+﻿@model SymViewModel.BWWF.InvestmentVM
+@using UIHelper.MVC
+
+<div class="headrow">
+    <button type="button" title="Add New Investment" data-url="/@ViewBag.TransType/Investment/Create" onclick="GoTo(this)" id=""  class=" sym-btn-add ">&nbsp;New</button>
+    <button type="button" data-url="/@ViewBag.TransType/Investment/DownloadExcel" onclick="GoTo(this)" id="" title="Click to Download the Report" class="sym-btn-Excel-Export">&nbsp;Download</button>
+    <label class="pull-right">Investment </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Investment List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                 
+                <th class="center">Action</th>
+                <th class="left">Reference No</th>
+                <th class="left">Transaction Code</th>
+                <th class="left">Investment Type</th>
+                <th class="left">Investment Name</th>
+                <th class="left">Investment Date</th>
+                <th class="left">Maturity Date</th>
+                <th class="left">Investment Value</th>
+                <th class="left">Post</th>
+                <th class="left">Encashed</th>
+
+
+
+
+                @*
+                    ReferenceNo
+                    InvestmentType
+                    InvestmentAddress
+                    InvestmentDate
+                    MaturityDate
+                    InvestmentValue
+                *@
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New Investment" data-url="/@ViewBag.TransType/Investment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+    <button type="button" data-url="/@ViewBag.TransType/Investment/DownloadExcel" onclick="GoTo(this)" id="" title="Click to Download the Report" class="sym-btn-Excel-Export">&nbsp;Download</button>
+</div>
+ 
+
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/Investment/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "left",
+                                "fnRender": function (oObj) {
+
+                                    if (oObj.aData[7] == "Posted")
+                                    {
+                                        return '  '
+                                       + '&nbsp; <a id=""  title="Click on for Journal"   href=\"/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '\" class=" sym-btn-bank-row"></a>'
+                                       + '&nbsp; <a id=""  title="Click on for Edit"   href=\"/@ViewBag.TransType/Investment/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></a>'
+                                       + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/Investment/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
+                                       + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Investment/Post"  onclick=btnPostNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                   //+ '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=2' + '&TransactionForm=Investment' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                       + '&nbsp; <a title="Click on for Renew" target="_blank"  href="/@ViewBag.TransType/InvestmentRenew/Index?investmentId=' + oObj.aData[0] + '\" class="sym-btn-add-row"></a>'
+                                    }
+                            else
+                                    {
+                                        return '  '
+                                      + '&nbsp; <a id=""  title="Click on for Journal"   href=\"/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '\" class=" sym-btn-bank-row"></a>'
+                                      + '&nbsp; <a id=""  title="Click on for Edit"   href=\"/@ViewBag.TransType/Investment/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></a>'
+                                      + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/Investment/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
+                                      + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Investment/Post"  onclick=btnPostNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                  //+ '&nbsp; <a title="Click on for Journal"   href="#'+ '\" class="sym-btn-bank-row"></a>'
+                                      + '&nbsp; <a title="Click on for Renew/Encash" target="_blank"  href="/@ViewBag.TransType/InvestmentRenew/Index?investmentId=' + oObj.aData[0] + '\" class="sym-btn-add-row"></a>'
+                                    }
+                                                           
+
+                                    ;
+                                }
+                            }
+
+                            , { "sName": "ReferenceNo", "sWidth": "10%" }
+                            , { "sName": "TransactionCode", "sWidth": "10%" }
+                            , { "sName": "InvestmentType", "sWidth": "10%" }
+                            , { "sName": "InvestmentName", "sWidth": "18%" }
+                            , { "sName": "InvestmentDate", "sWidth": "10%" }
+                            , { "sName": "MaturityDate", "sWidth": "10%" }
+                            , { "sName": "InvestmentValue", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "8%" }
+                            , { "sName": "IsEncashed", "sWidth": "10%" }
+
+            ]
+        });
+    });
+</script>
+
+
+<script>
+    function btnPostNew(sender) {
+
+        var Id = $(sender).attr("data-Id");
+
+        var getURL = "/@ViewBag.TransType/Investment/GetInvestment" + "?" + "id=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Post Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+    function btnDeleteNew(sender) {
+
+        //////var Id = $(sender).attr("data-Id");
+
+        //////var getURL = "/@ViewBag.TransType/Withdraw/GetWithdraw" + "?" + "id=" + Id;
+
+        //////$.getJSON(getURL, function (vm) {
+
+        //////    if (vm.Post) {
+        //////        ShowResult("Fail", "Data Already Posted! Can't Be Deleted!");
+        //////        return true;
+        //////    }
+        //////    else {
+        //////        var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+        //////        var questionMSG = "Are you sure to Delete Data!";
+        //////        singleOperation(questionMSG, url);
+        //////    }
+
+        //////});
+
+    }
+
+</script>
+
+<script>
+    function btnROI(sender) {
+        var id = $(sender).attr("data-Id");
+
+
+        var getURL = "/@ViewBag.TransType/Investment/GetInvestment" + "?" + "id=" + id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (!vm.Post) {
+                ShowResult("Fail", "Do Post before Return on Investment!");
+                return;
+            }
+
+
+            $("#ReferenceId").val(id);
+            $("#TransactionType").val("ROI");
+
+            $("#frmReturnOnInvestmentGet").submit();
+
+        });
+
+
+
+    }
+
+
+</script>

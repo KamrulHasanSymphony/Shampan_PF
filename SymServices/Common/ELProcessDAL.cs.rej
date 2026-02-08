@@ -1,0 +1,44 @@
+diff a/SymServices/Common/ELProcessDAL.cs b/SymServices/Common/ELProcessDAL.cs	(rejected hunks)
+@@ -117,24 +117,24 @@
+ 
+                 string[] result = new CommonDAL().BulkInsert("ELBalanceProcess", dt, currConn, transaction);
+ 
+-//                #region Update EL Balance 
+-              
+-//                sqlText = "  ";     
+-
+-//                    sqlText += @" UPDATE 
+-//    t1
+-//SET 
+-//    t1.LeaveDays = isnull(t2.Balance,0)
+-//
+-//FROM 
+-//    EmployeeLeaveStructure t1
+-//   left outer  JOIN (Select EmployeeId,FiscalYear,round(Sum (Balance),2)Balance from ELBalanceProcess 
+-//  group by EmployeeId,FiscalYear)t2 ON t1.EmployeeId=t2.EmployeeId and t1.LeaveYear=t2.FiscalYear
+-//  where t1.LeaveType_E='Annual Leave'
+-//  and LeaveYear=@LeaveYear
+-//                                 ";
+-
+-//                    sqlText += @"
++                #region Update EL Balance
++
++                sqlText = "  ";
++
++                sqlText += @" UPDATE 
++                    t1
++                SET 
++                    t1.LeaveDays =isnull(t2.Balance,0)
++
++                FROM 
++                    EmployeeLeaveStructure t1
++                   left outer  JOIN (Select EmployeeId,FiscalYear,round(Sum (Balance),2)Balance from ELBalanceProcess 
++                  group by EmployeeId,FiscalYear)t2 ON t1.EmployeeId=t2.EmployeeId and t1.LeaveYear=t2.FiscalYear
++                  where t1.LeaveType_E='Annual Leave'
++                  and LeaveYear=@LeaveYear
++                                                 ";
++
++//                sqlText += @"
+ //                UPDATE
+ //                    EMPLOYEELEAVESTRUCTURE
+ //                SET

@@ -1,0 +1,71 @@
+﻿<div class="headrow">
+    <button type="button" title="Add Fund (Return On Investment)" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    <label class="pull-right">Pre Distribution Fund </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Pre Distribution Fund List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                   Action
+                </th>
+                <th class="left">Code </th>
+                <th class="left">Transaction Date</th>
+                <th class="left">Total Value</th>
+                <th class="left">Remarks</th>
+    
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+
+
+</div>
+<div class="headrow">
+    <button type="button" title="Add Fund (Return On Investment)" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+</div>
+
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/PreDistributionFund/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                {
+                    "sName": "Id",
+                    "bSearchable": false,
+                    "bSortable": false,
+                    "sWidth": "12%",
+                    "sMargin": "10px",
+                    "sClass": "center",
+                    "fnRender": function (oObj) {
+                        var Code = encodeURIComponent(oObj.aData[1]);
+                        return '<a id="lnkEdit1" title="Click on for Edit" style="text-decoration:none;" href="/@ViewBag.TransType/PreDistributionFund/Edit/' + oObj.aData[0] + '" class="innerListLink sym-btn-edit-row"></a>'
+                            + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/PreDistributionFund/Post" onclick=btnPostNoSplit(this); data-Post="' + oObj.aData[4] + '" data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row"></a>'
+                            + '&nbsp; <a id="lnkEdit1" title="Click on for Report" style="text-decoration:none;" href="/@ViewBag.TransType/PreDistributionFund/reportVeiw/' + oObj.aData[0] + '" class="linkReport sym-btn-report-row"></a>'
+                            + '&nbsp; <a id="lnkEdit1" title="Click on for Distribution" style="text-decoration:none;" target="_blank" href="/@ViewBag.TransType/ProfitDistributionNew/Process?PreDistributionFundId=' + oObj.aData[0] + '" class="innerListLink sym-btn-add-row"></a>'
+                            + '<a title="Journal" class="sym-btn-bank-row" href="/@ViewBag.TransType/PreDistributionFund/JournalEntry/?Code=' + Code + '"></a>';
+                    }
+                },
+                { "sName": "Code", "sWidth": "10%" },
+                { "sName": "TransactionDate", "sWidth": "10%" },
+                { "sName": "TotalValue", "sWidth": "10%" },
+                { "sName": "Remarks", "sWidth": "10%" }
+            ]
+        });
+    });
+</script>
+

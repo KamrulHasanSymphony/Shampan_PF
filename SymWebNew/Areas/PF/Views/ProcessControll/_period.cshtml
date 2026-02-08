@@ -1,0 +1,48 @@
+﻿@model SymViewModel.Common.FiscalYearDetailVM
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+
+<div class="row countPeriods">
+     @using (Html.BeginCollectionItem("FiscalYearDetailVM"))
+    {
+         @Html.HiddenFor(model => model.LoanLock)
+         @Html.HiddenFor(model => model.PFLock)
+         @Html.HiddenFor(model => model.TAXLock)
+         @Html.HiddenFor(model => model.PeriodLock)
+         @Html.HiddenFor(model => model.FiscalYearId, new {@class = "fid" })
+         @Html.HiddenFor(model => model.Id, new { @class = "fdid" })
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PeriodName, new {@disabled="disabled", @class = "periodName form-control" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PeriodStart, new { @disabled="disabled", @class = "Start customDatePicker required form-control" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PeriodEnd, new { @disabled="disabled", @class = "End customDatePicker required form-control" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.CheckBoxFor(model => model.PayrollLock, new { @class = "plock form-control" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Remarks, new {@placeholder = "Period Remarks", @class = " form-control" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                <button type="submit" title="Update Data" onclick="" class="frm sym-btn-update">&nbsp;Update</button>
+                @*<button type="button" title="Update Information" class="sym-btn-edit"  value="Update" onclick="ProcessChange(true)">Update</button>*@
+            </div>
+        </div>
+     }
+</div>

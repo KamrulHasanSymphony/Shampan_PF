@@ -1,0 +1,349 @@
+﻿@model SymViewModel.WWF.ProfitDistributionVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "ProfitDistribution", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmProfitDistribution" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.PFDetailFiscalYearDetailIds)
+    @Html.HiddenFor(model => model.PreDistributionFundIds)
+    @Html.HiddenFor(model => model.TransactionType)
+
+    @Html.HiddenFor(model => model.FiscalYearDetailId)
+    @Html.HiddenFor(model => model.FiscalYearDetailIdTo)
+    @Html.HiddenFor(model => model.Post)
+
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmProfitDistribution')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Profit Distribution > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+            <label class="pull-right">Profit Distribution > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistribution" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Profit Distribution</p>
+        </div>
+        <div class="ProfitDistribution">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalEmployeeContribution)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalEmployeeContribution, new { @placeholder = "Total Employee Contribution", @class = " right NumberCheck totalEmployeeContribution form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalEmployeeContribution)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalEmployerContribution)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalEmployerContribution, new { @placeholder = "Total Employer Contribution", @class = " right NumberCheck totalEmployerContribution form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalEmployerContribution)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalProfit)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalProfit, new { @placeholder = "Total Profit", @class = "right NumberCheck  totalProfit form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalProfit)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalExpense)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalExpense, new { @placeholder = "Total Expense", @class = "right NumberCheck  totalExpense form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalExpense)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.AvailableDistributionAmount)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.AvailableDistributionAmount, new { @placeholder = "Available Distribution Amount", @class = "right NumberCheck  cAvailableDistributionAmount form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.AvailableDistributionAmount)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalWeightedContribution)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalWeightedContribution, new { @placeholder = "Total Weighted Contribution", @class = " right NumberCheck  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalWeightedContribution)
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.MultiplicationFactor)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.MultiplicationFactor, new { @placeholder = "Multiplication Factor", @class = " right   form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.MultiplicationFactor)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.PeriodNameFrom)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.PeriodNameFrom, new { @placeholder = "Period From", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.PeriodNameFrom)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.PeriodNameTo)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.PeriodNameTo, new { @placeholder = "Period To", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.PeriodNameTo)
+                    </div>
+                </div>
+
+
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.DistributionDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.DistributionDate, new { @placeholder = "Distribution Date", @class = " customDatePicker required  form-control" })
+                        @Html.ValidationMessageFor(model => model.DistributionDate)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thinbox formDesign" id="detail">
+        <div id="editorItemRows4">
+            @if (Model.profitDistributionDetailVMs != null)
+            {
+                <div class="row">
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Code")</div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="editor-label">@Html.Label("", "Name")</div>
+                    </div>
+                    @*<div class="col-md-2">
+                            <div class="editor-label">@Html.Label("", "Designation")</div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">@Html.Label("", @Session["DepartmentLabel"])</div>
+                        </div>*@
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Employee Contribution (A)")</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Employer Contribution (B)")</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Total Contribution (C=A+B)")</div>
+                    </div>
+
+
+                    <div class="col-md-1">
+                        <div class="editor-label" onclick="CopyItem(this)">@Html.Label("", "Service Length Weight (D)")</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Weighted Contribution (E=C*D)")</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Multiplication Factor (F)")</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Individual Profit Value (G=E*F)")</div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Employee Profit (H=G/2)")</div>
+                    </div>
+                    <div class="col-md-1">
+                        <div class="editor-label">@Html.Label("", "Employer Profit (I=G/2)")</div>
+                    </div>
+                    @*<div class="col-md-1">
+                            <div class="editor-label">@Html.Label("", "Remarks")</div>
+                        </div>*@
+                </div>
+
+                foreach (var item in Model.profitDistributionDetailVMs)
+                {
+                    Html.RenderPartial("~/Areas/WWF/Views/ProfitDistribution/_detail.cshtml", item);
+                }
+                <hr style="margin-top: 10px!important; margin-bottom: 10px!important;" />
+                <div style="font-size: 1.2em;">
+
+
+                    <div class="row">
+                        <div style="text-align: right; margin-top: 10px;" class="col-md-2">
+                            <label>Total Records @Model.profitDistributionDetailVMs.Count()</label>
+                        </div>
+                        <div style="text-align: right; margin-top: 10px;" class="col-md-4">
+                            <label>Employee Contribution Total</label>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-field"><strong>@Html.TextBox("EmployeeTotalContributionTotal", null, new { @class = "employeeTotalContributionTotal right NumberCheck form-control", @readonly = "readonly" })</strong></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">&nbsp; </div>
+                        <div style="text-align: right; margin-top: 10px;" class="col-md-4">
+                            <label>Employer Contribution Total</label>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-field"><strong>@Html.TextBox("EmployerTotalContributionTotal", null, new { @class = "employerTotalContributionTotal right NumberCheck form-control", @readonly = "readonly" })</strong></div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">&nbsp; </div>
+                        <div style="text-align: right; margin-top: 10px;" class="col-md-4">
+                            <label>Employee Profit Total</label>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-field"><strong>@Html.TextBox("EmployeeProfitValueTotal", null, new { @class = "employeeProfitValueTotal right NumberCheck form-control", @readonly = "readonly" })</strong></div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2">&nbsp; </div>
+                        <div style="text-align: right; margin-top: 10px;" class="col-md-4">
+                            <label>Employer Profit Total</label>
+                        </div>
+
+
+                        <div class="col-md-2">
+                            <div class="editor-field"><strong>@Html.TextBox("EmployerProfitValueTotal", null, new { @class = "employerProfitValueTotal right NumberCheck form-control", @readonly = "readonly" })</strong></div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmProfitDistribution')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistribution" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Profit Distribution" data-url="/@ViewBag.TransType/ProfitDistribution/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+
+
+<script>
+    $(function () {
+        valiDation("frmProfitDistribution");
+
+
+        SubTotal();
+    });
+
+    function SubTotal() {
+        var EmployeeTotalContribution = 0;
+        var EmployerTotalContribution = 0;
+        var EmployeeProfitValue = 0;
+        var EmployerProfitValue = 0;
+        var amount = 0;
+
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployeeTotalContribution").val().replace(/\,/g, '')); EmployeeTotalContribution += amount; });
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployerTotalContribution").val().replace(/\,/g, '')); EmployerTotalContribution += amount; });
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployeeProfitValue").val().replace(/\,/g, '')); EmployeeProfitValue += amount; });
+        $(".row.FormA").each(function () { amount = parseFloat($(this).find(".dEmployerProfitValue").val().replace(/\,/g, '')); EmployerProfitValue += amount; });
+
+
+        $(".employeeTotalContributionTotal").val(EmployeeTotalContribution);
+        $(".employerTotalContributionTotal").val(EmployerTotalContribution);
+        $(".employeeProfitValueTotal").val(EmployeeProfitValue);
+        $(".employerProfitValueTotal").val(EmployerProfitValue);
+
+
+        NumberFormatCheck();
+    }
+
+</script>
+
+<script>
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmProfitDistribution');
+    }
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/ProfitDistribution/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+</script>
+
+
+<script>
+    function CopyItem(sender) {
+        var tmpElement = $('<textarea style="opacity:0;"></textarea>');
+        ////var parent = $(sender).closest('td').siblings('td').not(this).not(":hidden").each(function () {
+        var parent = $(".dServiceLengthMonthWeight").each(function () {
+            tmpElement.text(tmpElement.text() + $(this).val() + '\t');
+        });
+
+        tmpElement.appendTo($('body')).focus().select();
+        document.execCommand("copy");
+        tmpElement.remove();
+
+        ////ShowResult("Info", "Data Copied to Clipboard!");
+
+    }
+
+
+
+</script>

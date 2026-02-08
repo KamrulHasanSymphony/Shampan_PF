@@ -1,0 +1,109 @@
+﻿@model IEnumerable<SymViewModel.Common.UserGroupVM>
+@{
+    ViewBag.Title = "Index";
+}
+<div Id="Detaildiv"></div>
+<!-- #region Script -->
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Common/UserGroup/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "Id",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "15%",
+                                    //"sClass":"center",
+                                    "fnRender": function (oObj) {
+                                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit"  style="text-decoration:none;" id="lnkEdit1"class=" lnkEdit sym-btn-edit-row"  href=\"/Common/UserGroup/Edit/' + oObj.aData[0] + '\"></a>' +
+                                        '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/UserGroup/Delete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>' +
+                                        '&nbsp; <a title="tt Click for Details" style="text-decoration:none" href=\"/Common/UserGroup/SelectUserForRoll?Id=' + oObj.aData[0] + '\"   class="sym-btn-detail-row"></a>';
+                                    }
+                                }
+                                , { "sName": "Name", "sWidth": "11%" }
+                                , { "sName": "IsAdmin", "sWidth": "8%" }
+                                , { "sName": "IsESS", "sWidth": "8%" }
+                                , { "sName": "IsHRM", "sWidth": "8%" }
+                                , { "sName": "IsAttendance", "sWidth": "10%" }
+                                , { "sName": "IsPayroll", "sWidth": "8%" }
+                                , { "sName": "IsTAX", "sWidth": "8%" }
+                                , { "sName": "IsPF", "sWidth": "8%" }
+                                , { "sName": "IsGF", "sWidth": "8%" }
+                                , { "sName": "Active", "sWidth": "10%" }
+                ]
+            });
+            //oTable.columnFilter({
+            //    sPlaceHolder: "head:after",
+            //    aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+            //               , { type: "text" }
+            //               , { type: "select", values: ["Active", "Inactive"] }
+            //               , { type: "text" }
+            //    ]
+            //});
+        });
+        function SelectemployeeFilter(Sender) {
+            //var Id = $("#Id").val();
+            var url = "/Common/UserGroup/SelectUserForRoll?Id=" + Sender;
+            $.ajax({
+                url: url,
+                type: 'GET',
+                beforeSend: function () { $(".loading").show(); },
+                complete: function () { $(".loading").fadeOut(200).hide("slow") },
+                success: function (data) {
+                    $('#Detaildiv').html(data);
+                },
+            });
+        }
+    </script>
+<div class="headrow">
+    <button type="button" title="Add New User Group" data-url="/Common/UserGroup/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+    <button type="button" title="Delete User Group" data-url="/Common/UserGroup/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <label class="pull-right">User Group</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>User Group List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+             <tr>
+                            <th>
+                                <input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Name</th>
+                            <th>Admin</th>
+                            <th>ESS</th>
+                            <th>HRM</th>
+                            <th>Attendance</th>
+                            <th>Payroll</th>
+                            <th>TAX</th>
+                            <th>PF</th>
+                            <th>GF</th>
+                            <th>Active</th>
+                        </tr>
+@*                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Name</th>
+                            <th>Active/Inactive</th>
+                            <th>Remark</th>
+                        </tr>*@
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <div class="pull-left">
+        <button type="button" title="Add New User Group" data-url="/Common/UserGroup/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete User Group" data-url="/Common/UserGroup/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    </div>
+</div>

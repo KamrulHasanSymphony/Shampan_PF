@@ -1,0 +1,127 @@
+﻿    <script language="javascript" type="text/javascript">
+        //$.datepicker.regional[""].dateFormat = 'dd/mm/yy';
+        //$.datepicker.setDefaults($.datepicker.regional['']);
+        $(document).ready(function () {
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Common/Grade/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "Id",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "12%",
+                                    "sClass": "center",
+                                    "fnRender": function (oObj) {
+                                        //return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;"   href=\"/Common/Grade/Edit/' + oObj.aData[0] + '\" id="lnkEdit1"   class="lnkEdit sym-btn-edit-row"></a>' +
+                                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;"   href=\"/Common/Grade/Edit/' + oObj.aData[0] + '\" id="lnkEdit1"   class="btnCreatebig sym-btn-edit-row"></a>' +
+                                        '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/Grade/GradeDelete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>';
+                                    }
+                                }
+                                , { "sName": "Code", "sWidth": "20%" }
+                                , { "sName": "Name", "sWidth": "25%" }
+                                , { "sName": "MinSalary", "sClass": "right", "sWidth": "20%" }
+                                , { "sName": "MaxSalary", "sClass": "right", "sWidth": "20%" }
+                ]
+            });  
+            oTable.columnFilter({
+                sPlaceHolder: "head:after",
+                aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "number-range" }
+                           , { type: "number-range" }
+                           //, { type: "date-range" }
+                ]
+            });
+        });
+    </script>
+<div class="headrow">
+        <button type="button" title="Add New Grade" data-url="/Common/Grade/Create" id="" class="btnCreatebig sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Grade" data-url="/Common/Grade/GradeDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <button type="button" title="Add New" data-url="/Common/Grade/Import" onclick="GoTo(this)" id="" class=" sym-btn-Excel-Export ">&nbsp;Export/Emport</button>
+ <label class="pull-right"> Grade </label>
+</div>
+  <div class="thinbox">
+        <div class="th_thinbox">
+        <p>Salary Grade List</p>   
+        </div>
+@*<div class="row">
+     <input type="button" style="width:65px;" data-url="/Common/Grade/Create"  id="" class="btnCreate btn btn-info  " value="Add" />
+    <input type="button" style="width:65px;" data-url="/Common/Grade/GradeDelete" onclick="deletedData(this, 'myDataTable');" id="" class=" btn btn-info  " value="Delete" />
+</div>
+        <p></p>*@
+<div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                         <tr>
+                            <th class="center"> <input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>Minimum Salary</th>
+                            <th>Maximum Salary</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Code</th>                            
+                            <th>Name</th>
+                            <th style="text-align:left!important">Minimum Salary</th>
+                            <th style="text-align:left!important">Maximum Salary</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        </div>
+        </div>
+<div class="headrow">
+        <button type="button" title="Add New Grade" data-url="/Common/Grade/Create" id="" class="btnCreatebig sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Grade" data-url="/Common/Grade/GradeDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+</div>
+@* 
+<script>
+    $(document).ready(function () {
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/Grade/_index",
+            "bProcessing": true,
+            "aoColumns": [
+                            {
+                                "sName": "Name",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[1].split('~')[1] + '">'
+                                    ;
+                                }
+                            },
+                            {
+                                "sName": "Code",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "fnRender": function (oObj) {
+                                    //return '<a   class="lnkEdit btn btn-primary " href=\"/Common/Grade/Edit/' + oObj.aData[3] + '\">Show</a>'
+                                    return '<a  id="lnkEdit1" class="lnkEdit innerListLink"  href=\"/Common/Grade/Edit/' + oObj.aData[1].split('~')[1] + '\">' + oObj.aData[1].split('~')[0] + '</a>'
+                                    ;
+                                }
+                            },
+                            { "sName": "Name" },
+                            { "sName": "MinSalary" },
+                            { "sName": "MaxSalary" },
+                            { "sName": "Remarks" }
+            ]
+        });
+        SelectAllForDelete();
+    });
+    </script>*@

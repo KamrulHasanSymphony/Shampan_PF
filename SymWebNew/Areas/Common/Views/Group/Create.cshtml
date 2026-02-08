@@ -1,0 +1,54 @@
+﻿@model SymViewModel.Common.GroupVM
+@using UIHelper.MVC
+@{
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create"; 
+}
+
+@using (Html.BeginForm("Create", "Group", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmGroup" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="EnumGroup">
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Code)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.Code, new { @placeholder = "Group Code", @class = "required form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Name)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.Name, new { @placeholder = "Group Name", @class = "required form-control" })
+
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Remarks)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                    <button type="button" title="Save Data" onclick="pageSubmit('frmGroup');" class="sym-btn-save">&nbsp;Save</button>
+                </label>
+                <label class="col-sm-4">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+        </div>
+    </div>
+}
+    <script>
+        $(function () {
+            valiDation("frmGroup");
+        });
+    </script>

@@ -1,0 +1,118 @@
+﻿<div class="headrow">
+
+
+
+   @* @if (string.IsNullOrWhiteSpace(@ViewBag.UserStatus))
+    { 
+        *@
+    @*<button type="button" title="Create New User" data-url="/Common/User/Create" onclick="GoTo(this)" id="" class="sym-btn-add">&nbsp;Create</button>*@
+      @if (@ViewBag.UserStatus !="User") {
+        <button type="button" title="Click to See Employee List" data-url="/Common/User/Index?UserStatus=User" onclick="GoTo(this)" id="" class="sym-btn-add">&nbsp;New User Create </button>
+    }   
+     <label class="pull-right">User</label>
+  
+
+</div>
+<div class="EditPlace">
+    <div id="User">
+    </div>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+     @*   @if (string.IsNullOrWhiteSpace(@ViewBag.UserStatus))
+        { 
+            *@<p>User List</p>
+       @* }
+        else
+        {
+            <p>Employee List For Creating User</p>
+        }*@
+    </div>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th class="center"></th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Join Date</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Join Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        var UserStatus = '@ViewBag.UserStatus';
+        $(".EditPlace").hide();
+        customToollip();
+        InitDateTimePickers();
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Common/User/_index?UserStatus=" + UserStatus,
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    if (UserStatus == 'User') {
+                                        return ' <a title="Click for Create New" style="text-decoration:none"  href=\"/Common/User/Create/' + oObj.aData[0] + '\" class="sym-btn-add-row"></a>';
+                                    }//return ' <a title="Click for Details" style="text-decoration:none" onclick="SelectEmployee(this);" name="empId" value="' + oObj.aData[0] + '" class="sym-btn-detail-row"></a>';
+                                    else {
+                                        return ' <a title="Click for Edit" style="text-decoration:none"  href=\"/Common/User/Edit/' + oObj.aData[0] + '\" class="sym-btn-edit-row"></a>' +
+                                       ' <a title="Click for Password Change" style="text-decoration:none"  href=\"/Common/User/PasswordChange/' + oObj.aData[0] + '\" class="lnkEdit sym-btn-password-row"></a>';
+                                    }
+                                }
+                            }
+                                , { "sName": "Code", "sWidth": "15%" }
+                                , { "sName": "EmpName", "sWidth": "20%" }
+                                , { "sName": "Department", "sWidth": "15%" }
+                                , { "sName": "Designation", "sWidth": "15%" }
+                                , { "sName": "JoinDate", "sWidth": "20%" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "date-range" }
+            ]
+        });
+    });
+ function CancleUser() {
+            $(".EditPlace").hide();
+        }
+        function SelectEmployee(sender) {
+              //var UserStatus = '@ViewBag.UserStatus';
+            //var EmployeeId = $(sender).val();
+            var EmployeeId = $(sender).attr("value");
+            $("#User").load('@Url.Action("User", "User")' + '?EmployeeId=' + EmployeeId+'&UserStatus=' + UserStatus);
+        $(".EditPlace").show();
+    }
+</script>

@@ -1,0 +1,141 @@
+﻿@using SymOrdinary
+@using System.Threading;
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+<div class="content white menuheight">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!--/.navbar-header-->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                @if (identity.IsAdmin)
+                {
+                    <li class="Home dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Home<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            @if (identity.IsAdmin)
+                            {
+                                <li><a class="btn btn-info" href="/Common/Home/">Admin</a></li>
+                            }
+                            <li><a class="btn btn-info" href="/HRM/Home/">HRM</a></li>
+                            <li><a class="btn btn-info" href="/Attendance/Home/">Leave & Attendance</a></li>
+
+                            @* <li><a class="btn btn-info" href="/PharmaRaw/Home/">Pharma Raw</a></li>*@
+                            <li><a class="btn btn-info" href="/Payroll/Home/">Payroll</a></li>
+                            @*                                   <li><a class="btn btn-info" href="/TAX/Home/">TAX</a></li>
+                                <li><a class="btn btn-info" href="/Attendance/Home/">Attendance</a></li>*@
+                        </ul>
+                    </li>
+
+
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Configuration<b class="caret"></b></a>
+                        <ul class="dropdown-menu multi-column columns-3">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <ul class="multi-column-dropdown">
+                                        <li><a class="btn btaZn-info" href="/Config/EnumBloodGroup">Blood Group</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumTravelType">Travel Type</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumDegree">Degree</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumCountry">Country</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumDivision">Division</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumDistrict">District</a></li>
+                                        @*                                            <li><a class="btn btn-info" href="/Common/InfoJobSeeker">Info Job Seekers</a></li>
+                                            <li><a class="btn btn-info" href="/Common/InfoEmployer">Info Employers</a></li>
+                                            <li><a class="btn btn-info" href="/Common/InfoAgent">Info Agents</a></li>
+                                            <li><a class="btn btn-info" href="/Common/BlockEmployer">Block Employers</a></li>
+                                            <li><a class="btn btn-info" href="/Common/BlockJobSeeker">Block Job Seekers</a></li>*@
+
+                                    </ul>
+
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <ul class="multi-column-dropdown">
+                                        <li><a class="btn btn-info" href="/Config/EnumEmploymentStatus">Employment Status</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumEmploymentType">Employment Type</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumGender">Gender</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumImmigrationType">Immigration Type</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumLanguage">Language</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumLanguageCompetency">Language Competency</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumYear">Year</a></li>
+                                        @*                                            <li><a class="btn btn-info" href="/Common/EMJobOffer">EM Job Offers</a></li>
+                                            <li><a class="btn btn-info" href="/Common/EmailSender">Email Senders</a></li>
+                                            <li><a class="btn btn-info" href="/Common/SMSSender">SMS Senders</a></li>
+                                            <li><a class="btn btn-info" href="/Common/EMJob">EM Jobs</a></li>
+                                            <li><a class="btn btn-info" href="/Common/JSProfileView">Job Seeker Profile</a></li>*@
+                                    </ul>
+                                </div>
+                                <div class="col-sm-3">
+                                    <ul class="multi-column-dropdown">
+                                        <li><a class="btn btn-info" href="/Config/EnumLanguageFluency">Skill Quality /Fluency</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumLeaveApproveStatus">Leave Approve Status</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumLeaveType">Leave Type</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumLeftType">Left Type</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumMeritalStatus">Marital Status</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumNationality">Nationality</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumTravelType">Travel Type</a></li>
+                                    </ul>
+                                </div>
+                                <div class="col-sm-3">
+                                    <ul class="multi-column-dropdown">
+                                        <li><a class="btn btn-info" href="/Config/EnumReligion">Religion</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumSalaryPayMode">Salary Pay Mode</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumSalutation">Salutation</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumTrainingCourse">Training Course</a></li>
+                                        <li><a class="btn btn-info" href="/Config/EnumTrainingPlace">Training Place</a></li>
+                                        <li><a class="btn btn-info" href="/Config/DataMigration">Data Migration</a></li>
+                                        <li><a class="btn btn-info" href="/Common/DatabaseTable/Create">Database Table</a></li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </ul>
+                    </li>
+                    //<li class="DBUpdate"><a href="/Common/Company/DBUpdate">DB Update </a></li>
+                }
+            </ul>
+            <ul class="nav navbar-nav navbar-right" style="border-left:5px solid #fff">
+                <li class="dropdown1">
+                    <a href="#" class="dropdown-toggle sym-btn-back" title="Go Back" onclick="goBack()" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">&nbsp;Back</a>
+                </li>
+                <li class="dropdown1">
+                    <a href="#" class="dropdown-toggle btn btn-warning" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin </a>
+                </li>
+            </ul>
+        </div>
+        <!--/.navbar-collapse-->
+    </nav>
+    <!--/.navbar-->
+
+</div>
+<style>
+    .navbar-default .navbar-nav > li.dropdown:hover > a,
+    .navbar-default .navbar-nav > li.dropdown:hover > a:hover,
+    .navbar-default .navbar-nav > li.dropdown:hover > a:focus {
+        /*background-color: rgb(231, 231, 231);*/
+        color: rgb(85, 85, 85);
+    }
+
+    li.dropdown:hover > .dropdown-menu {
+        display: block;
+    }
+</style>

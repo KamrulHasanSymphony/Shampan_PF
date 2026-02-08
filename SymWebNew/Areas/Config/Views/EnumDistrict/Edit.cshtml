@@ -1,0 +1,110 @@
+﻿@model SymViewModel.Enum.EnumDistrictVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Edit";
+    ViewBag.Location = "Edit"; 
+}
+
+@using (Html.BeginForm("Edit", "EnumDistrict", FormMethod.Post, new { @Id = "frmDistrict" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="EnumDistrict">
+                @Html.HiddenFor(model => model.Id)
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Country_E)
+                </label>
+                <div class="col-sm-9">
+                    @Html.SimpleDropDownFor(model => model.Country_E, "/Config/DropDown/Country", new {@onchange=" loadDivision();", @class = "required form-control" })
+
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Division_E)
+                </label>
+                <div class="col-sm-9">
+                    <select id="Division_E" name="Division_E" data-ct="@Model.Country_E" data-val="@Model.Division_E" class="required form-control"> </select>
+                </div>
+            </div>
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Name)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextBoxFor(model => model.Name, new { @placeholder = "District Name", @class ="required form-control" })
+              
+            </div>
+        </div>
+            <div class="row">
+                    <label class="col-sm-3">
+                         @Html.LabelFor(model => model.IsActive)
+                    </label>
+                <div class="col-sm-1">
+                @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+            </div> 
+        </div>
+        <div class="row">
+            <label class="col-sm-3">
+                @Html.LabelFor(model => model.Remarks)
+            </label>
+            <div class="col-sm-9">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks",@rows="1", @class ="  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-3">
+			<button type="button" title="Edit Data" onclick="Edit();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+              <button type="button" title="Save Data" onclick="pageSubmit('frmDistrict');" class="Save sym-btn-save">&nbsp;Save</button>
+              
+            </label>
+            <label class="col-sm-4">
+          
+				 <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+            </label>
+        </div>
+        </div>
+    </div>
+}
+ 
+<script>
+    $(function () {
+        InitDropDowns();
+        Edit();
+        valiDation("frmDistrict");
+        loadDivision();
+    });
+
+    function Edit() {
+        fnReadOnly("EnumDistrict");
+        if ($(".EnumDistrict").hasClass("readOnly")) {
+            $(".Save").hide();
+            $(".Edit").show();
+        }
+        else {
+            $(".Save").show();
+            $(".Edit").hide();
+        }
+    }
+    function loadDivision() {
+        var dropdownElements = $("#Division_E");
+        var val = $("#Division_E").attr('data-val');
+        var url = "/Config/DropDown/Division?country=" + $("#Division_E").attr('data-ct');
+        $.getJSON(url, function (item, textStatus, jqXHR) {
+            var Listitems = '<option value="">Select</option>';
+            $.each(item, function (i, data) {
+                if (val == data.Value) {
+
+                    Listitems += "<option selected='selected' value='" + data.Value + "'>" + data.Text + "</option>";
+                }
+                else {
+                    Listitems += "<option value='" + data.Value + "'>" + data.Text + "</option>";
+                }
+            });
+            dropdownElements.html(Listitems);
+        });
+    }
+</script>

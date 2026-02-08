@@ -1,0 +1,76 @@
+﻿@model SymViewModel.WWF.ForfeitureAccountVM
+@using UIHelper.MVC
+
+<div class="headrow">
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ForfeitureAccount" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    <label class="pull-right">Forfeiture Account > Resign Employee</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Resign Employee List</p>
+    </div>
+
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All</th>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Designation</th>
+                <th>Department</th>
+                <th>Resign Date</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+        <br />
+    </div>
+    <div class="headrow">
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ForfeitureAccount" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    </div>
+    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/@ViewBag.TransType/ForfeitureAccount/_indexResignEmployee",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "EmployeeId",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "12%",
+                                    "sClass": "center",
+                                    "fnRender": function (oObj) {
+
+                                        return '<a title="Click on for Forfeit" style="text-decoration:none;" href=\"/@ViewBag.TransType/ForfeitureAccount/Create?EmployeeId=' + oObj.aData[0] + '\"  class="sym-btn-save-row"></a>'
+
+                                        ////    + '&nbsp; <a id="lnkEdit1"  title="Click on for Edit" style="text-decoration:none;"    href=\"/@ViewBag.TransType/ForfeitureAccount/Edit/' + oObj.aData[0] + '\" class=" innerListLink sym-btn-edit-row"></a>'
+                                        ////    + '&nbsp; <a title="Click on for Post"   data-url="/@ViewBag.TransType/ForfeitureAccount/Post"   onclick=btnPostNoSplit(this);       data-Post="' + oObj.aData[4] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                        ////    + '&nbsp; <a title="Click on for Delete" data-url="/@ViewBag.TransType/ForfeitureAccount/Delete" onclick=btnDeleteNoSplit(this);    data-Post="' + oObj.aData[4] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-remove-row"></a>'
+                                            //////+ '&nbsp; <a title="Click on for Process" data-url="/@ViewBag.TransType/ForfeitureAccount/Process" onclick=btnDeleteNoSplit(this);    data-Post="' + oObj.aData[4] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-remove-row"></a>'
+                                        ////;
+                                    }
+                                }
+                                , { "sName": "Code", "sWidth": "10%" }
+                                , { "sName": "EmpName", "sWidth": "10%" }
+                                , { "sName": "Designation", "sWidth": "10%" }
+                                , { "sName": "Department", "sWidth": "10%" }
+                                , { "sName": "EmpResignDate", "sWidth": "10%" }
+
+                ]
+            });
+        });
+    </script>
+
+
+    

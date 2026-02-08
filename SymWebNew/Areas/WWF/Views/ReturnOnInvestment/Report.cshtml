@@ -1,0 +1,102 @@
+﻿@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Return On Investment</p>
+    </div>
+    <div class="ReturnOnInvestment">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.Label("", "Investment Type")
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDown("InvestmentTypeId", "/Config/DropDown/PF_EnumInvestmentType", new { @class = " invTypeId  form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.Label("", "Reference No.")
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDown("InvestmentId", "/Config/DropDown/PF_Investment", new { @class = " invId   form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Settlement Date From</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("ROIDateFrom", "", new { @placeholder = "Date From", @class = "roiDateFrom customDatePicker form-control" })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Settlement Date To</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("ROIDateDateTo", "", new { @placeholder = "Date To", @class = "roiDateTo customDatePicker form-control" })
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="headrow">
+    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/ReturnOnInvestment/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Detail</button>
+</div>
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var dtFrom = $(".roiDateFrom").val();
+        var dtTo = $(".roiDateTo").val();
+        var invId = $(".invId").val();
+        var invTypeId = $(".invTypeId").val();
+
+
+
+
+        rptObj = new Object();
+        rptObj.dtFrom = dtFrom;
+        rptObj.dtTo = dtTo;
+        rptObj.invId = invId;
+        rptObj.invTypeId = invTypeId;
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>
+<script>
+    $(window).on('load', function () {
+        //InvestmentDropDown();
+
+        $('.invTypeId').change(function () {
+            InvestmentDropDown();
+        });
+
+        function InvestmentDropDown() {
+            $('select.invId').html("");
+            var DropDownItem = "";
+            var invTypeId = $('.invTypeId').val();
+
+            DropDownItem += "<option value=''>Select</option>";
+
+            var url = "/Config/DropDown/PF_Investment/?invTypeId=" + invTypeId;
+
+            $.getJSON(url, function (data) {
+                $.each(data, function (i, state) {
+                    DropDownItem += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                });
+                $('select.invId').html(DropDownItem);
+            });
+        }
+    });
+</script>

@@ -1,0 +1,242 @@
+﻿@model SymViewModel.PF.PreDistributionFundVM
+@using System.Threading;
+@using UIHelper.MVC
+@using SymOrdinary
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+@using (Html.BeginForm("CreateEdit", "PreDistributionFund", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPreDistributionFund" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Post)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.FundingReferenceIds)
+    @Html.HiddenFor(model => model.TransactionType)
+    @Html.HiddenFor(model => model.IsApprove)
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPreDistributionFund')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Pre Distribution Fund > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            if (@identity.IsAdmin == true)
+            {
+                if (@Model.Post == false)
+                {
+                    <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+                }
+            }
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PreDistributionFund/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+            <label class="pull-right">Pre Distribution Fund > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Pre Distribution Fund" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+        @if (@identity.HaveApproval == true)
+        {
+            if (@Model.Post == true && @Model.IsApprove == false)
+            {
+                <button type="button" title="Approve Data" onclick="Approve(this)" class="sym-btn-post">&nbsp;Approve</button>
+
+            }
+            else
+            {
+                if (@Model.IsApprove == true)
+                {
+                    <button type="button" title="Approve Data" onclick="Reject(this)" class="sym-btn-reject">&nbsp;Reject</button>
+                }
+
+            }
+
+        }
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+        </div>
+        <div class="PreDistributionFund">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = "  Code form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionDate, new { @placeholder = "Transaction Date", @class = "customDatePicker required form-control" })
+                        @Html.ValidationMessageFor(model => model.TransactionDate)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalValue, new { @placeholder = "Total Value ", @class = "  required NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.TotalValue)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPreDistributionFund')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            if (@identity.IsAdmin == true)
+            {
+                if (@Model.Post == false)
+                {
+                    <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+                }
+            }
+
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PreDistributionFund/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Pre Distribution Fund" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+        @if (@identity.HaveApproval == true)
+        {
+            if (@Model.Post == true && @Model.IsApprove == false)
+            {
+                <button type="button" title="Approve Data" onclick="Approve(this)" class="sym-btn-post">&nbsp;Approve</button>
+
+            }
+            else
+            {
+                if (@Model.IsApprove == true)
+                {
+                    <button type="button" title="Approve Data" onclick="Reject(this)" class="sym-btn-reject">&nbsp;Reject</button>
+                }
+
+            }
+
+        }
+    </div>
+}
+<script>
+
+    $(document).ready(function () {
+        $(".customDatePicker").datepicker({
+            dateFormat: "dd-M-yy",
+            onSelect: function (dateText) {
+                GetProfitValue(dateText);
+            }
+        });
+    });
+
+    function GetProfitValue(selectedDate) {
+        $.ajax({
+            url: '/PF/PreDistributionFund/GetProfitValue',
+            type: 'GET',
+            data: { date: selectedDate },
+            success: function (response) {
+                if (response.success) {
+                    $("#TotalValue").val(response.totalValue);
+                } else {
+                    alert("Error: " + response.error);
+                }
+            },
+            error: function (error) {
+                alert("Error: " + response.error);
+            }
+        });
+    }
+
+    $(function () {
+        valiDation("frmPreDistributionFund");
+        ////SetFundingValue();
+
+        $('.reservedFundingValue').change(function () {
+            SetFundingValue();
+        });
+
+        ////function SetFundingValue() {
+        ////    var totalFundingValue = parseFloat($('.totalFundingValue').val());
+        ////    var reservedFundingValue = parseFloat($('.reservedFundingValue').val());
+        ////    var fundingValue = totalFundingValue - reservedFundingValue;
+        ////    $('.fundingValue').val(fundingValue)
+        ////}
+    });
+
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmPreDistributionFund');
+    }
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/PreDistributionFund/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+    function Approve(sender) {
+        debugger;
+        var Id = $("#Id").val();
+        var Approve = $("#IsApprove").val();
+        if (Approve.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Approved!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/PreDistributionFund/Approve?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Approve Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+    function Reject(sender) {
+        debugger;
+        var Id = $("#Id").val();
+        var url = '/@ViewBag.TransType/PreDistributionFund/Reject?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Reject Data!";
+        singlePostDlete(questionMSG, url);
+    }
+</script>

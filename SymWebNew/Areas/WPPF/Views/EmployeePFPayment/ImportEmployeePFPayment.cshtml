@@ -1,0 +1,217 @@
+﻿@using UIHelper.MVC
+
+@{
+    ViewBag.Title = "ImportEmployeePFPayment";
+}
+
+<div class="headrow">
+    <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/EmployeePFPayment" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    <label class="pull-right">Employee WPPF Payment > Excel Import/Export</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Employee WPPF Payment</p>
+    </div>
+
+    <div class="row">
+        <div class="thinbox col-md-12">
+            <div class="th_thinbox">
+                <p>Employee WPPF Payment Import</p>
+            </div>
+            @using (Ajax.BeginForm("ImportExcel", "EmployeePFPayment", null, new AjaxOptions { }, new { enctype = "multipart/form-data", id = "ImportEmployeePFPaymentExcel" }))
+            {
+
+                <div class="col-md-3"> </div>
+                <div class="col-md-3">
+
+                    <div class="col-md-6">
+                        <label>File</label>
+                        <input type="file" accept=".xlsx" name="file" id="FileUpload" style="width: 200px;" class="required" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+
+                    <label>&nbsp;</label>
+                    @*<button type="button" onclick="pageSubmit('ImportOtherEarningExcel');" class="sym-btn-file-upload" value="Upload" style="width: 50%; text-align: center;">&nbsp;Upload</button>*@
+                    <button type="button" onclick="ImportExcle();" class="sym-btn-file-upload" value="Upload" style="width: 50%; text-align: center;">&nbsp;Upload</button>
+                </div>
+            }
+        </div>
+
+    </div>
+
+    <div class="row">
+
+        <div class="thinbox col-md-12">
+            <div class="th_thinbox">
+                <p>Employee WPPF Payment Export</p>
+            </div>
+            <div class="row">
+
+                
+
+            </div>
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>Employee Code(From)</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("CodeF", "/Config/DropDown/EmployeeCodeName", new { @class = "codeFCom form-control selectDropdown" })
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>Employee Code(To)</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("CodeT", "/Config/DropDown/EmployeeCodeName", new { @class = "codeTCom form-control selectDropdown" })
+
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Designation</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("DesignationId", "/Config/DropDown/Designation", new { @class = " form-control" })
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>@Session["DepartmentLabel"]</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("DepartmentId", "/Config/DropDown/Department", new { @class = "departmentsCom form-control" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>@Session["SectionLabel"]</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("SectionId", "/Config/DropDown/Section", new { @class = "sectionsCom form-control" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>@Session["ProjectLabel"]</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("ProjectId", "/Config/DropDown/Project", new { @class = "projectsCom form-control" })
+                    </div>
+                </div>
+                @*<div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Earning Type</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("EarningTypeId", "/Config/DropDown/EarningTypeDropDown", new { @id = "ETId", @class = "required EarningTypeId eType form-control" })
+                    </div>
+                </div>*@
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Order By</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDown("Orderby", "/Config/DropDown/EnumOrderBy?Module=Salary", new { @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <div class="row">
+                <div class="col-md-3">
+                    <label>&nbsp;</label>
+                    <button id="btnExportFormEmployee" class="sym-btn-Excel-Export" type="button">&nbsp;Download from Employee</button>
+                </div>
+
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <button id="btnExportFormOpening" class="sym-btn-Excel-Export" type="button">&nbsp;Download from Opening</button>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<script>
+    $(function () {
+        InitDropdownsCommon();
+        valiDation('ImportEmployeePFPaymentExcel');
+    });
+
+    $('#btnExportFormEmployee').click(function () {
+        //var path = window.location.href;
+        //var fid = $("#FiscalPeriodDetailId").val();
+        var ProjectId = $("#ProjectId").val();
+        var DepartmentId = $("#DepartmentId").val();
+        var SectionId = $("#SectionId").val();
+        var DesignationId = $("#DesignationId").val();
+        var CodeF = $("#CodeF").val();
+        var CodeT = $("#CodeT").val();
+        //var ETId = $("#EarningTypeId").val();
+        var Orderby = $("#Orderby").val();
+
+       
+        if (Orderby == "") {
+            ShowResult('Fail', "Please Select Order By ");
+            return false;
+        }
+
+        window.location = '@Url.Action("DownloadExcel_Employee", "EmployeePFPayment")' + '?ProjectId=' + ProjectId
+                  + '&DepartmentId=' + DepartmentId
+                  + '&SectionId=' + SectionId
+                  + '&DesignationId=' + DesignationId
+                  + '&CodeF=' + CodeF
+                  + '&CodeT=' + CodeT                  
+                  + '&Orderby=' + Orderby
+    });
+
+    $('#btnExportFormOpening').click(function () {
+        //var path = window.location.href;
+        //var fid = $("#FiscalPeriodDetailId").val();
+        var ProjectId = $("#ProjectId").val();
+        var DepartmentId = $("#DepartmentId").val();
+        var SectionId = $("#SectionId").val();
+        var DesignationId = $("#DesignationId").val();
+        var CodeF = $("#CodeF").val();
+        var CodeT = $("#CodeT").val();
+        //var ETId = $("#EarningTypeId").val();
+        var Orderby = $("#Orderby").val();
+
+
+        if (Orderby == "") {
+            ShowResult('Fail', "Please Select Order By ");
+            return false;
+        }
+
+        window.location = '@Url.Action("DownloadExcel_Opening", "EmployeePFPayment")' + '?ProjectId=' + ProjectId
+                  + '&DepartmentId=' + DepartmentId
+                  + '&SectionId=' + SectionId
+                  + '&DesignationId=' + DesignationId
+                  + '&CodeF=' + CodeF
+                  + '&CodeT=' + CodeT
+                  + '&Orderby=' + Orderby
+    });
+
+</script>
+
+<script>
+
+    function ImportExcle() {
+
+        pageSubmit('ImportEmployeePFPaymentExcel');
+
+    }
+
+</script>
+

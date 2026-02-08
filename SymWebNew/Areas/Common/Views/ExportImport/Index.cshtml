@@ -1,0 +1,230 @@
+﻿@*@model IEnumerable<SymViewModel.HRM.EmployeeInfoVM>*@
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Location = "Index";
+}
+@using UIHelper.MVC
+
+<!DOCTYPE html>
+<html>
+<head>
+
+</head>
+<body>
+    <style>
+        .dataTables_filter {
+            /*display: none;*/
+        }
+    </style>
+
+    <label class="pull-right">@*Purchase Invoice (@Model.TransactionType)*@</label>
+
+    
+    <br />
+
+    <div class="headrow">
+       
+        @*<button type="button" title=" Import" id="" class="sym-btn-ExportImport" data-url="" onclick="GoTo(this)">&nbsp;Import</button>*@
+        <button type="button" title="Import" data-url="/Common/ExportImport/Import" onclick="GoTo(this)" id="" class="sym-btn-ExportImport ">&nbsp;Import</button>
+        <label class="pull-right"> Export </label>
+    </div>
+    <br />
+    <div class="row">
+        <div class="thinbox col-md-4" style="right: -1%;">
+
+            <div class="th_thinbox">
+                <p>Export Information</p>
+            </div>
+
+            <div id="Dropdown" class="row">
+                <div class="col-md-8">
+                    <div class="editor-label">
+                        <label>Type</label>
+                    </div>
+
+                    <div class="editor-field">
+                        <div>
+                            @Html.SimpleDropDown("ExportType", "/Config/DropDown/Import", new { @class = "required fpDetailsCom form-control" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    @*<button type="button" title="Import Data" onclick="ImportExcell()" class="sym-btn-file-upload" value="Upload" style="width: 50%; text-align: center;">&nbsp;Upload</button>*@
+                    <button type="button" title="Export Data" onclick="ExportExcell()" class="sym-btn-file-upload">&nbsp;Export</button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+    
+    <div id="container" class="ex_highlight">
+        <div id="demo" class="ex_highlight_row" style="overflow-x:auto;">
+            <table id="myDataTable" class="display">
+                <thead>
+                    <tr>
+                        <th style="text-align:center"><input type="checkbox" class="chkAll" /> Select All</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>@Session["DepartmentLabel"]</th>
+                        <th>@Session["SectionLabel"]</th>
+                        <th>@Session["ProjectLabel"]</th>
+                        <th>@Session["LabelOther1"]</th>
+                        @*<th>@Session["LabelOther2"]</th>
+                        <th>@Session["LabelOther3"]</th>*@
+                        <th>Zone</th>
+                        <th>Project</th>
+                        @* <th class="wth" >Photo</th>*@
+                    </tr>
+
+                    <tr>
+                        <th style="text-align:center">Actions</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Designation</th>
+                        <th>@Session["DepartmentLabel"]</th>
+                        <th>@Session["SectionLabel"]</th>
+                        <th>@Session["ProjectLabel"]</th>
+                        <th>@Session["LabelOther1"]</th>
+                        @*<th>@Session["LabelOther2"]</th>
+                        <th>@Session["LabelOther3"]</th>*@
+                        <th>Zone</th>
+                        <th>Project</th>
+
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+    <div style="display: none" id="formAppend"></div>
+
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+
+            "bServerSide": true,
+            "sAjaxSource": "/Common/ExportImport/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns":
+                [
+                    {
+                        "sName": "Id",
+                        "bSearchable": false,
+                        "bSortable": false,
+                        "sWidth": "8%",
+                        "sClass": "center",
+                        "fnRender": function (oObj) {
+                            return ' <input onclick="CheckAll(this)"  class="dSelected" type="checkbox" data-Id="' + oObj.aData[0] + '">' //+
+                            ;
+                        }
+                    }
+                    , { "sName": "Code", "sWidth": "8%" }
+                    , { "sName": "EmpName", "sWidth": "12%" }
+                    , { "sName": "Designation", "sWidth": "12%" }
+                    , { "sName": "Department ", "sWidth": "12%" }
+                    , { "sName": "Section", "sWidth": "8%" }
+                    , { "sName": "Project", "sWidth": "10%" }
+                    , { "sName": "Location", "sWidth": "10%" }
+                    , { "sName": "Zone", "sWidth": "8%" }
+                    , { "sName": "CostCenter", "sWidth": "12%" }
+
+                ]
+        });
+
+
+
+
+        oTable.columnFilter
+            ({
+                sPlaceHolder: "head:after",
+                aoColumns:
+                    [
+                        { type: "checkbox", "sClass": "chkAll" }
+                        , { type: "text" }
+                        , { type: "text" }
+                        , { type: "text" }
+                        , { type: "text" }
+                        , { type: "text" }
+                        , { type: "text" }
+                        , { type: "text" }
+                        , { type: "text" }
+                        , { type: "text" }
+                      
+                    ]
+            });
+    });
+
+    function ExportExcell() {
+
+        var ExportType = $("#ExportType :selected").val();
+
+        if (ExportType == "" || ExportType == null) {
+            ShowResult("Fail", "You are requested to Select Type  before Export!");
+            return;
+        }
+
+       
+        var questionMSG = "Are you sure to Export Data!";
+
+        Ask(questionMSG, function () {
+            var allowedTypes = ["EmployeeInfo", "Department", "Designation", "DesignationGroup", "Bank", "Branch"];
+
+            var IDs = $('#IDs').val();
+            var IDs = [];
+            var $Items = $(".dSelected:input:checkbox:checked");
+            var ExportType = $("#ExportType :selected").val();
+            
+            if (!allowedTypes.includes(ExportType))
+            {
+                if ($Items == null || $Items.length == 0) {
+                    ShowResult("Fail", "You are requested to Select before Export!");
+                    return;
+                }
+            }
+                
+               
+            $Items.each(function () {
+                var ID;
+                ID = $(this).attr("data-Id");
+                //alert(ID);
+                //console.log(ID, typeof ID);
+
+                var vID = ID.split("~")[0];
+
+                IDs.push(vID);
+            });
+
+           
+            var url = '/Common/ExportImport/ExportExcell';
+
+            var form = $('<form action="' + url + '"></form>');
+
+            IDs.forEach(function (item) {
+                form.append($('<input  value="' + item + '" name="Ids" />'))
+
+            })
+
+            form.append($('<input  value="' + ExportType + '" name="Type" />'))
+
+
+            form.appendTo('#formAppend').submit()
+
+
+          
+        });
+
+    }
+</script>

@@ -1,0 +1,102 @@
+﻿@model SymViewModel.WWF.PFReportVM
+@using UIHelper.MVC
+@using SymOrdinary
+@using System.Threading;
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+
+@{
+    ViewBag.Title = "Index";
+}
+@using (Html.BeginForm("PFSunDataTemplates", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmFR", @target = "_blank" }))
+{
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>WWF(Sun Data) </p>
+        </div>
+        @Html.HiddenFor(model => model.ReportType)
+        @Html.HiddenFor(model => model.TransType)
+
+     
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Fiscal Year From</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.YearFrom, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearCom required form-control selectDropdown" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Fiscal Period From</label>
+                    </div>
+                    <div class="editor-field">
+                        <div>
+                            @Html.SimpleDropDownFor(model => model.MonthFrom, "/Config/DropDown/DropDownPeriodByFYear?year=" + @Session["SessionYear"].ToString(), new { @class = " fpDetailsCom required form-control selectDropdown" })
+                        </div>
+                    </div>
+                </div>
+            </div>           
+       
+    </div>
+
+    <div class="headrow">
+        <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PFReport/PFSunDataTemplates" onclick="reportData(this);" id="" class="sym-btn-Excel-Export">&nbsp;Preview</button>
+
+
+
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            //$('.Dropdown').select2();
+            //$(".Dropdown").removeClass("form-control");
+            //////InitDropDowns();
+            InitDropdownsCommon();
+
+            $("#FiscalYearDetailId").addClass("required");
+
+        });
+
+
+
+        function reportData(sender) {
+            var fiscalyearCom = $("#fiscalyearCom").val();
+            var fpDetailsCom = $("#fpDetailsCom").val();
+
+            var fiscalyearCom = $("#fiscalyearCom").val();
+            var fpDetailsCom = $("#fpDetailsCom").val();
+             
+            if (fiscalyearCom == "") {
+                ShowResult("Fail", "Please select the Year From");
+                return true;
+            }
+            else if (fpDetailsCom == "") {
+                ShowResult("Fail", "Please select the Date To");
+                return true;
+            }
+
+            $("#frmFR").submit();
+        }
+
+
+
+    </script>
+
+
+
+}

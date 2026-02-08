@@ -1,0 +1,70 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *= require bootstrap
+ *= require_tree ./common 
+ */
+@page { size: 300mm 420mm }
+body {
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    font-size: 12px;
+}
+.IconOnly{
+	display:none;
+}
+.menubar{
+	display: none;
+}
+.tabbable{
+	display:none;
+}
+.panel .collapse{
+	display: block;
+	/*border: 1px solid #000000;*/
+}
+.widthcustom100{
+	width:100%;
+}
+.widthcustom50{
+	width:50%;
+}
+
+.thinbox {
+    margin: 10px 0px;
+    padding: 10px 20px;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    background: #000000;
+    background-color:#e6ffcc;
+}
+.SearchResult table {
+	border: 1px solid;
+    border-spacing: 0px;
+    width: 100%;
+}
+.btn{
+	border-color:#000000;
+	border-radius:25px;    
+}
+select
+{
+	border: 1px solid;
+}
+tr td{
+	border: 1px solid #7D7E7D;
+}
+input[type='text'], textarea {
+    border: 1px solid;
+    max-width: 100%;
+}
+.printdisplay{
+	display:none;
+}

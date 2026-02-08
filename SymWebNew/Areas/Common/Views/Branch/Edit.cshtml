@@ -1,0 +1,167 @@
+﻿@model SymViewModel.Common.BranchVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm()) {
+    @Html.ValidationSummary(true)
+
+            @Html.HiddenFor(model => model.CompanyId)
+            @Html.HiddenFor(model => model.Id)
+   
+                 <div class="headrow">
+           <button type="submit" title="Update Data" class="sym-btn-update">&nbsp;Update</button>
+ <label class="pull-right"> Branch > Edit</label>
+       </div>
+                
+                <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Branch</p>
+        </div>
+       <div class="branch">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Code)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Code, new {@placeholder = "Branch Code", @class ="required form-control" })
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Name)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Name, new {@placeholder = "Branch Name", @class ="required form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+             <div class="col-md-1">
+                    <div class="editor-label">
+                         @Html.LabelFor(model => model.IsActive)
+                    </div>
+                <div class="editor-field center">
+                @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+            </div> 
+                </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Address)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Address, new {@placeholder = "Address", @class =" form-control" })
+                    @Html.ValidationMessageFor(model => model.Address)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Country)
+                </div>
+                <div class="editor-field">
+                   <select id="Country" name="Country" data-val="@Model.Country"  data-url="/Config/DropDown/CountryEN/"  class = " country form-control" ></select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Division)
+                </div>
+                <div class="editor-field">
+                   <select id="Division" name="Division" data-val="@Model.Division"  data-url="/Config/DropDown/Division/"  class = " division form-control" ></select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.District)
+                </div>
+                <div class="editor-field">
+                   <select id="District" name="District" data-val="@Model.District"  data-url="/Config/DropDown/District/"  class = " district form-control" ></select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.City)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.City, new {@placeholder = "City", @class =" form-control" })
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.PostalCode)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.PostalCode, new {@placeholder = "Postal Code", @class =" form-control" })
+                    @Html.ValidationMessageFor(model => model.PostalCode)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Phone)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Phone, new {@placeholder = "Phone", @class =" form-control" })
+                    @Html.ValidationMessageFor(model => model.Phone)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Mobile)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Mobile, new {@placeholder = "Mobile", @class ="required form-control" })
+                    @Html.ValidationMessageFor(model => model.Mobile)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Fax)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Fax, new {@placeholder = "Fax", @class =" form-control" })
+                    @Html.ValidationMessageFor(model => model.Fax)
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Remarks, new {@placeholder = "Remarks", @class =" form-control" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+        </div>
+        </div>
+  @*  <p>
+        <input class="btn btn-info" type="submit" value="Save" />
+        <input type="button" class="btn btn-info" data-url="/Common/Branch" onclick="BackToList(this)" value="Back" />
+    </p>*@
+
+    </div>
+    
+       <div class="headrow">
+           <button type="submit" title="Update Data" class="sym-btn-update">&nbsp;Update</button>
+       </div>
+}
+@section Scripts {
+
+<script>
+    $(function () {
+        Country();
+        Division();
+        District();
+        //valiDation("frmDependent");
+        fromWriteColor("branch");
+    });
+</script>
+}

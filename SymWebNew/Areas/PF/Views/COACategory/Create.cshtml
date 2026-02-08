@@ -1,0 +1,116 @@
+﻿@model SymViewModel.PF.COAGroupVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "COACategory", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmCOACategory" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+
+    string PF_COAGroupUrl = "/Config/DropDown/PF_COAGroup?TransType=" + @ViewBag.TransType;
+    string PF_COASubGroupUrl = "/Config/DropDown/PF_COASubGroup?TransType=" + @ViewBag.TransType + "&GroupId=" + (Model != null ? Model.COAGroupId : "");
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmCOACategory')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">COA Category > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <label class="pull-right">COA Category > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/COACategory" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    </div>
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>COA Category</p>
+        </div>
+
+        <div class="COACategory">
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.COAGroupId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.COAGroupId, PF_COAGroupUrl, new { @class = "form-control required", @id = "ddlGroup" })
+                        @Html.ValidationMessageFor(model => model.COAGroupId)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.COASubGroupId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.COASubGroupId, PF_COASubGroupUrl, new { @class = "form-control required", @id = "ddlSubGroup" })
+                        @Html.ValidationMessageFor(model => model.COASubGroupId)
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Name)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Name, new { @placeholder = "Category Name", @class = "form-control required" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsActive)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmCOACategory')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/COACategory" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    </div>
+}
+
+<script>
+    $(function () {
+        valiDation("frmCOACategory");
+    });
+
+    function UpdateData() {
+        pageSubmit('frmCOACategory');
+    }
+
+    // If you want SubGroup dropdown to reload when Group changes
+    $(document).ready(function () {
+        $('#frmCOACategory').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+</script>

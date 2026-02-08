@@ -1,0 +1,190 @@
+﻿@model SymViewModel.HRM.EmployeeInfoVM
+@using UIHelper.MVC
+<div class="row">
+    <div class="col-md-6">
+        <div class="thinbox">
+    <div class="empInfo">
+        <div class="th_thinbox">
+        <p>@Html.ValueFor(model => model.EmpName)</p>   
+        </div>
+                <div class="row">
+                    @Html.HiddenFor(model => model.Id)
+              @*  @Html.HiddenFor(model => model.transferVM.jobjoinDate)*@
+
+                    <div class="editor-label col-md-4 ">
+                        <label><b>Code</b> </label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Employee Code", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        @Html.LabelFor(model => model.Designation)
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Designation, new { @placeholder = "Employee Designation", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Designation)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        <label>@Session["DepartmentLabel"]</label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Department, new { @placeholder = "Employee Department", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Department)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        <label>@Session["SectionLabel"]</label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Section, new { @placeholder = "Employee Section", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Section)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        <label>@Session["ProjectLabel"]</label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Project, new { @placeholder = "Employee Project", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Project)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        @using (Html.BeginForm("Left", "Left", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmLeft" }))
+        {
+
+    @Html.ValidationSummary(true)
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+        <p>Left Info</p>   
+        </div>
+        <div class="left">
+            @Html.HiddenFor(model => model.leftInformation.Id)
+            @Html.HiddenFor(model => model.leftInformation.EmployeeId)
+            <div class="row">
+             
+                    <div class=" col-md-4 editor-label">
+                        @Html.LabelFor(model => model.leftInformation.LeftType_E)
+                    </div>
+                    <div class="col-md-8 editor-field">
+                        @Html.SimpleDropDownFor(model => model.leftInformation.LeftType_E, "/Config/DropDown/LeftType", new { @class = "required form-control" })
+                        @Html.ValidationMessageFor(model => model.leftInformation.LeftType_E)
+                    </div>
+               <div class=" col-md-4 editor-label">
+                        @Html.LabelFor(model => model.leftInformation.EntryLeftDate)
+                    </div>
+                     <div class="col-md-8 editor-field">
+                        @Html.TextBoxFor(model => model.leftInformation.EntryLeftDate, new { @placeholder = "Issue Date", @class = " customDatePicker form-control" })
+                        @Html.ValidationMessageFor(model => model.leftInformation.EntryLeftDate)
+                    </div>
+                <div class=" col-md-4 editor-label">
+                        @Html.LabelFor(model => model.leftInformation.LeftDate)
+                    </div>
+                     <div class="col-md-8 editor-field">
+                        @Html.TextBoxFor(model => model.leftInformation.LeftDate, new { @placeholder = "Left Date",  @class = "required customDatePicker form-control" })
+                        @Html.ValidationMessageFor(model => model.leftInformation.LeftDate)
+                    </div>
+               <div class=" col-md-4 editor-label">
+                        @Html.LabelFor(model => model.leftInformation.Remarks)
+                    </div>
+                    <div class="col-md-8 editor-field">
+                        @Html.TextAreaFor(model => model.leftInformation.Remarks, new { @placeholder = "Remarks",   @class = " form-control", @rows = "1" })
+                        @Html.ValidationMessageFor(model => model.leftInformation.Remarks)
+                    </div>
+                <div class=" col-md-4 editor-label">
+                    @Html.LabelFor(model => model.leftInformation.IsSalalryProcess)
+                </div>
+                <div class="col-md-8 editor-field">
+                    @Html.CheckBoxFor(model => model.leftInformation.IsSalalryProcess, new { @placeholder = "Smoker", @class = "form-control" })
+
+
+                    @Html.ValidationMessageFor(model => model.leftInformation.IsSalalryProcess)
+                </div>
+
+            <div class=" col-md-4 editor-label">
+             &nbsp;
+                    </div>
+                <div class="col-md-8 editor-field">
+                    <input type="file" name="LeftInformationF" id="LeftInformationF" style="width: 200px;"  />
+                </div>
+          
+        
+      
+         <div class=" col-md-4 editor-label">
+             &nbsp;
+                    </div>
+       <div class="col-md-8 editor-field">
+ @*<button type="button" title="Save Data"  onclick="pageSubmit('frmLeft');"  class="sym-btn-save">&nbsp;Save</button>*@
+           <button type="button" title="Save Data" id="saveJSOND" class="sym-btn-save">&nbsp;Save </button>
+            <button type="button" title="Cancel Data" onclick="CancleLeft();" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+</div>
+            </div>
+
+    </div>
+      </div>
+        }
+            
+            </div>
+</div>
+<script>
+    fromReadColor("empInfo");
+    // for Transfer
+    //$('#empId').val('@Model.Code~@Model.EmpName');
+    if ('@Model.Code' == null || '@Model.Code' == "") {
+        $('.empId').val("");
+    }
+    else {
+        setTimeout(function () { $(".selectDropdown").val('@Model.Code').trigger('change'); }, 300);
+    }
+    //$('#empId').val('@Model.Code~@Model.EmpName');
+    InitDropDowns();
+    InitDateTimePickers();
+    fromWriteColor("left");
+    valiDation('frmLeft');
+    var isChange = false;
+    $('.form-control').change(function () {
+        isChange = true;
+    });
+    function CancleLeft() {
+        if (isChange == true) {
+            Ask("<h6>You have some changes in this form.</br>Click No to Ignore the chages.</h6>", null, function () {
+                isChange = false;
+                CancleLeft();
+            })
+        }
+        else {
+            isChange = false;
+            $(".EditPlace").hide();
+        }
+    }
+    //$('#saveJSON').click(function () {
+    //    if (isChange == true) {
+    //        if (pageSubmitJSON('frmLeft') == 0) {
+    //            var myData = $('#frmLeft').serialize();
+    //            var url = "/HRM/Left/Left";
+    //            var res = submit(url, myData);
+    //            if (res == true) {
+    //                location.reload();
+    //            }
+    //            isChange = false;
+    //        }
+    //    }
+    //    else {
+    //        ShowResult("Success", "You have no changes for save");
+    //    }
+    //});
+
+    $('#saveJSOND').click(function () {
+        var url = "/PF/Left/Left";
+
+        $form = $('#frmLeft');
+
+        $form.attr("action", url);
+        $form.submit();
+
+    });
+</script>
+
+

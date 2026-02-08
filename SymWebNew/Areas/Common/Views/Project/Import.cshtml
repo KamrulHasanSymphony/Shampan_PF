@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Import";
+}
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Projct Import </p>
+    </div>
+    <div class="row">
+        @using (Ajax.BeginForm("UploadExcel", "Project", null, new AjaxOptions { }, new { enctype = "multipart/form-data", id = "frmUploadExcel" }))
+        {
+
+            <div class="col-md-2 col-md-offset-3">
+                <label>&nbsp;</label>
+                <button type="button" title="Export Data" onclick="ExportExcell()" class="sym-btn-Excel-Export">&nbsp;Export</button>
+            </div>
+
+            <div class="col-md-2">
+                <label>File</label>
+                <input type="File" accept=".xlsx" name="file" id="FileUpload" style="width: 200px;" class="required" />
+            </div>
+            <div class="col-md-2">
+                <label>&nbsp;</label>
+                <button type="button" onclick="pageSubmit('frmUploadExcel');" title="Bonus Import" class="sym-btn-file-upload" value="Upload" style="width: 50%; text-align: center;">&nbsp;Upload</button>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    function ExportExcell() {
+
+        var questionMSG = "Are you sure you want to export data?";
+        Ask(questionMSG, function () {
+            window.location.href = '/Project/ExportExcell'; // Ensure correct controller name
+        });
+    }
+</script>

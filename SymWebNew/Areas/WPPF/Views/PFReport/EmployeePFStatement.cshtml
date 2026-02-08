@@ -1,0 +1,109 @@
+﻿@*@model SymViewModel.WPPF.PFParameterVM*@
+@using UIHelper.MVC
+@{
+    ViewBag.Title = "EmployeePFStatement";
+}
+@using (Html.BeginForm("EmployeePFStatements", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmEmployeePFStatement", @target = "_blank" }))
+{
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Employee WPPF Statement</p>
+        </div>
+        <div class="Withdraw">
+            <div class="row">
+                
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>Employee Name</label>
+                    </div>
+                    <div class="editor-field">
+                        @*@Html.SimpleDropDownFor(model => "EmployeeId", "/Config/DropDown/EmployeeCodeName", new { @id = "FiscalYearDetailId", @class = "form-control selectDropdown empId" })*@
+                        @Html.SimpleDropDown("EmployeeId", "/Config/DropDown/EmployeeCodeNameAll", new { @id = "EmployeeId", @class = " EmpId required form-control" })
+
+
+                        @*@Html.TextBox("DateFrom", "", new { @placeholder = "Date From", @class = " dtFrom customDatePicker form-control" })*@
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>From Date</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateFrom", "", new { @placeholder = "From Date", @class = " dtFrom customDatePicker form-control" })
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>To Date</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBox("DateTo", "", new { @placeholder = "To Date", @class = " dtTo customDatePicker form-control" })
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="headrow">
+        <button type="button" title="Click to View Report Summary"  class="sym-btn-report btnSummary">&nbsp;Summary</button>
+        <button type="button" title="Click to View Report Detail" class="sym-btn-report btnDetail">&nbsp;Detail</button>
+    </div>
+}
+
+<script>
+
+    $(function () {
+        
+       
+        $('.btnSummary').click(function () {
+
+            var empId = $('.EmpId').val();
+            var ToDate = $('.dtTo').val();
+            var FromDate = $('.dtFrom').val();
+            if (empId=="") {
+                ShowResult("Fail", "Please select Employee !");
+                return;
+            }
+            if (FromDate == "") {
+                ShowResult("Fail", "Please select From Date !");
+                return;
+            }
+            if (ToDate == "") {
+                ShowResult("Fail", "Please select To Date !");
+                return;
+            }
+            //alert(empId);
+           
+            var url = "/@ViewBag.TransType/PFReport/EmployeePFStatements?rType=" + "Summary" + '&EmployeeId=' + empId + '&ToDate=' + ToDate + '&FromDate=' + FromDate;
+            var win = window.open(url, '_blank');
+        });
+        $('.btnDetail').click(function () {
+
+            var empId = $('.EmpId').val();
+            var ToDate = $('.dtTo').val();
+            var FromDate = $('.dtFrom').val();
+            if (empId == "") {
+                ShowResult("Fail", "Please select Employee !");
+                return;
+            }
+            if (FromDate == "") {
+                ShowResult("Fail", "Please select From Date !");
+                return;
+            }
+            if (ToDate == "") {
+                ShowResult("Fail", "Please select To Date !");
+                return;
+            }
+            var url = "/@ViewBag.TransType/PFReport/EmployeePFStatements?rType=" + "Detail" + '&EmployeeId=' + empId + '&ToDate=' + ToDate+'&FromDate='+FromDate;
+            var win = window.open(url, '_blank');
+        });
+
+       
+        //valiDation("frmEmployeePFStatement");
+    });
+</script>

@@ -1,0 +1,268 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>ShampanERP-@ViewBag.Title</title>
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width" />
+
+    <script src="~/assets/javascripts/jQuery2.1.4.js"></script>
+    <link href="@Url.Content("~/assets/css/demo_table.css")" rel="stylesheet" type="text/css" />
+    <link href="~/assets/css/menu.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery-ui.css" rel="stylesheet" />
+
+    <link href="~/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/assets/stylesheets/common.css" rel="stylesheet" />
+    <link href="~/assets/css/jquery.ptTimeSelect.css" rel="stylesheet" />
+    <link href="~/assets/plugins/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+    @Styles.Render("~/Content/css")
+    @*@Scripts.Render("~/bundles/modernizr")*@
+    <script>
+        $(document).ready(function () {
+            var url = "";
+            $(".dialog-alert").dialog({
+                autoOpen: false,
+                resizable: false,
+                //height: 170,
+                title: 'Shampan ERP',
+                width: 350,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    var msg = '@Session["result"]';
+                    msg = msg.split("~");
+                    $(".ui-dialog").addClass('' + msg[0]);
+                    $(".msgg").html("" + msg[1]);
+                },
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            if ('@Session["result"]' != "") {
+                // $(".dialog-alert").dialog('open');
+                var msg = '@Session["result"]';
+                msg = msg.split("~");
+                ShowResult(msg[0], msg[1]);
+            }
+
+            $(".dialog-create").dialog({
+                title: 'Create',
+                autoOpen: false,
+                resizable: false,
+                width: 400,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 200
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    $(this).load(url);
+                }
+            });
+            $(".dialog-edit").dialog({
+                title: 'Update',
+                autoOpen: false,
+                resizable: false,
+                width: 400,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    $(this).load(url);
+                }
+            });
+            $(".dialog-confirm").dialog({
+                autoOpen: false,
+                resizable: false,
+                title: 'Shampan ERP',
+                height: 170,
+                width: 350,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(".ui-dialog").removeClass('Success');
+                    $(".ui-dialog").removeClass('Fail');
+                    test
+                },
+                buttons: {
+                    "OK": function () {
+                        $(this).dialog("close");
+                        window.location.href = url;
+                    },
+                    "Cancel": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".dialog-detail").dialog({
+                title: 'View User',
+                autoOpen: false,
+                resizable: false,
+                width: 400,
+                show: {
+                    effect: 'drop', direction: "up", effect: "blind",
+                    duration: 300
+                },
+                hide: {
+                    effect: "explode",
+                    duration: 300
+                },
+                modal: true,
+                draggable: true,
+                open: function (event, ui) {
+                    $(".ui-dialog-titlebar-close").hide();
+                    $(this).load(url);
+                },
+                buttons: {
+                    "Close": function () {
+                        $(this).dialog("close");
+                    }
+                }
+            });
+
+            $(".lnkCreate").live("click", function (e) {
+                url = $(this).attr('href');
+                $(".dialog-create").dialog('open');
+
+                return false;
+            });
+            $(".btnCreate").live("click", function (e) {
+                url = $(this).attr('data-url');
+                $(".dialog-create").dialog('open');
+
+                return false;
+            });
+            $(".lnkEdit").live("click", function (e) {
+                url = $(this).attr('href');
+                $(".dialog-edit").dialog('open');
+
+                return false;
+            });
+
+            $(".lnkDelete").live("click", function (e) {
+                url = $(this).attr('href');
+                //url = $(this).attr('data-url');
+                $(".dialog-confirm").dialog('open');
+
+                return false;
+            });
+
+            $(".lnkDetail").live("click", function (e) {
+                url = $(this).attr('href');
+                $(".dialog-detail").dialog('open');
+
+                return false;
+            });
+            $(".btncancel").live("click", function (e) {
+                $(".dialog-edit").dialog("close");
+                $(".dialog-create").dialog("close");
+                return false;
+            });
+
+        });
+    </script>
+</head>
+<body  style="min-height: 300px; width:200%;"  class="bgimg">
+
+    
+    <!--/.content-->
+     
+    <!--/.content-->
+    <div style="min-height: 300px;   class="">
+        @RenderBody()
+        @*@Scripts.Render("~/bundles/jquery")*@
+        @RenderSection("scripts", required: false)
+    </div>
+    <div>
+        <div class="dialog-alert" style="display: none">
+            <div class="msgg">jj</div>
+
+
+        </div>
+        <div class="dialog-confirm" style="display: none">
+            <p>
+                <span class="ui-icon ui-icon-//alert(" style="float: left; margin: 0 7px 20px 0;"></span>
+                Are you sure to delete?
+            </p>
+        </div>
+        <div class="dialog-create" style="display: none">
+        </div>
+        <div class="dialog-edit" style="display: none">
+        </div>
+        <div class="dialog-detail" style="display: none">
+        </div>
+    </div>
+   
+    <script src="~/assets/javascripts/custom.js"></script>
+    <script src="~/assets/javascripts/jquery.min.js"></script>
+    <script src="~/assets/javascripts/jquery.validate.js"></script>
+    <script src="~/assets/javascripts/jquery.validate.min.js"></script>
+    <script src="~/assets/javascripts/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/assets/javascripts/jquery-1.8.2.min.js"></script>
+    <script src="~/assets/javascripts/jquery-ui-1.8.24.min.js"></script>
+    <script src="~/assets/javascripts/default.js"></script>
+
+    <script src="~/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/assets/js/typeahead.bundle.js"></script>
+    <script src="/assets/js/form-elements.js"></script>
+    <script src="/assets/js/ui-buttons.js"></script>
+    <script src="/assets/js/form-dropzone.js"></script>
+    <script src="/assets/js/table-data.js"></script>
+    <script src="~/assets/js/jquery.dataTables.min.js"></script>
+    <script src="~/assets/javascripts/jquery.ptTimeSelect.js"></script>
+    <script>
+        $(function () {
+            if (typeof topMenuActive != 'undefined' && topMenuActive) {
+                $("li." + topMenuActive).addClass("leftMenuActive");
+            }
+        });
+    </script>
+</body>
+</html>
+

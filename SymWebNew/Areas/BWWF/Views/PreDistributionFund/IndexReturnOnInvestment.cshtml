@@ -1,0 +1,135 @@
+﻿@model SymViewModel.BWWF.PreDistributionFundVM
+@using UIHelper.MVC
+<div class="headrow">
+        <button type="button" title="Distribute Return On Investment" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="SummationData(this, 'myDataTable');" id="" class="sym-btn-detail">&nbsp;Distribute</button>
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+    <label class="pull-right">Return On Investment </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Return On Investment List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All</th>
+                <th>Investment Type</th>
+                <th>RO Investment Date</th>
+                <th>RO Investment Rate</th>
+                <th>Total Interest Value</th>
+                <th>Post Status</th>
+                
+                
+
+
+@*  
+InvestmentType
+ROIDate
+ROIRate
+TotalInterestValue
+Post
+*@
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+        @*<button type="button" title="Add New Return On Investment" data-url="/@ViewBag.TransType/ReturnOnInvestment/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+        <button type="button" title="Distribute Return On Investment" data-url="/@ViewBag.TransType/PreDistributionFund/Create" onclick="SummationData(this, 'myDataTable');" id="" class="sym-btn-detail">&nbsp;Distribute</button>
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PreDistributionFund" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+</div>
+
+@using (Html.BeginForm("Create", "PreDistributionFund", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPreDistributionFundGet" }))
+{
+    @Html.HiddenFor(model => model.FundingReferenceIds, new { @class = "cFundingReferenceIds" })
+    @Html.HiddenFor(model => model.TransactionType, new { @class = " cTransactionType" })
+}
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/PreDistributionFund/_indexReturnOnInvestment",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-value="' + oObj.aData[4] + '" data-Id="' + oObj.aData[0].split('~')[0] + '">'
+                                        + '&nbsp; <a title="Click on for Distribute" data-url="/@ViewBag.TransType/PreDistributionFund/Create"  onclick=btnValue(this); data-value="' + oObj.aData[4] + '" data-Id="' + oObj.aData[0].split('~')[0] + '\" class="sym-btn-detail-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "InvestmentType", "sWidth": "10%" }
+                            , { "sName": "ROIDate", "sWidth": "10%" }
+                            , { "sName": "ROIRate", "sWidth": "10%" }
+                            , { "sName": "TotalInterestValue", "sWidth": "10%" }
+                            , { "sName": "Post", "sWidth": "10%" }
+                            
+
+
+            ]
+        });
+    });
+</script>
+
+<script>
+    function btnValue(sender) {
+        var Id = $(sender).attr('data-Id');
+        $(".cFundingReferenceIds").val(Id);
+
+        Ask("Are you sure to Pre-Distribute!", function () {
+            $("#frmPreDistributionFundGet").submit();
+
+            //////window.location = url;
+        }, function () { })
+    }
+
+
+    function SummationData(sender, checkboxId, id) {
+        var SummationIds = "";
+        var TotalInterestValues = 0;
+        if (typeof id === 'undefined') {
+            var length = $("#" + checkboxId + " tbody input:checkbox").length;
+            for (var i = 0; i < length; i++) {
+                if ($($("#" + checkboxId + " tbody input:checkbox")[i]).is(":checked")) {
+                    SummationIds += $($("#" + checkboxId + " tbody input:checkbox")[i]).attr("data-Id") + "~";
+                }
+            }
+        }
+        else {
+            SummationIds = id + "~";
+        }
+
+        var url = $(sender).attr("data-url") + "?ids=" + SummationIds + "&tType=" + '@Model.TransactionType';;
+        if (SummationIds == "") {
+            ShowResult("Fail", "Select first to Pre-Distribute!");
+            return;
+        }
+
+        $(".cFundingReferenceIds").val(SummationIds);
+
+
+        Ask("Are you sure to Pre-Distribute!", function () {
+            $("#frmPreDistributionFundGet").submit();
+
+            ////window.location = url;
+        }, function () { })
+    }
+
+</script>
+
+

@@ -1,0 +1,175 @@
+﻿@*  
+BankBranchName
+ROBIDate
+ROBIRate
+TotalInterestValue
+Post
+
+*@
+
+@model SymViewModel.WWF.ReturnOnBankInterestVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "ReturnOnBankInterest", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmReturnOnBankInterest" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+    //IsTransferPDF
+    string PF_BankBranchNameUrl = "/Config/DropDown/PF_BankBranchName?TransType=" + @ViewBag.TransType;
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmReturnOnBankInterest')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Return On Bank Interest > Create</label>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/ReturnOnBankInterest/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=3&TransactionForm=BankInterest(ROBI)&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+            <label class="pull-right">Return On Bank Interest > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ReturnOnBankInterest" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Return On Bank Interest" data-url="/@ViewBag.TransType/ReturnOnBankInterest/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Return On Bank Interest</p>
+        </div>
+        <div class="ReturnOnBankInterest">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Auto Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankBranchId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.BankBranchId, PF_BankBranchNameUrl, new { @class = "required  form-control" })
+                        @Html.ValidationMessageFor(model => model.BankBranchId)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionDate, new { @placeholder = "RO Bank Interest Date", @class = " customDatePicker required  form-control" })
+                        @Html.ValidationMessageFor(model => model.TransactionDate)
+                    </div>
+                </div>
+                </div>
+            <div class="row">
+               
+ 
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalValue, new { @placeholder = "Total Interest Value", @class = " required cTotalInterestValue right NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.TotalValue)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmReturnOnBankInterest')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+           <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/ReturnOnBankInterest/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=BankWIthdraw&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ReturnOnBankInterest" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Return On Bank Interest" data-url="/@ViewBag.TransType/ReturnOnBankInterest/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmReturnOnBankInterest");
+    });
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmReturnOnBankInterest');
+    }
+
+    function PostData(sender) {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/ReturnOnBankInterest/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+
+</script>
+
+<script>
+    $('.cServiceChargeAmount, .cActualInterestAmount').change(function () {
+        TotalInterestValue();
+    });
+
+
+    function TotalInterestValue() {
+        var TotalInterestValue = 0;
+        var ActualInterestAmount = parseFloat($(".cActualInterestAmount").val().replace(/\,/g, ''));
+
+        var ServiceChargeAmount = parseFloat($(".cServiceChargeAmount").val().replace(/\,/g, ''));
+
+        TotalInterestValue = ActualInterestAmount - ServiceChargeAmount;
+
+        $(".cTotalInterestValue").val(TotalInterestValue);
+
+        NumberFormatCheck();
+    }
+    $(document).ready(function () {
+        $('#frmReturnOnBankInterest').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+
+</script>

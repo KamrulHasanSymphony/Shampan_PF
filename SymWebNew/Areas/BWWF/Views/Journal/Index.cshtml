@@ -1,0 +1,137 @@
+﻿@model SymViewModel.BWWF.GLJournalVM
+
+@using NPOI.SS.Formula.Functions
+@using UIHelper.MVC
+<div style="padding-top: 14px !important;" class="headrow">
+
+    <a title="Delete Journal Entry" href="/@ViewBag.TransType/Journal/Create?JournalType=@Model.JournalType" id="" class="sym-btn-add">&nbsp;New</a>
+    <label class="pull-right">Journal Entry</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        @{
+            if (Model.JournalType == 1)
+            {
+                <p class="thinHead">Journal Voucher</p>
+
+            }
+            else if (Model.JournalType == 2)
+            {
+                <p class="thinHead">Payment Voucher</p>
+
+            }
+            else if (Model.JournalType == 3)
+            {
+                <p class="thinHead">Receipt Voucher</p>
+            }
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="editor-label">
+                @Html.HiddenFor(model => model.JournalType)
+            </div>
+
+        </div>
+
+        @*<div class="col-md-2">
+                <div class="editor-label">
+                    <label>&nbsp;</label>
+                </div>
+                <div class="editor-field">
+                    <button type="button" title="Click to Search" id="searchBtn" class="sym-btn-search">&nbsp;Search</button>
+                </div>
+            </div>*@
+    </div>
+    <br />
+
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                 
+                <th class="center">Action</th>
+                <th class="center">Voucher No</th>
+                <th class="center">Voucher Date</th>                
+                @*<th class="center">Transaction Type</th>*@
+                <th class="center">Value</th>
+                <th class="center">Post Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/Journal/_index?JournalType=@Model.JournalType",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                {
+                    "sName": "Id",
+                    "bSearchable": false,
+                    "bSortable": false,
+                    "sWidth": "10%",
+                    "sClass": "center",
+                    "fnRender": function (oObj) {
+                        return ''
+                            + '&nbsp; <a title="Click on for Edit" style="text-decoration:none;" Id=""   class=" innerListLink  sym-btn-edit-row"   href=\"/@ViewBag.TransType/Journal/Edit/' + oObj.aData[0].split('~')[0] + '\"></a>'
+                            + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Journal/Post"  onclick=btnPostNoSplit(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                            + '&nbsp; <a title="Click on for Voucher" data-url="/@ViewBag.TransType/Journal/ReportView"  onclick=reportData(this); data-Id="' + oObj.aData[0].split('~')[0] + '\" class="sym-btn-report-row"></a>'
+;
+                    }
+                }, { "sName": "Code ", "sWidth": "15%" }
+                , { "sName": "TransactionDate", "sWidth": "15%" }
+                , { "sName": "TransactionValue", "sWidth": "15%" }
+                //, { "sName": "TransactionType", "sWidth": "15%" }
+                , { "sName": "Post", "sWidth": "12%" }
+            ]
+        });
+        $('#searchBtn').click(function () {
+            var oParam = {
+                "branchId": "",
+                "tType": "",
+                "dtFrom": "",
+                "dtTo": ""
+            };
+            oParam.branchId = $(".branchId :selected").val();
+            oParam.tType = '@Model.TransactionType';
+            oParam.dtFrom = $(".dtFrom").val();
+            oParam.dtTo = $(".dtTo").val();
+
+            $.ajax({
+                url: "/Acc/JournalEntry/Index",
+                cache: false,
+                data: oParam,
+                success: function (html) {
+                    oTable.fnDraw();
+                }
+            });
+        });
+    });
+</script>
+<script>
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var code = $(sender).attr('data-Id');
+        rptObj = new Object();
+        rptObj.id = code;
+        
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>
+

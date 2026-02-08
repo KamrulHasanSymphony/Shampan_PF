@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{D45367B5-20CB-40F0-8B22-3730F0BACBF0}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SymServices</RootNamespace>
+    <AssemblyName>SymServices</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccAuxPath>
+    </SccAuxPath>
+    <SccProvider>
+    </SccProvider>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EPPlus, Version=4.1.0.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\EPPlus.4.1.0\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
+    <Reference Include="Excel">
+      <HintPath>..\packages\ExcelDataReader.2.1.2.3\lib\net45\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\Microsoft.Office\Microsoft.Office.Interop.Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.ConnectionInfo, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MicrosoftSQL\Microsoft.SqlServer.ConnectionInfo.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Management.Sdk.Sfc, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MicrosoftSQL\Microsoft.SqlServer.Management.Sdk.Sfc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Smo, Version=14.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MicrosoftSQL\Microsoft.SqlServer.Smo.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Blend\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SymphonySofttech.Utilities">
+      <HintPath>..\packages\Utilities\SymphonySofttech.Utilities.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\CommonDAL.cs" />
+    <Compile Include="Common\CompanyprofileDAL.cs" />
+    <Compile Include="Common\DesignationDAL.cs" />
+    <Compile Include="Common\EmployeeDAL.cs" />
+    <Compile Include="Common\EmployeeInfoDAL.cs" />
+    <Compile Include="Common\ExportImportDAL.cs" />
+    <Compile Include="Common\GradeDAL.cs" />
+    <Compile Include="Common\HomePageInfoDashboardDAL.cs" />
+    <Compile Include="Common\DesignationGroupDAL.cs" />
+    <Compile Include="Common\DBUpdateDAL.cs" />
+    <Compile Include="Common\GroupDAL.cs" />
+    <Compile Include="Common\BankDAL.cs" />
+    <Compile Include="Common\SymUserRollDAL.cs" />
+    <Compile Include="Common\UserGroupDAL.cs" />
+    <Compile Include="Enum\EnumOderByDAL.cs" />
+    <Compile Include="Enum\EnumReportDAL.cs" />
+    <Compile Include="Loan\EmployeeLoanDAL.cs" />
+    <Compile Include="Common\CompanyDAL.cs" />
+    <Compile Include="PF\AutoJournalSetupDAL.cs" />
+    <Compile Include="PF\COACategoryDAL.cs" />
+    <Compile Include="PF\COASubCategoryDAL.cs" />
+    <Compile Include="PF\COASubGroupDAL.cs" />
+    <Compile Include="PF\EmployeeInfoForPFDAL.cs" />
+    <Compile Include="PF\EmployeeLeftInformationDAL.cs" />
+    <Compile Include="PF\EmployeePFDAL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PF\EmployeePFPaymentDAL.cs" />
+    <Compile Include="PF\EmployeeTransferDAL.cs" />
+    <Compile Include="PF\InvestmentAccruedDAL.cs" />
+    <Compile Include="PF\LoanDAL.cs" />
+    <Compile Include="PF\COAGroupDAL.cs" />
+    <Compile Include="PF\EmployeeForfeitureDAL.cs" />
+    <Compile Include="PF\EmployeeBreakMonthPFDAL.cs" />
+    <Compile Include="PF\EnumJournalTypeDAL.cs" />
+    <Compile Include="PF\GLJournalDAL.cs" />
+    <Compile Include="PF\COADAL.cs" />
+    <Compile Include="PF\EmployeePFOpeinigDAL.cs" />
+    <Compile Include="PF\BankChargeDAL.cs" />
+    <Compile Include="PF\InvestmentRenewDAL.cs" />
+    <Compile Include="PF\WPPFDAL.cs" />
+    <Compile Include="PF\PFReportDAL.cs" />
+    <Compile Include="PF\PFStructureDAL.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="PF\ProfitDistributionNewDAL.cs" />
+    <Compile Include="PF\LoanSattlementDAL.cs" />
+    <Compile Include="PF\LoanRepaymentToBankDAL.cs" />
+    <Compile Include="PF\LoanMonthlyPaymentDAL.cs" />
+    <Compile Include="PF\PFSettlementDetailDAL.cs" />
+    <Compile Include="PF\BankBranchDAL.cs" />
+    <Compile Include="PF\TransactionMediaDAL.cs" />
+    <Compile Include="PF\InvestmentNameDAL.cs" />
+    <Compile Include="PF\BankNameDAL.cs" />
+    <Compile Include="PF\PFSettlementDAL.cs" />
+    <Compile Include="PF\PFBankDepositDAL.cs" />
+    <Compile Include="PF\PFDetailDAL.cs" />
+    <Compile Include="PF\PreDistributionFundDAL.cs" />
+    <Compile Include="PF\ReturnOnBankInterestDAL.cs" />
+    <Compile Include="PF\EnumInvestmentTypeDAL.cs" />
+    <Compile Include="PF\InvestmentDAL.cs" />
+    <Compile Include="PF\SettlementPolicyDAL.cs" />
+    <Compile Include="Common\DepartmentDAL.cs" />
+    <Compile Include="Common\ProjectDAL.cs" />
+    <Compile Include="Common\RoleDAL.cs" />
+    <Compile Include="PF\WithdrawDAL.cs" />
+    <Compile Include="Common\UserRoleDAL.cs" />
+    <Compile Include="Enum\EnumCountryDAL.cs" />
+    <Compile Include="Enum\EnumGenderDAL.cs" />
+    <Compile Include="Enum\EnumYearDAL.cs" />
+    <Compile Include="Common\BranchDAL.cs" />
+    <Compile Include="Common\SectionDAL.cs" />
+    <Compile Include="Common\FiscalYearDAL.cs" />
+    <Compile Include="Common\SettingDAL.cs" />
+    <Compile Include="Common\SettingRoleDAL.cs" />
+    <Compile Include="Common\SetupDAL.cs" />
+    <Compile Include="Common\UserInformationDAL.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="BWWF\AutoJournalSetupDAL.cs" />
+    <Compile Include="BWWF\BankBranchDAL.cs" />
+    <Compile Include="BWWF\BankChargeDAL.cs" />
+    <Compile Include="BWWF\BankNameDAL.cs" />
+    <Compile Include="BWWF\COACategoryDAL.cs" />
+    <Compile Include="BWWF\COADAL.cs" />
+    <Compile Include="BWWF\COAGroupDAL.cs" />
+    <Compile Include="BWWF\COASubCategoryDAL.cs" />
+    <Compile Include="BWWF\COASubGroupDAL.cs" />
+    <Compile Include="BWWF\EmployeeBreakMonthPFDAL.cs" />
+    <Compile Include="BWWF\EmployeeForfeitureDAL.cs" />
+    <Compile Include="BWWF\EmployeeInfoForPFDAL.cs" />
+    <Compile Include="BWWF\EmployeePFDAL.cs" />
+    <Compile Include="BWWF\EmployeePFOpeinigDAL.cs" />
+    <Compile Include="BWWF\EmployeePFPaymentDAL.cs" />
+    <Compile Include="BWWF\EmployeeTransferDAL.cs" />
+    <Compile Include="BWWF\EnumInvestmentTypeDAL.cs" />
+    <Compile Include="BWWF\EnumJournalTypeDAL.cs" />
+    <Compile Include="BWWF\GLJournalDAL.cs" />
+    <Compile Include="BWWF\InvestmentAccruedDAL.cs" />
+    <Compile Include="BWWF\InvestmentDAL.cs" />
+    <Compile Include="BWWF\InvestmentNameDAL.cs" />
+    <Compile Include="BWWF\InvestmentRenewDAL.cs" />
+    <Compile Include="BWWF\LoanDAL.cs" />
+    <Compile Include="BWWF\LoanMonthlyPaymentDAL.cs" />
+    <Compile Include="BWWF\LoanRepaymentToBankDAL.cs" />
+    <Compile Include="BWWF\LoanSattlementDAL.cs" />
+    <Compile Include="BWWF\PFBankDepositDAL.cs" />
+    <Compile Include="BWWF\PFDetailDAL.cs" />
+    <Compile Include="BWWF\PFReportDAL.cs" />
+    <Compile Include="BWWF\PFSettlementDAL.cs" />
+    <Compile Include="BWWF\PFSettlementDetailDAL.cs" />
+    <Compile Include="BWWF\PFStructureDAL.cs" />
+    <Compile Include="BWWF\PreDistributionFundDAL.cs" />
+    <Compile Include="BWWF\ProfitDistributionNewDAL.cs" />
+    <Compile Include="BWWF\ReturnOnBankInterestDAL.cs" />
+    <Compile Include="BWWF\SettlementPolicyDAL.cs" />
+    <Compile Include="BWWF\TransactionMediaDAL.cs" />
+    <Compile Include="BWWF\WithdrawDAL.cs" />
+    <Compile Include="WWF\AutoJournalSetupDAL.cs" />
+    <Compile Include="WWF\BankBranchDAL.cs" />
+    <Compile Include="WWF\BankChargeDAL.cs" />
+    <Compile Include="WWF\BankNameDAL.cs" />
+    <Compile Include="WWF\COACategoryDAL.cs" />
+    <Compile Include="WWF\COADAL.cs" />
+    <Compile Include="WWF\COAGroupDAL.cs" />
+    <Compile Include="WWF\COASubCategoryDAL.cs" />
+    <Compile Include="WWF\COASubGroupDAL.cs" />
+    <Compile Include="WWF\EmployeeBreakMonthPFDAL.cs" />
+    <Compile Include="WWF\EmployeeForfeitureDAL.cs" />
+    <Compile Include="WWF\EmployeeInfoForPFDAL.cs" />
+    <Compile Include="WWF\EmployeePFDAL.cs" />
+    <Compile Include="WWF\EmployeePFOpeinigDAL.cs" />
+    <Compile Include="WWF\EmployeePFPaymentDAL.cs" />
+    <Compile Include="WWF\EmployeeTransferDAL.cs" />
+    <Compile Include="WWF\EnumInvestmentTypeDAL.cs" />
+    <Compile Include="WWF\EnumJournalTypeDAL.cs" />
+    <Compile Include="WWF\GLJournalDAL.cs" />
+    <Compile Include="WWF\InvestmentAccruedDAL.cs" />
+    <Compile Include="WWF\InvestmentDAL.cs" />
+    <Compile Include="WWF\InvestmentNameDAL.cs" />
+    <Compile Include="WWF\InvestmentRenewDAL.cs" />
+    <Compile Include="WWF\LoanDAL.cs" />
+    <Compile Include="WWF\LoanMonthlyPaymentDAL.cs" />
+    <Compile Include="WWF\LoanRepaymentToBankDAL.cs" />
+    <Compile Include="WWF\LoanSattlementDAL.cs" />
+    <Compile Include="WWF\PFBankDepositDAL.cs" />
+    <Compile Include="WWF\PFDetailDAL.cs" />
+    <Compile Include="WWF\PFReportDAL.cs" />
+    <Compile Include="WWF\PFSettlementDAL.cs" />
+    <Compile Include="WWF\PFSettlementDetailDAL.cs" />
+    <Compile Include="WWF\PFStructureDAL.cs" />
+    <Compile Include="WWF\PreDistributionFundDAL.cs" />
+    <Compile Include="WWF\ProfitDistributionNewDAL.cs" />
+    <Compile Include="WWF\ReturnOnBankInterestDAL.cs" />
+    <Compile Include="WWF\SettlementPolicyDAL.cs" />
+    <Compile Include="WWF\TransactionMediaDAL.cs" />
+    <Compile Include="WWF\WithdrawDAL.cs" />
+    <Compile Include="WPPF\AutoJournalSetupDAL.cs" />
+    <Compile Include="WPPF\BankBranchDAL.cs" />
+    <Compile Include="WPPF\BankChargeDAL.cs" />
+    <Compile Include="WPPF\BankNameDAL.cs" />
+    <Compile Include="WPPF\COACategoryDAL.cs" />
+    <Compile Include="WPPF\COADAL.cs" />
+    <Compile Include="WPPF\COAGroupDAL.cs" />
+    <Compile Include="WPPF\COASubCategoryDAL.cs" />
+    <Compile Include="WPPF\COASubGroupDAL.cs" />
+    <Compile Include="WPPF\EmployeeBreakMonthPFDAL.cs" />
+    <Compile Include="WPPF\EmployeeForfeitureDAL.cs" />
+    <Compile Include="WPPF\EmployeeInfoForPFDAL.cs" />
+    <Compile Include="WPPF\EmployeePFDAL.cs" />
+    <Compile Include="WPPF\EmployeePFOpeinigDAL.cs" />
+    <Compile Include="WPPF\EmployeePFPaymentDAL.cs" />
+    <Compile Include="WPPF\EmployeeTransferDAL.cs" />
+    <Compile Include="WPPF\EnumInvestmentTypeDAL.cs" />
+    <Compile Include="WPPF\EnumJournalTypeDAL.cs" />
+    <Compile Include="WPPF\GLJournalDAL.cs" />
+    <Compile Include="WPPF\InvestmentAccruedDAL.cs" />
+    <Compile Include="WPPF\InvestmentDAL.cs" />
+    <Compile Include="WPPF\InvestmentNameDAL.cs" />
+    <Compile Include="WPPF\InvestmentRenewDAL.cs" />
+    <Compile Include="WPPF\LoanDAL.cs" />
+    <Compile Include="WPPF\LoanMonthlyPaymentDAL.cs" />
+    <Compile Include="WPPF\LoanRepaymentToBankDAL.cs" />
+    <Compile Include="WPPF\LoanSattlementDAL.cs" />
+    <Compile Include="WPPF\PFBankDepositDAL.cs" />
+    <Compile Include="WPPF\PFDetailDAL.cs" />
+    <Compile Include="WPPF\PFReportDAL.cs" />
+    <Compile Include="WPPF\PFSettlementDAL.cs" />
+    <Compile Include="WPPF\PFSettlementDetailDAL.cs" />
+    <Compile Include="WPPF\PFStructureDAL.cs" />
+    <Compile Include="WPPF\PreDistributionFundDAL.cs" />
+    <Compile Include="WPPF\ProfitDistributionNewDAL.cs" />
+    <Compile Include="WPPF\ReturnOnBankInterestDAL.cs" />
+    <Compile Include="WPPF\SettlementPolicyDAL.cs" />
+    <Compile Include="WPPF\TransactionMediaDAL.cs" />
+    <Compile Include="WPPF\WithdrawDAL.cs" />
+    <Compile Include="WPPF\WPPFDAL.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SymOrdinary\SymOrdinary.csproj">
+      <Project>{83e8e9ad-89c0-4a1b-b554-c25c84d4db25}</Project>
+      <Name>SymOrdinary</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SymViewModel\SymViewModel.csproj">
+      <Project>{b98cc664-34bd-4405-b815-ce6f1d9d7b66}</Project>
+      <Name>SymViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>5</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="MSScriptControl">
+      <Guid>{0E59F1D2-1FBE-11D0-8FF2-00A0D10038BC}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="stdole">
+      <Guid>{00020430-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

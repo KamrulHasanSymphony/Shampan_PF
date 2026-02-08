@@ -1,0 +1,38 @@
+﻿@model IEnumerable<SymViewModel.Common.SettingsVM>
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Settings</p>
+    </div>
+    <div class="row">
+        <div class="col-md-2">
+            <div class="editor-label lab">
+                <label>Setting Group</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-label lab">
+                <label>Setting Name</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-label lab">
+                <label>Setting Value</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-label lab">
+                <label>Setting Type</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-label lab">
+                <label>Remark</label>
+            </div>
+        </div>
+    </div>
+    @foreach (var item in Model)
+    {
+        @Html.Partial("_Setting", item);
+    }
+</div>

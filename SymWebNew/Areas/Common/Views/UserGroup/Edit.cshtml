@@ -1,0 +1,140 @@
+﻿@model SymViewModel.Common.UserGroupVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+@using (Html.BeginForm("Edit", "UserGroup", FormMethod.Post, new { @Id = "frmUserGroup" }))
+{
+    @Html.ValidationSummary(true)
+
+    <div class="thinbox">
+        <div class="UserGroup">
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.GroupName)
+                </div>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(model => model.GroupName, null, new { @placeholder = "UserGroup Name", @class = "required form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsAdmin)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsAdmin, new { @class = " form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsESS)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsESS, new { @class = " form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsHRM)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsHRM, new { @class = " form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsAttendance)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsAttendance, new { @class = " form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsPayroll)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsPayroll, new { @class = " form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsTAX)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsTAX, new { @class = " form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsPF)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsPF, new { @class = " form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @Html.LabelFor(model => model.IsGF)
+                </label>
+                <div class="col-sm-1">
+                    @Html.CheckBoxFor(model => model.IsGF, new { @class = " form-control" })
+                </div>
+            </div>
+            @if (Model.IsSuper == false)
+            { 
+
+                <div class="row">
+                    <label class="col-sm-4">
+                        @Html.LabelFor(model => model.IsActive)
+                    </label>
+                    <div class="col-sm-1">
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+                    </div>
+                </div>
+            }
+            <div class="row">
+                <div class="col-md-4">
+                    @Html.LabelFor(model => model.Remarks)
+                </div>
+                <div class="col-md-8">
+                    @Html.TextBoxFor(model => model.Remarks, null, new { @placeholder = "Remarks", @class = " form-control" })
+                </div>
+            </div>
+
+            <div class="row">
+                @if (Model.IsSuper == false)
+                { 
+                    <label class="col-sm-3">
+
+                        <button type="button" title="Edit Data" onclick="Edit();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+                        <button type="button" title="Save Data" onclick="pageSubmit('frmUserGroup');" class="Save sym-btn-save">&nbsp;Save</button>
+                    </label>
+                }
+                <label class="col-sm-4">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+
+        </div>
+        @Html.HiddenFor(model => model.Id)
+    </div>
+}
+<script>
+    $(function () {
+        Edit();
+        valiDation("frmUserGroup");
+    });
+    function Edit() {
+        fnReadOnly("UserGroup");
+        if ($(".UserGroup").hasClass("readOnly")) {
+            $(".Save").hide();
+            $(".Edit").show();
+        }
+        else {
+            $(".Save").show();
+            $(".Edit").hide();
+        }
+    }
+</script>

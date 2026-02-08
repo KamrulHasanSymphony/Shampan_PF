@@ -1,0 +1,211 @@
+﻿@*
+    FiscalYearDetailId
+    DepositAmount
+    TotalEmployeePFValue
+    TotalEmployeerPFValue
+
+    DepositAmount
+    DepositDate
+*@
+
+@model SymViewModel.WPPF.PFBankDepositVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "PFBankDeposit", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPFBankDeposit" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.FiscalYearDetailId)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+    @Html.HiddenFor(model => model.ReferenceId)
+    string PF_BankBranchNameUrl = "/Config/DropDown/PF_BankBranchName?TransType=" + @ViewBag.TransType;
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPFBankDeposit')" class="sym-btn-save">&nbsp;Save</button>
+            <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFBankDeposit" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+            <label class="pull-right">WPPF Bank Deposit > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            @*<button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFBankDeposit/ReportView?d=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>*@
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFBankDeposit/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+             if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=3&TransactionForm=BankDeposit&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Bank</button>
+
+            }
+            @*<button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmPFBankDeposit')" class="sym-btn-update">&nbsp;Update</button>*@
+            <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFBankDeposit" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+            <button type="button" title="Add New WPPF Bank Deposit" data-url="/@ViewBag.TransType/PFBankDeposit/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+            <label class="pull-right">WPPF Bank Deposit > Edit</label>
+        }
+        @*<button type="button" title="Add New WPPF Bank Deposit" data-url="/@ViewBag.TransType/PFBankDeposit/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>WPPF Bank Deposit</p>
+        </div>
+        <div class="PFBankDeposit">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Auto Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankBranchId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.BankBranchId, PF_BankBranchNameUrl, new { @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.BankBranchId)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.DepositDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.DepositDate, new { @placeholder = "Deposit Date", @class = "  required customDatePicker form-control", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.DepositDate)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionMedia)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.TransactionMediaId, "/Config/DropDown/PF_TransactionMedia", new { @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.TransactionMedia)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ReferenceNo)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ReferenceNo, new { @placeholder = "Reference No", @class = "required  form-control" })
+                        @Html.ValidationMessageFor(model => model.ReferenceNo)
+                    </div>
+                </div>
+
+                @*<div class="col-md-3">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.BankBranchName)
+                        </div>
+                        <div class="editor-field">
+                            @Html.SimpleDropDownFor(model => model.BankBranchId, "/Config/DropDown/PF_BankBranchName", new { @class = " required form-control" })
+                            @Html.ValidationMessageFor(model => model.BankBranchId)
+                        </div>
+                    </div>*@
+
+
+
+            </div>
+            <div class="row">
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.DepositAmount)
+                    </div>
+                    <div class="editor-field">
+
+                        @Html.TextBoxFor(model => model.DepositAmount, new { @placeholder = "Deposit Amount", @class = " required right NumberCheck form-control" })
+
+                        @Html.ValidationMessageFor(model => model.DepositAmount)
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "   form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmPFBankDeposit')" class="sym-btn-save">&nbsp;Save</button>
+            <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFBankDeposit" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+          
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            @*<button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFBankDeposit/ReportView?d=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>*@
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/PFBankDeposit/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=3&TransactionForm=BankDeposit&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Bank</button>
+
+            }
+            @*<button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmPFBankDeposit')" class="sym-btn-update">&nbsp;Update</button>*@
+            <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/PFBankDeposit" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+            <button type="button" title="Add New WPPF Bank Deposit" data-url="/@ViewBag.TransType/PFBankDeposit/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+            @*<label class="pull-right">WPPF Bank Deposit > Edit</label>*@
+        }
+        @*<button type="button" title="Add New WPPF Bank Deposit" data-url="/@ViewBag.TransType/PFBankDeposit/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmPFBankDeposit");
+    });
+
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmPFBankDeposit');
+    }
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/PFBankDeposit/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+    $(document).ready(function () {
+        $('#frmPFBankDeposit').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+
+</script>

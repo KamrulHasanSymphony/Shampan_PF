@@ -1,0 +1,80 @@
+﻿@using UIHelper.MVC
+@{
+    ViewBag.Title = "Index";
+}
+<div class="headrow">
+    <button type="button" title="Add New Employee BWWF Opeinig" data-url="/@ViewBag.TransType/EmployeePFOpeinig/SingleEmployeePFOpeinigEdit" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    <button type="button" title=" Import/Export" id="" class="sym-btn-ExportImport" data-url="/@ViewBag.TransType/EmployeePFOpeinig/ImportEmployeePFOpeinig" onclick="GoTo(this)">&nbsp;Import/Export</button>
+   
+     <label class="pull-right">Employee BWWF Opening
+ </label>
+</div>
+<div class="thinbox">
+    @Html.HiddenFor(model => model.Id)
+    <div id="container">
+        <table id="myDataTable" class="display">
+            <thead>
+                <tr>
+                    <th class="center">Actions</th>
+                    <th class="center">Code</th>
+                    <th class="center">Name</th>
+                    <th class="center">Employee Contribution</th>
+                    <th class="center">Employer Contribution</th>
+                    <th class="center">Employee Profit</th>
+                    <th class="center">Employer Profit</th>
+                    <th class="center">Date</th>
+                    <th class="center">Post</th>
+                    
+                </tr>
+               
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New Employee BWWF Opeinig" data-url="/@ViewBag.TransType/EmployeePFOpeinig/SingleEmployeePFOpeinigEdit" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    <button type="button" title=" Import/Export" id="" class="sym-btn-ExportImport" data-url="/@ViewBag.TransType/EmployeePFOpeinig/ImportEmployeePFOpeinig" onclick="GoTo(this)">&nbsp;Import/Export</button>
+
+</div>
+<script>
+    $(function () {
+
+        SelectAllForDelete();
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/EmployeePFOpeinig/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                     {
+                         "sName": "Id",
+                         "bSearchable": false,
+                         "bSortable": false,
+                         "sWidth": "12%",
+                         "sClass": "center",
+                         "fnRender": function (oObj) {
+                             return '  &nbsp;  <a title="Click on for Edit" id="lnkEdit1" style="text-decoration:none;" Onclick="otherearningEdit(this);"  class=" sym-btn-edit-row"  data-Id="' + oObj.aData[0] + '"></a>'
+                                 + '&nbsp; <a title="Click on for Post" style="text-decoration:none;" data-url="/@ViewBag.TransType/EmployeePFOpeinig/MultiplePost" onclick="postedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-post-row"></a>'
+                             ;
+                         }
+                     }
+                      , { "sName": "Code", "sWidth": "10%" }
+                                , { "sName": "Name", "sWidth": "14%" }
+                                , { "sName": "EmployeeContribution", "sWidth": "10%", "sType": "numeric" }
+                                , { "sName": "EmployerContribution", "sWidth": "10%", "sType": "numeric" }
+                                , { "sName": "EmployeeProfit", "sWidth": "10%", "sType": "numeric" }
+                                , { "sName": "EmployerProfit", "sWidth": "10%", "sType": "numeric" }
+                                , { "sName": "OpeningDate", "sClass": "center", "sWidth": "10%" }
+                                , { "sName": "Post", "sClass": "right", "sWidth": "18%" }
+                ]
+            });
+            
+        });
+        function otherearningEdit(sender) {
+            window.location = "/@ViewBag.TransType/EmployeePFOpeinig/SingleEmployeePFOpeinigEdit?PFOpeinigId=" + $(sender).attr('data-Id');
+        }
+</script>

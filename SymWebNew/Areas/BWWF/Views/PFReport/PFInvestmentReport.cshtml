@@ -1,0 +1,65 @@
+﻿@model SymViewModel.BWWF.PFReportVM
+@using UIHelper.MVC
+@using SymOrdinary
+@using System.Threading;
+@{
+    ViewBag.Title = "PFInvestmentReport";
+}
+@using (Html.BeginForm("PFInvestmentRepor", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmEmployeePFStatement", @target = "_blank" }))
+{
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Investment</p>
+        </div>
+        <div class="Withdraw">
+            <div class="row">
+
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        <label>Year</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.YearTo, "/Config/DropDown/DropDownYear", new { @class = " fiscalyearTo required form-control selectDropdown" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="headrow">
+        <button type="button" title="Click to View Report" class="sym-btn-report btnFDR">&nbsp;FDR</button>
+        <button type="button" title="Click to View Report" class="sym-btn-report btnSanchayapatra">&nbsp;Sanchayapatra</button>
+    </div>
+}
+
+<script>
+
+    $(function () {
+        
+        $('.btnFDR').click(function () {
+            debugger;
+            var ToDate = $('#YearTo').val();
+            if (ToDate == "") {
+                ShowResult("Fail", "Please select To Date !");
+                return;
+            }
+            //alert(empId);
+
+            var url = "/@ViewBag.TransType/PFReport/PFInvestmentRepor?ToDate=" + ToDate + "&Type=" + "FDR";
+            var win = window.open(url, '_blank');
+        });
+        $('.btnSanchayapatra').click(function () {
+                        
+            var ToDate = $('#YearTo').val();
+            if (ToDate == "") {
+                ShowResult("Fail", "Please select To Date !");
+                return;
+            }
+            var url = "/@ViewBag.TransType/PFReport/PFInvestmentRepor?ToDate=" + ToDate + "&Type=" + "SynP";
+            var win = window.open(url, '_blank');
+        });
+
+    });
+</script>

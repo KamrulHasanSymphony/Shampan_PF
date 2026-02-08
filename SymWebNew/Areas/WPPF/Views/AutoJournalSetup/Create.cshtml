@@ -1,0 +1,119 @@
+﻿@*  
+PolicyName      
+JobAgeInMonth
+EmployeeContributionRatio 
+EmployeerContributionRatio
+Remarks  
+*@
+
+@model SymViewModel.WPPF.AutoJournalSetupVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "AutoJournalSetup", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmAutoJournalSetup" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    string PF_COAGroupUrl = "/Config/DropDown/PF_COAGroup?TransType=" + @ViewBag.TransType;
+    string PF_COAUrl = "/Config/DropDown/PF_COA?TransType=" + @ViewBag.TransType;
+    string PF_JournalFor = "/Config/DropDown/PF_JournalFor";
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmAutoJournalSetup')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Auto Journal Setup > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmAutoJournalSetup')" class="sym-btn-update">&nbsp;Update</button>
+            <label class="pull-right">Auto Journal Setup> Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/AutoJournalSetup" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Settlement Policy" data-url="/@ViewBag.TransType/SettlementPolicy/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Auto Journal Setup</p>
+        </div>
+        <div class="SettlementPolicy">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.JournalFor)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.JournalFor, PF_JournalFor, new { @class = "  form-control required" })
+                        @Html.ValidationMessageFor(model => model.JournalFor)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.JournalName)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.JournalName, new { @placeholder = "Journal Name", @class = "required  form-control" })
+                        @Html.ValidationMessageFor(model => model.JournalName)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Nature)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.Nature, "/Config/DropDown/AccountNature", new { @class = "required   form-control" })
+                        @Html.ValidationMessageFor(model => model.Nature)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.GroupName)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.GroupName, PF_COAGroupUrl, new { @class = "  form-control required" })
+                        @Html.ValidationMessageFor(model => model.GroupName)
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.COAID)
+                    </div>
+                    <div style="font-size:14px" class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.COAID, PF_COAUrl, new { @class = "  form-control required" })
+                        @Html.HiddenFor(model => model.COAID)
+                    </div>
+                </div>
+              
+            </div>
+           
+        </div>
+    </div>
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmAutoJournalSetup')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="pageSubmit('frmAutoJournalSetup')" class="sym-btn-update">&nbsp;Update</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/AutoJournalSetup" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New Settlement Policy" data-url="/@ViewBag.TransType/SettlementPolicy/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmAutoJournalSetup");
+    });
+
+    $(document).ready(function () {
+        $('#AutoJournalSetup').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+</script>

@@ -1,0 +1,104 @@
+﻿<div class="headrow">
+        <button type="button" title="Add New Gender" data-url="/Config/EnumGender/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Gender" data-url="/Config/EnumGender/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+		<label class="pull-right"> Gender</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Gender List</p>
+    </div>
+@*    <div class="row">
+    <input type="button" style="width:65px;" data-url="/Config/EnumGender/Create"  id="" class="btnCreate btn btn-info  " value="New" />
+    <input type="button" style="width:65px;" data-url="/Config/EnumGender/Delete" onclick="deletedData(this, 'myDataTable');" id="" class=" btn btn-info  " value="Delete" />
+           </div>*@
+    <p></p>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Name</th>
+                            <th>Active/Inactive</th>
+                            <th>Remarks</th>
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Name</th>
+                            <th>Active/Inactive</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="headrow">
+        <button type="button" title="Add New Gender" data-url="/Config/EnumGender/Create" id="" class="btnCreate sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Gender" data-url="/Config/EnumGender/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+</div>
+<script>
+    $(document).ready(function () {
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/Config/EnumGender/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;" href=\"/Config/EnumGender/Edit/' + oObj.aData[0] + '\" id="lnkEdit1"   class="lnkEdit sym-btn-edit-row"></a>' +
+                                    '&nbsp; <a title="Click on for Delete" style="text-decoration:none;"  data-url="/Config/EnumGender/Delete" onclick="deletedData(this, myDataTable,' + oObj.aData[0] + ');"  class="sym-btn-remove-row"></a>';
+                                }
+                            }
+                            , { "sName": "Name" }
+                            , { "sName": "Active" }
+                            , { "sName": "Remarks" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "select", values: ["Active", "Inactive"] }
+                       , { type: "text" }
+            ]
+            //"bProcessing": true,
+            //"aoColumns": [
+            //                {
+            //                    "sName": "Name",
+            //                    "bSearchable": false,
+            //                    "bSortable": false,
+            //                    "fnRender": function (oObj) {
+            //                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[1].split('~')[1] + '">'
+            //                        ;
+            //                    }
+            //                },
+            //               {
+            //                   "sName": "Name",
+            //                   "bSearchable": false,
+            //                   "bSortable": false,
+            //                   "fnRender": function (oObj) {
+            //                       return '<a id="lnkEdit1"  class="lnkEdit innerListLink" href=\"/Config/EnumGender/Edit/' + oObj.aData[1].split('~')[1] + '\">' + oObj.aData[1].split('~')[0] + '</a>'
+            //                       ;
+            //                   }
+            //               },
+            //                { "sName": "Remarks" },
+            //                { "sName": "Active" }
+            //]
+        });
+        SelectAllForDelete();
+    });
+    </script>

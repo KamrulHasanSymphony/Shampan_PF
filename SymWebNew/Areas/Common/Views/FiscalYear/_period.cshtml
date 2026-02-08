@@ -1,0 +1,40 @@
+﻿@model SymViewModel.Common.FiscalYearDetailVM
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row countPeriods">
+    @using (Html.BeginCollectionItem("FiscalYearDetailVM"))
+    {
+         @Html.HiddenFor(model => model.LoanLock)
+         @Html.HiddenFor(model => model.PFLock)
+         @Html.HiddenFor(model => model.TAXLock)
+         @Html.HiddenFor(model => model.PayrollLock)
+        <div class="col-md-2">
+            <div class="editor-field">
+        @Html.HiddenFor(model => model.Id)
+                @Html.TextBoxFor(model => model.PeriodName, new {@disabled="disabled", @class = "periodName form-control" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PeriodStart, new { @disabled="disabled", @class = "Start customDatePicker required form-control" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PeriodEnd, new { @disabled="disabled", @class = "End customDatePicker required form-control" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.CheckBoxFor(model => model.PeriodLock, new { @class = "PeriodLock required form-control" })
+            </div>
+        </div>
+        <div class="col-md-5">
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Remarks, new {@placeholder = "Period Remarks", @class = " form-control" })
+            </div>
+        </div>
+    }
+</div>

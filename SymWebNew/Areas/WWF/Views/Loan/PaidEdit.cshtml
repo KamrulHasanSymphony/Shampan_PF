@@ -1,0 +1,125 @@
+﻿@model SymViewModel.Loan.EmployeeLoanDetailVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Edit";
+    ViewBag.Location = "Edit"; 
+}
+
+@using (Html.BeginForm("PaidEdit", "Loan", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmGrade" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="Grade">
+            @Html.HiddenFor(model => model.Id)
+            @Html.HiddenFor(model => model.BranchId)
+            @Html.HiddenFor(model => model.EmployeeId)
+            @Html.HiddenFor(model => model.EmployeeLoanId)
+            <div class="row">
+                <label class="col-sm-3">
+               
+                       @Html.Label("Principal Amount")
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.PrincipalAmount, new { @placeholder = "Principal Amount", @class = "required right form-control",@readonly="disable"  })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                       @Html.Label("Interest Amount")
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.InterestAmount, new { @placeholder = "Interest Amount", @class = " required right form-control",@readonly="disable" })
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.Label("Installment Amount")
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.InstallmentAmount, new { @placeholder = "Installment Amount", @class = " right required form-control",@readonly="disable" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                       @Html.Label("Payment Date")
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.PaymentDate, new { @placeholder = "Payment Date", @class = " customDatePicker required form-control" })
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.Remarks)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-3">
+                    @*<button type="button" title="Save Data" onclick="pageSubmit('frmGrade');" class="Save sym-btn-save">&nbsp;Save</button>*@
+                    <button type="button" title="Save Data" id="SaveJSON" class=" Save sym-btn-save">&nbsp;Save</button>
+
+                </label>
+                <label class="col-sm-4">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+        </div>
+    </div>
+}
+    <script>
+        InitDatePickers();
+        $(function () {
+            InitDatePickers();
+            InitDateTimePickers();
+            valiDation("frmGrade");
+        });
+        
+    </script>
+
+<script>
+
+    $('#SaveJSON').click(function () {
+        var PaymentDate = $('#PaymentDate').val();
+
+        if (PaymentDate == "") {
+            ShowResult('Fail', "Please Select Payment Date");
+            return;
+        }
+
+        var url = "/Common/FiscalYear/FiscalPeriodLockCheck_PeriodDate?PeriodDate=" + PaymentDate;
+
+        $.ajax({
+            url: url
+               , type: 'Post'
+               , traditional: true
+               , beforeSend: function () { $(".loading").show(); }
+               , success: SaveUpdateData
+            , complete: function () { $(".loading").fadeOut(200).hide("slow") }
+        });
+
+
+    });
+
+    function SaveUpdateData(result) {
+        var results = result.split("~");
+        if (results[0].toLowerCase() == 'true') {
+
+            ShowResult("Fail", results[1]);
+
+        }
+        else {
+
+            pageSubmit('frmGrade');
+
+        }
+
+    }
+
+
+</script>

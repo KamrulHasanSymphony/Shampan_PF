@@ -1,0 +1,186 @@
+﻿@*
+    LoanDate
+    LoanAmount
+    Remarks
+*@
+
+@model SymViewModel.WWF.LoanVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "Loan", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmLoan" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="SaveData()" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Loan > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=Loan&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/Loan/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+
+            <label class="pull-right">Loan > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Loan" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="Add New Loan" data-url="/@ViewBag.TransType/Loan/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Loan</p>
+        </div>
+        <div class="Loan">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Auto Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionDate, new { @placeholder = "Loan Date", @class = " required customDatePicker form-control", @autocomplete = "off" })
+                        @Html.ValidationMessageFor(model => model.TransactionDate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Amount)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Amount, new { @placeholder = "Amount", @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.Amount)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InterestAmount)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.InterestAmount, new { @placeholder = "InterestAmount", @class = "required  form-control" })
+                        @Html.ValidationMessageFor(model => model.InterestAmount)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ReferenceNo)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ReferenceNo, new { @placeholder = "ReferenceNo", @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.ReferenceNo)
+                    </div>
+                </div>
+              
+               
+              
+               
+            </div>
+            <div class="row">
+
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="SaveData()" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=Loan&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+            }
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/Loan/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Loan" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="Add New Loan" data-url="/@ViewBag.TransType/Loan/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmLoan");
+
+        @*var BankBranchId = $(".cBankBranchId").val();
+        if ('@Model.Post'.toLowerCase != 'true' && '@Model.Operation' != "add") {
+            AvailableBalance(BankBranchId);
+        }*@
+    });
+
+
+</script>
+<script>
+
+ 
+</script>
+
+<script>
+
+    function SetTransactionType() {
+        var TransactionType = $(".cTransactionTypeId :selected").text();
+        $("#TransactionType").val(TransactionType);
+    }
+
+    function SaveData() {
+        SetTransactionType();
+
+        pageSubmit('frmLoan');
+
+
+    }
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmLoan');
+
+    }
+
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/Loan/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+</script>

@@ -1,0 +1,47 @@
+﻿@model SymViewModel.HRM.EmployeeInfoVM
+<div class="EditPlace">
+  @*  <div id="EmployeeInfo">
+    </div>*@
+@Html.Partial("_left",Model)
+ </div>
+<script>
+
+    function Left() {
+        for (var i = 0; i < $("[name='empId']").length; i++) {
+            if ($($("[name='empId']")[i]).is(':checked')) {
+                $("#leftInformation_EmployeeId").val($($("[name='empId']")[i]).val());
+                pageSubmit('frmLeft');
+                break;
+            }
+        }
+        if ($("#leftInformation_EmployeeId").val() == "0") {
+            ShowResult("Fail", "Please select employee!");
+            return;
+        }
+    }
+    function CancleLeft() {
+
+        // window.location.reload();
+        $(".EditPlace").hide();
+        $(".search").hide();
+    }
+    $(function () {
+     @*   $.get('@Url.Action("EmployeeInfo","Home", new { Id = Model.Id } )', function (data) {
+            $('#EmployeeInfo').html(data);
+        });*@
+
+
+      @*  $.get('@Url.Action("LeftInfo","Left")', function (data) {
+            $('#LeftInfo').html(data);
+        });*@
+
+
+    });
+    function jobjoin() {
+        if ($("#jobjoinDate").val() == "") {
+            $("#TransferNEW").html('');
+        }
+    }
+    var topMenuActive = "Transfer";
+</script>
+

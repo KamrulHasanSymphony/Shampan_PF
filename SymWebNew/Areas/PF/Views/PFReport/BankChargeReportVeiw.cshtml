@@ -1,0 +1,92 @@
+﻿@model SymViewModel.PF.PFReportVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create";
+}
+
+
+
+@using (Html.BeginForm("BankCharge_Statement", "PFReport", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmBankCharge_Statement"}))
+{
+    @Html.ValidationSummary(true)
+    @*@Html.HiddenFor(model => model.Id)*@
+    @*@Html.HiddenFor(model => model.PFHeaderId)*@
+    @*@Html.HiddenFor(model => model.Operation)*@
+    <h4>Bank Charge Report</h4>
+    <div class="thinbox">
+        <div class="EnumEEHead">
+            @*<div class="row">
+                <label class="col-sm-3">
+                    <label>Code</label>
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = " form-control" })
+                </div>
+            </div>*@
+
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.DateFrom)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.DateFrom, new { @placeholder = "Date From", @class = "customDatePicker form-control" })
+                    @Html.ValidationMessageFor(model => model.DateFrom)
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-3">
+                    @Html.LabelFor(model => model.DateTo)
+                </label>
+                <div class="col-sm-9">
+                    @Html.TextBoxFor(model => model.DateTo, new { @placeholder = "Date To", @class = "customDatePicker form-control" })
+                    @Html.ValidationMessageFor(model => model.DateTo)
+                </div>
+            </div>
+            <div class="row">
+                &nbsp;
+            </div>
+            <div class="row">
+                <label class="col-sm-4">
+                    @*<button type="button" title="Report Preview" onclick="pageSubmit('frmCOAGroup');" class="sym-btn-save">&nbsp;Preview</button>*@
+                    <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/PFReport/BankCharge_Statement" onclick="reportData(this);" id="" class="sym-btn-Excel-Export">&nbsp;Download</button>
+
+                </label>
+                <label class="col-sm-4">
+                    &nbsp;<button type="button" title="Clear the Entries" id="Clear" class="sym-btn-clear">&nbsp;Clear</button>
+
+                </label>
+                <label class="col-sm-4">
+                    <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+                </label>
+            </div>
+        </div>
+    </div>
+}
+<script>
+    $(function () {
+        InitDropDowns();
+        InitDateTimePickers();
+        $("#Clear").on('click', function () {
+            //$("#Code").val("");
+            $("#Id").val("");
+            $("#PFHeaderId").val("");
+            $("#DateFrom").val("");
+            $("#DateTo").val("");
+
+        });
+        $(".btncancel").on("click", function () {
+            $("#ui-datepicker-div").addClass("removedate")
+        })
+        $(".customDatePicker").on("click", function () {
+            $("#ui-datepicker-div").toggleClass("removedate")
+        })
+    });
+
+    function reportData(sender) {
+        $("#frmBankCharge_Statement").submit();
+    }
+
+</script>

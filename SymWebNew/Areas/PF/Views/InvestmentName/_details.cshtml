@@ -1,0 +1,65 @@
+﻿@model SymViewModel.PF.InvestmentNameDetailsVM
+
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row details">
+    @using (Html.BeginCollectionItem("InvestmentNameDetails"))
+    {
+        
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.InvestmentNameId)
+        
+        <div class="col-md-1" style="margin-top: 4px;">
+            <a id="" onclick="RemoveProduct(this);" class="sym-btn-remove-row "></a>&nbsp;
+            <a id="" onclick="EditProduct(this);" class="sym-btn-edit-row"></a>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.FromMonth, new { @placeholder = "From Month", @class = " dFromMonth form-control NumberCheck", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.ToMonth, new { @placeholder = "To Month", @class = "dToMonth form-control NumberCheck", @readonly = "readonly" })
+            </div>
+        </div>
+        
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.InterestRate, new { @class = " right dInterestRate  form-control NumberCheck", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @rows = "1", @class = "  form-control" })
+            </div>
+        </div>
+       
+         
+    }
+</div>
+<script>
+    $(function () {
+
+    });
+    $(document).ready(function () {
+        //$(".row.details").each(function () {
+        //    if (this.checked)
+        //        $('#autoUpdate').fadeIn('slow');
+        //    else
+        //        $('#autoUpdate').fadeOut('slow');
+        //});
+
+        //$('.isCheque').change(function () {
+        //    if (this.checked)
+        //        $('.chequeDiv').fadeIn('slow');
+        //    else
+        //        $('.chequeDiv').fadeOut('slow');
+
+        //});
+    });
+
+</script>
+

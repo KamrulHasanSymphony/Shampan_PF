@@ -1,0 +1,311 @@
+﻿@model SymViewModel.HRM.EmployeeInfoVM
+@using UIHelper.MVC
+<style>
+    input[type='text'], input[type='password'], textarea {
+        margin: 0px!important;
+    }
+</style>
+@using (Html.BeginForm("Create", "EmployeeForfeiture", FormMethod.Post, new { @Id = "afrmEmployeeEdit" }))
+{   
+    <div class="row">
+        <div class="col-md-4">
+            <div class="thinbox">
+                <div class="th_thinbox">
+                    <p>@Model.EmpName</p>
+                </div>
+                <div class="row">
+                    @Html.HiddenFor(model => model.Id)
+                    @Html.HiddenFor(model => model.Operation)
+                    @Html.HiddenFor(model => model.empPFForfeitureVM.Id, new { @class = "cPFOpeinigId" })
+                    @Html.HiddenFor(model => model.empPFForfeitureVM.EmployeeId)
+                    @Html.HiddenFor(model => model.empPFForfeitureVM.Post, new { @class = "cPost" })
+                    @*@Html.HiddenFor(model => model.FiscalYearDetailId)*@
+                    @*@Html.HiddenFor(model => model.EmployeeOtherEarningVM.EarningTypeId, new { @class = " form-control " })*@
+                    <div class="editor-label col-md-4 ">
+                        <label><b>Code</b> </label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Employee Code", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        @Html.LabelFor(model => model.JoinDate)
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.JoinDate, new { @placeholder = "Employee Join Date", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.JoinDate)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        @Html.LabelFor(model => model.Designation)
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Designation, new { @placeholder = "Employee Designation", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Designation)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        <label>@Session["DepartmentLabel"]</label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Department, new { @placeholder = "Employee Department", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Department)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        <label>@Session["SectionLabel"]</label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Section, new { @placeholder = "Employee Section", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Section)
+                    </div>
+                    <div class="editor-label col-md-4">
+                        <label>@Session["ProjectLabel"]</label>
+                    </div>
+                    <div class="editor-field col-md-8">
+                        @Html.TextBoxFor(model => model.Project, new { @placeholder = "Employee Project", @class = "  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.Project)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-8">
+            <div class="thinbox">
+
+                <div class="row" id="ot">
+                    <div class="col-md-3">
+                        <div class="editor-label">
+                              @Html.LabelFor(model => model.empPFForfeitureVM.EmployeeContribution)                        </div>
+ <div class="editor-field"> @Html.TextBoxFor(model => model.empPFForfeitureVM.EmployeeContribution, new { @placeholder = "Employee Contribution", @class = "cEmployeeContribution  form-control" })
+                  @Html.ValidationMessageFor(model => model.empPFForfeitureVM.EmployeeContribution)
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.empPFForfeitureVM.EmployerContribution)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.empPFForfeitureVM.EmployerContribution, new { @placeholder = "Employer Contribution", @class = "cEmployerContribution  form-control" })
+                            @Html.ValidationMessageFor(model => model.empPFForfeitureVM.EmployerContribution)
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.empPFForfeitureVM.EmployeeProfit)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.empPFForfeitureVM.EmployeeProfit, new { @placeholder = "Employee Profit", @class = "cEmployeeProfit  form-control" })
+                            @Html.ValidationMessageFor(model => model.empPFForfeitureVM.EmployeeProfit)
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.empPFForfeitureVM.EmployerProfit)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.empPFForfeitureVM.EmployerProfit, new { @placeholder = "Employer Profit", @class = "cEmployerProfit  form-control" })
+                            @Html.ValidationMessageFor(model => model.empPFForfeitureVM.EmployerProfit)
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.empPFForfeitureVM.OpeningDate)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.empPFForfeitureVM.OpeningDate, new { @placeholder = "Forfeiture Date", @class = "dpDate cOpeningDate customDatePicker required form-control" })
+                            @Html.ValidationMessageFor(model => model.empPFForfeitureVM.OpeningDate)
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.empPFForfeitureVM.Remarks)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextAreaFor(model => model.empPFForfeitureVM.Remarks, new { @placeholder = "Remarks", @class = "  form-control" })
+                            @Html.ValidationMessageFor(model => model.empPFForfeitureVM.Remarks)
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                 
+                    
+                </div>
+                <br />
+                <div class="headrow">
+                    <button type="button" title="Save Data" id="SaveJSON" class=" Save sym-btn-save">&nbsp;Save</button>
+                    <button type="button" title="Save Data" id="UpdateJSON" class=" Save sym-btn-update">Update</button>
+                    @*<button type="button" title="Delete Data" id="DeleteJSON" class=" Save sym-btn-remove">&nbsp;Delete</button>*@
+                    <button type="button" title="Post Data" id="PostJSON" class=" Save sym-btn-post">&nbsp;Post</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<script>
+ 
+    $(function () {
+        InitDateTimePickers();
+    });
+    $(function () {
+
+        InitDropDowns();
+        checkvalue();
+        if ('@Model.Code' == null || '@Model.Code' == "") {
+            $('#empId').val("");
+        }
+        else {
+            $('#empId').val('@Model.Code~@Model.EmpName');
+        }
+        $('.selectDropdown').val('@Model.Code').change();
+    });
+    $('#DeleteJSON').click(function () {
+        var myData = $('#afrmEmployeeEdit').serialize();
+        var url = "/@ViewBag.TransType/EmployeeOtherEarning/Create?btn=delete";
+        submit(url, myData);
+        $('.EarningAmount').val('0');
+    });
+    $(function () {
+        valiDation("afrmEmployeeEdit");
+    });
+    function checkvalue() {
+        var empPFOpeinigId = '@Model.empPFForfeitureVM.Id';
+        var operation = '@Model.Operation';
+
+        if (empPFOpeinigId == 0 || empPFOpeinigId == "") {
+            $("#SaveJSON").show();
+            $("#UpdateJSON").hide();
+            $("#PostJSON").hide();
+        }
+        else {
+            if (operation == "add") {
+                $("#SaveJSON").show();
+                $("#UpdateJSON").hide();
+
+            }
+            else {
+                $("#SaveJSON").hide();
+                $("#UpdateJSON").show();
+            }
+            //$("#SaveJSON").hide();
+
+            $("#PostJSON").show();
+        }
+    }
+
+    function checkbtn() {
+        $("#SaveJSON").hide();
+        $("#UpdateJSON").show();
+        $("#PostJSON").show();
+    }
+
+    $('#SaveJSON').click(function () {
+        
+        var PFOpeningValue = $('.cPFOpeningValue').val();
+        var OpeningDate = $('.cOpeningDate').val();
+
+        var Code = $('#Code').val();
+        if (Code == "") {
+            ShowResult("Fail", "Please Select Code!");
+            return;
+        }
+        if (PFOpeningValue == "" || PFOpeningValue == "0" || PFOpeningValue == "0.0" || PFOpeningValue == "0.00") {
+            ShowResult("Fail", "Please Enter WWF Opening Value!");
+            return;
+        }
+        if (OpeningDate == "") {
+            ShowResult("Fail", "Please Select Opening Date!");
+            return;
+        }
+        var myData = $('#afrmEmployeeEdit').serialize();
+        var url = "/@ViewBag.TransType/EmployeeForfeiture/Create";
+        //submit(url, myData);
+        //location.reload();
+
+        ////url = "/@ViewBag.TransType/EmployeeForfeiture/Create";
+        $.ajax({
+            url: url,
+            data: myData,
+            type: 'POST',
+            beforeSend: function () { $(".loading").show(); },
+            complete: function () { $(".loading").fadeOut(200).hide("slow") },
+            success: function (data) {
+
+                var msg1 = data.split('~')[0];
+                var msg2 = data.split('~')[1];
+                var msg3 = data.split('~')[2];
+             
+
+                if (msg1.toLowerCase() == "success") {
+                    checkbtn();
+                    $('#Id').val(msg3);
+                    $('.cPFOpeinigId').val(msg3);
+
+                }
+
+                ShowResult(msg1, msg2);
+            },
+            
+        });
+
+    });
+
+    $('#UpdateJSON').click(function () {
+
+        var PFOpeningValue = $('.cPFOpeningValue').val();
+        var OpeningDate = $('.cOpeningDate').val();
+        var Post = $('.cPost').val();
+
+        var Code = $('#Code').val();
+        if (Code == "") {
+            ShowResult("Fail", "Please Select Code!");
+            return;
+        }
+        if (PFOpeningValue == "" || PFOpeningValue == "0" || PFOpeningValue == "0.0" || PFOpeningValue == "0.00") {
+            ShowResult("Fail", "Please Enter WWF Opening Value!");
+            return;
+        }
+        if (OpeningDate == "") {
+            ShowResult("Fail", "Please Select Opening Date!");
+            return;
+        }
+
+        if (Post.toLowerCase() == "true") {
+            ShowResult("Fail", "This transaction already posted!");
+            return;
+        }
+
+        var myData = $('#afrmEmployeeEdit').serialize();
+        var url = "/@ViewBag.TransType/EmployeeForfeiture/Update";
+        submit(url, myData);
+
+    });
+
+    $('#PostJSON').click(function () {
+
+        var Post = $('.cPost').val();
+
+        var Code = $('#Code').val();
+        if (Code == "") {
+            ShowResult("Fail", "Please Select Code!");
+            return;
+        }
+        
+        if (Post.toLowerCase() == "true") {
+            ShowResult("Fail", "This transaction already posted!");
+            return;
+        }
+
+        var myData = $('#afrmEmployeeEdit').serialize();
+        var url = "/@ViewBag.TransType/EmployeeForfeiture/Post";
+        submit(url, myData);
+        //location.reload();
+
+    });
+
+
+</script>
+
+

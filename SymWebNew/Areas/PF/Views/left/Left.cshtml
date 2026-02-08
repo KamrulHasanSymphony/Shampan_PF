@@ -1,0 +1,137 @@
+﻿<div class="headrow">
+        <label class="pull-right">Left</label>
+</div>
+<div class="EditPlace">
+    <div id="EmployeeInfo">
+    </div>
+    <div id="LeftInfo">
+    </div>
+ </div>
+
+
+
+<div id="detailsDiv">
+</div>
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Active Employee List</p>
+    </div>
+    <div id="container">
+            <div id="demo">
+    <table id="myDataTable"  class="display">
+                   <thead>
+                        <tr>
+                           <th class="center" >Show Detail</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Join Date</th>
+                        </tr>
+                           <tr>
+                            <th  class="center" >Actions</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Join Date</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table> 
+                </div>
+        </div>
+    <br />
+    </div>
+<script>
+    $(function () {
+        $(".EditPlace").hide();
+        customToollip();
+        valiDation("frmLeft");
+        InitDateTimePickers();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/PF/Left/_indexActiveEmployee",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <a title="Click on for Details" style="text-decoration:none;" onclick="SelectEmployee(this);" name="empId" data-Id=""  data-employeeId="' + oObj.aData[0] + '" class="sym-btn-detail-row sym-sx"></a>'
+
+                                    //return ' <a title="Click on for Detail" style="text-decoration:none;"  onclick="SelectEmployee(this);" name="empId" value="' + oObj.aData[0] + '" class="sym-btn-detail-row sym-sx"></a>'
+                                    ;
+                                }
+                            }
+                                                         //{
+                                                         //    "sName": "Code",
+                                                         //    "bSearchable": false,
+                                                         //    "bSortable": false,
+                                                         //    "fnRender": function (oObj) {
+                                                         //        return ' <lable class="ActionWidth">' + oObj.aData[1] + '</lable>'
+                                                         //        ;
+                                                         //    }
+                                                         //},
+                            , { "sName": "Code", "sWidth": "12%" }
+                            , { "sName": "EmpName", "sWidth": "16%" }
+                            , { "sName": "Department", "sWidth": "16%" }
+                            , { "sName": "Designation", "sWidth": "16%" }
+                            , { "sName": "JoinDate", "sWidth": "18%" }
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "date-range" }
+            ]
+        });
+    });
+    function Left() {
+        for (var i = 0; i < $("[name='empId']").length; i++) {
+            if ($($("[name='empId']")[i]).is(':checked')) {
+                $("#leftInformation_EmployeeId").val($($("[name='empId']")[i]).val());
+                pageSubmit('frmLeft');
+                break;
+            }
+        }
+        if ($("#leftInformation_EmployeeId").val() == "0") {
+            ShowResult("Fail", "Please select employee!");
+            return;
+        }
+    }
+    function CancleLeft() {
+        // window.location.reload();
+        $(".EditPlace").hide();
+    }
+@*    function SelectEmployee(sender) {
+        var EmployeeId = $(sender).val();
+        $("#EmployeeInfo").load('@Url.Action("EmployeeInfo", "Home")' + '?Id=' + EmployeeId);
+        $("#LeftInfo").load('@Url.Action("LeftInfo", "Home")');
+        $(".EditPlace").show();
+    }*@
+
+    function SelectEmployee(sender) {
+        var Id = $(sender).attr("data-Id");
+        var EmployeeId = $(sender).attr("data-employeeId");
+        $("#detailsDiv").load('@Url.Action("leftdetailCreate", "left")' + '?id=' + Id + '&employeeId=' + EmployeeId);
+         $(".EditPlace").show();
+     }
+
+
+    var topMenuActive = "Left";
+    </script>

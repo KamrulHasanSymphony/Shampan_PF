@@ -1,0 +1,307 @@
+﻿@model SymViewModel.BWWF.EETransactionVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "EETransaction", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmEETransaction" }))
+{   
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.TransactionType)
+    @Html.HiddenFor(model => model.Post)
+    @Html.HiddenFor(model => model.Operation)
+    <div class="headrow">
+        @if (Model.Operation == "update")
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/EETransaction/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Report</button>
+            <label class="pull-right">EETransaction > Edit</label>
+        }
+        else if (Model.Operation == "add")
+        {
+            <button type="button" title="Save Data" onclick="pageSubmit('frmEETransaction')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">EETransaction > Create</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/EETransaction?tType=@Model.TransactionType" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="Add New EE Transaction" data-url="/@ViewBag.TransType/EETransaction/Create?tType=@Model.TransactionType" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Earning Expense Transaction</p>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Code)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @readonly = "readonly", @class = "  form-control" })
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.TransactionDateTime)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.TransactionDateTime, new { @placeholder = "Transaction Date", @class = " customDatePicker required form-control" })
+                    @Html.ValidationMessageFor(model => model.TransactionDateTime)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ReferenceNo1)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.ReferenceNo1, new { @placeholder = "Reference No1", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.ReferenceNo1)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @rows = "1", @class = " form-control" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Earning Expense Head Detail</p>
+        </div>
+        <div id="ItemDetail" class="row">
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.eeTransactionDetailVMs.FirstOrDefault().EEHeadName)
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDownFor(model => model.eeTransactionDetailVMs.FirstOrDefault().EEHeadId, "/Config/DropDown/PF_EEHead", new { @class = "eeHead  form-control selectDropdown" })
+                    @Html.HiddenFor(model => model.eeTransactionDetailVMs.FirstOrDefault().EEHeadId)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.eeTransactionDetailVMs.FirstOrDefault().SubTotal)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("SubTotal", null, new { @placeholder = "Sub Total", @class = " NumberCheck right STotal  form-control" })
+                </div>
+            </div>
+            <div style="margin-top: 7px;" class="col-md-2">
+                <div class="editor-label">
+                    &nbsp;
+                </div>
+                <div class="editor-field">
+                    <div id="ItemExist" title="Add Earning Transaction Detail" class="sym-btn-add-row AddRow" data-container="editorItemRows4">Add EE Head</div>
+                </div>
+            </div>
+
+        </div>
+        <div id="detail" hidden>
+            <div id="editorItemRows4">
+                @if (Model.eeTransactionDetailVMs != null)
+                {
+                    <div class="row">
+                        <div class="col-md-1">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-3">
+                            <div class="editor-label">
+                                <label>Earning Expencse Head</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">
+                                <label>Sub Total</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="editor-label">
+                                <label>Remarks</label>
+                            </div>
+                        </div>
+                    </div>
+                    foreach (var item in Model.eeTransactionDetailVMs)
+                    {
+                        Html.RenderPartial("_details", item);
+                    }
+                }
+            </div>
+            <hr style="margin-top: 10px!important; margin-bottom: 10px!important;" />
+            <div style="font-size: 1.2em;" class="row">
+                <div class="col-md-2">
+                    &nbsp;
+                </div>
+                <div style="text-align: right; margin-top: 10px;" class="col-md-2">
+                    <label>Grand Total</label>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-field">
+                        <strong>@Html.TextBox("GTotal", null, new { @class = "right GTotal form-control", @readonly = "readonly" })</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        @if (Model.Operation == "update")
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/EETransaction/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Report</button>
+        }
+        else if (Model.Operation == "add")
+        {
+            <button type="button" title="Save Data" onclick="pageSubmit('frmEETransaction')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/EETransaction" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="Add New EE Transaction" data-url="/@ViewBag.TransType/EETransaction/Create?tType=@Model.TransactionType" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(function () {
+            valiDation("frmEETransaction");
+            ShowHide();
+        });
+
+        function reportData(sender) {
+            var url = $(sender).attr('data-url');
+            var code = $("#Code").val();
+            rptObj = new Object();
+            rptObj.Code = code;
+            rptObj.RT = "D";
+            rptObj.tType = '@Model.TransactionType';
+            var rptParam = $.param(rptObj);
+            url = url + "?" + rptParam;
+            var win = window.open(url, '_blank');
+        }
+
+        function UpdateData() {
+            var Post = $("#Post").val();
+            if (Post.toLowerCase() == 'true') {
+                ShowResult("Fail", "Data Already Posted. Can't Update!");
+                return;
+            }
+            pageSubmit('frmEETransaction');
+        }
+
+        function PostData(sender) {
+            var Id = $("#Id").val();
+            var Post = $("#Post").val();
+            if (Post.toLowerCase() == 'true') {
+                ShowResult("Fail", "Data Already Posted!");
+                return;
+            }
+            var url = '/@ViewBag.TransType/EETransaction/Post?ids=' + Id + '~';
+            var questionMSG = "Are you sure to Post Data!";
+            singlePostDlete(questionMSG, url);
+        }
+    </script>
+    <script>
+        $('.AddRow:not(.AddRowInited)').on("click", function () {
+            var container = $(this).attr('data-container');
+            AddRow(container)
+            return false;
+        }).addClass("AddRowInited");
+
+        function AddRow(container) {
+            var ItemExist = 0;
+            var url = '/@ViewBag.TransType/EETransaction/BlankItem';
+            var oParam = { "EEHeadId": "", "STotal": "" };
+            var eeHeadId = $('.eeHead  :selected').val();
+
+            if (eeHeadId == "") {
+                ShowResult("Fail", "Please select the Item!");
+                return;
+            }
+
+            oParam.EEHeadId = eeHeadId;
+            oParam.STotal = $(".STotal").val();
+            $.each($("input.dEEHeadId"), function (i, item) {
+                var addedItem = $(item).val();
+                if (eeHeadId == addedItem) {
+                    ItemExist = 1;
+                }
+            });
+            if (ItemExist == "1") {
+                ShowResult("Fail", "This Earning Expense Head Already Added!");
+                return;
+            }
+            else if (oParam.STotal == "") {
+                ShowResult("Fail", "Please Enter Sub Total!");
+                return;
+            }
+            $.ajax({
+                url: url,
+                //type: 'POST',
+                cache: false,
+                data: oParam,
+                success: function (html) {
+                    $("#" + container).append(html);
+                    calculation();
+                }
+            });
+            $('#detail').show();
+            $(".eeHead").select2("val", "Select");
+            $(".STotal").val("");
+        }
+    </script>
+    <script>
+        function EditItem(sender) {
+            var eeHeadId = $(sender).parents().parents().find('.dEEHeadId').val();
+            $(".eeHead").select2("val", eeHeadId);
+            $(".STotal").val($(sender).parents().parents().find('.dSTotal').val());
+            $(sender).parents("div.row:first").remove();
+                calculation();
+            ShowHide();
+        }
+
+        function RemoveItem(sender) {
+            Ask("Are you sure to delete the item!", function () {
+                $(sender).parents("div.row:first").remove();
+                    calculation();
+                ShowHide();
+            });
+        }
+
+        function ShowHide() {
+            var proName = $('.dEEHead').val();
+            if (proName == null) {
+                $('#detail').hide();
+            }
+            else {
+                $('#detail').show();
+            }
+        }
+    </script>
+    <script>
+        calculation();
+        function calculation() {
+            var STotal = 0;
+            var discount = 0;
+
+            $(".row.Idn").each(function () {
+                var amount = getnum($(this).find(".dSTotal").val());
+                STotal += amount;
+            });
+            $(".GTotal").val(STotal.toFixed(2));
+        }
+        function getnum(e) {
+            if (isNaN(e) || typeof e === 'undefined ') {
+                return 0;
+            }
+            else {
+                return parseFloat(e);
+            }
+        }
+    </script>
+}

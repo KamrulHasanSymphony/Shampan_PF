@@ -1,0 +1,542 @@
+﻿@model SymViewModel.WPPF.GLJournalVM
+
+@using UIHelper.MVC
+@{
+    ViewBag.Title = Model.Id > 0 ? "Edit" : "Create";
+}
+@{
+    string CompanyName = System.Configuration.ConfigurationManager.AppSettings["CompanyName"];
+}
+
+@using (Html.BeginForm("CreateEdit", "Journal", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmJournalEntry" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+    @Html.HiddenFor(model => model.JournalType)
+    string PF_COAUrl = "/Config/DropDown/PF_COA?TransType=" + @ViewBag.TransType;
+
+    <div class="headrow">
+        @if (Model.Operation.ToLower() == "add")
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="SaveData()" class="sym-btn-save">&nbsp;Save</button>
+            <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Journal?JournalType=@Model.JournalType" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/Journal/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Report</button>
+            <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Journal?JournalType=@Model.JournalType" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+            <a title="Delete Journal Entry" href="/@ViewBag.TransType/Journal/Create?JournalType=@Model.JournalType" id="" class="sym-btn-add">&nbsp;New</a>
+
+
+        }
+
+
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            @{
+    if (Model.JournalType == 1)
+    {
+        <p class="thinHead">Journal Voucher (JV)</p>
+
+    }
+    else if (Model.JournalType == 2)
+    {
+        <p class="thinHead">Payment Voucher (PV)</p>
+
+    }
+    else if (Model.JournalType == 3)
+    {
+        <p class="thinHead">Receipt Voucher (RV)</p>
+    }
+            }
+
+        </div>
+        <div class="JournalEntry">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Journal Code</label>
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Auto Code", @class = " form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        <label>Journal Date</label>
+
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionDate, new { @placeholder = "Transaction Date", @class = "trDate customDatePicker required form-control" })
+                        @Html.ValidationMessageFor(model => model.TransactionDate)
+                    </div>
+                </div>
+                @if (CompanyName == "tib")
+                {
+                    <div class="col-md-3">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.TransactionType)
+                        </div>
+                        <div class="editor-field">
+                            @Html.SimpleDropDownFor(model => model.TransactionType, "/Config/DropDown/PF_JournalTransactionTypeDropDown", new { @class = "  form-control selectDropdown" })
+                            @Html.ValidationMessageFor(model => model.TransactionType)
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Detail</p>
+        </div>
+        <div id="ProductDetail" class="row formDesign">
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+
+            <div class="col-md-4">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.GLJournalDetails.FirstOrDefault().COAId)
+                </div>
+                <div style="font-size:14px" class="editor-field">
+                    @Html.SimpleDropDownFor(model => model.GLJournalDetails.FirstOrDefault().COAId, PF_COAUrl, new { @class = "COAId  form-control selectDropdown" })
+                    @Html.HiddenFor(model => model.GLJournalDetails.FirstOrDefault().COAId)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.GLJournalDetails.FirstOrDefault().DrAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("DebitAmount", null, new { @placeholder = "Debit Amount", @class = " right NumberCheck drAmount  form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.GLJournalDetails.FirstOrDefault().CrAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("CreditAmount", null, new { @placeholder = "Credit Amount", @class = " right NumberCheck crAmount  form-control" })
+                </div>
+            </div>
+
+
+            <div style="margin-top: 7px;" class="col-md-1">
+                <div class="editor-label">
+                    &nbsp;
+                </div>
+                <div class="editor-field">
+                    <div id="ItemExist" title="Add JournalEntry Detail" class="sym-btn-add-row AddRow" data-container="editorItemRows4">Add Row</div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                &nbsp
+            </div>
+
+
+        </div>
+        <div class="formDesign" id="detail" hidden>
+            <hr />
+            <div id="editorItemRows4">
+                @if (Model.GLJournalDetails != null)
+                {
+                    <div class="row">
+                        <div class="col-md-1">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-4">
+                            <div class="editor-label">
+                                <label>Account</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">
+                                <label>Debit Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="editor-label">
+                                <label>Credit Amount</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3 ">
+                            <div class="editor-label">
+                                <label>Narration</label>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    foreach (var item in Model.GLJournalDetails)
+                    {
+                        Html.RenderPartial("~/Areas/WPPF/Views/Journal/_details.cshtml", item);
+                    }
+                }
+            </div>
+            <hr style="margin-top: 10px!important; margin-bottom: 10px!important;" />
+
+            <div style="font-size: 1.2em" class="row right">
+                <div class="col-md-3">
+                    &nbsp;
+                </div>
+                <div style="text-align: right; margin-top: 10px;" class="col-md-2">
+                    <label>Total</label>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-field">
+                        @Html.TextBox("Debit", null, new { @class = "right drTotal form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-field">
+                        @Html.TextBox("Credit", null, new { @class = "right crTotal form-control", @readonly = "readonly" })
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+    <div class="thinbox">
+        <div class="th_thinbox">
+            @{
+    if (Model.JournalType == 1)
+    {
+        <p class="thinHead">Journal Voucher Narration</p>
+
+    }
+    else if (Model.JournalType == 2)
+    {
+        <p class="thinHead">Payment Voucher Narration</p>
+
+    }
+    else if (Model.JournalType == 3)
+    {
+        <p class="thinHead">Receipt Voucher Narration</p>
+    }
+            }
+
+        </div>
+        <div class="JournalEntry">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Narration", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="headrow">
+        @if (Model.Operation.ToLower() == "add")
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="SaveData()" class="sym-btn-save">&nbsp;Save</button>         
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/Journal/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Report</button>
+            <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Journal?JournalType=@Model.JournalType" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+            <a title="Delete Journal Entry" href="/@ViewBag.TransType/Journal/Create?JournalType=@Model.JournalType" id="" class="sym-btn-add">&nbsp;New</a>
+
+
+        }
+    </div>
+
+}
+
+
+
+<script>
+    $('.AddRow:not(.AddRowInited)').on("click", function () {
+        var container = $(this).attr('data-container');
+        AddRow(container)
+        return false;
+    }).addClass("AddRowInited");
+
+    function AddRow(container) {
+        debugger;
+
+
+        var journalType = parseInt($("#JournalType").val());
+        if (journalType == 2) {
+            var selectedCOAId = $("select.COAId").val()
+                || $(".selectDropdown.COAId").val()
+                || $("input[type='hidden'][name$='COAId']").val()
+                || 0;
+            selectedCOAId = parseInt(selectedCOAId) || 0;
+
+            var drAmount = parseFloat($(".drAmount").val());
+
+            if (selectedCOAId === 21 && drAmount >= 0) {
+                ShowResult("Fail", "Add Row is not allowed.");
+                return;
+            }
+        }
+
+        if (journalType == 3) {
+            var selectedCOAId = $("select.COAId").val()
+                || $(".selectDropdown.COAId").val()
+                || $("input[type='hidden'][name$='COAId']").val()
+                || 0;
+            selectedCOAId = parseInt(selectedCOAId) || 0;
+
+            var crAmount = parseFloat($(".crAmount").val());
+
+            if (selectedCOAId === 21 && crAmount >= 0) {
+                ShowResult("Fail", "Add Row is not allowed.");
+                return;
+            }
+        }
+
+        var ItemExist = 0;
+        var url = '/@ViewBag.TransType/Journal/BlankItem';
+        var oParam = { "COAId": "", "DrAmount": "", "CrAmount": "", "AccountName": "", };
+
+        var accountId = $('.COAId  :selected').val();
+        var accName = $('.COAId  :selected').text();
+
+        var debitAmount = $(".drAmount").val();
+        var creditAmount = $(".crAmount").val();
+
+
+        if (accountId == "") {
+            ShowResult("Fail", "Please select the Item!");
+            return;
+        }
+
+        //if ((debitAmount != "") && (creditAmount != "")) {
+        //    ShowResult("Fail", "Please Enter Either Debit or Credit Amount, Not Both!");
+        //    return;
+        //}
+
+        if ((parseFloat(debitAmount) > 0) && (parseFloat(creditAmount) > 0)) {
+            ShowResult("Fail", "Please Enter Either Debit or Credit Amount, Not Both!");
+            return;
+        }
+
+
+
+        if (debitAmount == "" && creditAmount == "") {
+            ShowResult("Fail", "Please Enter Either Debit or Credit Amount!");
+            return;
+        }
+
+
+        oParam.COAId = accountId;
+        oParam.DrAmount = debitAmount;
+        oParam.CrAmount = creditAmount;
+        oParam.AccountName = accName;
+
+
+        $.each($("input.dAccountId"), function (i, item) {
+            var addedItem = $(item).val();
+            if (accountId == addedItem) {
+                ItemExist = 1;
+            }
+        });
+        if (ItemExist == "1") {
+            ShowResult("Fail", "This Item Already Added!");
+            return;
+        }
+        $.ajax({
+            url: url,
+            //type: 'POST',
+            cache: false,
+            data: oParam,
+            success: function (html) {
+                $("#" + container).append(html);
+                calculation();
+            }
+        });
+        $('#detail').show();
+        $(".COAId").val("");
+        $(".COAId").trigger('change');
+        $(".drAmount").val("");
+        $(".crAmount").val("");
+    }
+    function EditProduct(sender) {
+        var accountId = $(sender).parents().parents().find('.dAccountId').val();
+        $(".COAId").select2("val", accountId);
+        $(".drAmount").val($(sender).parents().parents().find('.dDrAmount').val());
+        $(".crAmount").val($(sender).parents().parents().find('.dCrAmount').val());
+        $(sender).parents("div.row:first").remove();
+        calculation();
+        ShowHide();
+        ShowBalance();
+    }
+
+    function RemoveProduct(sender) {
+        Ask("Are you sure to delete the item!", function () {
+            $(sender).parents("div.row:first").remove();
+            calculation();
+            ShowHide();
+        });
+    }
+
+    function ShowHide() {
+        var accName = $('.dAccName').val();
+        if (accName == null) {
+            $('#detail').hide();
+        }
+        else {
+            $('#detail').show();
+        }
+    }
+</script>
+<script>
+    calculation();
+    function calculation() {
+        var drTotal = 0;
+        var crTotal = 0;
+
+        $(".row.details").each(function () {
+            var amount = getnum($(this).find(".dDrAmount").val());
+            drTotal += amount;
+        });
+        $(".row.details").each(function () {
+            var amount = getnum($(this).find(".dCrAmount").val());
+            crTotal += amount;
+        });
+
+        //$(".drTotal").val(drTotal.toFixed(2));
+        //$(".crTotal").val(crTotal.toFixed(2));
+
+        $(".drTotal").val(drTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+        $(".crTotal").val(crTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }));
+
+    }
+
+    function getnum(e) {
+        if (isNaN(e) || typeof e === 'undefined ') {
+            return 0;
+        }
+        else {
+            return parseFloat(e);
+        }
+    }
+
+</script>
+
+<script>
+    function PostData(sender) {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/Journal/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+</script>
+
+<script>
+    $(function () {
+        cheque();
+        valiDation("frmJournalEntry");
+        ShowHide();
+
+        setTimeout(function () {
+            $("#TransactionType").select2("val", '@Model.TransactionType');
+        }, 2000)
+    });
+    $('.isChequeD').on("click", function () {
+        cheque();
+    });
+    function cheque() {
+        $(".isChequeD").each(function () {
+            if (this.checked == true) {
+                $(this).parent().parent().parent().parent().find('.chqD').show();
+            }
+            else {
+                $(this).parent().parent().parent().parent().find('.chqD').hide();
+            }
+
+        });
+    }
+    $(function () {
+        $('.accName').change(ShowBalance);
+    });
+    //function ShowBalance() {
+    //    var acctId = $('.accName  :selected').val().replace("Select", "");
+    //    Obj = new Object();
+    //    Obj.AccountId = acctId;
+
+    //    var objParams = $.param(Obj);
+    //    var url = "/Acc/GLTransaction/BringBalance";
+    //    url = url + "?" + objParams;
+    //    $.getJSON(url, function (returnString) {
+    //        var arr = returnString.split('~');
+    //        var balance = arr[0];
+    //        $('.balance').val(balance);
+    //    });
+    //}
+
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var Id = $("#Id").val();
+        rptObj = new Object();
+        rptObj.id = Id;
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+
+    function SaveData() {
+        var drTotal = $(".drTotal").val();
+        var crTotal = $(".crTotal").val();
+
+        if (drTotal != crTotal) {
+            ShowResult("Fail", "Debit and Credit Total Must Be Same!");
+            return;
+        }
+        pageSubmit('frmJournalEntry');
+    }
+
+
+    function UpdateData() {
+
+        var drTotal = $(".drTotal").val();
+        var crTotal = $(".crTotal").val();
+
+        if (drTotal != crTotal) {
+            ShowResult("Fail", "Debit and Credit Total Must Be Same!");
+            return;
+        }
+        var Post = $("#Post").val();
+        if (Post == 'True') {
+            ShowResult("Fail", "Data Already Posted! Can't Update!");
+            return;
+        }
+        pageSubmit('frmJournalEntry');
+    }
+
+
+</script>
+
+

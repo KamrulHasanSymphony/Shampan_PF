@@ -1,0 +1,66 @@
+﻿<div class="headrow">
+    <button type="button" title="Add New COASubCategory" data-url="/@ViewBag.TransType/COASubCategory/Create" onclick="GoTo(this)" class="sym-btn-add">&nbsp;New</button>
+    <label class="pull-right">COA Sub Category</label>
+</div>
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>COA Sub Category List</p>
+    </div>
+    <p></p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">Action</th>
+                <th class="center">COA Group</th>
+                <th class="center">Sub Group</th>
+                <th class="center">Category Name</th>
+                <th class="center">SubCategory Name</th>
+                <th class="center">Active/Inactive</th>
+                <th class="center">Remarks</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+
+<div class="headrow">
+    <div class="pull-left">
+        <button type="button" title="Add New COASubCategory" data-url="/@ViewBag.TransType/COASubCategory/Create" onclick="GoTo(this)" class="sym-btn-add">&nbsp;New</button>
+    </div>
+</div>
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/COASubCategory/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                {
+                    "sName": "Id",
+                    "bSearchable": false,
+                    "bSortable": false,
+                    "sWidth": "10%",
+                    "sClass": "center",
+                    "fnRender": function (oObj) {
+                        return '<a id="" title="Click on for Edit" style="text-decoration:none;" href="/@ViewBag.TransType/COASubCategory/Edit/' + oObj.aData[0] + '" class="sym-btn-edit-row"></a>';
+                    }
+                },
+                { "sName": "GroupName", "sWidth": "15%" },
+                { "sName": "SubGroupName", "sWidth": "15%" },
+                { "sName": "CategoryName", "sWidth": "15%" },
+                { "sName": "SubCategoryName", "sWidth": "15%" },
+                { "sName": "IsActive", "sWidth": "10%" },
+                { "sName": "Remarks", "sWidth": "10%" }
+            ]
+        });
+    });
+</script>

@@ -1,0 +1,163 @@
+﻿@model SymViewModel.HRM.DesignationVM
+@using UIHelper.MVC
+@{
+
+    ViewBag.Title = "Create";
+    ViewBag.Location = "Create"; 
+}
+
+@using (Html.BeginForm("Create", "Designation", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmDesignation" }))
+{
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="Designation">
+                @Html.HiddenFor(model => model.Id)
+        <div class="row">
+             <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                         @Html.TextBoxFor(model => model.Code, new { @placeholder = "Designation Code", @class = " required form-control" })
+                    </div>
+                </div>
+             <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Name)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.Name, new { @placeholder = "Designation Name", @class = "required form-control" })
+                    </div>
+                </div>
+             <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EPZ)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.EPZ, new { @placeholder = "Designation EPZ", @class = "required form-control" })
+                    </div>
+                </div>
+             <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Other)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.Other, new { @placeholder = "Designation Other", @class = "required form-control" })
+                    </div>
+                </div>
+             <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.DinnerAmount)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.DinnerAmount, new { @placeholder = "Designation DinnerAmount", @class = "required form-control" })
+                    </div>
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IfterAmount)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.IfterAmount, new { @placeholder = "Designation IfterAmount", @class = "required form-control" })
+                    </div>
+                </div>
+            <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TiffinAmount)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.TiffinAmount, new { @placeholder = "Designation TiffinAmount", @class = "required form-control" })
+                    </div>
+                </div>
+            <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ETiffinAmount)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.ETiffinAmount, new { @placeholder = "Designation ETiffinAmount", @class = "required form-control" })
+                    </div>
+                </div>
+            <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.OTAlloawance)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.OTAlloawance, new { @placeholder = "Designation OTAlloawance", @class = "required form-control" })
+                    </div>
+                </div>
+            <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.OTOrginal)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.OTOrginal, new { @placeholder = "Designation OTOrginal", @class = "required form-control" })
+                    </div>
+                </div>
+              </div>
+        <div class="row">
+            <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.OTBayer)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.OTBayer, new { @placeholder = "Designation OTBayer", @class = "required form-control" })
+                    </div>
+                </div>
+             <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.AttendenceBonus)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.AttendenceBonus, new { @placeholder = "Designation Attendence Bonus", @class = "required form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ExtraOT)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.ExtraOT, new { @placeholder = "Designation ExtraOT", @class = "required form-control" })
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                            @Html.TextBoxFor(model => model.Remarks, new { @placeholder = "Designation Remarks", @class = " form-control" })
+                    </div>
+                </div>
+                </div>
+        </div>
+       
+      
+@*           <div class="row">
+                <div class="col-sm-3">
+                    <input type="button" onclick="pageSubmit('frmDesignation');" value="Add" class=" Save btn btn-primary" />
+                </div>
+
+                <div class="col-sm-4">
+                    <input type="button" value="Cancel" class="btncancel btn btn-primary" />
+                </div>
+            </div>*@
+
+            
+ <div class="row">
+            <label class="col-sm-3">
+				  <button type="button" title="Save Data" onclick="pageSubmit('frmDesignation');" class="sym-btn-save">&nbsp;Save</button>
+            </label>
+            <label class="col-sm-4">
+			 <button type="button" title="Cancel Data" class=" btncancel sym-btn-cancel">&nbsp;Cancel</button>
+            </label>
+        </div>
+        </div>
+    </div>
+}
+ 
+<script>
+    $(function () {
+        valiDation("frmDesignation");
+    });
+</script>

@@ -1,0 +1,94 @@
+﻿@model SymViewModel.BWWF.InvestmentAccruedVM
+
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row details">
+    @using (Html.BeginCollectionItem("InvestmentAccrueds"))
+    {
+
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.InvestmentNameId)
+
+        <div class="col-md-1" style="margin-top: 4px;">
+            <a id="" onclick="AccruedDelete(this);" data-id="@Model.Id"  class="sym-btn-remove-row "></a>&nbsp;
+            <a id="" href="/@ViewBag.TransType/InvestmentName/AccruedProcessView?InvestmentNameId=@Model.InvestmentNameId&AccruedId=@Model.Id" class="sym-btn-edit-row lnkEdit"></a>
+            <a id=""  onclick="btnPostNew(this);" data-id="@Model.Id" class="sym-btn-post-row"></a>
+            <a id="" href="/@ViewBag.TransType/InvestmentName/JournalEntry?InvestmentNameId=@Model.InvestmentNameId&InterestAmount=@Model.NetInterest&TransactionDate=@Model.TransactionDate" class="sym-btn-bank-row"></a>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PeriodName, new { @placeholder = "", @class = " dFromMonth form-control ", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.TransactionDate, new { @placeholder = "", @class = " dFromMonth form-control ", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.InvestmentValue, new { @placeholder = "", @class = " dFromMonth form-control right ", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.AccruedMonth, new { @placeholder = "", @class = " dFromMonth form-control right", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.InterestRate, new { @placeholder = "", @class = " dFromMonth form-control right", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.AccruedInterest, new { @placeholder = "", @class = " dFromMonth form-control right", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.AitInterest, new { @placeholder = "", @class = "form-control right", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.NetInterest, new { @placeholder = "", @class = "form-control right", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.ReferenceNo, new { @placeholder = "", @class = " dFromMonth form-control ", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Post, new { @placeholder = "", @class = " dFromMonth form-control ", @readonly = "readonly" })
+            </div>
+        </div>
+    }
+</div>
+<script>
+    $(function () {
+
+    });
+    $(document).ready(function () {
+        //$(".row.details").each(function () {
+        //    if (this.checked)
+        //        $('#autoUpdate').fadeIn('slow');
+        //    else
+        //        $('#autoUpdate').fadeOut('slow');
+        //});
+
+        //$('.isCheque').change(function () {
+        //    if (this.checked)
+        //        $('.chequeDiv').fadeIn('slow');
+        //    else
+        //        $('.chequeDiv').fadeOut('slow');
+
+        //});
+    });
+
+</script>
+

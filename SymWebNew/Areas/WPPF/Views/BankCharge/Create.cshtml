@@ -1,0 +1,177 @@
+﻿@*  
+BankBranchName
+ROBIDate
+ROBIRate
+TotalInterestValue
+Post
+
+*@
+
+@model SymViewModel.WPPF.BankChargeVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "BankCharge", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmBankCharge" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    @Html.HiddenFor(model => model.Post)
+    //IsTransferPDF
+
+    string PF_BankBranchNameUrl = "/Config/DropDown/PF_BankBranchName?TransType=" + @ViewBag.TransType;
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmBankCharge')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">BankCharge > Create</label>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=BankCharges&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+            <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/BankCharge/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+            <label class="pull-right">BankCharge > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/BankCharge" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New BankCharge" data-url="/@ViewBag.TransType/BankCharge/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>BankCharge</p>
+        </div>
+        <div class="BankCharge">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Auto Code", @class = "  form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.BankBranchId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.BankBranchId, "/Config/DropDown/PF_BankBranchName", new { @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.BankBranchId)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TransactionDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TransactionDate, new { @placeholder = "RO Bank Interest Date", @class = " customDatePicker required  form-control" })
+                        @Html.ValidationMessageFor(model => model.TransactionDate)
+                    </div>
+                </div>
+                </div>
+            <div class="row">
+               
+ 
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalValue, new { @placeholder = "Total Interest Value", @class = " required cTotalInterestValue right NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.TotalValue)
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmBankCharge')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData(this)" class="sym-btn-post">&nbsp;Post</button>
+            if (Model.Post)
+            {
+                <button type="button" title="A Click on for Journal" onclick="window.open('/@ViewBag.TransType/Journal/Create?JournalType=2&TransactionForm=BankCharges&TransactionId=@Model.Id')" id="" class=" sym-btn-bank-row">&nbsp;Journal</button>
+
+            }
+           <button type="button" title="Click to view GL Transaction Report" onclick="window.open('/@ViewBag.TransType/BankCharge/ReportView?id=@Model.Id')" id="" class=" sym-btn-report ">&nbsp;Report</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/BankCharge" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        @*<button type="button" title="Add New BankCharge" data-url="/@ViewBag.TransType/BankCharge/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>*@
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmBankCharge");
+    });
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmBankCharge');
+    }
+
+    function PostData(sender) {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/BankCharge/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+
+</script>
+
+<script>
+    $('.cServiceChargeAmount, .cActualInterestAmount').change(function () {
+        TotalInterestValue();
+    });
+
+
+    function TotalInterestValue() {
+        var TotalInterestValue = 0;
+        var ActualInterestAmount = parseFloat($(".cActualInterestAmount").val().replace(/\,/g, ''));
+
+        var ServiceChargeAmount = parseFloat($(".cServiceChargeAmount").val().replace(/\,/g, ''));
+
+        TotalInterestValue = ActualInterestAmount - ServiceChargeAmount;
+
+        $(".cTotalInterestValue").val(TotalInterestValue);
+
+        NumberFormatCheck();
+    }
+    $(document).ready(function () {
+        $('#frmBankCharge').on('click', 'input[type="text"], textarea.NumberCheck', function () {
+            $(this).select();
+        });
+    });
+
+</script>

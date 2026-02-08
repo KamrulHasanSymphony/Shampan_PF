@@ -1,0 +1,90 @@
+﻿    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Common/Project/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "Id",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "12%",
+                                    "sClass": "center",
+                                    "fnRender": function (oObj) {
+                                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;" id=""   class=" innerListLink  sym-btn-edit-row"   href=\"/Common/Project/Edit/' + oObj.aData[0] + '\"></a>' +
+                                        '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Common/Project/ProjectDelete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>';
+                                }
+            }
+                                , { "sName": "Code", "sWidth": "10%" }
+                                , { "sName": "Name", "sWidth": "20%" }
+                                , { "sName": "ContactPersonName", "sWidth": "18%" }
+                                , { "sName": "Mobile", "sWidth": "10%" }
+                                , { "sName": "Manpower", "sWidth": "10%", "sClass": "center" }
+                                , { "sName": "StartDate", "sWidth": "20%", "sClass": "center" }
+                ]
+            });
+            oTable.columnFilter({
+                sPlaceHolder: "head:after",
+                aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "date-range" }
+                ]
+            });
+        });
+    </script>
+<div class="headrow">
+        <button type="button" title="Add New Project" data-url="/Common/Project/Create" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Project"  data-url="/Common/Project/ProjectDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <button type="button" title="Add New" data-url="/Common/Project/Import" onclick="GoTo(this)" id="" class=" sym-btn-Excel-Export ">&nbsp;Export/Emport</button>
+ <label class="pull-right">Location</label>
+</div>
+ <div class="thinbox">
+        <div class="th_thinbox">
+        <p>Location</p>   
+        </div>
+<p>
+     </p>
+     <table id="myDataTable" class="display">
+         <thead>
+             <tr>
+                 <th class="center">
+                     <input type="checkbox" class="chkAll" />Select All</th>
+                 <th>Code</th>
+                 <th>Name</th>
+                 <th>Contact Person</th>
+                 <th>Mobile</th>
+                 <th>Manpower</th>
+                 <th>Start Date</th>
+             </tr>
+             <tr>
+                 <th class="center">Actions</th>
+                 <th>Code</th>
+                 <th>Name</th>
+                 <th>Contact Person</th>
+                 <th>Mobile</th>
+                 <th style="text-align:left!important">Manpower</th>
+                 <th style="text-align:left!important">Start Date</th>
+             </tr>
+         </thead>
+         <tbody>
+         </tbody>
+     </table>
+     <br />
+ </div>
+<div class="headrow">
+    <div class="pull-left">
+        <button type="button" title="Add New Project" data-url="/Common/Project/Create" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+        <button type="button" title="Delete Project"  data-url="/Common/Project/ProjectDelete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>     
+    </div>
+</div>

@@ -1,0 +1,209 @@
+﻿@*
+    BankName
+    BranchName
+    BranchAddress
+    BankAccountType
+    BankAccountNo
+*@
+
+@model SymViewModel.PF.ForfeitureAccountVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "ForfeitureAccount", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmForfeitureAccount" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Post)
+    @Html.HiddenFor(model => model.EmployeeId)
+    @Html.HiddenFor(model => model.Operation)
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmForfeitureAccount')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">Forfeiture Account > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+            <label class="pull-right">Forfeiture Account > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ForfeitureAccount" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="New Forfeiture Account" data-url="/@ViewBag.TransType/ForfeitureAccount/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Forfeiture Account</p>
+        </div>
+        <div class="ForfeitureAccount">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @class = " form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmpName)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmpName, new { @class = " form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.EmpName)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmpResignDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmpResignDate, new { @placeholder = " Resign Date", @class = " customDatePicker required  form-control", @disabled = "disabled" })
+                        @Html.ValidationMessageFor(model => model.EmpResignDate)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployerContributionForfeitValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployerContributionForfeitValue, new { @placeholder = "Employer Contribution Forfeit Value", @class = " cEmployerContributionForfeitValue right NumberCheck form-control" })
+                        @Html.ValidationMessageFor(model => model.EmployerContributionForfeitValue)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployeContributionForfeitValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployeContributionForfeitValue, new { @placeholder = "Employee Contribution Forfeit Value", @class = " cEmployeContributionForfeitValue right NumberCheck form-control"})
+                        @Html.ValidationMessageFor(model => model.EmployeContributionForfeitValue)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployerProfitForfeitValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployerProfitForfeitValue, new { @placeholder = "Employer Profit Forfeit Value", @class = " cEmployerProfitForfeitValue right NumberCheck form-control"})
+                        @Html.ValidationMessageFor(model => model.EmployerProfitForfeitValue)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EmployeProfitForfeitValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EmployeProfitForfeitValue, new { @placeholder = "Employee Profit Forfeit Value", @class = " cEmployeProfitForfeitValue right NumberCheck form-control"})
+                        @Html.ValidationMessageFor(model => model.EmployeProfitForfeitValue)
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.TotalForfeitValue)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.TotalForfeitValue, new { @placeholder = "Total Forfeit Value", @class = " cTotalForfeitValue right NumberCheck form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.TotalForfeitValue)
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ForfeitDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ForfeitDate, new { @placeholder = "Forfeit Date", @class = " customDatePicker required  form-control" })
+                        @Html.ValidationMessageFor(model => model.ForfeitDate)
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmForfeitureAccount')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <button type="button" title="Post Data" onclick="PostData()" class="sym-btn-post">&nbsp;Post</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ForfeitureAccount" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="New Forfeiture Account" data-url="/@ViewBag.TransType/ForfeitureAccount/IndexResignEmployee" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmForfeitureAccount");
+    });
+
+    function UpdateData() {
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted. Can't Update!");
+            return;
+        }
+        pageSubmit('frmForfeitureAccount');
+    }
+
+    function PostData() {
+        var Id = $("#Id").val();
+        var Post = $("#Post").val();
+        if (Post.toLowerCase() == 'true') {
+            ShowResult("Fail", "Data Already Posted!");
+            return;
+        }
+        var url = '/@ViewBag.TransType/ForfeitureAccount/Post?ids=' + Id + '~';
+        var questionMSG = "Are you sure to Post Data!";
+        singlePostDlete(questionMSG, url);
+    }
+
+
+</script>
+
+<script>
+    $('.cEmployerContributionForfeitValue, .cEmployeContributionForfeitValue, .cEmployerProfitForfeitValue, .cEmployeProfitForfeitValue').change(function () {
+
+        TotalForfeitValue();
+    });
+
+
+    function TotalForfeitValue() {
+        var vTotalForfeitValue = 0;
+        var EmployerContributionForfeitValue = parseFloat($(".cEmployerContributionForfeitValue").val().replace(/\,/g, ''));
+        var EmployeContributionForfeitValue = parseFloat($(".cEmployeContributionForfeitValue").val().replace(/\,/g, ''));
+        var EmployerProfitForfeitValue = parseFloat($(".cEmployerProfitForfeitValue").val().replace(/\,/g, ''));
+        var EmployeProfitForfeitValue = parseFloat($(".cEmployeProfitForfeitValue").val().replace(/\,/g, ''));
+
+        vTotalForfeitValue = EmployerContributionForfeitValue + EmployeContributionForfeitValue + EmployerProfitForfeitValue + EmployeProfitForfeitValue;
+
+        $(".cTotalForfeitValue").val(vTotalForfeitValue);
+
+        NumberFormatCheck();
+    }
+
+</script>

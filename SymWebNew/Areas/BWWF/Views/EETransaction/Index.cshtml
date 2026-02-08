@@ -1,0 +1,100 @@
+﻿@model SymViewModel.BWWF.EETransactionVM
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="headrow">
+    <button type="button" title="Add New EE Transaction" data-url="/@ViewBag.TransType/EETransaction/Create?tType=@Model.TransactionType" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    <button type="button" title="Post Checked Issue" data-url="/@ViewBag.TransType/EETransaction/Post" onclick="postedData(this, 'myDataTable');" id="" class="sym-btn-post">&nbsp;Post</button>
+    <button type="button" title="Click For Report" data-url="/@ViewBag.TransType/EETransaction/Report?tType=@Model.TransactionType" id="" class="btnReport sym-btn-report">&nbsp;Report</button>
+    <button type="button" title="Delete Checked EE Transaction" data-url="/@ViewBag.TransType/EETransaction/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <label class="pull-right">EE Transaction </label>
+</div>
+
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>EE Transaction</p>
+    </div>
+    <p></p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />
+                    Select All</th>
+                <th class="center">Code</th>
+                <th class="center">Transaction Date</th>
+                <th class="center">Grand Total</th>
+                <th class="center">Post Status</th>
+                <th class="center">Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+
+<div class="headrow">
+    <button type="button" title="Add New EE Transaction" data-url="/@ViewBag.TransType/EETransaction/Create?tType=@Model.TransactionType" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    <button type="button" title="Post Checked Issue" data-url="/@ViewBag.TransType/EETransaction/Post" onclick="postedData(this, 'myDataTable');" id="" class="sym-btn-post">&nbsp;Post</button>
+    <button type="button" title="Click For Report" data-url="/@ViewBag.TransType/EETransaction/Report?tType=@Model.TransactionType" id="" class="btnReport sym-btn-report">&nbsp;Report</button>
+    <button type="button" title="Delete Checked EE Transaction" data-url="/@ViewBag.TransType/EETransaction/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+</div>
+
+<script language="javascript" type="text/javascript">
+
+    $(document).ready(function () {
+
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/EETransaction/_index?tType=@Model.TransactionType",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "16%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0].split('~')[0] + '">'
+                                        + '&nbsp; <a title="Click on for Edit" href=\"/@ViewBag.TransType/EETransaction/Edit/' + oObj.aData[0].split('~')[0] + '\" class="sym-btn-edit-row"></a>'
+                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/EETransaction/Post"  onclick=btnPost(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                        + '&nbsp; <a title="Click on for Report" data-url="/@ViewBag.TransType/EETransaction/ReportView"  onclick=reportData(this); data-Id="' + oObj.aData[1] + '\" class="sym-btn-report-row"></a>'
+                                        + '&nbsp; <a title="Click on for Delete" data-url="/@ViewBag.TransType/EETransaction/Delete"  onclick=btnDelete(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-remove-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "Code", "sWidth": "20%" }
+                            , { "sName": "TransactionDateTime", "sWidth": "15%" }
+                            , { "sName": "GrandTotal", "sWidth": "15%" }
+                            , { "sName": "Post", "sWidth": "15%" }
+                            , { "sName": "Remarks", "sWidth": "15%" }
+            ]
+        });
+
+    });
+
+</script>
+
+<script>
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var code = $(sender).attr('data-Id');
+        rptObj = new Object();
+        rptObj.Code = code;
+        rptObj.RT = "D";
+        rptObj.tType = '@Model.TransactionType';
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>
+

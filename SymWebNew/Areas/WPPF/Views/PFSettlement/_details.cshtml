@@ -1,0 +1,35 @@
+﻿@model SymViewModel.WPPF.PFSettlementDetailVM
+
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row Idn">
+    @using (Html.BeginCollectionItem("detailVMs"))
+    {
+        @*@Html.HiddenFor(model => model.Id)*@
+        <div class="col-md-3">
+            <div class="editor-field">
+                @Html.SimpleDropDownFor(model => model.AccountId, "/Config/DropDown/PF_Account?AccountType="+Model.AccountType, new { @class = " required  form-control" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.DebitAmount, new { @placeholder = "Debit Amount", @class = " right NumberCheck form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.CreditAmount, new { @placeholder = "Credit Amount", @class = " right NumberCheck form-control", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @rows = "1", @class = "  form-control" })
+            </div>
+        </div>
+    }
+</div>
+<script>
+</script>
+

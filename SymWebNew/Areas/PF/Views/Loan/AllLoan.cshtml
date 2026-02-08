@@ -1,0 +1,216 @@
+﻿@using SymOrdinary
+@using System.Threading;
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+<style>
+    #myDataTable {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        min-width: 1370px;
+    }
+</style>
+<div class="headrow">
+    <button type="button" title="Add New Employee Info for Loan" data-url="/PF/Loan/EmployeeInfoForLoan" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    <button type="button" title="Delete Loan" data-url="/PF/Loan/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <label class="pull-right">Employee Loan</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Loan List</p>
+    </div>
+
+    <p></p>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th class="center">
+                                <input type="checkbox" class="chkAll" />Select All1
+                            </th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Loan Type</th>
+                            <th style="text-align:left!important">Principal Amount</th>
+                            <th style="text-align:left!important">Interest Amount</th>
+                            <th style="text-align:left!important">Total Amount</th>                       
+                        </tr>
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Loan Type</th>
+                            <th style="text-align:left!important">Principal Amount</th>
+                            <th style="text-align:left!important">Interest Amount</th>
+                            <th style="text-align:left!important">Total Amount</th>                        
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="headrow">
+    <button type="button" title="Add New Employee Info for Loan" data-url="/PF/Loan/EmployeeInfoForLoan" onclick="GoTo(this)" id="" class="sym-btn-add ">&nbsp;New</button>
+    <button type="button" title="Delete Loan" data-url="/PF/Loan/Delete" onclick="deletedData(this, 'myDataTable');" id="" class="sym-btn-remove">&nbsp;Delete</button>
+    <button type="button" data-url="/PF/Loan/AllLoanReport" title="Click to see the Report" id="" class=" sendRpt sym-btn-report">&nbsp;Report</button>
+    <button type="button" data-url="/PF/Loan/DownloadAllLoanReport" id="" title="Click to Download the Report" class=" sendRpt sym-btn-Excel-Export">&nbsp;Download</button>
+</div>
+
+
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        debugger;
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        // Custom function to format numbers with commas
+        function formatNumberWithCommas(value) {
+            if (value !== null && value !== undefined && !isNaN(value)) {
+                return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Regular expression to add commas
+            }
+            return value; // Return the value as is if it's not a valid number
+        }
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/PF/Loan/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    var loanId = oObj.aData[0];
+                                    var isApproved = oObj.aData[10]; // adjust index if needed
+
+                                    var checkbox = '<input onclick="CheckAll(this)" type="checkbox" data-Id="' + loanId + '">';
+                                    var editBtn = '<a title="Edit" class="sym-btn-edit-row" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                    var reportBtn = '<a title="Report" data-url="/PF/Loan/ReportView" onclick="reportData(this);" data-Id="' + loanId + '" class="sym-btn-report-row"></a>';
+                                    var deleteBtn = '<a title="Delete" data-url="/PF/Loan/Delete" onclick="deletedData(this, myDataTable, \'' + loanId + '\');" class="sym-btn-remove-row"></a>';
+                                    var settlementBtn = '<a title="Settlement" class="sym-btn-add-row" href="/PF/Loan/Settlement?loanId=' + loanId + '"></a>';
+                                    var approveBtn = '';
+
+                                    if ('@identity.IsAdmin'.toLowerCase() == "true") {
+                                        if (isApproved == "Approved") {
+                                            approveBtn = '<a title="Click for Not Approve" class="sym-btn-post-row" href="/PF/Loan/Approved?loanId=' + loanId + '"></a>';
+                                        }
+                                        else {
+                                            approveBtn = '<a title="Click for Approve" class="sym-btn-reject-row" href="/PF/Loan/Approved?loanId=' + loanId + '"></a>';
+                                        }
+                                    }
+
+                                    // Apply condition for enabling/disabling renewOrEncashBtn
+                                    if (isApproved == "Not Approved") {
+                                        settlementBtn = '<a title="settlement" target="_blank" href="#" class="sym-btn-add-row" style="pointer-events: none; opacity: 0.5;"></a>';  // Disabled state
+                                        reportBtn = '<a title="settlement" target="_blank" href="#" class="sym-btn-report-row" style="pointer-events: none; opacity: 0.5;"></a>';  // Disabled state
+                                        editBtn = '<a title="settlement" target="_blank" href="#" class="sym-btn-edit-row" style="pointer-events: none; opacity: 0.5;"></a>';  // Disabled state
+                                    } else {
+                                        settlementBtn = '<a title="settlement" target="_blank" href="/PF/Loan/Settlement?loanId=' + loanId + '" class="sym-btn-add-row"></a>';  // Enabled state
+                                        editBtn = '<a title="Edit" class="sym-btn-edit-row" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                        reportBtn = '<a title="Report" data-url="/PF/Loan/ReportView" onclick="reportData(this);" data-Id="' + loanId + '" class="sym-btn-report-row"></a>';
+                                    }
+                                        if ('@identity.IsAdmin'.toLowerCase() == "true") {
+                                        return checkbox + '&nbsp;' + editBtn + '&nbsp;' + approveBtn + '&nbsp;' + deleteBtn + '&nbsp;' + reportBtn + '&nbsp;' + settlementBtn;
+                                        }
+                                        else
+                                        {
+                                            return checkbox + '&nbsp;' + editBtn + '&nbsp;' + approveBtn + '&nbsp;' +'&nbsp;' + reportBtn + '&nbsp;' + settlementBtn;
+                                        }
+                                }
+
+                            }
+                                , { "sName": "Code", "sWidth": "5%" }
+                                , { "sName": "EmpName", "sWidth": "12%" }
+                                , { "sName": "Department", "sWidth": "10%" }
+                                , { "sName": "Designation", "sWidth": "10%" }
+                                , { "sName": "LoanType", "sWidth": "10%" }
+                                   , {
+                                       "sName": "PrincipalAmount",
+                                    "sWidth": "8%", "sClass": "right",
+                                    "fnRender": function (oObj) {
+                                        return formatNumberWithCommas(oObj.aData[6]);
+                                    }
+                                   }
+                                    , {
+                                        "sName": "InterestAmount",
+                                        "sWidth": "8%", "sClass": "right",
+                                        "fnRender": function (oObj) {
+                                            return formatNumberWithCommas(oObj.aData[7]);
+                                        }
+                                    }
+                               , {
+                                   "sName": "TotalAmount",
+                                   "sWidth": "8%", "sClass": "right",
+                                   "fnRender": function (oObj) {
+                                       return formatNumberWithCommas(oObj.aData[8]);
+                                   }
+                               }
+                          
+            ]
+        });
+        oTable.columnFilter({
+            sPlaceHolder: "head:after",
+            aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "text" }
+                       , { type: "date-range" }
+                       , { type: "text" }
+
+            ]
+        });
+    });
+</script>
+<script>
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var code = $(sender).attr('data-Id');
+        rptObj = new Object();
+        rptObj.id = code;
+
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+
+    $('.sendRpt').click(function (e) {
+        debugger;
+        var fid = '@ViewBag.Id';
+        var sdate = $('#myDataTable_range_from_9').val();
+        var eDate = $('#myDataTable_range_to_9').val();
+        var url = $(this).attr("data-url");
+        url += '?StartDate=' + sdate + '&EndDate=' + eDate;
+        var win = window.open(url, '_blank');
+
+    });
+
+</script>

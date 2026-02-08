@@ -1,0 +1,41 @@
+﻿@model SymViewModel.Common.SettingsVM
+@using (Html.BeginForm("Edit", "Settings", FormMethod.Post, new { @Id = "frmSettings" }))
+{
+    <div class="row">
+        <div class="col-md-2">
+            @Html.HiddenFor(model => model.Id)
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.SettingGroup, new { @class = " required form-control",@readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.SettingGroup)
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.SettingName, new { @class = " required form-control" ,@readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.SettingName)
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="editor-field">
+                @Html.TextAreaFor(model => model.SettingValue, new { @class = " required form-control" })
+                @Html.ValidationMessageFor(model => model.SettingValue)
+
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.SettingType, new { @class = " required form-control",@readonly="readonly"  })
+                @Html.ValidationMessageFor(model => model.SettingType)
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Remarks, new { @class = "  form-control" })
+                @Html.ValidationMessageFor(model => model.Remarks)
+            </div>
+        </div>
+        <div class="col-md-1">
+            <button type="submit" onclick="pageSubmit('frmSettings');" value="Update" class="sym-btn-update">&nbsp;Update</button>
+        </div>
+    </div>
+}

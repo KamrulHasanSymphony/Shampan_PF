@@ -1,0 +1,218 @@
+﻿@model SymViewModel.Common.UserLogsVM
+@using UIHelper.MVC
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Login Form</title>
+
+    <style>
+    </style>
+
+</head>
+<body>
+    <div style="max-height:250px!important" class="content">
+        <div class=" ">
+
+            <div class="col-md-8 visible-md visible-lg jumbotron" style="padding-top: 0.5em; padding-bottom:2em ">
+   
+                @Html.Partial("_slideshow")
+            </div>
+
+            <div id="login" class="col-md-4 col-sm-12 col-xs-12">
+                <div class="login">
+                    <div style="color: white;" class="">
+                        <img src="~/Images/ShampanlogoPF.png" />
+                    </div>
+                    <div class="col-md-1">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-10">
+                        @using (Html.BeginForm("Login", "Home", new { ReturnUrl = ViewBag.ReturnUrl, enctype = "multipart/form-data", @Id = "frmLogin" }))
+                        {
+                             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            
+                            @Html.HiddenFor(model => model.ReturnUrl)
+                            @Html.LabelFor(model => model.LogID, new { @class = "" })
+                            @Html.TextBoxFor(model => model.LogID, new { placeholder = "User Name", required = "required", @class = "uid form-control" })
+                            @Html.LabelFor(model => model.Password, new { @class = "" })
+                            @Html.PasswordFor(model => model.Password, new { placeholder = "Password", required = "required", @class = "form-control" })
+                               @Html.LabelFor(model => model.BranchId, new { @class = "" })
+                            @Html.SimpleDropDownFor(model => model.BranchId, "/Config/DropDown/Branch", new { required = "required", @class = "form-control " })
+                            <label>&nbsp;</label>
+                            @Html.HiddenFor(model => model.ComputerIPAddress, new { @id = "ip1", @class = "ipAdd required form-control" })
+                            @Html.HiddenFor(model => model.Location, new { @id = "Location", @class = "Location required form-control" })
+
+                            <button type="submit" class="btn btn-primary btn-block btn-large">Log In.</button>
+                            <br />
+                            <a href="/Home/ForgotPasswordView">Forgot Password</a>
+                        }
+                    </div>
+                </div>
+               
+
+                
+            </div>
+        </div>
+    </div>
+    @*  <div class="content">
+            @Html.Partial("_footerView")
+        </div>*@
+    <span id="ip"></span>
+
+
+</body>
+
+<script>
+    //$(function () {
+    //    setTimeout(function () {
+    //        getUserIP();
+    //    }, 3000);
+
+    //});
+
+    //$(document).keypress(function (e) {
+    //    if (e.which == 13) {
+    //        //var url = "/Home/Login";
+    //        pageSubmit('frmLogin')
+    //        //submit(url);
+    //    }
+    //});
+
+
+    var realIp = "";
+    $('#shwoname').click(function () {
+        //uid
+        //alert((myurl);
+    })
+    $('.logme').click(function () {
+        var myurl = '@HttpContext.Current.Request.RawUrl';
+        //alert((myurl);
+    })
+    $(".loading").hide();
+    var localIp = "";
+
+    function realipFind() {
+        //$.get("http://ipinfo.io", function (response) {
+        //    realIp=response.ip;
+        //}, "jsonp");
+        $.ajax({
+            url: "http://ipinfo.io",
+            dataType: 'jsonp',
+            //beforeSend: function () { $(".loading").show(); },
+            complete: function () {
+                $(".loading").fadeOut(200).hide("slow")
+                getipdetail();
+            },
+            success: function (data) {
+                realIp = data.ip;
+            },
+        });
+    }
+    realipFind();
+    function getipdetail() {
+        getUserIP(function (ip) {
+            var FullIp = "";
+            var localIp = ip;
+            FullIp = realIp + "~" + localIp
+            $('.ipAdd').val(FullIp);
+        });
+    }
+    function getUserIP(onNewIP) { //  onNewIp - your listener function for new IPs
+        //compatibility for firefox and chrome
+        var myPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;
+        var pc = new myPeerConnection({
+            iceServers: []
+        }),
+        noop = function () { },
+        localIPs = {},
+        ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/g,
+        key;
+
+        function iterateIP(ip) {
+            if (!localIPs[ip]) onNewIP(ip);
+            localIPs[ip] = true;
+        }
+
+        //create a bogus data channel
+        pc.createDataChannel("");
+
+        // create offer and set local description
+        pc.createOffer(function (sdp) {
+            sdp.sdp.split('\n').forEach(function (line) {
+                if (line.indexOf('candidate') < 0) return;
+                line.match(ipRegex).forEach(iterateIP);
+            });
+
+            pc.setLocalDescription(sdp, noop, noop);
+        }, noop);
+
+        //listen for candidate events
+        pc.onicecandidate = function (ice) {
+            if (!ice || !ice.candidate || !ice.candidate.candidate || !ice.candidate.candidate.match(ipRegex)) return;
+            ice.candidate.candidate.match(ipRegex).forEach(iterateIP);
+        };
+    }
+    //$(':input[type="submit"]').prop('disabled', true);
+    getLocation()
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            alert("Geolocation is not supported by this browser.");
+        }
+    }
+    function showPosition(position) {
+        if (position != null) {
+            $('#Location').val(position.coords.latitude + ',' + position.coords.longitude);
+            $(':input[type="submit"]').prop('disabled', false);
+            $('.onLocation').hide();
+        }
+    }
+</script>
+<script>
+    /* ==============================================
+    PORTFOLIO ITEMS
+    =============================================== */
+
+    var $container = $('.portfolio-items');
+
+    $container.isotope({
+        //masonry: { columnWidth: $container.width() / 5 },
+        itemSelector: '.item',
+    });
+
+    var $optionSets = $('#options .option-set'),
+          $optionLinks = $optionSets.find('a');
+
+    $optionLinks.click(function () {
+        var $this = $(this);
+
+        // don't proceed if already selected
+        if ($this.hasClass('selected')) {
+            return false;
+        }
+        var $optionSet = $this.parents('.option-set');
+        $optionSet.find('.selected').removeClass('selected');
+        $this.addClass('selected');
+
+        // make option object dynamically, i.e. { filter: '.my-filter-class' }
+        var options = {},
+            key = $optionSet.attr('data-option-key'),
+            value = $this.attr('data-option-value');
+        // parse 'false' as false boolean
+        value = value === 'false' ? false : value;
+        options[key] = value;
+        if (key === 'layoutMode' && typeof changeLayoutMode === 'function') {
+            // changes in layout modes need extra logic
+            changeLayoutMode($this, options)
+        } else {
+            // otherwise, apply new options
+            $container.isotope(options);
+        }
+
+        return false;
+    });
+
+</script>
+

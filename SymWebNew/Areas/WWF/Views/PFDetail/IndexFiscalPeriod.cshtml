@@ -1,0 +1,153 @@
+﻿@model SymViewModel.WWF.PFBankDepositVM
+@using UIHelper.MVC
+
+<div class="headrow">
+    <button type="button" title="Add New WWF Process" data-url="/@ViewBag.TransType/PFDetail/PFProcess" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New WWF Process</button>
+    <button type="button" title=" Import/Export" id="" class="sym-btn-ExportImport" data-url="/WWF/PFDetail/ImportExportPF" onclick="GoTo(this)">&nbsp;Import/Export</button>
+    <label class="pull-right">Contribution</label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p class="thinHead">Contribution</p>
+    </div>
+    <p>
+    </p>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+               
+                <th class="center">Action</th>
+                <th class="center">Code</th>
+                <th class="center">Project</th>
+                <th class="center">Fiscal Period</th>
+                <th class="center">Total Profit</th>
+                <th class="center">WWF Value</th>              
+                <th class="center">Post Status</th>
+
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New WWF Process" data-url="/@ViewBag.TransType/PFDetail/PFProcess" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New WWF Process</button>
+    <button type="button" title=" Import/Export" id="" class="sym-btn-ExportImport" data-url="/WWF/PFDetail/ImportExportPF" onclick="GoTo(this)">&nbsp;Import/Export</button>
+</div>
+
+
+@using (Html.BeginForm("Create", "PFBankDeposit", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmPFBankDepositGet" }))
+{
+    @Html.HiddenFor(model => model.TransactionType)
+    @Html.HiddenFor(model => model.FiscalYearDetailId)
+
+}
+
+
+<script language="javascript" type="text/javascript">
+    $(function () {
+        InitDateTimePickers();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/PFDetail/_indexFiscalPeriod?EmployeeId=@ViewBag.EmployeeId&fydid=@ViewBag.fydid",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "16%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    //return '  <a title="Click on for Details" style="text-decoration:none;"    href=\"/@ViewBag.TransType/PFDetail?fydid=' + oObj.aData[0] + '\"  class="sym-btn-detail-row"></a>'
+                                    return '  <a title="Click on for Details" style="text-decoration:none;"    href=\"/@ViewBag.TransType/PFDetail?id=' + oObj.aData[0] + '\"  class="sym-btn-detail-row"></a>'
+                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/PFDetail/Post"  onclick=btnPostNew(this);  data-Id="' + oObj.aData[0] + "~" + oObj.aData[7] + '\" class="sym-btn-post-row"></a>'
+
+                                        + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/PFDetail/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
+
+                                    //+ '&nbsp; <a title="Click on for Report Summary" target="_blank"  href=\"/@ViewBag.TransType/PFDetail/PFReportSummaryDetail?fydid=' + oObj.aData[0] + '&rType=Summary' + '\" class="sym-btn-report-row"></a>'
+                                    //+ '&nbsp; <a title="Click on for Report Detail" target="_blank"  href=\"/@ViewBag.TransType/PFDetail/PFReportSummaryDetail?fydid=' + oObj.aData[0] + '&rType=Detail' + '\" class="sym-btn-report-row"></a>'
+                                    //+ '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=1' + '&TransactionForm=PFContribution' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                    + '&nbsp; <a title="Click on for Journal" href="/@ViewBag.TransType/PFDetail/InsertAutoJournal?TransactionMonth=' + oObj.aData[3] + '' + '&TransactionForm=Contribution' + '&TransactionCode=' + oObj.aData[1] + '\" class="sym-btn-bank-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "Code", "sWidth": "10%" }
+                            , { "sName": "ProjectName", "sWidth": "20%" }
+                            , { "sName": "FiscalPeriod", "sWidth": "10%" }
+                             , { "sName": "TotalPF", "sWidth": "10%" }
+                            , { "sName": "WWFValue", "sWidth": "10%" }                           
+                            , { "sName": "Post", "sWidth": "12%" }
+            ]
+        });
+
+    });
+
+</script>
+
+<script>
+    function btnBankDeposit(sender) {
+        var fydid = $(sender).attr("data-Id");
+
+
+        var getURL = "/@ViewBag.TransType/PFDetail/GetPFDetail" + "?" + "fydid=" + fydid;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (!vm.Post) {
+                ShowResult("Fail", "Do Post before Bank Deposit!");
+                return;
+            }
+
+            if (vm.IsBankDeposited) {
+                ShowResult("Fail", "Already Deposited to Bank!");
+                return;
+            }
+
+
+            $("#FiscalYearDetailId").val(fydid);
+            $("#TransactionType").val("PFContribution");
+
+            $("#frmPFBankDepositGet").submit();
+
+            ////alert(vm.IsBankDeposited);
+
+
+        });
+
+
+
+    }
+    function btnPostNew(sender) {
+
+        var Id = $(sender).attr("data-Id").split('~')[0];
+        var post = $(sender).attr("data-Id").split('~')[1];
+        if (post == "Posted") {
+            ShowResult("Fail", "Data Already Posted!");
+            return true;
+        }
+        var getURL = "/@ViewBag.TransType/PFDetail/Post" + "?" + "ids=" + Id;
+
+        $.getJSON(getURL, function (vm) {
+
+            if (vm.Post) {
+                ShowResult("Fail", "Data Already Posted!");
+                return true;
+            }
+            else {
+                var url = $(sender).attr("data-url") + "?ids=" + Id + '~';
+                var questionMSG = "Are you sure to Post Data!";
+                singleOperation(questionMSG, url);
+            }
+
+        });
+
+    }
+
+
+</script>

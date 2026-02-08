@@ -1,0 +1,68 @@
+﻿@model SymViewModel.PF.EmployeeInfoForPFVM
+@{
+    ViewBag.Title = "Index";
+    ViewBag.Location = "Index"; 
+}
+<!DOCTYPE html>
+<html>
+    <head>
+    </head>
+    <body>
+            <p>
+</p>
+        <div id="">
+            <div id="">
+                <table id="myDataTableNominee" class="display">
+                    <thead>
+                        <tr>
+                            <th class="center" ><input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Name</th>
+                            <th>Relation</th>
+                            <th>Mobile</th>
+                            <th>Phone</th>
+                        </tr>
+                    </thead>
+                    <tbody> 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
+</html>
+<script>
+    $(document).ready(function () {
+        //InitCustomDialog();
+        if ('@Session["result"]' != "") {
+            var tt = '@Session["result"]';
+            var tt1 = tt.split("~");
+           // $(".dialog-alert").dialog('open');
+            $("#dialog-msg").append('' + tt1[1]);
+            $(".ui-dialog").addClass('' + tt1[0]);
+        }
+        var oTable = $('#myDataTableNominee').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/PF/EmployeeInfoPF/_indexNominee/@Model.Id",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;" Onclick="NomineeEdit(this);" data-EmployeeId="@Model.Id"  data-Id="' + oObj.aData[0] + '" id=""  class=" innerListLink sym-btn-edit-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "Name", "sWidth": "25%" }
+                            , { "sName": "Relation", "sWidth": "20%" }
+                            , { "sName": "Mobile", "sWidth": "20%" }
+                            , { "sName": "Phone", "sWidth": "20%" }
+            ]
+        });
+    });
+    </script>

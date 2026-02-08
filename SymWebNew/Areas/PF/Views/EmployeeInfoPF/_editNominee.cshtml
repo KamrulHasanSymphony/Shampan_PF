@@ -1,0 +1,248 @@
+﻿@model SymViewModel.PF.EmployeeInfoForPFVM
+@using SymOrdinary
+@using System.Threading;
+@{ 
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+
+@using (Html.BeginForm("Nominee", "EmployeeInfoPF", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmNominee" }))
+{
+    @Html.ValidationSummary(true)
+
+
+    <div class="nominee">
+        @Html.HiddenFor(model => model.nomineeVM.EmployeeId)
+        @Html.HiddenFor(model => model.nomineeVM.Id)
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Name)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.Name, new { @placeholder = "Nominee Name", @class = "required form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Relation)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.Relation, new { @placeholder = "Relation", @class = "required form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.DateofBirth)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.DateofBirth, new { @onchange = "DateOfBirth(this)", @placeholder = "Date of Birth", @class = "required customDatePicker form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.BirthReg)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.BirthReg, new { @placeholder = "Birth Certificate", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Address)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.nomineeVM.Address, new { @placeholder = "Village/House & Road", @rows = "1", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.PostalCode)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.PostalCode, new { @placeholder = "Postal Code", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.PostOffice)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.PostOffice, new { @placeholder = "Post Office", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.City)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.City, new { @placeholder = "Police Station", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Country)
+                </div>
+                <div class="editor-field">
+                    <select id="nomineeVM.Country" name="nomineeVM.Country" data-val="@Model.nomineeVM.Country"  data-url="/Config/DropDown/CountryEN/"  class = " country form-control" ></select>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Division)
+                </div>
+                <div class="editor-field">
+                    <select id="nomineeVM.Division" name="nomineeVM.Division" data-val="@Model.nomineeVM.Division"  data-url="/Config/DropDown/Division/"  class = " division form-control" ></select>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.District)
+                </div>
+                <div class="editor-field">
+                    <select id="nomineeVM.District" name="nomineeVM.District" data-val="@Model.nomineeVM.District"  data-url="/Config/DropDown/District/"  class = " district form-control" ></select>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.NID)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.NID, new { @placeholder = "NID No.", @class = "form-control" })
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Mobile)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.Mobile, new { @placeholder = "Mobile", @class = "required form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Phone)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.Phone, new { @placeholder = "Phone", @class = " form-control" })
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Fax)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.Fax, new { @placeholder = "Fax", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Passport)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.nomineeVM.Passport, new { @placeholder = "Passport No.", @class = "form-control" })
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.nomineeVM.Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.nomineeVM.Remarks, new { @placeholder = "Remarks", @rows = "1", @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <br />
+        <p>
+            @if (identity.IsAdmin || identity.IsHRM || identity.IsESSEditPermission)
+            {
+
+                
+                <button type="button"  title="Save Data" id="saveJSOND" class="sym-btn-save">&nbsp;Save </button>
+                
+                <button type="button" title="Click for Edit" onclick="Editnominee();" class="Edit sym-btn-edit">&nbsp;Edit</button>
+          
+            }
+            <button type="button" title="Click for Cancel" onclick="Canclenominee();" class="Cancle  sym-btn-cancel">&nbsp;Cancel</button>
+        </p>
+    </div>
+    <p>
+        <input class="tooltip"></p>
+
+}
+<script>
+    var url = "";
+    var urlDivision = "";
+    var urlDistrict = "";
+    $(function () {
+        customToollip();
+        //$(document).tooltip();
+        $("#dialogCon").hide();
+        InitDateTimePickers();
+        Editnominee();
+        Country();
+        Division();
+        District();
+        $(".showHideNM").hide();//index page new btn
+        valiDation('frmNominee');
+    });
+    function DateOfBirth(sender) {
+        var selectedDate = ParseDate($(sender).val());
+        var today = new Date();
+        if (selectedDate > today) {
+            $(sender).val("");
+            ShowResult("Fail", "Date of birth can't be prior to today!");
+        }
+    }
+    var isChange = false;
+    $('.form-control').change(function () {
+        isChange = true;
+    });
+
+    $('#saveJSOND').click(function () {
+        var url = "/PF/EmployeeInfoPF/Nominee";
+
+        $form = $('#frmNominee');
+
+        $form.attr("action", url);
+        $form.submit();
+
+    });
+
+    function Canclenominee() {
+        if (isChange == true) {
+            Ask("<h6>You have some changes in this form.</br>Click No for Ignore</h6>", null, function () {
+                isChange = false;
+                Canclenominee();
+            })
+        }
+        else {
+            //isChange = false;
+            $("#myNominee").html('');
+            $(".showHideNM").show();
+        }
+    }
+</script>
+
+

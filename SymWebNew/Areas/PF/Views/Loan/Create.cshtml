@@ -1,0 +1,678 @@
+﻿@model SymViewModel.Loan.EmployeeLoanVM
+@using UIHelper.MVC
+@using (Html.BeginForm("Create", "Loan", FormMethod.Post, new { @Id = "frmLoan" }))
+{
+    <div class="headrow">
+        <button type="button" title="Save Data" onclick="pageSubmit('frmLoan')" class="sym-btn-save">&nbsp;Save</button>
+        <label class="pull-right">Loan > Create</label>
+    </div>
+    @Html.ValidationSummary(true)
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Loan</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Code)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Code, new { @placeholder = "Employee Code", @class = "  form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Employee)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Employee, new { @placeholder = "Employee Name", @class = "  form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Employee)
+                </div>
+
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>@Session["DepartmentLabel"]</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Department, new { @placeholder = "Employee Department", @class = "  form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Department)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>@Session["SectionLabel"]</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Section, new { @placeholder = "Employee Section", @class = "  form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Section)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>@Session["ProjectLabel"]</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Project, new { @placeholder = "Employee Project", @class = "  form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Project)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Designation)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Designation, new { @placeholder = "Employee Designation", @class = "  form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.Designation)
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.LoanType_E)
+                    @Html.HiddenFor(model => model.EmployeeId, new { @class = "cEmployeeId" })
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDownFor(model => model.LoanType_E, "/Config/DropDown/LoanType", new { @class = "required form-control" })
+                    @Html.ValidationMessageFor(model => model.LoanType_E)
+                </div>
+            </div>
+
+            <div class="col-md-2 Balance">
+                <div class="editor-label">
+                    <label>Balance</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("Balance", "", new { @placeholder = "Balance", @class = "cBalance right form-control", @readonly = "readonly" })
+                    @Html.ValidationMessage("Balance")
+                </div>
+            </div>
+            <div class="col-md-2 AvailableRate">
+                <div class="editor-label">
+                    <label>Available Rate (%)</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("AvailableRate", "", new { @placeholder = "Available Rate", @class = " cAvailableRate right form-control", @readonly = "readonly" })
+                    @Html.ValidationMessage("AvailableRate")
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    <label>Loan No</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.LoanNo, new { @placeholder = "Loan No", @class = " cLoanNo right form-control" })
+                    @Html.ValidationMessage("LoanNo")
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.PrincipalAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.PrincipalAmount, new { @onchange = "LoanSchudele();", @placeholder = "Principal Amount", @class = " right required form-control" })
+                    @Html.ValidationMessageFor(model => model.PrincipalAmount)
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.NumberOfInstallment)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.NumberOfInstallment, new { @onchange = "LoanSchudele()", @placeholder = "Number Of Installment", @class = " right  required form-control" })
+                    @Html.ValidationMessageFor(model => model.NumberOfInstallment)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ApplicationDate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.ApplicationDate, new { @onchange = "LoanSchudele(); LoanDate(this);", @placeholder = "Application Date", @class = "customDatePicker  form-control" })
+                    @Html.ValidationMessageFor(model => model.ApplicationDate)
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.IsApproved)
+                </div>
+                <div class="editor-field">
+                    @Html.CheckBoxFor(model => model.IsApproved, new { @class = "ApprovedCheck form-control" })
+                    @Html.ValidationMessageFor(model => model.IsApproved)
+                </div>
+            </div>
+
+            <div class="col-md-2 approvedDate">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.ApprovedDate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.ApprovedDate, new { @onchange = "LoanSchudele(); LoanDate(this);", @placeholder = "Approved Date", @class = "customDatePicker  form-control" })
+                    @Html.ValidationMessageFor(model => model.ApprovedDate)
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.StartDate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.StartDate, new { @onchange = "LoanSchudele(); LoanDate(this);", @placeholder = "Start Date", @class = "customDatePicker required form-control" })
+                    @Html.ValidationMessageFor(model => model.StartDate)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.EndDate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.EndDate, new { @disabled = "disabled", @placeholder = "End Date", @class = "customDatePicker required form-control" })
+                    @Html.ValidationMessageFor(model => model.EndDate)
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InterestPolicy)
+                </div>
+                <div class="editor-field">
+                    @*@Html.CheckBoxFor(model => model.IsFixed, new { @onchange = "IsFixedAmount(this)", @placeholder = "Is it Fixed?", @class = "form-control" })*@
+                    @Html.SimpleDropDownFor(model => model.InterestPolicy, "/Config/DropDown/LoanInterestPolicyList", new { @onchange = "LoanSchudele()", @class = "intPolicy required form-control" })
+                    @Html.ValidationMessageFor(model => model.InterestPolicy)
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InterestRate)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.InterestRate, new { @onchange = "LoanSchudele()", @placeholder = "Interest Rate", @class = "intRate right form-control" })
+                    @Html.ValidationMessageFor(model => model.InterestRate)
+                </div>
+
+            </div>
+            @*<div class="col-md-1">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.InterestRate1)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.InterestRate1, new { @onchange = "LoanSchudele()", @placeholder = "Interest Rate1", @class = "intRate1 right form-control" })
+                        @Html.ValidationMessageFor(model => model.InterestRate1)
+                    </div>
+
+                </div>*@
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.InterestAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.InterestAmount, new { @onchange = "LoanSchudele()", @placeholder = "Interest Amount", @class = " right form-control" })
+                    @Html.ValidationMessageFor(model => model.InterestAmount)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.TotalAmount)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.TotalAmount, new { @placeholder = "Total Amount", @class = " right form-control", @readonly = "readonly" })
+                    @Html.ValidationMessageFor(model => model.TotalAmount)
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @rows = "1", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+
+
+
+        </div>
+
+
+
+
+        <hr />
+        <div id="loanDetails">
+        </div>
+    </div>
+    <div class="headrow">
+        @*<button type="button" title="Save Data" onclick="pageSubmit('frmLoan')" class="sym-btn-save">&nbsp;Save</button>*@
+        @*<button type="button" title="Save Data" onclick="pageSubmit('frmLoan')" class="sym-btn-save btnsave">&nbsp;Save</button>*@
+        <button type="button" title="Save Data" class="sym-btn-save btnsave">&nbsp;Save</button>
+    </div>
+}
+<script>
+
+    $(function () {
+
+        PFLoanTypeCheck();
+
+    });
+
+
+    $('#LoanType_E').change(function () {
+        PFLoanTypeCheck();
+        PFBalanceLoad();
+
+    });
+
+
+    function PFLoanTypeCheck() {
+
+        var PFloanType = $('#LoanType_E :selected').text();
+
+        if (PFloanType == "PF Loan") {
+            $(".Balance").show();
+            $(".AvailableRate").show();
+        }
+        else {
+            $('.Balance').hide();
+            $('.AvailableRate').hide();
+        }
+    }
+
+    function PFBalanceLoad() {
+
+        var ApplicationDate = $('#ApplicationDate').val();
+        var EmployeeId = $('.cEmployeeId').val();
+
+        var PFloanType = $('#LoanType_E :selected').text();
+
+        if (PFloanType == "PF Loan") {
+
+            var url = "/PF/Loan/PFBalance?ApplicationDate=" + ApplicationDate + '&emploanId=' + EmployeeId;
+            $.getJSON(url, function (vm) {
+
+                $('.cBalance').val(vm.PFBalance);
+                $('.cAvailableRate').val(vm.AvailableRate);
+
+                //$('#InterestRate').val(vm.InterestRate);
+                //$('#InterestRate1').val(vm.InterestRate1);
+                //if (vm.FromSetting) {
+                //    $('#InterestRate').readOnly = true;
+                //    $('#InterestRate1').readOnly = true;
+                //}
+
+            })
+        }
+
+    }
+
+    $('#PrincipalAmount').change(function () {
+        var PFloanType = $('#LoanType_E :selected').text();
+        if (PFloanType == "PF Loan") {
+
+            PFAvailableBalanceCheck();
+        }
+    });
+
+    function PFAvailableBalanceCheck() {
+
+        var PFBalance = $('.cBalance').val();
+        var PFAvailableRate = $('.cAvailableRate').val();
+        var PFPrincipalAmount = $('#PrincipalAmount').val();
+
+        var AvailableBalance = PFBalance * PFAvailableRate / 100;
+
+        //alert(AvailableBalance);
+
+        if (AvailableBalance < PFPrincipalAmount) {
+
+            ShowResult("Fail", "Balance Not Available");
+            $('#PrincipalAmount').val(0);
+            return;
+        }
+
+
+    }
+
+    $('.btnsave').click(function () {
+
+
+        var PFloanType = $('#LoanType_E :selected').text();
+        if (PFloanType == "PF Loan") {
+
+            PFAvailableBalanceCheck();
+
+        }
+
+        var PFPrincipalAmount = $('#PrincipalAmount').val();
+
+        if (PFPrincipalAmount == 0) {
+            ShowResult("Fail", "Principal Amount is Required ");
+            return
+        }
+
+        pageSubmit('frmLoan');
+
+
+    });
+
+</script>
+
+
+
+<script>
+    $(function () {
+        debugger;
+
+        PFLoanTypeCheck();
+        ApprovedCheck();
+        InitDatePickers();
+        ////InitDropDown();
+        LoanSchudele();
+        valiDation("frmLoan");
+
+
+    });
+
+    $('#IsApproved').change(function () {
+        ApprovedCheck();
+    });
+
+    function ApprovedCheck() {
+        if ($('#IsApproved').attr('checked')) {
+            $(".approvedDate").show();
+            $("#ApprovedDate").addClass("required");
+            }
+            else {
+            $('.approvedDate').hide();
+            $('#ApprovedDate').removeClass("required");
+            }
+    }
+        //var ApprovedCheck = (".ApprovedCheck").
+        //if(".ApprovedCheck")
+    //}
+
+
+    $('.intPolicy').change(function () {
+        //var intPolicy = $('.intPolicy').val();
+        var intPolicy = $('.intPolicy  :selected').text();
+        $("#InterestAmount").attr('readonly', true);
+        $("#InterestAmount").val(0);
+        if (intPolicy == "Fixed") {
+            $("#InterestAmount").attr('readonly', false);
+        }
+
+        var intRate = $('.intRate').val();
+        if (intPolicy == "Rate") {
+            if (parseFloat(intRate) > 100)
+                $('.intRate').val(0);
+        }
+    })
+
+    $('.intRate').change(function () {
+        var intPolicy = $('.intPolicy  :selected').text();
+
+        var intRate = $('.intRate').val();
+        if (intPolicy == "Rate") {
+            if (parseFloat(intRate) > 100)
+                $('.intRate').val(0);
+            //$("#InterestAmount").attr('readonly', false);
+            //$("#InterestAmount").val(0);
+        }
+        //alert()
+        //$("#InterestAmount").attr('readonly', true);
+    });
+
+
+
+
+    //function IsFixedAmount(sender) {
+    //    if ($(sender).is(":checked")) {
+    //        $(".InterestRate").hide();
+    //        $("#InterestRate").val('0');
+    //        $("#InterestAmount").attr('readonly', false);
+    //    }
+    //    else {
+    //        $(".InterestRate").show();
+    //        $("#InterestAmount").attr('readonly', true);
+    //    }
+    //    LoanSchudele();
+    //}
+
+    function LoanSchudele() {
+
+        PFBalanceLoad();
+        debugger;
+
+        var intPolicy = $('.intPolicy  :selected').text();
+
+        $("#loanDetails").html("");
+        var installment = parseFloat($("#NumberOfInstallment").val());
+        var PrincipalAmount = parseFloat($("#PrincipalAmount").val());
+        var PrincipalAmt = parseFloat($("#PrincipalAmount").val());
+
+        var InterestRate = parseFloat($("#InterestRate").val());
+        var InterestRate1 = parseFloat($("#InterestRate1").val());
+        var InterestAmount = parseFloat($("#InterestAmount").val());
+        InterestAmount = InterestAmount.toFixed(2);
+        var totalInterest = 0;
+        var Subtotal = 0;
+        var startDate = $("#StartDate").val();
+        if (installment <= 0 || PrincipalAmount <= 0 || startDate == "") {
+            return;
+        }
+        // details
+
+        debugger;
+        var dPAmount = PrincipalAmount / installment;
+        dPAmount = dPAmount.toFixed(2);
+        var actualValue = dPAmount.toString().split('.')[0];
+        var fractionValue = dPAmount.toString().split('.')[1];
+
+        actualValue = parseInt(actualValue);
+        fractionValue = parseInt(fractionValue);
+
+
+
+        var dIAmount = 0;
+        var dTAmount = 0;
+        var cPAmount = PrincipalAmount;
+        var iLoop = 1;
+        var totalCount = installment - 1;
+        //
+        if (PrincipalAmount <= 0 || installment <= 0 || startDate == "") {
+            return;
+        }
+        var html = "";
+        var url = "/PF/Loan/MonthCalculation?date=" + $("#StartDate").val() + "&number=" + parseInt(installment);
+        debugger;
+        var annualInterestRate = 0;
+        annualInterestRate = parseFloat(InterestRate) / 100;
+        var monthlyInterestRate = parseFloat(annualInterestRate) / 12;
+        var installmentValue = 0;
+        var installmentValue = Math.ceil((parseFloat(PrincipalAmount) * monthlyInterestRate * Math.pow(1 + monthlyInterestRate, parseFloat(installment))) / (Math.pow(1 + monthlyInterestRate, parseFloat(installment)) - 1));
+
+
+        '@Html.Raw(ViewBag.TotalDays)'
+        debugger;
+        $.ajax({
+            type: "GET",
+            url: url,
+            error: function (xhr, status, error) {
+            },
+            success: function (response) {
+                html += "<table border='3' border-collapse: collapse; class='table table-striped  table-responsive'><thead><caption><h1>Payment Schedule</h1></caption><tr><th>No.</th><th>Date</th><th>Amount</th><th>Interest</th><th>Total</th></tr></thead><tbody>"
+                $.each(response, function (i, item)
+                {
+
+                    console.log(response);
+                    if (intPolicy == "Reduce") {
+                        debugger;
+
+                        var NewPrincipleAmount = Math.round(parseFloat(PrincipalAmount));
+
+                        var InterestAmount = parseFloat(NewPrincipleAmount) * parseFloat(annualInterestRate) / 12;
+                        var PrinciipleWithInterestAmount = parseFloat(PrincipalAmount) + parseFloat(InterestAmount);
+                        var Deposit = Math.round(parseFloat(installmentValue));
+                        if (i == totalCount) {
+                            Deposit = parseFloat((parseFloat(PrinciipleWithInterestAmount))).toFixed(2);
+
+                        }
+                        var InterestPart = parseFloat(InterestAmount).toFixed(4);
+                        var PrinciplePart = parseFloat(Deposit - InterestPart).toFixed(4);
+
+
+                        PrincipalAmount = parseFloat((PrinciipleWithInterestAmount - installmentValue)).toFixed(2);
+
+                        dPAmount = PrinciplePart;
+                        dIAmount = InterestPart;
+                        dTAmount = Deposit;
+                        totalInterest = parseFloat(totalInterest) + parseFloat(dIAmount);
+                        Subtotal = parseFloat(Subtotal) + parseFloat(dTAmount);
+
+                    }
+                    else if (intPolicy == "Fixed") {
+                        dIAmount = parseFloat(InterestAmount) / parseFloat(installment);
+                        totalInterest = parseFloat(totalInterest) + parseFloat(dIAmount);
+                        totalInterest = totalInterest.toFixed(2);
+                        dTAmount = parseFloat(dPAmount) + parseFloat(dIAmount);
+                        dTAmount = dTAmount.toFixed(2);
+                        Subtotal = parseFloat(Subtotal) + parseFloat(dTAmount);
+                    }
+                    else if (intPolicy == "Rate")
+                    {
+                        dIAmount = ((parseFloat(PrincipalAmount) * parseFloat(InterestRate) / 100) / 12);
+                        totalInterest = parseFloat(totalInterest) + parseFloat(dIAmount);
+                        totalInterest = totalInterest.toFixed(2);
+                        dTAmount = parseFloat(dPAmount) + parseFloat(dIAmount);
+                        dTAmount = dTAmount.toFixed(2);
+                        Subtotal = parseFloat(Subtotal) + parseFloat(dTAmount);
+                    }
+                    if (intPolicy != "Reduce") {
+
+                        if (totalCount == i) {
+
+                            dPAmount = PrincipalAmount - (actualValue * (installment - 1));
+
+                            dIAmount = dIAmount.toFixed(2);
+                            var val = dIAmount.toString().split('.')[0];
+                            var amnt = parseInt(val);
+                            dIAmount = parseInt(totalInterest) - (amnt * (installment - 1));
+                        }
+                        else {
+                            dPAmount = Math.floor(dPAmount);
+                            dIAmount = Math.floor(dIAmount);
+                        }
+                    }
+                    dTAmount = parseInt(dPAmount) + parseInt(dIAmount);
+                    html += "<tr><td>" + (i + 1) + "</td><td>" + item.StartDate + "</td><td class='text-right' >" + parseFloat(dPAmount).toFixed(2) + "</td><td class='text-right'>" + parseFloat(dIAmount).toFixed(2) + "</td><td class='text-right'>" + parseFloat(dTAmount).toFixed(2) + "</td></tr>";
+                    debugger;
+                    $("#EndDate").val(item.StartDate)
+                    iLoop++;
+                });
+                // bottom line
+                PrincipalAmount = PrincipalAmt;
+                Subtotal = parseInt(PrincipalAmount) + parseInt(totalInterest);
+                var rate = $("#InterestRate").val() || 0;
+                if (intPolicy != "Reduce") {
+                    if (rate > 0) {
+                        totalInterest = (parseFloat(PrincipalAmount) * parseFloat(InterestRate) / 100 / 12) * installment;
+                    }
+                }
+
+                html += "<tr><th>Total: </th><th> Installment= " + installment + "</th><th class='text-right' >Principle= " + parseFloat(PrincipalAmount).toFixed(2) + "</th><th class='text-right'>Interest= " + parseFloat(totalInterest).toFixed(2) + "</th><th class='text-right'>Subtotal= " + parseFloat(Subtotal).toFixed(2).toLocaleString('en') + "</th></tr>";
+
+                html += "</tbody></table>";
+                $("#loanDetails").html(html);
+                $("#TotalAmount").val(parseFloat(Subtotal).toFixed(2));
+                $("#InterestAmount").val(parseFloat(totalInterest).toFixed(2));
+            }
+        });
+    }
+    //function SetFiscalyear(sender) {
+    //    var startDate = new Date(ParseDate($("#YearStart").val()));
+    //    var yr = startDate.getFullYear();
+    //    var mon = startDate.getMonth();
+    //    var da = startDate.getDate();
+    //    var newDate = function (y, m, d) {
+    //        return new Date(y, m, d);
+    //    }
+    //    var months = ["January", "February", "March", "April", "May", "June",
+    //           "July", "August", "September", "October", "November", "December"];
+    //    $.each($(".countPeriods"), function (i, item) {
+    //        var month = mon + i >= 12 ? mon + i - 12 : mon + i;
+    //        $(item).find('.periodName').val(months[month] + "-" + yr);
+    //        $(item).find('.Start').val(FormatDate(newDate(yr, mon + i, da)));
+    //        $(item).find('.End').val(FormatDate(newDate(yr, mon + i + 1, da - 1)));
+    //    });
+    //    $("#YearEnd").val(FormatDate(newDate(yr, mon + 12, da - 1)));
+    //}
+    function LoanDate(sender) {
+        debugger;
+        var applicationDate = ParseDate($("#ApplicationDate").val());
+        var approvedDate = ParseDate($("#ApprovedDate").val());
+        var startDate = ParseDate($("#StartDate").val());
+
+        //changed
+        if (approvedDate != "" && $("#StartDate").val() == "")
+        {
+            debugger;
+            var dt = new Date(approvedDate);
+            if (!isNaN(dt.getTime())) {
+                var monthsToAdd = 1;
+                dt.setMonth(dt.getMonth() + monthsToAdd);
+
+                function pad(number) {
+                    if (number < 10) {
+                        return '0' + number;
+                    }
+                    return number;
+                }
+                var monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                var formattedDate = pad(dt.getDate()) + '-' + monthNames[dt.getMonth()] + '-' + dt.getFullYear();
+                $("#StartDate").val(formattedDate);
+                LoanSchudele();
+            }
+        }
+        ///
+
+        if (applicationDate > approvedDate) {
+            ShowResult("Fail", "Application Date can't be prior to Approved Date!");
+            $(sender).val("");
+        }
+        else if (applicationDate > startDate) {
+            ShowResult("Fail", "Application Date can't be prior to Start Date!");
+            $(sender).val("");
+        }
+        else if (approvedDate > startDate) {
+            ShowResult("Fail", " Start Date can't be prior to Approved Date!");
+            $(sender).val("");
+        }
+    };
+
+
+</script>
+<style>
+    .thinbox #loanDetails table, .thinbox #loanDetails table tr td, .thinbox #loanDetails table tr th, table tr {
+        border: 1px solid #808080 !important;
+    }
+
+    table th {
+        text-align: center !important;
+    }
+</style>

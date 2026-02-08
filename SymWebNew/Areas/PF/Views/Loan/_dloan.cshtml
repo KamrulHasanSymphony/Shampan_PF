@@ -1,0 +1,52 @@
+﻿@model SymViewModel.Loan.EmployeeLoanDetailVM
+@using UIHelper.MVC
+@{
+    Layout = null;
+}
+<div class="row countInstallments">
+    @using (Html.BeginCollectionItem("employeeLoanDetails"))
+    {
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.EmployeeId)
+        @Html.HiddenFor(model => model.EmployeeLoanId)
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.PaymentScheduleDate, new { @class = "customDatePicker form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.InstallmentAmount, new { @class = " right Start  required form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="editor-field">
+                @Html.TextBoxFor(model => model.Remarks, new { @class = " form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @if (Model.IsPaid)
+                {
+                    <label>Paid</label>
+                }
+                else
+                {
+                    <label>Un Paid</label>
+
+                }
+                @Html.CheckBoxFor(model => model.IsPaid, new { @class = "   form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="col-md-1">
+            <div class="editor-field">
+                @Html.CheckBoxFor(model => model.IsHold, new { @class = "   form-control", @disabled = "disabled" })
+            </div>
+        </div>
+             
+        @*
+            <div class="col-md-1">
+                <input type="button" class="RemoveRow btn btn-info" value="Remove" />
+            </div>*@
+    }
+</div>

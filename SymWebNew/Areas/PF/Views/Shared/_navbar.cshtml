@@ -1,0 +1,300 @@
+﻿@using SymOrdinary
+@using System.Threading;
+@{
+    ShampanIdentity identity = null;
+    try
+    {
+        identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+    }
+    catch (Exception)
+    {
+        Response.Redirect("/Home/Index");
+        return;
+    }
+}
+@{
+    string CompanyName = System.Configuration.ConfigurationManager.AppSettings["CompanyName"];
+    string BranchName = Session["BranchName"] != null ? Session["BranchName"].ToString() : "No Branch Selected";
+}
+<div class="content white menuheight">
+    <nav class="navbar navbar-default" role="navigation">
+        <div class="navbar-header">
+            <ul class="nav col-xs-4 visible-xs">
+                <li class="dropdown1" style="padding-top: 4px">
+                    <a href="#" class=" btn btn-warning">PF </a>
+                </li>
+            </ul>
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <!--/.navbar-header-->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="Transfer"><a href="/PF/Home/">Home</a></li>
+                @if ((HttpContext.Current.User.IsInRole("Master") || HttpContext.Current.User.IsInRole("Admin") || HttpContext.Current.User.IsInRole("Account")))
+                {
+                    <li class="Home dropdown">
+                   
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Module<b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            @if (identity.IsAdmin)
+                            {
+                                <li><a class="btn btn-info" href="/Common/Home/">Admin</a></li>
+                            }
+                          
+                            @if (identity.IsAdmin || identity.IsPF)
+                            {
+                                <li><a class="btn btn-info" href="/PF/Home/">PF</a></li>
+                            }
+                           @if (CompanyName == "Meghna")
+                            {
+                                if (identity.IsAdmin || identity.IsPF)
+                                {
+                                    <li><a class="btn btn-info" href="/WPPF/Home/Index">WPPF</a></li>
+                                }                        
+                                if (identity.IsAdmin || identity.IsPF)
+                                {
+                                    <li><a class="btn btn-info" href="/WWF/Home/Index">WWF</a></li>
+                                }        
+                            }           
+                         
+                        </ul>
+                    </li>
+                     <li class="dropdown Setup">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setup<b class="caret"></b></a>
+                        <ul class="dropdown-menu multi-column columns-1">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <ul class="multi-column-dropdown">
+
+                                        <li class="dropdown  "><a href="/PF/InvestmentName" class="btn btn-info">Investment Register</a></li>
+
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Bank</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown  "><a href="/PF/BankName" class="btn btn-info">Bank Name</a></li>
+                                                <li class="dropdown  "><a href="/PF/BankBranch" class="btn btn-info">Bank Branch</a></li>
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">COA</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown  "><a href="/PF/COA" class="btn btn-info">COA</a></li>
+                                                <li class="dropdown  "><a href="/PF/COAGroup" class="btn btn-info">COA Group</a></li>                                            
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown  "><a href="/PF/EnumInvestmentType" class="btn btn-info">Investment Type</a></li>
+                                        <li class="dropdown  "><a href="/PF/TransactionMedia" class="btn btn-info">Transaction Media</a></li>
+                                        <li class="dropdown  "><a href="/PF/SettlementPolicy" class="btn btn-info">Settlement Policy</a></li>
+                                        <li class="dropdown  "><a href="/PF/AutoJournalSetup" class="btn btn-info">Auto Journal Setup</a></li>                                                                         
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown Structure">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Transaction<b class="caret"></b></a>
+                        <ul class="dropdown-menu multi-column columns-1 col-md-2">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <ul class="multi-column-dropdown">
+                                        <li class="dropdown  "><a href="/PF/PFDetail/IndexFiscalPeriod" class="btn btn-info">Contribution</a></li>
+                                        <li class="dropdown  "><a href="/PF/Investment" class="btn btn-info">Investment</a></li>
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Voucher Entry</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown  "><a href="/PF/Journal?JournalType=1" class="btn btn-info">Journal Voucher</a></li>
+                                                <li class="dropdown  "><a href="/PF/Journal?JournalType=2" class="btn btn-info">Payment Voucher</a></li>
+                                                <li class="dropdown  "><a href="/PF/Journal?JournalType=3" class="btn btn-info">Receipt Voucher</a></li>
+                                            </ul>
+                                        </li>
+                                        @if (CompanyName != "EGCB")
+                                        {
+                                            <li class="dropdown dropdown-submenu">
+                                                <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Bank</a>
+                                                <ul class="dropdown-menu">
+                                                    <li class="dropdown  "><a href="/PF/PFBankDeposit" class="btn btn-info">Bank Deposit</a></li>
+                                                    <li class="dropdown  "><a href="/PF/Withdraw" class="btn btn-info">Withdraw</a></li>
+                                                    <li class="dropdown  "><a href="/PF/ReturnOnBankInterest" class="btn btn-info">Return On Bank Interest</a></li>
+                                                    <li class="dropdown  "><a href="/PF/BankCharge" class="btn btn-info">Bank Charge</a></li>
+
+                                                </ul>
+                                            </li>
+
+                                            @*<li class="dropdown dropdown-submenu">
+                                                <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Loan</a>
+                                                <ul class="dropdown-menu">
+                                                    <li class="dropdown  "><a href="/PF/Loan" class="btn btn-info">Loan Payment</a></li>
+                                                    <li class="dropdown  "><a href="/PF/LoanMonthlyPayment" class="btn btn-info">Loan RePayment</a></li>
+                                                    <li class="dropdown  "><a href="/PF/LoanRepaymentToBank" class="btn btn-info">Loan RePayment (Bank)</a></li>
+                                                    <li class="dropdown  "><a href="/PF/LoanSattlement" class="btn btn-info">Loan Sattlement</a></li>
+
+                                                </ul>
+                                            </li>*@
+
+                                        }
+
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Employee</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown  "><a href="/PF/EmployeeInfoPF/Index" class="btn btn-info">Employee Info</a></li>
+                                                <li class="dropdown  "><a href="/PF/Left/Index" class="btn btn-info">Employee Resign</a></li>
+                                                <li class="dropdown  "><a href="/PF/EmployeeTransfer" class="btn btn-info">Employee Transfer</a></li>    
+
+                                                <li class="dropdown  "><a href="/PF/EmployeePFOpeinig" class="btn btn-info"> Opening</a></li>
+                                                <li class="dropdown  "><a href="/PF/EmployeePFPayment" class="btn btn-info"> Payment</a></li>
+                                                @*<li class="dropdown  "><a href="/PF/EmployeeForfeiture" class="btn btn-info">Forfeiture</a></li>*@
+                                                <li class="dropdown  "><a href="/PF/EmployeeBreakMonthPF" class="btn btn-info">Break Month</a></li>
+                                                <li class="dropdown  "><a href="/PF/EmployeeForfeiture" class="btn btn-info">Forfeiture</a></li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown  "><a href="/PF/PreDistributionFund" class="btn btn-info">Profit Distribution</a></li>
+
+                                        <li class="dropdown  "><a href="/PF/PFSettlement" class="btn btn-info">Settlement</a></li>                                       
+                                        <li class="dropdown  "><a href="/PF/PFReport/YearClosingReportVeiw?JournalType=1" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Year Closing</a></li>
+                                        <li class="dropdown "><a href="/PF/Loan/AllLoan" class="btn btn-info">Loan </a></li>
+                                        <li class="dropdown  "><a href="/PF/ProcessControll" class="btn btn-info">Loan Collection</a></li>
+                                        @*<li class="dropdown  "><a href="/PF/WPPF/IndexFiscalPeriod" class="btn btn-info">WPPF</a></li>*@
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown Reports">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports <b class="caret"></b></a>
+                        <ul class="dropdown-menu columns-1">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <ul class="multi-column-dropdown">
+                                        <li class="dropdown  "><a href="/PF/PFReport/PFContributionReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Contribution</a></li>
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Financial Reports</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown  "><a href="/PF/PFReport/LedgerVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Ledger</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/IFRSReportView?ReportType=tb" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Trial Balance</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/IFRSReportView?ReportType=is" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Income Statement (P / L)</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/IFRSReportView?ReportType=bs" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Balance Sheet</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/IFRSReportView?ReportType=nc" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Net Change</a></li>
+
+                                            </ul>
+                                        </li>
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Voucher</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown  "><a href="/PF/PFReport/Voucher_StatementReportVeiw?JournalType=1" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Journal Voucher</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/Voucher_StatementReportVeiw?JournalType=2" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Payment Voucher</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/Voucher_StatementReportVeiw?JournalType=3" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Receipt Voucher</a></li>
+
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Employee</a>
+                                            <ul class="dropdown-menu">
+                                                <li class="dropdown  "><a href="/PF/PFReport/AllEmployeeReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;">All Employee </a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeeReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Employee Statement</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeeLedgerReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Employee Ledger</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeePFOpeinigReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;">  Opening</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeePFPaymentReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;">  Payment</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeeBreakMonthPFReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Break Month</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeeForfeitureReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;">Forfeiture</a></li>
+
+
+                                            </ul>
+                                                                             
+                                                @if (CompanyName != "EGCB")
+                                                {
+                                                <li class="dropdown dropdown-submenu">
+                                                    <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Bank</a>
+                                                    <ul class="dropdown-menu">
+                                                        <li class="dropdown  "><a href="/PF/PFReport/PFBankDepositsReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;">Bank Deposits</a></li>
+                                                        <li class="dropdown  "><a href="/PF/PFReport/WithdrawsReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Withdraws</a></li>
+                                                        <li class="dropdown  "><a href="/PF/PFReport/BankChargeReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Bank Charge</a></li>
+                                                        <li class="dropdown  "><a href="/PF/PFReport/ReturnOnBankInterestsReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Return On Bank Interests</a></li>
+                                                    </ul>
+
+                                                </li>                                              
+                                                }
+                                               
+                                          
+                                        </li>
+
+                                        <li class="dropdown">@*<a href="/PF/PFReport/AccountStatement" class="btn btn-info">Account Statement</a>*@</li>
+
+
+                                        <li class="dropdown">@*<a href="/PF/ReservedFund/Report" class="btn btn-info">Reserved Fund</a>*@</li>
+
+                                        @*<li class="dropdown"><a href="/PF/PFReport/EmployeePFStatement" class="btn btn-info">Employee PF Statement</a></li>*@
+
+                                        <li class="dropdown dropdown-submenu">
+                                            <a href="#" class="dropdown-toggle btn btn-info" data-toggle="dropdown">Loan</a>
+                                            <ul class="dropdown-menu">
+                                                @*<li class="dropdown  "><a href="/PF/Loan/EmployeeLoanReport?view=Y" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Employee Loan</a></li>*@
+                                                <li class="dropdown  "><a href="/PF/Loan/EmployeeLoanStatementReport?view=Y" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Loan Statement</a></li>
+                                                <li class="dropdown  "><a href="/PF/Loan/ScheduleofLoanMember?view=Y" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Schedule of Loan Member</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeeLoanSettelmentView" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Loan Early Settelment</a></li>
+                                                @if (CompanyName != "EGCB")
+                                                {
+                                                <li class="dropdown  "><a href="/PF/PFReport/LoanReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Loan</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/LoanMonthlyPaymentReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Loan Monthly Payment</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/LoanRepaymentToBankReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Loan Repayment To Bank</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/LoanSattlementReportVeiw" id="lnkEdit1" class="btn btn-info linkReport" style="text-decoration:none;"> Loan Sattlement</a></li>
+                                                <li class="dropdown  "><a href="/PF/PFReport/EmployeeLoanClosedView" id="lnkEdit1" class="btn btn-info " style="text-decoration:none;"> Loan Closed</a></li>
+                                                }
+                                            </ul>
+                                        </li>
+
+                                        <li class="dropdown"><a href="/PF/PFReport/PFInvestmentReportView" class="btn btn-info">Investment</a></li>
+                                        <li class="dropdown"><a href="/PF/PFReport/EmployeePFSettlementReport" class="btn btn-info">Final Settlement</a></li>
+                                        <li class="dropdown"><a href="/PF/PFReport/ProfitDistributionNewReportVeiw" class="btn btn-info linkReport" style="text-decoration:none;"> Profit Distribution</a></li>
+                                       
+
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </ul>
+                    </li>  
+                       <li class="dropdown Setup">
+                    <a style="color: blue; margin-left: 400px;">(@BranchName)</a>
+
+                </li>
+                }
+
+            </ul>
+
+            <ul class=" btn-danger nav navbar-nav navbar-right" style="border-left: 5px solid #fff">
+                <li class="dropdown1">
+                    <a href="#" class="dropdown-toggle sym-btn-back" title="Go Back" onclick="goBack()" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">&nbsp;Back</a>
+                </li>
+                <li class="dropdown1">
+                    <a href="#" class="dropdown-toggle btn btn-danger" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Provident Fund </a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+</div>
+<style>
+    .navbar-default .navbar-nav > li.dropdown:hover > a,
+    .navbar-default .navbar-nav > li.dropdown:hover > a:hover,
+    .navbar-default .navbar-nav > li.dropdown:hover > a:focus {
+        /*background-color: rgb(231, 231, 231);*/
+        color: rgb(85, 85, 85);
+    }
+
+    li.dropdown:hover > .dropdown-menu {
+        display: block;
+    }
+</style>

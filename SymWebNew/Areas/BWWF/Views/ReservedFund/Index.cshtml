@@ -1,0 +1,109 @@
+﻿<div class="headrow">
+    <button type="button" title="Add New Reserved Fund" data-url="/@ViewBag.TransType/ReservedFund/Create" id="" class=" btnCreate sym-btn-add ">&nbsp;New</button>
+    <label class="pull-right">Reserved Fund </label>
+</div>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Reserved Fund List</p>
+    </div>
+    <table id="myDataTable" class="display">
+        <thead>
+            <tr>
+                <th class="center">
+                    <input type="checkbox" class="chkAll" />Select All</th>
+                <th class="center">Reserved Date</th>
+                <th class="center">Reserved Value</th>
+                <th class="center">Transaction Type</th>
+                <th class="center">Post</th>
+
+
+
+                @*  
+ReservedDate
+ReservedValue
+TransactionType
+Post
+*@
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <br />
+</div>
+<div class="headrow">
+    <button type="button" title="Add New Reserved Fund" data-url="/@ViewBag.TransType/ReservedFund/Create" id="" class=" btnCreate sym-btn-add ">&nbsp;New</button>
+</div>
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        SelectAllForDelete();
+        $.datepicker.regional[""].dateFormat = 'dd/M/y';
+        $.datepicker.setDefaults($.datepicker.regional['']);
+        var oTable = $('#myDataTable').dataTable({
+            "bServerSide": true,
+            "sAjaxSource": "/@ViewBag.TransType/ReservedFund/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "12%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
+                                    + '&nbsp; <a id="lnkEdit1"  title="Click on for Edit" style="text-decoration:none;"    href=\"/@ViewBag.TransType/ReservedFund/Edit/' + oObj.aData[0] + '\" class=" linkReport sym-btn-edit-row"></a>'
+                                    + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/ReservedFund/Post"  onclick=prePost(this); data-Post="' + oObj.aData[4] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
+                                    + '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/@ViewBag.TransType/ReservedFund/Delete" onclick="preDelete(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>'
+                                    ;
+                                }
+                            }
+                            , { "sName": "ReservedDate", "sWidth": "10%" }
+                            , { "sName": "ReservedValue", "sWidth": "10%" }
+                            , { "sName": "TransactionType", "sWidth": "10%", "sClass": "tType" }
+                            , { "sName": "Post", "sWidth": "10%" }
+                            , { "sName": "PFId", "sWidth": "10%", "bVisible": false }
+
+            ]
+        });
+    });
+</script>
+
+<script>
+    $(function () {
+        
+    });
+
+
+    function prePost(sender) {
+
+        var TransactionType = $(sender).closest("tr").find(".tType").text();
+
+        if (TransactionType == "Other") {
+            btnPostNoSplit(sender);
+        }
+        else {
+            ShowResult("Fail", "Data Came From Outside! Cannot be Posted!");
+            return;
+        }
+    }
+
+
+    function preDelete(sender, myDataTable, id) {
+
+        var TransactionType = $(sender).closest("tr").find(".tType").text();
+
+        if (TransactionType == "Other") {
+            deletedData(sender, myDataTable, id);
+        }
+        else {
+            ShowResult("Fail", "Data Came From Outside! Cannot be Deleted!");
+            return;
+        }
+    }
+
+
+</script>

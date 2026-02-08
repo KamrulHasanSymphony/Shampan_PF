@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "ContactUs";
+}
+@model SymWebUI.Models.EmailSettings
+@using UIHelper.MVC
+<div class="content">
+    <div class="jumbotron jumbotron-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-lg-12">
+                    <h1 class="h1">
+                        Contact us <small>Feel free to contact us</small>
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+
+                @using (Html.BeginForm("ContactUs", "Home", FormMethod.Post, new { @Id = "frmGLAccount" }))
+                {
+                    <div class="well well-sm">
+                        @Html.ValidationSummary(true)
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">
+                                        User Name
+                                    </label>
+                                    @Html.TextBoxFor(model => model.Name, new { placeholder = "User Name", required = "required", @class = "form-control" })
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">
+                                        Email Address
+                                    </label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-envelope"></span>
+                                        </span>
+                                        @Html.TextBoxFor(model => model.MailFromAddress, new { placeholder = "Mail From Address", required = "required", @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="subject">
+                                        Subject
+                                    </label>
+                                    @Html.TextBoxFor(model => model.MailHeader, new { placeholder = "Subject", required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="name">
+                                        Message
+                                    </label>
+                                    @Html.TextAreaFor(model => model.MailHeader, new { placeholder = "Subject", required = "required", @class = "form-control" })
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-primary pull-right" id="btnContactUs">
+                                    Send Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-4">
+                <form>
+                    <legend><span class="glyphicon glyphicon-globe"></span> Our office</legend>
+                    <address>
+                        HOUSE # 02 (3RD FL.), LAKE CIRCUS, 3RD LANE<br>
+                        KALABAGAN, DHAKA-1205, BANGLADESH.<br>
+                        <abbr title="Phone">
+                            M:
+                        </abbr> +88 01713 330402<br>
+                        <abbr title="Phone">
+                            M:
+                        </abbr>+88 01742 091853<br>
+                        <abbr title="Phone">
+                            M:
+                        </abbr>
+                        +88 01676 325025
+                    </address>
+                    <address>
+                        <strong>Full Name</strong><br>
+                        <a href="mailto:#">first.last@example.com</a>
+                    </address>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .jumbotron {
+        background: #358CCE;
+        color: #FFF;
+        border-radius: 0px;
+    }
+
+    .jumbotron-sm {
+        padding-top: 24px;
+        padding-bottom: 24px;
+    }
+
+    .jumbotron small {
+        color: #FFF;
+    }
+
+    .h1 small {
+        font-size: 24px;
+    }
+</style>

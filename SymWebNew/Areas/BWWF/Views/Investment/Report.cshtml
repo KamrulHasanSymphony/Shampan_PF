@@ -1,0 +1,104 @@
+﻿@using UIHelper.MVC
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Investment</p>
+    </div>
+    <div class="Investment">
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.Label("", "Investment Type")
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDown("InvestmentTypeId", "/Config/DropDown/PF_EnumInvestmentType", new { @class = " invTypeId  form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.Label("", "Reference No.")
+                </div>
+                <div class="editor-field">
+                    @Html.SimpleDropDown("InvestmentId", "/Config/DropDown/PF_Investment", new { @class = " invId   form-control" })
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Investment Date From</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("InvestmentDateFrom", "", new { @placeholder = "Date From", @class = "invDateFrom customDatePicker form-control" })
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="editor-label">
+                    <label>Investment Date To</label>
+                </div>
+                <div class="editor-field">
+                    @Html.TextBox("InvestmentDateTo", "", new { @placeholder = "Date To", @class = "invDateTo customDatePicker form-control" })
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<div class="headrow">
+    <button type="button" title="Click for Report" name="report" data-url="/@ViewBag.TransType/Investment/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Investement Report</button>
+    <button type="button" title="Click for Statement" name="statement" data-url="/@ViewBag.TransType/Investment/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Investement Statement</button>
+</div>
+<script>
+    $(function () {
+        InitDropdownsCommon();
+    });
+
+    function reportData(sender) {
+        var url = $(sender).attr('data-url');
+        var name = $(sender).attr('name');
+        var dtFrom = $(".invDateFrom").val();
+        var dtTo = $(".invDateTo").val();
+        var invId = $(".invId").val();
+        var invTypeId = $(".invTypeId").val();
+
+
+        rptObj = new Object();
+        rptObj.dtFrom = dtFrom;
+        rptObj.dtTo = dtTo;
+        rptObj.invId = invId;
+        rptObj.invTypeId = invTypeId;
+        rptObj.statement = name;
+
+        var rptParam = $.param(rptObj);
+        url = url + "?" + rptParam;
+        var win = window.open(url, '_blank');
+    }
+</script>
+
+<script>
+    $(window).on('load', function () {
+        //InvestmentDropDown();
+
+        $('.invTypeId').change(function () {
+            InvestmentDropDown();
+        });
+
+        function InvestmentDropDown() {
+            $('select.invId').html("");
+            var DropDownItem = "";
+            var invTypeId = $('.invTypeId').val();
+
+            DropDownItem += "<option value=''>Select</option>";
+
+            var url = "/Config/DropDown/PF_Investment/?invTypeId=" + invTypeId;
+
+            $.getJSON(url, function (data) {
+                $.each(data, function (i, state) {
+                    DropDownItem += "<option value='" + state.Value + "'>" + state.Text + "</option>";
+                });
+                $('select.invId').html(DropDownItem);
+            });
+        }
+    });
+</script>
+

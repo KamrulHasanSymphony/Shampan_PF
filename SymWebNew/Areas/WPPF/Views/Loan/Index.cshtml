@@ -1,0 +1,103 @@
+﻿    <script language="javascript" type="text/javascript">
+        $(document).ready(function () {
+
+            SelectAllForDelete();
+            $.datepicker.regional[""].dateFormat = 'dd/M/y';
+            $.datepicker.setDefaults($.datepicker.regional['']);
+            var oTable = $('#myDataTable').dataTable({
+                "bServerSide": true,
+                "sAjaxSource": "/Payroll/EmployeeDeduction/_index",
+                "bProcessing": true,
+                "aLengthMenu": tablelength(),
+                "bJqueryUI": true,
+                "bAutoWidth": false,
+                "aoColumns": [
+                                {
+                                    "sName": "Id",
+                                    "bSearchable": false,
+                                    "bSortable": false,
+                                    "sWidth": "12%",
+                                    "sClass": "center",
+                                    "fnRender": function (oObj) {
+                                        return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">&nbsp; <a id="lnkEdit1"  title="Click on for Edit" style="text-decoration:none;"   href=\"/Payroll/EmployeeDeduction/Edit/' + oObj.aData[0] + '\" class="sym-btn-edit-row"></a>'
+                                        + '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/Payroll/Loan/Delete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-remove-row"></a>'
+
+                                        ;
+                                    }
+                                }
+                                , { "sName": "Employee", "sWidth": "15%" }
+                                , { "sName": "EmpName", "sWidth": "20%" }
+                                , { "sName": "Department", "sWidth": "10%" }
+                                , { "sName": "Designation", "sWidth": "10%" }
+
+                                //Employee 
+                                //LoanType 
+                                //TotalAmount
+                                //StartDate 
+
+
+                ]
+            });
+            oTable.columnFilter({
+                sPlaceHolder: "head:after",
+                aoColumns: [{ type: "checkbox", "sClass": "chkAll" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           , { type: "text" }
+                           //, { type: "text" }
+                           //, { type: "date-range" }
+
+                ]
+
+            });
+
+        });
+    </script>
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Employee Loan</p>
+    </div>
+    <p></p>
+    <div class="row">
+        <div id="container">
+            <div id="demo">
+                <table id="myDataTable" class="display">
+                    <thead>
+                        <tr>
+                            <th>Loan</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Remarks</th>
+                        </tr>
+
+                      @*  <tr>
+                            <th>
+                                <input type="checkbox" class="chkAll" />Select All</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Deduction Amount</th>
+                        </tr>
+
+                        <tr>
+                            <th class="center">Actions</th>
+                            <th>Code</th>
+                            <th>Name</th>
+                            <th>@Session["DepartmentLabel"]</th>
+                            <th>Designation</th>
+                            <th>Deduction Amount</th>
+                        </tr>*@
+
+
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+ 
+</head>
+<body onload="window.scroll(0, 150)">
+            @RenderBody()
+            @Scripts.Render("~/bundles/jquery")
+            @RenderSection("scripts", required: false)
+   
+</body>
+</html>
+
+  <script>
+      $(document).ready(function () {
+       @{ Session["rollPermission"] = "deny"; }
+          window.location.href = "/Home/Index";
+
+      });
+
+    </script>

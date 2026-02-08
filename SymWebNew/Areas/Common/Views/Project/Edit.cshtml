@@ -1,0 +1,211 @@
+﻿@model SymViewModel.Common.ProjectVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+@using (Html.BeginForm("Edit", "Project", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmProject" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.BranchId)
+
+    <div class="headrow">
+        <button type="submit" title="Update Data" class="sym-btn-update">&nbsp;Update</button>
+        <label class="pull-right">Project > Edit</label>
+    </div>
+    
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Project</p>
+        </div>
+        <div class="project">
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Project Code", @class = " required form-control" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Name)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Name, new { @placeholder = "Project Name", @class = "required form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Startdate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Startdate, new { @onchange = "FromToDate(this);", @placeholder = "Start Date", @class = "customDatePicker form-control" })
+                        @Html.ValidationMessageFor(model => model.Startdate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.EndDate)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.EndDate, new { @onchange = "FromToDate(this);", @placeholder = "End Date", @class = "customDatePicker form-control" })
+                        @Html.ValidationMessageFor(model => model.EndDate)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ManpowerRequired)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ManpowerRequired, new { @onchange = "NumberCheck(this);", @placeholder = "Manpower Required!", @class = "required form-control" })
+                        @Html.ValidationMessageFor(model => model.ManpowerRequired)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ContactPerson)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ContactPerson, new { @placeholder = "Contact Person Name", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ContactPerson)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.ContactPersonDesignation)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.ContactPersonDesignation, new { @placeholder = "Contact Person Designation", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.ContactPersonDesignation)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Address)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Address, new { @placeholder = "Address", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Address)
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Country)
+                    </div>
+                    <div class="editor-field">
+                        <select id="Country" name="Country" data-val="@Model.Country"  data-url="/Config/DropDown/CountryEN/"  class = " country form-control" ></select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Division)
+                    </div>
+                    <div class="editor-field">
+                        <select id="Division" name="Division" data-val="@Model.Division"  data-url="/Config/DropDown/Division/"  class = " division form-control" ></select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.District)
+                    </div>
+                    <div class="editor-field">
+                        <select id="District" name="District" data-val="@Model.District"  data-url="/Config/DropDown/District/"  class = " district form-control" ></select>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.City)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.City, new { @placeholder = "City", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.City)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.PostalCode)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.PostalCode, new { @placeholder = "Postal Code", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.PostalCode)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Phone)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Phone, new { @placeholder = "Phone", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Phone)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Mobile)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Mobile, new { @placeholder = "Mobile", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Mobile)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Fax)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Fax, new { @placeholder = "Fax", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Fax)
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+                <div class="col-md-1">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsActive)
+                    </div>
+                    <div class="editor-field center">
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = " form-control" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="headrow">
+        <button type="submit" title="Update Data" class="sym-btn-update">&nbsp;Update</button>
+    </div>
+}
+
+<script>
+    $(function () {
+        valiDation("frmProject");
+
+        Country();
+        Division();
+        District();
+        InitDateTimePickers();
+        fromWriteColor("project");
+    });
+    function FromToDate(sender) {
+        var from = ParseDate($("#Startdate").val());
+        var to = ParseDate($("#EndDate").val());
+        if (from > to) {
+            $(sender).val("");
+            ShowResult("Fail", "To-Date can't be prior to Start-Date!");
+        }
+    }
+</script>

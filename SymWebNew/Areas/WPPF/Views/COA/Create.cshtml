@@ -1,0 +1,171 @@
+﻿@*
+    FiscalYearDetailId
+    DepositAmount
+    TotalEmployeePFValue
+    TotalEmployeerPFValue
+
+    DepositAmount
+    DepositDate
+*@
+
+@model SymViewModel.WPPF.COAVM
+@using UIHelper.MVC
+@using (Html.BeginForm("CreateEdit", "COA", FormMethod.Post, new { enctype = "multipart/form-data", @Id = "frmCOA" }))
+{
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.Id)
+    @Html.HiddenFor(model => model.Operation)
+    string PF_COAGroupUrl = "/Config/DropDown/PF_COAGroup?TransType=" + @ViewBag.TransType;
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmCOA')" class="sym-btn-save">&nbsp;Save</button>
+            <label class="pull-right">COA > Create</label>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+            <label class="pull-right">COA > Edit</label>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/COA" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    </div>
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>COA</p>
+        </div>
+        <div class="COA">
+            <div class="row">
+                <div class="col-md-2 cust-width">
+                    <div class="editor-label lab">
+                        @Html.LabelFor(model => model.Code)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Code, new { @placeholder = "Code", @class = "  form-control" })
+                        @Html.ValidationMessageFor(model => model.Code)
+                    </div>
+                </div>
+                <div class="col-md-2 cust-width">
+                    <div class="editor-label lab">
+                        @Html.LabelFor(model => model.Name)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextBoxFor(model => model.Name, new { @placeholder = "Name", @class = "  form-control required" })
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="col-md-2 cust-width">
+                    <div class="editor-label lab">
+                        @Html.LabelFor(model => model.COAGroupId)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.COAGroupId, PF_COAGroupUrl, new { @class = "  form-control required" })
+                        @Html.ValidationMessageFor(model => model.COAGroupId)
+                    </div>
+                </div>
+                <div class="col-md-2 cust-width">
+                    <div class="editor-label lab">
+                        @Html.LabelFor(model => model.Nature)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.Nature, "/Config/DropDown/AccountNature", new { @class = "  form-control required" })
+                        @Html.ValidationMessageFor(model => model.Nature)
+                    </div>
+                </div>
+                <div class="col-md-2 cust-width">
+                    <div class="editor-label lab">
+                        @Html.LabelFor(model => model.COAType)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.COAType, "/Config/DropDown/PF_COAType", new { @class = "  form-control required" })
+                        @Html.ValidationMessageFor(model => model.COAType)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-2 chk-flex cust-width">
+
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsRetainedEarning)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsRetainedEarning, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsRetainedEarning)
+                    </div>
+                </div>
+                <div class="col-md-2 chk-flex cust-width">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsNetProfit)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsNetProfit, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsNetProfit)
+                    </div>
+                </div>
+                <div class="col-md-2 chk-flex cust-width">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsDepreciation)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsDepreciation, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsDepreciation)
+                    </div>
+                </div>
+                <div class="col-md-2 chk-flex cust-width">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.IsActive)
+                    </div>
+                    <div class="editor-field">
+                        @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IsActive)
+                    </div>
+                </div>
+
+                <div class="col-md-2 cust-width">
+                    <div class="editor-label lab">
+                        @Html.LabelFor(model => model.Remarks)
+                    </div>
+                    <div class="editor-field">
+                        @Html.TextAreaFor(model => model.Remarks, new { @placeholder = " Remarks", @class = "   form-control" })
+                        @Html.ValidationMessageFor(model => model.Remarks)
+                    </div>
+                </div>
+
+            </div>
+           
+        </div>
+    </div>
+
+
+
+
+    <div class="headrow">
+        @if (Model.Operation == "add")
+        {
+            <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmCOA')" class="sym-btn-save">&nbsp;Save</button>
+        }
+        else
+        {
+            <button type="button" name="btnName" value="Update" title="Update Data" onclick="UpdateData()" class="sym-btn-update">&nbsp;Update</button>
+        }
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/COA" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+
+    </div>
+}
+<script>
+    $(function () {
+        valiDation("frmCOA");
+    });
+
+
+
+    function UpdateData() {
+        //pageSubmit('frmLoan');
+        pageSubmit('frmCOA');
+    }
+
+ 
+
+</script>

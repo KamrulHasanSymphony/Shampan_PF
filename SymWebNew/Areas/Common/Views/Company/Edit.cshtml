@@ -1,0 +1,216 @@
+﻿@model SymViewModel.Common.CompanyVM
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+
+    @Html.HiddenFor(model => model.Id)
+    <div class="thinbox">
+        <div class="th_thinbox">
+            <p>Company Information</p>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Code)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Code, new { @placeholder = "Company Code", @class = "required form-control" })
+                    @Html.ValidationMessageFor(model => model.Code)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Name)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Name, new { @placeholder = "Company Name", @class = "required form-control" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Address)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Address, new { @placeholder = "Address", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Address)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Country)
+                </div>
+                <div class="editor-field">
+                    <select id="Country" name="Country" data-val="@Model.Country"  data-url="/Config/DropDown/CountryEN/"  class = " country form-control" ></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Division)
+                </div>
+                <div class="editor-field">
+                    <select id="Division" name="Division" data-val="@Model.Division"  data-url="/Config/DropDown/Division/"  class = " division form-control" ></select>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.District)
+                </div>
+                <div class="editor-field">
+                    <select id="District" name="District" data-val="@Model.District"  data-url="/Config/DropDown/District/"  class = " district form-control" ></select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.City)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.City, new { @placeholder = "City", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.City)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.PostalCode)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.PostalCode, new { @placeholder = "Postal Code", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.PostalCode)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Phone)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Phone, new { @placeholder = "Phone", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Phone)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Mobile)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Mobile, new { @placeholder = "Mobile", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Mobile)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Fax)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Fax, new { @placeholder = "Fax", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Fax)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Email)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Email)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.TaxId)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.TaxId, new { @placeholder = "TAX Id", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.TaxId)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.RegistrationNumber)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.RegistrationNumber, new { @placeholder = "Registration Number", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.RegistrationNumber)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.NumberOfEmployees)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.NumberOfEmployees, new { @placeholder = "Number Of Employees", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.NumberOfEmployees)
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Remarks)
+                </div>
+                <div class="editor-field">
+                    @Html.TextAreaFor(model => model.Remarks, new { @placeholder = "Remarks", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Remarks)
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.Year)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.Year, new { @disabled = "disabled", @placeholder = "Year", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.Year)
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="editor-label">
+                    @Html.LabelFor(model => model.YearStart)
+                </div>
+                <div class="editor-field">
+                    @Html.TextBoxFor(model => model.YearStart, new {@onchange="FiscalYear();", @placeholder = "Year Start", @class = "customDatePicker required form-control" })
+                    @Html.ValidationMessageFor(model => model.YearStart)
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p>
+        <input type="submit" class="sym-btn-save" value="Save" />
+    </p>
+}
+
+
+
+@section Scripts {
+    <script>
+        $(function () {
+            Country();
+            Division();
+            District();
+            if ($("#YearStart").val()!="") {
+                $("#YearStart").attr('disabled', true);
+            }
+        })
+        function FiscalYear() {
+            var startDate = new Date(ParseDate($("#YearStart").val()));
+            var day = 01;
+            var mon = startDate.getMonth();
+            var yr = startDate.getFullYear();
+            var stDate = FormatDate(new Date(yr, mon, day));
+            $("#YearStart").val(stDate);
+            $("#Year").val(yr);
+        }
+
+
+    </script>
+}

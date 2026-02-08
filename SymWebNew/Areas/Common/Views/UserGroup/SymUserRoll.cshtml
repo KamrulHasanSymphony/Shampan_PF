@@ -1,0 +1,73 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = null;
+}
+@model SymViewModel.Common.UserGroupVM
+@using UIHelper.MVC
+
+<div class="">
+      @using (Html.BeginForm("EditRoll", "UserGroup", FormMethod.Post, new { @Id = "frmUserGroup" }))
+    {
+            @Html.HiddenFor(model => model.Id)
+          if (Model.SymUserRollVMs.Count() > 0) { 
+<div class="thinbox ">
+    <div class="th_thinbox">
+        <p >User Roll </p>
+    </div>
+        <div class="headrow">
+            <button type="button"  title="Save Data" onclick="pageSubmit('frmUserGroup');"class="sym-btn-save">&nbsp;Save</button>
+        </div>
+    <div class="row">
+        <div class="col-md-2"><label>Area</label></div>
+        <div class="col-md-4"><label>Control</label></div>
+        <div class="col-md-1"><label>Index</label></div>
+        <div class="col-md-1"><label>Add</label></div>
+        <div class="col-md-1"><label>Edit</label></div>
+        <div class="col-md-1"><label>Delete</label></div>
+        <div class="col-md-1"><label>Process</label></div>
+        <div class="col-md-1"><label>Report</label></div>
+
+    </div>
+        @foreach (var item in Model.SymUserRollVMs)
+        {
+        @Html.Partial("_symUserRoll",item);
+        }
+          <div class="headrow">
+                   <button type="submit" title="Save Data" class="sym-btn-save">&nbsp;Save</button>
+        </div>
+</div>
+    }
+    }
+    </div>
+<script>
+    $(function () {
+        //var userid = $('.userid').val();
+        //$("#symArea").change(function () {
+        //    $(".UserDetail").show();
+        //    var Module = $("#symArea").val();
+        //    //var Menu = $("#Menu").val();
+        //    var empId = $('.userid').val();
+        //    //Selectemployee(empId)
+        //})
+
+
+
+        //function Selectemployee() {
+        //    var symArea = $("#symArea").val();
+        //    var Id = $("#Id").val();
+
+        //    var url = "/Common/SymUserRoll/SelectUserForRollSearch?Id=" + Id + '&SymArea=' + symArea;
+        //    $.ajax({
+        //        url: url,
+        //        type: 'GET',
+        //        beforeSend: function () { $(".loading").show(); },
+        //        complete: function () { $(".loading").fadeOut(200).hide("slow") },
+        //        success: function (data) {
+        //            //$('#detailsDiv').html(data);
+        //        },
+        //    });
+        //}
+    });
+</script>
+
+
