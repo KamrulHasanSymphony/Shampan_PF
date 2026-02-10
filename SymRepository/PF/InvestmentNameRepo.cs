@@ -31,12 +31,12 @@ namespace SymRepository.PF
                 throw ex;
             }
         }
-        public List<InvestmentNameDetailsVM> SelectAllDetails(int Id = 0, string[] conditionFields = null, string[] conditionValues = null)
+        public List<InvestmentNameDetailsVM> SelectAllDetails(string branchId, int Id = 0, string[] conditionFields = null, string[] conditionValues = null)
         {
             try
             {
 
-                return new InvestmentNameDAL().SelectAllDetails(Id, conditionFields, conditionValues);
+                return new InvestmentNameDAL().SelectAllDetails(branchId, Id, conditionFields, conditionValues);
             }
             catch (Exception ex)
             {

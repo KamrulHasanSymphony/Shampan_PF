@@ -213,7 +213,8 @@ namespace SymWebUI.Areas.PF.Controllers
             InvestmentNameVM vm = new InvestmentNameVM();
             vm.TransType = AreaTypePFVM.TransType;
             vm = _repo.SelectAll(Convert.ToInt32(id)).FirstOrDefault();
-            vm.InvestmentNameDetails = _repo.SelectAllDetails(0, new[] { "InvestmentNameId" }, new[] { vm.Id.ToString() });
+            string branchId = Session["BranchId"].ToString();
+            vm.InvestmentNameDetails = _repo.SelectAllDetails(branchId, 0, new[] { "InvestmentNameId" }, new[] { vm.Id.ToString() } );
             vm.InvestmentAccrueds = new InvestmentAccruedRepo().SelectAll(0, new[] { "I.InvestmentNameId" }, new[] { vm.Id.ToString() });
             vm.Operation = "update";
             return View("~/Areas/PF/Views/InvestmentName/Create.cshtml", vm);
