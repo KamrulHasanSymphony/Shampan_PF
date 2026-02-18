@@ -3283,7 +3283,6 @@
     <Content Include="assets\plugins\jQuery-File-Upload\server\gae-python\static\robots.txt" />
     <Content Include="assets\plugins\jQuery-File-Upload\server\node\.gitignore" />
     <Content Include="assets\plugins\jQuery-File-Upload\server\node\public\files\.gitignore" />
-    <Content Include="assets\plugins\jQuery-File-Upload\server\node\public\files\thumbnail\.gitignore" />
     <Content Include="assets\plugins\jQuery-File-Upload\server\node\server.js" />
     <Content Include="assets\plugins\jQuery-File-Upload\server\node\tmp\.gitignore" />
     <Content Include="assets\plugins\jQuery-File-Upload\server\php\files\.gitignore" />
@@ -5258,6 +5257,7 @@
     <Content Include="Areas\PF\Views\EmployeeInfoPF\_nominee.cshtml" />
     <Content Include="Areas\PF\Views\EmployeeInfoPF\_editNominee.cshtml" />
     <None Include="Properties\PublishProfiles\PFEGCB.pubxml" />
+    <None Include="Properties\PublishProfiles\ShampanPF.pubxml" />
     <None Include="Properties\PublishProfiles\SymphonyHRM_New.pubxml" />
     <Content Include="Views\Home\ForgotPasswordView.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
@@ -5596,6 +5596,7 @@
     <Folder Include="Areas\Common\Models\" />
     <Folder Include="Areas\Config\Models\" />
     <Folder Include="assets\css\image\Gallary\" />
+    <Folder Include="assets\plugins\jQuery-File-Upload\server\node\public\files\thumbnail\" />
     <Folder Include="Files\Asset\" />
     <Folder Include="Files\Attachment\Client\" />
     <Folder Include="Files\Attachment\Product\" />

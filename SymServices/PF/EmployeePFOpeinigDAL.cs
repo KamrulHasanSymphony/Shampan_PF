@@ -2054,7 +2054,7 @@ SELECT
                 ds = reader.AsDataSet();
                 dt = ds.Tables[0];
                 reader.Close();
-                dt = ds.Tables[0].Select("empCode <>''").CopyToDataTable();
+               // dt = ds.Tables[0].Select("empCode <>''").CopyToDataTable();
 
                 #endregion
 

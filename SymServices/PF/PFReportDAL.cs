@@ -904,7 +904,7 @@ from
 select fyd.PeriodEnd TransactionDate, pfd.EmployeeId, pfd.EmployeePFValue EmployeeContribution, pfd.EmployeerPFValue EmployeerContribution
 , 0 ProfitAmount,0 LoanAmount, 0 PaymentAmount, 'Contribution' TransactionType
 from PFDetails pfd
-left outer join HRMDB.dbo.FiscalYearDetail fyd on pfd.FiscalYearDetailId=fyd.Id
+left outer join FiscalYearDetail fyd on pfd.FiscalYearDetailId=fyd.Id
 where 1=1 and EmployeeId=@EmployeeId and fyd.PeriodEnd <=@ToDate
 
 union all
@@ -917,17 +917,17 @@ where 1=1 and pfdd.EmployeeId=@EmployeeId and pfd.Post=1 and pfd.IsPaid=1 and pf
 union all
 select StartDate, EmployeeId, 0 EmployeeContribution, 0 EmployeerContribution
 , 0 ProfitAmount,TotalAmount LoanAmount, 0 PaymentAmount, 'Loan' TransactionType 
-from HRMDB.dbo.EmployeeLoan loan
-left outer join HRMDB.dbo.EnumLoanType elt on elt.id=loan.LoanType_E
+from EmployeeLoan loan
+left outer join EnumLoanType elt on elt.id=loan.LoanType_E
 where 1=1 and loan.EmployeeId=@EmployeeId and loan.IsApproved=1
 and elt.Name = 'PF Loan' and loan.StartDate <= @ToDate
 
 union all
 select fyd.PeriodEnd, EmployeeId, 0 EmployeeContribution, 0 EmployeerContribution
 , 0 ProfitAmount,0 LoanAmount, (LoanAmount+InterestAmount) PaymentAmount, 'Loan Payment' TransactionType 
-from HRMDB.dbo.SalaryLoanDetail loan
-left outer join HRMDB.dbo.EnumLoanType elt on elt.id=loan.LoanType_E
-left outer join HRMDB.dbo.FiscalYearDetail fyd on loan.FiscalYearDetailId=fyd.Id
+from SalaryLoanDetail loan
+left outer join EnumLoanType elt on elt.id=loan.LoanType_E
+left outer join FiscalYearDetail fyd on loan.FiscalYearDetailId=fyd.Id
 where 1=1 and loan.EmployeeId=@EmployeeId
 and elt.Name = 'PF Loan' and fyd.PeriodEnd <= @ToDate
 ) as empPF
@@ -7023,6 +7023,7 @@ RowSL
 ,TypeOfReportSL
 ,GroupTypeShortName
 ,TypeOfReportShortName
+,BranchId
 )
 
 select 
@@ -7056,6 +7057,7 @@ b.RowSL
 ,b.TypeOfReportSL
 ,b.GroupTypeShortName
 ,b.TypeOfReportShortName
+,b.BranchId
 from View_NetChange as b
 right outer join (select distinct COAId,MAX(RowSL)RowSL from #TempNetChange
 group by COAId) as a
@@ -7507,8 +7509,8 @@ drop table #TempNetProfit";
                 #region SqlText
 
                 sqlText = @" 
---declare @MonthFrom as varchar(100)='1148'
---declare @MonthTo as varchar(100)='1159'
+--declare @MonthFrom as varchar(100)='1'
+--declare @MonthTo as varchar(100)='12'
 --declare @TransType as varchar(100)='PF' -- closing
 
 declare @FirstStart as varchar(100)
@@ -7552,12 +7554,12 @@ select @FirstRetainedEarning=isnull(RetainedEarning,0) from NetProfitYearEnds wh
 select  @LastNetProfit=isnull(Sum(TransactionAmount),0)  
 from View_GLJournalDetailNew 
 where transactionDate >=@LastStart and transactionDate <=@LastEnd and isnull(IsYearClosing,0)=0 
-and TransType in(@TransType)  and COAType in ('Revenue','Expense')
+and TransType in(@TransType)  and COAType in ('Revenue','Expense') and BranchId=@BranchId
 
 select  @FirstNetProfit=isnull(Sum(TransactionAmount),0)  
 from View_GLJournalDetailNew 
 where transactionDate >=@FirstStart and transactionDate <=@FirstEnd and isnull(IsYearClosing,0)=0 
-and TransType in(@TransType)  and COAType in ('Revenue','Expense')
+and TransType in(@TransType)  and COAType in ('Revenue','Expense') and BranchId=@BranchId
  
 TRUNCATE TABLE TempNetChangeNew; 
 DBCC CHECKIDENT ('TempNetChangeNew', RESEED, 1);
@@ -7571,6 +7573,7 @@ and isnull(IsYearClosing,0)=0
 and TransType in(@TransType)
 and isnull(IsRetainedEarning,0)=0
 and COAType in ('Asset','Members Fund and Liabilities','OwnersEquity') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
 insert into #TempNetChangeNew(TransType,OperationType,COAId,TransactionAmount)
@@ -7582,6 +7585,7 @@ and isnull(IsYearClosing,0)=0
 and TransType in(@TransType)
 and isnull(IsRetainedEarning,0)=0
 and COAType in ('Revenue','Expense') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
 
@@ -7589,23 +7593,24 @@ group by TransType, CoaId
 insert into #TempNetChangeNew(TransType,OperationType,COAId,TransactionAmount)
 select distinct TransType,'NetChange', CoaId ,isnull(Sum(TransactionAmount),0)TransactionAmount from View_GLJournalDetailNew 
 where 1=1
-and transactionDate >=@FirstEnd
 and transactionDate <=@LastEnd
 and isnull(IsRetainedEarning,0)=0
 and isnull(IsYearClosing,0)=0 
 and TransType in(@TransType)
 and COAType in ('Asset','Members Fund and Liabilities','OwnersEquity') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
 insert into #TempNetChangeNew(TransType,OperationType,COAId,TransactionAmount)
 select distinct TransType,'NetChange', CoaId ,isnull(Sum(TransactionAmount),0)TransactionAmount from View_GLJournalDetailNew 
 where 1=1
-and transactionDate >=@FirstEnd 
+and transactionDate >=@LastStart 
 and transactionDate <=@LastEnd
 and isnull(IsRetainedEarning,0)=0
 and isnull(IsYearClosing,0)=0 
 and TransType in(@TransType)
 and COAType in ('Revenue','Expense') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
  
@@ -7632,8 +7637,8 @@ from View_COA_New c
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew group by  COAId ) t on c.COAId=t.COAId
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew where operationType='Opening'  group by  COAId) o on c.COAId=o.COAId
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew where operationType='NetChange'  group by  COAId) n on c.COAId=n.COAId
-  where isnull(c.TransType,'PF') in(@TransType)
-
+  where isnull(c.TransType,'PF') in(@TransType) and BranchId=@BranchId
+ 
 select 
 case when c.COAType in('Asset') then '1' 
 when c.COAType in('Members Fund and Liabilities') then '2' 
@@ -7669,7 +7674,7 @@ else 0 end,0) OpenCr
 
 from View_COA_New c 
 left outer join    TempNetChangeNew  t on c.COAId=t.COAId
-where 1=1  and c.BranchId=@BranchId
+where 1=1 and c.BranchId=@BranchId
 and (   t.ClosingAmount<>0)
  and isnull(c.TransType,'PF') in(@TransType)
  order by sl,GroupSL,COASL,COACode
@@ -7681,10 +7686,10 @@ isnull(@FirstRetainedEarning,0) FirstRetainedEarning,isnull(@FirstNetProfit,0) F
 
 
 drop table #TempNetChangeNew
+
 ";
 
                 #endregion SqlText
-                sqlText = sqlText.Replace("HRMDB", vm.HRMDB);
 
                 #region SqlExecution
                 SqlDataAdapter da = new SqlDataAdapter(sqlText, currConn);
@@ -7819,12 +7824,12 @@ if	(@FirstYear is NULL) begin set @FirstYear='1900'; end
 select  @LastNetProfit=isnull(Sum(TransactionAmount),0)  
 from View_GLJournalDetailNew 
 where transactionDate >=@LastStart and transactionDate <=@LastEnd and isnull(IsYearClosing,0)=0 
-and TransType in(@TransType)  and COAType in ('Revenue','Expense')
+and TransType in(@TransType)  and COAType in ('Revenue','Expense') and BranchId=@BranchId
 
 select  @FirstNetProfit=isnull(Sum(TransactionAmount),0)  
 from View_GLJournalDetailNew 
 where transactionDate >=@FirstStart and transactionDate <=@FirstEnd and isnull(IsYearClosing,0)=0 
-and TransType in(@TransType)  and COAType in ('Revenue','Expense')
+and TransType in(@TransType)  and COAType in ('Revenue','Expense') and BranchId=@BranchId
  
 
 TRUNCATE TABLE TempNetChangeNew; 
@@ -7839,6 +7844,7 @@ and isnull(IsYearClosing,0)=0
 and TransType in(@TransType)
 and isnull(IsRetainedEarning,0)=0
 and COAType in ('Asset','Members Fund and Liabilities') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
 insert into #TempNetChangeNew(TransType,OperationType,COAId,TransactionAmount)
@@ -7855,7 +7861,8 @@ and transactionDate <=@LastEnd
 and isnull(IsRetainedEarning,0)=0
 and isnull(IsYearClosing,0)=0 
 and TransType in(@TransType)
-and COAType in ('Asset','Members Fund and Liabilities') 
+and COAType in ('Asset','Members Fund and Liabilities','OwnersEquity') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
 insert into #TempNetChangeNew(TransType,OperationType,COAId,TransactionAmount)
@@ -7874,7 +7881,7 @@ from View_COA_New c
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew group by  COAId ) t on c.COAId=t.COAId
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew where operationType='Opening'  group by  COAId) o on c.COAId=o.COAId
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew where operationType='NetChange'  group by  COAId) n on c.COAId=n.COAId
- where  isnull(c.TransType,'PF') in(@TransType)
+ where  isnull(c.TransType,'PF') in(@TransType) and BranchId=@BranchId
 select 
 case when c.COAType in('Asset') then '1' 
 when c.COAType in('Members Fund and Liabilities') then '2' 
@@ -8027,11 +8034,11 @@ declare @NetProfitCOAId as varchar(100)
 declare @RetainedEarningCOAId as varchar(100)
 
 
-select @LastEnd=PeriodEnd,@LastYear=[Year] from HRMDB.dbo.FiscalYearDetail where id=@MonthTo
+select @LastEnd=PeriodEnd,@LastYear=[Year] from FiscalYearDetail where id=@MonthTo
 
-select @FirstStart=YearStart,@FirstYear=[Year]   from HRMDB.dbo.FiscalYear where [Year]=cast( @LastYear as int)-1
+select @FirstStart=YearStart,@FirstYear=[Year]   from FiscalYear where [Year]=cast( @LastYear as int)-1
 SELECT  @FirstEnd=CONVERT(VARCHAR(8),DATEADD(MONTH, -12, CONVERT(DATE, @LastEnd, 112)), 112)  
-select @LastStart=YearStart  from HRMDB.dbo.FiscalYear where [Year]= @LastYear  
+select @LastStart=YearStart  from FiscalYear where [Year]= @LastYear  
 
 select @LastRetainedEarning=RetainedEarning from NetProfitYearEnds where Year=@LastYear
 select @FirstRetainedEarning=RetainedEarning from NetProfitYearEnds where Year=@FirstYear
@@ -8050,12 +8057,12 @@ if	(@FirstYear is NULL) begin set @FirstYear='1900'; end
 select  @LastNetProfit=isnull(Sum(TransactionAmount),0)  
 from View_GLJournalDetailNew 
 where transactionDate >=@LastStart and transactionDate <=@LastEnd and isnull(IsYearClosing,0)=0 
-and TransType in(@TransType)  and COAType in ('Revenue','Expense')
+and TransType in(@TransType)  and COAType in ('Revenue','Expense') and BranchId=@BranchId
 
 select  @FirstNetProfit=isnull(Sum(TransactionAmount),0)  
 from View_GLJournalDetailNew 
 where transactionDate >=@FirstStart and transactionDate <=@FirstEnd and isnull(IsYearClosing,0)=0 
-and TransType in(@TransType)  and COAType in ('Revenue','Expense')
+and TransType in(@TransType)  and COAType in ('Revenue','Expense') and BranchId=@BranchId
  
 
 TRUNCATE TABLE TempNetChangeNew; 
@@ -8070,6 +8077,7 @@ and isnull(IsYearClosing,0)=0
 and TransType in(@TransType)
 and isnull(IsRetainedEarning,0)=0
 and COAType in ('Revenue','Expense') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
 
@@ -8082,6 +8090,7 @@ and isnull(IsRetainedEarning,0)=0
 and isnull(IsYearClosing,0)=0 
 and TransType in(@TransType)
 and COAType in ('Revenue','Expense') 
+and BranchId=@BranchId
 group by TransType, CoaId
 
 
@@ -8095,7 +8104,7 @@ from View_COA_New c
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew group by  COAId ) t on c.COAId=t.COAId
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew where operationType='Opening'  group by  COAId) o on c.COAId=o.COAId
 left outer join (select distinct COAId,sum(TransactionAmount)TransactionAmount from #TempNetChangeNew where operationType='NetChange'  group by  COAId) n on c.COAId=n.COAId
-  where isnull(c.TransType,'PF') in(@TransType)
+  where isnull(c.TransType,'PF') in(@TransType) and BranchId=@BranchId
 
 select 
 case when c.COAType in('Asset') then '1' 
@@ -8134,17 +8143,8 @@ isnull(@FirstRetainedEarning,0) FirstRetainedEarning,isnull(@FirstNetProfit,0) F
 
 drop table #TempNetChangeNew
 
-
-
-
-
 ";
-
-
-
-
                 #endregion SqlText
-                sqlText = sqlText.Replace("HRMDB", vm.HRMDB);
 
                 #region SqlExecution
                 SqlDataAdapter da = new SqlDataAdapter(sqlText, currConn);
@@ -8248,7 +8248,7 @@ declare @NextYearRetainedEarning decimal(18,4)=0
 declare @RetainedEarningId varchar(10)
 declare @NetIncomeId varchar(10)
 
-select @YearStart =YearStart,@YearEnd =YearEnd from HRMDB.dbo.FiscalYear where [Year]=@FiscalYear
+select @YearStart =YearStart,@YearEnd =YearEnd from FiscalYear where [Year]=@FiscalYear
 select @RetainedEarningId=Id from COAs where COASL='9999' and TransType=@transType
 select @NetIncomeId=Id from COAs where COASL='8888' and TransType=@transType
 
@@ -8470,7 +8470,7 @@ order by FiscalYear,  y.TransType,case when COASL='9999' then 'D' when COASL='88
                          Left Outer Join InvestmentNames n on n.Id=ia.InvestmentNameId
                          Left Outer Join EnumInvestmentTypes it on it.Id=n.InvestmentTypeId
                          Left Outer Join BankNames b on b.Id=n.BankNameId
-                        left outer join HRMDB.dbo.FiscalYearDetail fd on ia.FiscalYearDetailId=fd.Id
+                        left outer join FiscalYearDetail fd on ia.FiscalYearDetailId=fd.Id
                         order by n.Code";
                 
                 SqlDataAdapter da = new SqlDataAdapter(sqlText, currConn);

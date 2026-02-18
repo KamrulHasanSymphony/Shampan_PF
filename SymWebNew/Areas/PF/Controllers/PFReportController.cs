@@ -1944,7 +1944,7 @@ namespace SymWebUI.Areas.PF.Controllers
                  string ReportHead = "";
                  string rptLocation = "";
                  PFReport report = new PFReport();
-                 string fileName = "rptIFRSReportTB.rpt";
+                 string fileName = "rptIFRSReportIS.rpt";
                  ReportDocument doc = new ReportDocument();
                  DataTable dt = new DataTable();
                  DataTable dt1 = new DataTable();
@@ -2185,12 +2185,12 @@ namespace SymWebUI.Areas.PF.Controllers
                  PFReport report = new PFReport();
 
                  vm.TransType = AreaTypePFVM.TransType;
-                 string[] cFields = { "TransType" };
-                 string[] cValues = { AreaTypePFVM.TransType};
+                 string[] cFields = { "TransType","BranchId" };
+                 string[] cValues = { AreaTypePFVM.TransType,Session["BranchId"].ToString()};
                  //vm.BranchId = Session["BranchId"].ToString();
                  ReportDocument doc = new ReportDocument();
                  DataTable dt = new DataTable();
-
+                 vm.BranchId = Session["BranchId"].ToString();
 
                  dt = _repo.View_NetChange(vm,cFields, cValues);
 
