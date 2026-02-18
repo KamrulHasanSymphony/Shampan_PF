@@ -257,7 +257,7 @@ WHERE  1=1 AND IsArchive = 0
         /// Retrieves all Investment Name Details information.
         /// </summary>      
         /// <returns>View containing Investment Name Details</returns>
-        public List<InvestmentNameDetailsVM> SelectAllDetails(int Id = 0, string[] conditionFields = null, string[] conditionValues = null
+        public List<InvestmentNameDetailsVM> SelectAllDetails(string branchId, int Id = 0, string[] conditionFields = null, string[] conditionValues = null
             , SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Variables
@@ -296,15 +296,16 @@ WHERE  1=1 AND IsArchive = 0
                 #region sql statement
                 sqlText = @"
 SELECT
-Id
-,InvestmentNameId
-,FromMonth
-,ToMonth
-,InterestRate
-,Remarks
- From InvestmentNameDetails
+a.Id
+,a.InvestmentNameId
+,a.FromMonth
+,a.ToMonth
+,a.InterestRate
+,a.Remarks
+ From InvestmentNameDetails a
+ left join InvestmentNames b on a.InvestmentNameId = b.Id
 
-WHERE  1=1  
+WHERE  1=1 and b.BranchId = @BranchId  
 ";
 
                 if (Id > 0)
@@ -346,6 +347,7 @@ WHERE  1=1
                 {
                     objComm.Parameters.AddWithValue("@Id", Id);
                 }
+                objComm.Parameters.AddWithValue("@BranchId", branchId);
                 SqlDataReader dr;
                 dr = objComm.ExecuteReader();
                 while (dr.Read())
