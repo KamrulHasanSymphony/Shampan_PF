@@ -8015,6 +8015,193 @@ drop table #TempNetChangeNew
 
                 sqlText = @" 
 
+--declare @MonthTo as varchar(100)='12'
+--declare @TransType as varchar(100)='PF' -- closing
+--declare @BranchId as varchar(100)='10' -- BranchId
+
+
+declare @FirstStart as varchar(100)
+declare @FirstEnd as varchar(10)
+declare @LastStart as varchar(100)
+declare @LastEnd as varchar(100)
+
+declare @FirstYear as varchar(100)
+declare @LastYear as varchar(100)
+declare @FirstRetainedEarning as decimal(18,4)
+declare @LastRetainedEarning as decimal(18,4)
+declare @FirstNetProfit  as decimal(18,4)
+declare @LastNetProfit as decimal(18,4)
+declare @NetProfitCOAId as varchar(100)
+declare @RetainedEarningCOAId as varchar(100)
+
+
+select @LastEnd=PeriodEnd,@LastYear=[Year] from FiscalYearDetail where id=@MonthTo
+
+select @FirstStart=YearStart,@FirstYear=[Year]   from FiscalYear where [Year]=cast( @LastYear as int)-1
+SELECT  @FirstEnd=CONVERT(VARCHAR(8),DATEADD(MONTH, -12, CONVERT(DATE, @LastEnd, 112)), 112)  
+select @LastStart=YearStart  from FiscalYear where [Year]= @LastYear  
+
+if	(@FirstStart is NULL) begin set @FirstStart='19000101'; end
+if	(@LastStart is NULL) begin set @LastStart='19000101'; end
+if	(@FirstEnd is NULL) begin set @FirstEnd='29001231'; end
+if	(@LastEnd is NULL) begin set @LastEnd='29001231'; end
+if	(@LastYear is NULL) begin set @LastYear='2900'; end
+if	(@FirstYear is NULL) begin set @FirstYear='1900'; end
+
+
+
+SELECT  
+    CASE 
+        WHEN c.COAType = 'Asset' THEN 1
+        WHEN c.COAType = 'Members Fund and Liabilities' THEN 2
+        WHEN c.COAType = 'Revenue' THEN 3
+        WHEN c.COAType = 'Expense' THEN 4
+        WHEN c.COAType = 'OwnersEquity' THEN 5
+        WHEN c.COAType = 'RetainedEarnings' THEN 6
+        WHEN c.COAType = 'NetProfit' THEN 7
+        ELSE 0
+    END AS SL,
+
+    c.GroupSL,
+    c.COAGroupName,
+    c.COASL,
+    c.Nature,
+    c.COAType,
+    c.COACode,
+    c.COAName,
+
+    SUM(jd.DrAmount) AS Dr,
+	SUM(jd.CrAmount) AS Cr,
+    (SUM(jd.DrAmount)-SUM(jd.CrAmount)) AS TransactionAmount,
+    0 AS OpeningAmount,
+    0 AS NetChange,
+    (SUM(jd.DrAmount)-SUM(jd.CrAmount)) AS ClosingAmount
+
+FROM dbo.GLJournalDetails jd
+LEFT JOIN dbo.GLJournals j ON jd.GLJournalId = j.Id
+LEFT JOIN dbo.View_COA_New c ON jd.COAId = c.COAId
+
+WHERE 
+    c.BranchId = @BranchId
+    AND c.COAType IN ('Revenue','Expense')
+    AND jd.TransactionDate <= @LastEnd
+
+
+GROUP BY 
+    c.COAType,
+    c.GroupSL,
+    c.COAGroupName,
+    c.COASL,
+    c.Nature,
+    c.COACode,
+    c.COAName
+
+ORDER BY 
+    SL,
+    c.GroupSL,
+    c.COASL,
+    c.COACode
+
+	select  @LastNetProfit=isnull(Sum(TransactionAmount),0)  
+from View_GLJournalDetailNew 
+where transactionDate >=@LastStart and transactionDate <=@LastEnd and isnull(IsYearClosing,0)=0 
+and TransType in(@TransType)  and COAType in ('Revenue','Expense') and BranchId=@BranchId
+
+    select @FirstStart FirstStart,@FirstEnd FirstEnd,@FirstYear  FirstYear,@LastStart LastStart,@LastEnd LastEnd,@LastYear LastYear,
+isnull(@FirstRetainedEarning,0) FirstRetainedEarning,isnull(@FirstNetProfit,0) FirstNetProfit
+,isnull(@LastRetainedEarning,0) LastRetainedEarning,isnull(@LastNetProfit,0) LastNetProfit
+
+";
+                #endregion SqlText
+
+                #region SqlExecution
+                SqlDataAdapter da = new SqlDataAdapter(sqlText, currConn);
+                da.SelectCommand.Transaction = transaction;
+                //da.SelectCommand.Parameters.AddWithValue("@StartYear", vm.YearFrom);
+                //da.SelectCommand.Parameters.AddWithValue("@EndYear", vm.YearTo);
+                //da.SelectCommand.Parameters.AddWithValue("@MonthFrom", vm.MonthFrom);
+                da.SelectCommand.Parameters.AddWithValue("@MonthTo", vm.MonthTo);
+                //da.SelectCommand.Parameters.AddWithValue("MonthTo", Ordinary.DateToString(vm.DateFrom));
+                da.SelectCommand.Parameters.AddWithValue("@TransType", vm.TransType);
+                da.SelectCommand.Parameters.AddWithValue("@BranchId", vm.BranchId);
+
+                da.Fill(ds);
+
+                #endregion SqlExecution
+
+                if (Vtransaction == null && transaction != null)
+                {
+                    transaction.Commit();
+                }
+                #endregion
+            }
+
+            #region catch
+
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException("", "SQL:" + sqlText + FieldDelimeter + ex.Message.ToString());
+            }
+
+            #endregion
+
+            #region finally
+
+            finally
+            {
+                if (VcurrConn == null && currConn != null && currConn.State == ConnectionState.Open)
+                {
+                    currConn.Close();
+                }
+            }
+            #endregion
+
+            return ds;
+        }
+
+        public DataSet IFRSReportsIS_old(PFReportVM vm, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
+        {
+            #region Variables
+            SqlConnection currConn = null;
+            SqlTransaction transaction = null;
+            string sqlText = "";
+            DataSet ds = new DataSet();
+            string[] retResults = new string[6];
+            #endregion
+
+            try
+            {
+                #region open connection and transaction
+                #region New open connection and transaction
+                if (VcurrConn != null)
+                {
+                    currConn = VcurrConn;
+                }
+                if (Vtransaction != null)
+                {
+                    transaction = Vtransaction;
+                }
+                #endregion New open connection and transaction
+                if (currConn == null)
+                {
+                    currConn = _dbsqlConnection.GetConnection();
+                    if (currConn.State != ConnectionState.Open)
+                    {
+                        currConn.Open();
+                    }
+                }
+                if (transaction == null)
+                {
+                    transaction = currConn.BeginTransaction("");
+                }
+                #endregion open connection and transaction
+
+                #region sql statement
+
+                #region SqlText
+
+                sqlText = @" 
+
 --declare @MonthTo as varchar(100)='1171'
 --declare @TransType as varchar(100)='PF' -- closing
 
