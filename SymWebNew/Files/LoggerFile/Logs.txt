@@ -137,3 +137,8 @@ Invalid column name 'BWWF'.
  Source : DownloadAllWPPFReport , Method : WPPFController
 Object reference not set to an instance of an object.
    at SymWebUI.Areas.WPPF.Controllers.WPPFController.DownloadAllWPPFReport() in d:\Meghna_WPPF\SymWebNew\Areas\WPPF\Controllers\WPPFController.cs:line 492
+
+2026-02-22 14:42:59 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\Shampan_PF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766

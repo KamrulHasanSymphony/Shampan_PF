@@ -86,7 +86,7 @@ BankAccountNo
                             @Html.LabelFor(model => model.FromDate)
                         </div>
                         <div class="editor-field">
-                            @Html.TextBoxFor(model => model.FromDate, new { @placeholder = "From Date", @class = " customDatePicker  required  form-control" })
+                            @Html.TextBoxFor(model => model.FromDate, new {  @placeholder = "From Date", @class = " customDatePicker  required  form-control FromDate" })
                             @Html.ValidationMessageFor(model => model.FromDate)
                         </div>
                     </div>
@@ -95,7 +95,7 @@ BankAccountNo
                             @Html.LabelFor(model => model.ToDate)
                         </div>
                         <div class="editor-field">
-                            @Html.TextBoxFor(model => model.ToDate, new { @placeholder = "To Date", @class = " customDatePicker  required  form-control" })
+                            @Html.TextBoxFor(model => model.ToDate, new {  @placeholder = "To Date", @class = " customDatePicker  required  form-control ToDate" })
                             @Html.ValidationMessageFor(model => model.ToDate)
                         </div>
                     </div>
@@ -354,7 +354,6 @@ BankAccountNo
 
         valiDation("frmInvestmentName");
     });
-
 </script>
 <script>
     $('.AddRow:not(.AddRowInited)').on("click", function () {
