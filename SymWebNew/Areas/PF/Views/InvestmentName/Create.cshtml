@@ -125,7 +125,7 @@ BankAccountNo
                         @Html.LabelFor(model => model.BankBranchId)
                     </div>
                     <div class="editor-field">
-                        @Html.SimpleDropDownFor(model => model.BankBranchId, "/Config/DropDown/PF_BankBranchName", new { @class = "  form-control" })
+                        @Html.SimpleDropDownFor(model => model.BankBranchId, "/Config/DropDown/PF_BankBranchName", new { @class = " required form-control" })
                         @Html.ValidationMessageFor(model => model.BankBranchId)
                     </div>
                 </div>
@@ -501,5 +501,23 @@ BankAccountNo
         $('#frmInvestmentName').on('click', 'input[type="text"], textarea.NumberCheck', function () {
             $(this).select();
         });
+    });
+
+    $(document).ready(function () {
+
+        $("#frmInvestmentName").on("submit", function (e) {
+
+            var totalRows = $("#editorItemRows4")
+                    .find(".dInterestRate")
+                    .length;
+
+            if (totalRows === 0) {
+                ShowResult("Fail", "Please add Interest Policy");
+                e.preventDefault();
+                return false;
+            }
+
+        });
+
     });
 </script>

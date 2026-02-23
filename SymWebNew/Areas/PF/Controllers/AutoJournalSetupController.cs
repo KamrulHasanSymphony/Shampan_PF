@@ -107,8 +107,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 {
                     vm.CreatedAt = DateTime.Now.ToString("yyyyMMddHHmmss");
                     vm.CreatedBy = identity.Name;
-                    vm.CreatedFrom = identity.WorkStationIP;
-                    vm.BranchId = "1";
+                    vm.CreatedFrom = identity.WorkStationIP;                 
                     result = _repo.Insert(vm);
                     Session["result"] = result[0] + "~" + result[1];
                     if (result[0].ToLower() == "success")
