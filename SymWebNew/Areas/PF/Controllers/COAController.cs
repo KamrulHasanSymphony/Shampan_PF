@@ -118,9 +118,9 @@ namespace SymWebUI.Areas.PF.Controllers
                 , c.GroupName.ToString()               
                 , c.COAType.ToString()               
                 , c.Nature.ToString()               
-                , c.IsRetainedEarning.ToString()               
-                , c.IsNetProfit.ToString()               
-                , c.IsDepreciation.ToString()               
+                , c.IsRetainedEarning.ToString() == "1" ? "Yes" : "No"               
+                , c.IsNetProfit.ToString() == "1" ? "Yes" : "No"            
+                , c.IsDepreciation.ToString() == "1" ? "Yes" : "No"               
                 , c.COASL.ToString()                   
                 , c.IsActive? "Active":"Inactive"
             };

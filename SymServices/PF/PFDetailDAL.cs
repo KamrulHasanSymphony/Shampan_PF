@@ -1073,7 +1073,7 @@ WHERE  1=1
                 sqlText = @"
                         insert into PFHeader (
                             Code       
-                            ,[Id]
+                            
                             ,[FiscalYearDetailId]
                             ,[ProjectId]
                             ,[EmployeePFValue]
@@ -1091,7 +1091,7 @@ WHERE  1=1
                             )
                             select 
                             @code
-                            ,@Id
+                            
                             ,@FiscalYearDetailId
                             ,@ProjectId
                             ,sum(ei.BasicSalary*.10)PFValue
@@ -1127,7 +1127,7 @@ WHERE  1=1
 
                 cmd = new SqlCommand(sqlText, currConn, transaction);
                 cmd.Parameters.AddWithValue("@code", code);
-                cmd.Parameters.AddWithValue("@Id", nextId);
+                //cmd.Parameters.AddWithValue("@Id", nextId);
                 cmd.Parameters.AddWithValue("@ProjectId", ProjectId);
                 cmd.Parameters.AddWithValue("@FiscalYearDetailId", FiscalYearDetailId);
                 cmd.Parameters.AddWithValue("@Post", false);
@@ -1263,7 +1263,7 @@ WHERE  1=1
                 ,Vei.GrossSalary
                 ,1
                 ,1
-                FROM ViewEmployeeInfo Vei";
+                FROM ViewEmployeeInformation Vei";
                 #endregion SqlText
 
                 #region SqlExecution

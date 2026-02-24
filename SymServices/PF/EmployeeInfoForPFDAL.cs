@@ -1214,6 +1214,7 @@ namespace SymServices.PF
                     vEmployeeInfoVM.NomineeFileName = dr["NomineeFileName"].ToString();
                     vEmployeeInfoVM.NomineeRemarks = dr["NomineeRemarks"].ToString();
                     vEmployeeInfoVM.NomineeNID = dr["NomineeNID"].ToString();
+                   
 
                     vEmployeeInfoVM.BranchId = paramVM.BranchId;
 

@@ -242,13 +242,15 @@ Where vei.IsArchive=0 AND vei.IsActive=1
                 #region SQL query
                 string sqlText = @"
              SELECT
-                        a.Code, 
-                        a.Name, 
+                         a.Code, 
+                         a.Name, 
                          b.Name AS Department,
                          c.Name AS Designation,
+                         d.Name AS Project,
+                         e.Name AS Section,
                          a.BasicSalary,
                          a.GrossSalary,
-                        a.DateOfBirth,
+                         a.DateOfBirth,
                          a.JoinDate,
                          a.IsActive,
                          a.ContactNo,
@@ -271,9 +273,12 @@ Where vei.IsArchive=0 AND vei.IsActive=1
                         , a.NomineeFileName
                         , a.NomineeRemarks
                         , a.NomineeNID
+                        , a.BranchId
                         from EmployeeInfo a 
 						left join Department b on a.Department = b.Id
 						left join Designation c on a.Designation = c.Id
+						left join Project d on a.Project = d.Id
+						left join Section e on a.Section = e.Id
                         where a.BranchId = @BranchId and a.IsActive =1 ";
 
                 #endregion SQL query
@@ -296,6 +301,8 @@ Where vei.IsArchive=0 AND vei.IsActive=1
                     'Enter Name' Name, 
                     'Development' Department,
                     'Sr. Software Developer' Designation,
+                    '1_1' Project,
+                    '1_1' Section,
                     0 BasicSalary,
                     0 GrossSalary,
                     '01-Jan-1999' DateOfBirth,
@@ -319,7 +326,8 @@ Where vei.IsArchive=0 AND vei.IsActive=1
                     'Nominee Fax' NomineeFax,
                     'Nominee File Name' NomineeFileName,
                     'Nominee Remarks' NomineeRemarks,
-                    'Nominee NID' NomineeNID";
+                    'Nominee NID' NomineeNID
+                    'Branch' BranchId";
 
                     // Execute the second query if no data is found
                     SqlCommand cmddSample = new SqlCommand(sqlText, currConn);

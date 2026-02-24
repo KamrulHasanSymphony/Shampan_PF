@@ -9,7 +9,7 @@
 </style>
 
 <button type="button" title="Add New" data-url="/PF/EmployeeInfoPF/Create" onclick="GoTo(this)" id="" class=" sym-btn-add ">&nbsp;New</button>
-<button type="button" title="Add New" data-url="/PF/EmployeeInfoPF/Create" onclick="GoTo(this)" id="" class=" sym-btn-save ">&nbsp;Sync</button>
+<button type="button" title="Add New" data-url="" onclick="GoTo(this)" id="" class=" sym-btn-save ">&nbsp;Sync</button>
 <button type="button" title="Add New" data-url="/PF/EmployeeInfoPF/Import" onclick="GoTo(this)" id="" class=" sym-btn-Excel-Export ">&nbsp;Export/Emport</button>
 <div class="thinbox">
     <div class="th_thinbox">
@@ -60,11 +60,12 @@
                    "sWidth": "9%",
                    "sClass": "center",
                    "fnRender": function (oObj) {
-                       return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0]
-                           + '">&nbsp; <a title="Click on for Edit" style="text-decoration:none;" href=\"/PF/EmployeeInfoPF/Edit/' + oObj.aData[0] + '\"  class=" sym-btn-edit-row"></a>'
-                           + '&nbsp; <a title="Click on for Send Mail"  href="/PF/EmployeeInfoPF/Delete?Id=' + oObj.aData[0] + '\" class="sym-btn-remove-row"></a>'
+                       var id = oObj.aData[0];
 
-                       ;
+                       return '<input type="checkbox" onclick="CheckAll(this)" data-Id="' + id + '" />'
+                           + ' &nbsp;<a title="Click on for Edit" style="text-decoration:none;" href="/PF/EmployeeInfoPF/Edit/' + id + '" class="sym-btn-edit-row"></a>'
+                       //+ ' &nbsp;<a title="Click on for Delete" href="/PF/EmployeeInfoPF/Delete?Id=' + id + '" class="sym-btn-remove-row"></a>';
+                       + '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/PF/EmployeeInfoPF/Delete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');" class="sym-btn-remove-row"></a>'
                    }
                },
                 { "sName": "Code", "sWidth": "10%" },
