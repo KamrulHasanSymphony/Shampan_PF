@@ -82,9 +82,8 @@ SELECT DISTINCT
 ,ve.Project
 ,ve.ResignDate
 ";
-                sqlText += " FROM [dbo].ViewEmployeeInformation ve";
-                sqlText += @" WHERE  1=1 AND ve.IsActive = 0 and ResignReason!='Resignation'
-";
+                sqlText += "  FROM EmployeeLeftInformation el ";
+                sqlText += @" Left Join [dbo].ViewEmployeeInformation ve on ve.EmployeeId=el.EmployeeId WHERE  1=1 ";
                 sqlText += @" 
 AND ve.EmployeeId NOT IN (
 SELECT EmployeeId FROM PFSettlements WHERE 1=1 AND Post = 1
