@@ -27,11 +27,11 @@ namespace SymRepository.PF
         }
 
 
-        public List<PFSettlementVM> SelectAll(int Id = 0, string[] conditionFields = null, string[] conditionValues = null)
+        public List<PFSettlementVM> SelectAll(string BranchId="", int Id = 0, string[] conditionFields = null, string[] conditionValues = null)
         {
             try
             {
-                return new PFSettlementDAL().SelectAll(Id, conditionFields, conditionValues);
+                return new PFSettlementDAL().SelectAll(BranchId,Id, conditionFields, conditionValues);
             }
             catch (Exception ex)
             {

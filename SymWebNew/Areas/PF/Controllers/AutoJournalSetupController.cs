@@ -50,6 +50,7 @@ namespace SymWebUI.Areas.PF.Controllers
                     c.JournalName.ToLower().Contains(param.sSearch.ToLower()) ||
                     c.Nature.ToLower().Contains(param.sSearch.ToLower()) ||
                     c.COAName.ToString().ToLower().Contains(param.sSearch.ToLower()) ||
+                    c.GroupName.ToString().ToLower().Contains(param.sSearch.ToLower()) ||
                     c.IsActive.ToString().ToLower().Contains(param.sSearch.ToLower())
                 );
             }
@@ -70,6 +71,7 @@ namespace SymWebUI.Areas.PF.Controllers
                      c.JournalName,
                      c.Nature,
                      c.COAName.ToString(),
+                     c.GroupName,
                      c.IsActive ? "Yes" : "No"
                  };
 

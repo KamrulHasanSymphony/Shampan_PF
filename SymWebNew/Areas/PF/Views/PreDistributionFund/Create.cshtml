@@ -82,7 +82,7 @@
                         @Html.LabelFor(model => model.TransactionDate)
                     </div>
                     <div class="editor-field">
-                        @Html.TextBoxFor(model => model.TransactionDate, new { @placeholder = "Transaction Date", @class = "customDatePicker required form-control" })
+                        @Html.TextBoxFor(model => model.TransactionDate, new { onchange = "GetProfitValue(this.value)", @placeholder = "Transaction Date", @class = "customDatePicker required form-control" })
                         @Html.ValidationMessageFor(model => model.TransactionDate)
                     </div>
                 </div>
