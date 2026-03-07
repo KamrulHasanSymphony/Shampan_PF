@@ -32,6 +32,8 @@ namespace SymServices.PF
         /// <param name="VcurrConn">An optional SQL connection. If not provided, a new connection is established.</param>
         /// <param name="Vtransaction">An optional SQL transaction. If not provided, a new transaction is created and committed.</param>
         /// <returns>A list of <see cref="BankBranchVM"/> representing the Resigne Employee matching the criteria.</returns>
+        /// 
+
         public List<PFSettlementVM> SelectAll_ResignEmployee(string[] conditionFields = null, string[] conditionValues = null, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Variables
@@ -67,7 +69,7 @@ namespace SymServices.PF
                     transaction = currConn.BeginTransaction("");
                 }
                 #endregion open connection and transaction
-                
+
 
                 #region sql statement
                 #region SqlText
@@ -82,9 +84,9 @@ SELECT DISTINCT
 ,ve.Project
 ,ve.ResignDate
 ";
-                sqlText += " FROM [dbo].ViewEmployeeInformation ve";
-                sqlText += @" WHERE  1=1 AND ve.IsActive = 0 and ResignReason!='Resignation'
-";
+                sqlText += " FROM ViewEmployeeInformation ve";
+                sqlText += @" left join EmployeeLeftInformation b on ve.EmployeeId = b.EmployeeId";
+                sqlText += @" WHERE  1=1 AND b.IsActive = 1";
                 sqlText += @" 
 AND ve.EmployeeId NOT IN (
 SELECT EmployeeId FROM PFSettlements WHERE 1=1 AND Post = 1
@@ -174,6 +176,134 @@ SELECT EmployeeId FROM ForfeitureAccounts WHERE 1=1 AND Post = 1
             #endregion
             return VMs;
         }
+
+
+
+//        public List<PFSettlementVM> SelectAll_ResignEmployee(string[] conditionFields = null, string[] conditionValues = null, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
+//        {
+//            #region Variables
+//            SqlConnection currConn = null;
+//            SqlTransaction transaction = null;
+//            string sqlText = "";
+//            List<PFSettlementVM> VMs = new List<PFSettlementVM>();
+//            PFSettlementVM vm;
+//            #endregion
+//            try
+//            {
+//                #region open connection and transaction
+//                #region New open connection and transaction
+//                if (VcurrConn != null)
+//                {
+//                    currConn = VcurrConn;
+//                }
+//                if (Vtransaction != null)
+//                {
+//                    transaction = Vtransaction;
+//                }
+//                #endregion New open connection and transaction
+//                if (currConn == null)
+//                {
+//                    currConn = _dbsqlConnection.GetConnection();
+//                    if (currConn.State != ConnectionState.Open)
+//                    {
+//                        currConn.Open();
+//                    }
+//                }
+//                if (transaction == null)
+//                {
+//                    transaction = currConn.BeginTransaction("");
+//                }
+//                #endregion open connection and transaction
+
+
+//                #region sql statement
+//                #region SqlText
+//                sqlText = @"
+//
+//SELECT ve.Code, ve.EmpName , ve.Designation, ve.Department,ve.ResignDate
+//From ViewEmployeeInformation ve
+//LEFT OUTER JOIN  EmployeeLeftInformation el ON ve.EmployeeId = el.EmployeeId
+//Where 1=1 and ve.IsArchive=1 
+//";
+//                //////LeftDate BETWEEN 20180101 AND 20991231
+//                string cField = "";
+//                if (conditionFields != null && conditionValues != null && conditionFields.Length == conditionValues.Length)
+//                {
+//                    for (int i = 0; i < conditionFields.Length; i++)
+//                    {
+//                        if (string.IsNullOrWhiteSpace(conditionFields[i]) || string.IsNullOrWhiteSpace(conditionValues[i]))
+//                        {
+//                            continue;
+//                        }
+//                        cField = conditionFields[i].ToString();
+//                        cField = Ordinary.StringReplacing(cField);
+//                        sqlText += " AND " + conditionFields[i] + "=@" + cField;
+//                    }
+//                }
+//                sqlText += @" ORDER BY ve.Code";
+
+//                #endregion SqlText
+//                #region SqlExecution
+
+//                SqlCommand objComm = new SqlCommand(sqlText, currConn, transaction);
+//                if (conditionFields != null && conditionValues != null && conditionFields.Length == conditionValues.Length)
+//                {
+//                    for (int j = 0; j < conditionFields.Length; j++)
+//                    {
+//                        if (string.IsNullOrWhiteSpace(conditionFields[j]) || string.IsNullOrWhiteSpace(conditionValues[j]))
+//                        {
+//                            continue;
+//                        }
+//                        cField = conditionFields[j].ToString();
+//                        cField = Ordinary.StringReplacing(cField);
+//                        objComm.Parameters.AddWithValue("@" + cField, conditionValues[j]);
+//                    }
+//                }
+//               // objComm.Parameters.AddWithValue("@BranchId", vm.BranchId);
+//                SqlDataReader dr;
+//                dr = objComm.ExecuteReader();
+//                while (dr.Read())
+//                {
+//                    vm = new PFSettlementVM();
+//                    vm.EmpName = dr["EmpName"].ToString();
+//                    vm.Code = dr["Code"].ToString();
+//                    vm.Designation = dr["Designation"].ToString();
+//                    vm.Department = dr["Department"].ToString();
+//                    vm.EmpResignDate = Ordinary.StringToDate(dr["ResignDate"].ToString());
+//                    VMs.Add(vm);
+//                }
+//                dr.Close();
+//                #endregion SqlExecution
+
+//                if (Vtransaction == null && transaction != null)
+//                {
+//                    transaction.Commit();
+//                }
+//                #endregion
+//            }
+//            #region catch
+//            catch (SqlException sqlex)
+//            {
+//                throw new ArgumentNullException("", "SQL:" + sqlText + FieldDelimeter + sqlex.Message.ToString());
+//            }
+//            catch (Exception ex)
+//            {
+//                throw new ArgumentNullException("", "SQL:" + sqlText + FieldDelimeter + ex.Message.ToString());
+//            }
+//            #endregion
+//            #region finally
+//            finally
+//            {
+//                if (VcurrConn == null && currConn != null && currConn.State == ConnectionState.Open)
+//                {
+//                    currConn.Close();
+//                }
+//            }
+//            #endregion
+//            return VMs;
+//        }
+
+
         /// <summary>
         /// Retrieves a list of Profit Distribution Detail from the database, optionally filtered by ID or additional conditions.
         /// Supports external SQL connection and transaction handling for reuse within larger operations.

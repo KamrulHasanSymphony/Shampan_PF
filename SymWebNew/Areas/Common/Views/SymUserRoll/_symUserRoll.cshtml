@@ -23,16 +23,17 @@
                 </div>
             </div>
             <div class="col-md-1">
+                <div class="editor-field">
+                     @Html.CheckBoxFor(model => model.IsIndex, new { @placeholder = "Is Index", @class = "IsIndex form-control" })
+                </div>
+            </div>
+            <div class="col-md-1">
                 
                 <div class="editor-field">
                     @Html.CheckBoxFor(model=> model.IsAdd, new {@class = "IsAdd form-control" })
                 </div>
             </div>
-            <div class="col-md-1">
-                <div class="editor-field">
-                     @Html.CheckBoxFor(model => model.IsIndex, new { @placeholder = "Is Index", @class = "IsIndex form-control" })
-                </div>
-            </div>
+
             <div class="col-md-1">
                 <div class="editor-field">
                     @Html.CheckBoxFor(model => model.IsEdit, new { @placeholder = "IsEdit", @class = "IsEdit form-control" })

@@ -78,6 +78,7 @@
                     </div>
                     <div class="editor-field">
                         @Html.TextBoxFor(model => model.Name, new { @placeholder = "Name", @class = "required form-control" })
+                        @Html.ValidationMessageFor(model => model.Name)
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -86,6 +87,7 @@
                     </div>
                     <div class="editor-field">
                         @Html.SimpleDropDownFor(model => model.Department, "/Config/DropDown/Department", new { @placeholder = "Department", @class = "required form-control " })
+                        @Html.ValidationMessageFor(model => model.Department)
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -94,6 +96,7 @@
                     </div>
                     <div class="editor-field">
                         @Html.SimpleDropDownFor(model => model.Designation, "/Config/DropDown/Designation", new { @placeholder = "Designation", @class = "required form-control " })
+                        @Html.ValidationMessageFor(model => model.Designation)
                     </div>
                 </div>
                 <div class="col-sm-2 hidden">
@@ -118,6 +121,7 @@
                     </div>
                     <div class="editor-field">
                         @Html.TextBoxFor(model => model.ContactNo, new { @placeholder = "Personal Contact No", @class = "required form-control" })
+                        @Html.ValidationMessageFor(model => model.ContactNo)
                     </div>
                 </div>
                 <div class="col-sm-2">
@@ -126,6 +130,7 @@
                     </div>
                     <div class="editor-field">
                         @Html.TextBoxFor(model => model.OfficialContactNo, new { @placeholder = "Official Contact No", @class = "required form-control" })
+                        @Html.ValidationMessageFor(model => model.OfficialContactNo)
                     </div>
                 </div>
             </div>
@@ -248,6 +253,7 @@
                     </div>
                     <div class="editor-field">
                         @Html.TextBoxFor(model => model.Email, new { @placeholder = "Email", @class = "required form-control" })
+                        @Html.ValidationMessageFor(model => model.Email)
                     </div>
                 </div>
                 <div class="col-sm-2">

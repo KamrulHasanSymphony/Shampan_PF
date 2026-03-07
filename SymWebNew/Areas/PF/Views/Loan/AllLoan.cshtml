@@ -37,7 +37,7 @@
                     <thead>
                         <tr>
                             <th class="center">
-                                <input type="checkbox" class="chkAll" />Select All1
+                                <input type="checkbox" class="chkAll" />Select All
                             </th>
                             <th>Code</th>
                             <th>Name</th>
@@ -113,11 +113,11 @@
                                     var approveBtn = '';
 
                                     if ('@identity.IsAdmin'.toLowerCase() == "true") {
-                                        if (isApproved == "Approved") {
-                                            approveBtn = '<a title="Click for Not Approve" class="sym-btn-post-row" href="/PF/Loan/Approved?loanId=' + loanId + '"></a>';
+                                        if (isApproved == "Approved" || isApproved === true) {
+                                            approveBtn = '<a title="Click for Not Approve" class=" sym-btn-post-row" style="opacity:0.45;pointer-events:none;cursor:default;" href="/PF/Loan/Approved?loanId=' + loanId + '"></a>';
                                         }
                                         else {
-                                            approveBtn = '<a title="Click for Approve" class="sym-btn-reject-row" href="/PF/Loan/Approved?loanId=' + loanId + '"></a>';
+                                            approveBtn = '<a title="Click for Approve" class="sym-btn-post-row" href="/PF/Loan/Approved?loanId=' + loanId + '"></a>';
                                         }
                                     }
 

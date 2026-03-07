@@ -28,7 +28,17 @@ namespace SymRepository.PF
             }
         }
 
-
+        public DataTable SelectAllForReport(int Id = 0, string[] conditionFields = null, string[] conditionValues = null)
+        {
+            try
+            {
+                return new PreDistributionFundDAL().SelectAllForReport(Id, conditionFields, conditionValues);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
 
         public string[] Insert(PreDistributionFundVM vm)
         {

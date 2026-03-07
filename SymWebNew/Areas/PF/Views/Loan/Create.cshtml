@@ -123,7 +123,7 @@
                     @Html.LabelFor(model => model.PrincipalAmount)
                 </div>
                 <div class="editor-field">
-                    @Html.TextBoxFor(model => model.PrincipalAmount, new { @onchange = "LoanSchudele();", @placeholder = "Principal Amount", @class = " right required form-control" })
+                    @Html.TextBoxFor(model => model.PrincipalAmount, new { @onchange = "LoanSchudele();", @placeholder = "Principal Amount", @class = "NumberCheck right required form-control"})
                     @Html.ValidationMessageFor(model => model.PrincipalAmount)
                 </div>
             </div>
@@ -132,7 +132,7 @@
                     @Html.LabelFor(model => model.NumberOfInstallment)
                 </div>
                 <div class="editor-field">
-                    @Html.TextBoxFor(model => model.NumberOfInstallment, new { @onchange = "LoanSchudele()", @placeholder = "Number Of Installment", @class = " right  required form-control" })
+                    @Html.TextBoxFor(model => model.NumberOfInstallment, new { @onchange = "LoanSchudele()", @placeholder = "Number Of Installment", @class = "NumberCheck right  required form-control" })
                     @Html.ValidationMessageFor(model => model.NumberOfInstallment)
                 </div>
             </div>
@@ -161,7 +161,7 @@
                     @Html.LabelFor(model => model.ApprovedDate)
                 </div>
                 <div class="editor-field">
-                    @Html.TextBoxFor(model => model.ApprovedDate, new { @onchange = "LoanSchudele(); LoanDate(this);", @placeholder = "Approved Date", @class = "customDatePicker  form-control" })
+                    @Html.TextBoxFor(model => model.ApprovedDate, new { @onchange = "LoanSchudele(); LoanDate(this);", @placeholder = "Approved Date", @class = "customDatePicker required form-control" })
                     @Html.ValidationMessageFor(model => model.ApprovedDate)
                 </div>
             </div>
@@ -321,11 +321,14 @@
 
     }
 
-    $('#PrincipalAmount').change(function () {
+    $('#PrincipalAmount, #NumberOfInstallment').change(function () {
         var PFloanType = $('#LoanType_E :selected').text();
         if (PFloanType == "PF Loan") {
 
             PFAvailableBalanceCheck();
+        }
+        else {
+            PFInstallmentCheck();
         }
     });
 
@@ -339,14 +342,32 @@
 
         //alert(AvailableBalance);
 
-        if (AvailableBalance < PFPrincipalAmount) {
+        if (AvailableBalance > PFPrincipalAmount) {
 
             ShowResult("Fail", "Balance Not Available");
             $('#PrincipalAmount').val(0);
             return;
         }
+        var NumberOfInstallment = $('#NumberOfInstallment').val();
 
+        NumberOfInstallment = parseInt(NumberOfInstallment, 10);
 
+        if (NumberOfInstallment > 120) {
+            ShowResult("Fail", "Installment must be a positive number and not more than 120.");
+            $('#NumberOfInstallment').val(0);
+            return;
+        }
+    }
+
+    function PFInstallmentCheck() {
+        var NumberOfInstallment = $('#NumberOfInstallment').val();
+
+        NumberOfInstallment = parseInt(NumberOfInstallment, 10);
+        if (NumberOfInstallment > 120) {
+            ShowResult("Fail", "Installment must be a positive number and not more than 120.");
+            $('#NumberOfInstallment').val(0);
+            return;
+        }
     }
 
     $('.btnsave').click(function () {

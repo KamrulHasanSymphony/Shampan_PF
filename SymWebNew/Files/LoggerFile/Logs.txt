@@ -142,3 +142,18 @@ Object reference not set to an instance of an object.
  Source : LoanReport , Method : LoanController
 Object reference not set to an instance of an object.
    at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\Shampan_PF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766
+
+2026-02-26 15:23:55 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\Shampan_PF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766
+
+2026-02-26 15:30:58 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\Shampan_PF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766
+
+2026-02-26 15:57:51 +06:00
+ Source : LoanReport , Method : LoanController
+Object reference not set to an instance of an object.
+   at SymWebUI.Areas.PF.Controllers.LoanController.AllLoanReport(EmployeeLoanVM vm) in d:\Shampan_PF\SymWebNew\Areas\PF\Controllers\LoanController.cs:line 1766

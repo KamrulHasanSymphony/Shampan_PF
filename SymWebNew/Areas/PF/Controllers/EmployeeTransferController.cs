@@ -228,6 +228,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 vm.CreatedBy = identity.Name;
                 vm.CreatedFrom = identity.WorkStationIP;
                 vm.Code = empVM.Code;
+                vm.FromBranch = empVM.empPFForTransferVM.FromBranch;
 
                 result = _eaRepo.Insert(vm);
 

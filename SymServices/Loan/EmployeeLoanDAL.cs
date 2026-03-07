@@ -60,7 +60,8 @@ ve.EmpName,ve.Department ,ve.Designation
 ,l.Remarks
 ,t.Name
 ,t.Name LoanType
- ,l.Id
+,l.Id
+,l.IsApproved
  from EmployeeLoan l
 left outer join ViewEmployeeInformation ve on l.EmployeeId=ve.EmployeeId
 left outer join EnumLoanType t on t.Id=l.LoanType_E
@@ -102,6 +103,7 @@ WHERE l.IsArchive=0  and l.BranchId=@BranchId
                     vm.Code = dr["Code"].ToString();
                     vm.Designation = dr["Designation"].ToString();
                     vm.Department = dr["Department"].ToString();
+                    vm.IsApproved = Convert.ToBoolean(dr["IsApproved"]);
                     VMs.Add(vm);
                 }
                 #endregion
@@ -3514,6 +3516,125 @@ EXEC sp_executesql @query, N'@StartDate DATE, @EndDate DATE @BranchId INT', @Sta
                     transaction.Commit();
                     retResults[0] = "Success";
                     retResults[1] = "Loan settelment approved successfully.";
+                }
+            }
+            #region catch
+            catch (Exception ex)
+            {
+                retResults[0] = "Fail";//Success or Fail
+                retResults[4] = ex.Message; //catch ex
+                if (Vtransaction == null) { transaction.Rollback(); }
+                return retResults;
+            }
+            finally
+            {
+                if (VcurrConn == null)
+                {
+                    if (currConn != null)
+                    {
+                        if (currConn.State == ConnectionState.Open)
+                        {
+                            currConn.Close();
+                        }
+                    }
+                }
+            }
+            #endregion
+            return retResults;
+        }
+
+        public string[] Approved(EmployeeLoanVM vm, string ids, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
+        {
+            #region Variables
+            string[] retResults = new string[6];
+            retResults[0] = "Fail";//Success or Fail
+            retResults[1] = "Fail";// Success or Fail Message
+            retResults[2] = "0";// Return Id
+            retResults[3] = "sqlText"; //  SQL Query
+            retResults[4] = "ex"; //catch ex
+            retResults[5] = "Approved Employee Loan"; //Method Name
+            int transResult = 0;
+            string sqlText = "";
+            string retVal = "";
+            SqlConnection currConn = null;
+            SqlTransaction transaction = null;
+            #endregion
+            try
+            {
+                #region open connection and transaction
+                #region New open connection and transaction
+                if (VcurrConn != null)
+                {
+                    currConn = VcurrConn;
+                }
+                if (Vtransaction != null)
+                {
+                    transaction = Vtransaction;
+                }
+                #endregion New open connection and transaction
+                if (currConn == null)
+                {
+                    currConn = _dbsqlConnection.GetConnection();
+                    if (currConn.State != ConnectionState.Open)
+                    {
+                        currConn.Open();
+                    }
+                }
+                if (transaction == null) { transaction = currConn.BeginTransaction("DeleteToEmployeeLoan"); }
+                #endregion open connection and transaction
+
+                if (ids.Length >= 1)
+                {
+                    sqlText = "";
+                    sqlText += " ";
+                    sqlText += "Update EmployeeLoan set IsApproved = Case when IsApproved=1 then 0 else 1 end ";
+                    sqlText += " WHERE Id=@Id";
+                    SqlCommand cmdDelete = new SqlCommand(sqlText, currConn, transaction);
+                    cmdDelete.Parameters.AddWithValue("@Id", ids);
+                    var exeRes = cmdDelete.ExecuteNonQuery();
+                    transResult = Convert.ToInt32(exeRes);
+                    if (transResult <= 0)
+                    {
+                        retResults[3] = sqlText;
+                        throw new ArgumentNullException("Unexpected error to update EmployeeLoan.", "");
+                    }
+
+                    // Retrieve the updated status of the Post column
+                    sqlText = "SELECT IsApproved FROM EmployeeLoan WHERE Id=@Id";
+                    SqlCommand cmdCheckPost = new SqlCommand(sqlText, currConn);
+                    cmdCheckPost.Parameters.AddWithValue("@Id", ids);
+                    cmdCheckPost.Transaction = transaction;
+                    var postStatus = cmdCheckPost.ExecuteScalar();
+
+                    // Check if Post is 1 or 0 and set the message accordingly
+                    //if (Convert.ToInt32(postStatus) == 1)
+                    //{
+                        retResults[0] = "Success";
+                        retResults[1] = "Data Approved Successfully.";
+                    //}
+                    //else
+                    //{
+                    //    retResults[0] = "Success";
+                    //    retResults[1] = "Data Not Approved Successfully.";
+                    //}
+
+                    retResults[2] = "";// Return Id
+                    retResults[3] = sqlText; //  SQL Query
+                    #region Commit
+                    if (transResult <= 0)
+                    {
+                        throw new ArgumentNullException("EmployeeLoan Delete", vm.Id + " could not Delete.");
+                    }
+                    #endregion Commit
+
+                }
+                else
+                {
+                    throw new ArgumentNullException("EmployeeLoan Information Delete", "Could not found any item.");
+                }
+                if (Vtransaction == null && transaction != null)
+                {
+                    transaction.Commit();
                 }
             }
             #region catch

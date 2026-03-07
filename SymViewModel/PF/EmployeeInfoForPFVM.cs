@@ -12,6 +12,7 @@ namespace SymViewModel.PF
     {
         public int Id { get; set; }
         public string Code { get; set; }
+       [Display(Name = "Name")]
         public string Name { get; set; }
         public string Department { get; set; }
         public string Designation { get; set; }

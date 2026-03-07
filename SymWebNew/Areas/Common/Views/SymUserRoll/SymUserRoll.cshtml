@@ -29,7 +29,7 @@
         <div class="col-md-1"><label>Edit</label></div>
         <div class="col-md-1"><label>Delete</label></div>
         <div class="col-md-1"><label>Process</label></div>
-        <div class="col-md-1"><label>Report</label></div>
+        @*<div class="col-md-1"><label>Report</label></div>*@
 
     </div>
         @foreach (var item in Model.SymUserRollVMs)
@@ -83,47 +83,70 @@
             Selectemployee(empId);
         })
         
-        $(".AllIsAdd").click(function () {
-            if ($('.AllIsAdd').prop('checked') == false) {
-                $('.IsAdd').prop('checked', false);
-            }
-            else {
-                $('.IsAdd').prop('checked', true);
-            }
+        //ADD
+        $(".AllIsAdd").on("click", function () {
+            $(".IsAdd").prop("checked", this.checked);
         });
-        $(".AllIIndex").click(function () {
-            if ($('.AllIIndex').prop('checked') == false) {
-                $('.IsIndex').prop('checked', false);
-            }
-            else {
-                $('.IsIndex').prop('checked', true);
-            }
+
+        $(".IsAdd").on("click", function () {
+            $(".AllIsAdd").prop(
+                "checked",
+                $(".IsAdd").length === $(".IsAdd:checked").length
+            );
         });
-        $(".AllIEdit").click(function () {
-            if ($('.AllIEdit').prop('checked') == false) {
-                $('.IsEdit').prop('checked', false);
-            }
-            else {
-                $('.IsEdit').prop('checked', true);
-            }
+
+        // INDEX
+        $(".AllIIndex").on("click", function () {
+            $(".IsIndex").prop("checked", this.checked);
         });
-        $(".AllDelete").click(function () {
-            if ($('.AllDelete').prop('checked') == false) {
-                $('.IsDelete').prop('checked', false);
-            }
-            else {
-                $('.IsDelete').prop('checked', true);
-            }
-            $(".AllProcess").click(function () {
-                if ($('.AllProcess').prop('checked') == false) {
-                    $('.IsProcess').prop('checked', false);
-                }
-                else {
-                    $('.IsProcess').prop('checked', true);
-                }
-            });
+
+        $(".IsIndex").on("click", function () {
+            $(".AllIIndex").prop(
+                "checked",
+                $(".IsIndex").length === $(".IsIndex:checked").length
+            );
         });
-    })
+
+
+        // EDIT
+        $(".AllIEdit").on("click", function () {
+            $(".IsEdit").prop("checked", this.checked);
+        });
+
+        $(".IsEdit").on("click", function () {
+            $(".AllIEdit").prop(
+                "checked",
+                $(".IsEdit").length === $(".IsEdit:checked").length
+            );
+        });
+
+
+        // DELETE
+        $(".AllDelete").on("click", function () {
+            $(".IsDelete").prop("checked", this.checked);
+        });
+
+        $(".IsDelete").on("click", function () {
+            $(".AllDelete").prop(
+                "checked",
+                $(".IsDelete").length === $(".IsDelete:checked").length
+            );
+        });
+
+
+        // PROCESS
+        $(".AllProcess").on("click", function () {
+            $(".IsProcess").prop("checked", this.checked);
+        });
+
+        $(".IsProcess").on("click", function () {
+            $(".AllProcess").prop(
+                "checked",
+                $(".IsProcess").length === $(".IsProcess:checked").length
+            );
+        });
+ });
+
 
     function Selectemployee() {
         var symArea = $("#symArea").val();

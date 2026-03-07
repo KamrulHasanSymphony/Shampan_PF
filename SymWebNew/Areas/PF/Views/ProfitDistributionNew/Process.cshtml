@@ -63,10 +63,8 @@
                         @Html.LabelFor(model => model.DistributionDate)
                     </div>
                     <div class="editor-field">
-                        @Html.TextBoxFor(model => model.DistributionDate, new { @placeholder = "Distribution Date ", @class = " required customDatePicker   form-control", @readonly = "readonly" })
-
-
-
+                        @Html.TextBoxFor(model => model.DistributionDate, new { @placeholder = "Distribution Date ", @class = "customDatePicker required form-control", @readonly = "readonly" })
+                        @Html.ValidationMessageFor(model => model.DistributionDate)
                     </div>
                 </div>
 
@@ -78,14 +76,14 @@
 
     <div class="headrow">
         <button type="button" name="btnName" value="Save" title="Save Data" onclick="pageSubmit('frmProfitDistribution')" class="sym-btn-save">&nbsp;Process</button>
-        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistributionNew" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
+        <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/ProfitDistributionNew?PreDistributionFundId=@Model.PreDistributionFundId" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
     </div>
 }
 
 
 <script>
     $(function () {
-      //  valiDation("frmProfitDistribution");
+      valiDation("frmProfitDistribution");
 
 
         //SubTotal();

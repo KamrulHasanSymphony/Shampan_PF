@@ -25,6 +25,11 @@ namespace SymWebUI.Areas.PF.Controllers
 {
     public class EmployeeInfoPFController : Controller
     {
+
+        public EmployeeInfoPFController()
+        {
+            ViewBag.TransType = AreaTypePFVM.TransType;
+        }
         //
         // GET: /PF/EmployeeInfoPF/
         ShampanIdentity identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
@@ -407,15 +412,41 @@ namespace SymWebUI.Areas.PF.Controllers
         /// </summary>
         /// <param name="Id">The ID of the employee PF record to be deleted</param>
         /// <returns>Returns the Index view with a session message indicating success or failure</returns>
-        public ActionResult Delete(int Id)
-        {
-            string[] result = new string[6];
-            EmployeeInfoForPFRepo _Repo = new EmployeeInfoForPFRepo();
-            EmployeeInfoForPFVM vm = new EmployeeInfoForPFVM();
+        /// 
 
-            result = _Repo.DeleteEmployeeInfoForPF(Id);
-            Session["result"] = result[0] + "~" + result[1];
-            return View("Index");
+        //public ActionResult Delete(int Id)
+        //{
+        //    string[] result = new string[6];
+        //    EmployeeInfoForPFRepo _Repo = new EmployeeInfoForPFRepo();
+        //    EmployeeInfoForPFVM vm = new EmployeeInfoForPFVM();
+
+        //    result = _Repo.DeleteEmployeeInfoForPF(Id);
+        //    Session["result"] = result[0] + "~" + result[1];
+        //    return View("Index");
+        //}
+
+        public JsonResult Delete(string ids)
+        {
+            // Assuming _repoSUR and identity are properly initialized somewhere in your controller
+
+           
+
+            // Create ViewModel (adjust accordingly if different from your use case)
+            EmployeeInfoForPFVM vm = new EmployeeInfoForPFVM();
+            EmployeeInfoForPFRepo _Repo = new EmployeeInfoForPFRepo();
+            vm.LastUpdateAt = DateTime.Now.ToString("yyyyMMddHHmmss");
+            vm.LastUpdateBy = identity.Name;
+            vm.LastUpdateFrom = identity.WorkStationIP;
+
+            // Split the 'ids' string by '~' to handle multiple IDs (bulk delete scenario)
+            string[] a = ids.Split('~');
+
+            // Call the Delete method in your repository
+            string[] result = new string[6];
+            result = _Repo.DeleteEmployeeInfoForPF(vm, a);  // Assuming your repo method accepts the vm and array of ids
+
+            // Return the result as JSON (using result[1] for status message, adjust based on your return structure)
+            return Json(result[1], JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

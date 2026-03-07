@@ -453,10 +453,8 @@ namespace SymWebUI.Areas.PF.Controllers
 
                 WithdrawVM Withdrawvm = new WithdrawVM();
 
-                var Result = _repo.SelectAll(0, cFields, cValues);
-
-                dt = JsonConvert.DeserializeObject<DataTable>(JsonConvert.SerializeObject(Result));
-
+                dt = _repo.SelectAllForReport(0, cFields, cValues);
+                               
 
                 ReportHead = "There are no data to Preview for GL Transaction for Bank Deposit";
                 if (dt.Rows.Count > 0)

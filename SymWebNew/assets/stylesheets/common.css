@@ -1,4 +1,12 @@
-﻿/*Index page Header&Alignment*/
+﻿
+.RequiredField{
+    position: absolute;
+}
+#afrmEmployeeEdit .editor-field {
+   margin-bottom: 12px!important
+}
+
+/*Index page Header&Alignment*/
 #myDataTable tbody tr td:first-child {
     display: flex;
     justify-content: center;
@@ -7,6 +15,7 @@
 }
 /*all buttton same size*/ 
  
+
 #myDataTable a {
         height: 28px;
         width: 28px;
