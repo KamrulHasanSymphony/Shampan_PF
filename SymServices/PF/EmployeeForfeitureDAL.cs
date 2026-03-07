@@ -316,7 +316,7 @@ From EmployeeForfeiture pfo
 
 ";
                 sqlText += " left outer join ViewEmployeeInformation e on e.EmployeeId=pfo.Id";
-                sqlText += " Where 1=1 and  pfo.IsArchive=0 and  pfo.IsActive=1  AND e.Code=@Code AND pfo.Id=@Id AND TRY_CONVERT(date, e.JoinDate, 106)>=@DateFrom AND TRY_CONVERT(date, e.JoinDate, 106)<=@DateTo";
+                sqlText += " Where 1=1 and  pfo.IsArchive=0 and  pfo.IsActive=1  AND e.Code=@Code AND pfo.Id=@Id AND TRY_CONVERT(date, pfo.OpeningDate, 106)>=@DateFrom AND TRY_CONVERT(date, pfo.OpeningDate, 106)<=@DateTo";
 
                 #endregion
 

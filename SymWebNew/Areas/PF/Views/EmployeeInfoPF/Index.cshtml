@@ -65,7 +65,7 @@
                        return '<input type="checkbox" onclick="CheckAll(this)" data-Id="' + id + '" />'
                            + ' &nbsp;<a title="Click on for Edit" style="text-decoration:none;" href="/PF/EmployeeInfoPF/Edit/' + id + '" class="sym-btn-edit-row"></a>'
                        //+ ' &nbsp;<a title="Click on for Delete" href="/PF/EmployeeInfoPF/Delete?Id=' + id + '" class="sym-btn-remove-row"></a>';
-                       + '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url="/PF/EmployeeInfoPF/Delete" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');" class="sym-btn-remove-row"></a>'
+                       + '&nbsp; <a title="Click on for Delete" style="text-decoration:none;" data-url=\"/PF/EmployeeInfoPF/Delete/' + id + '" onclick="deletedData(this, myDataTable,\'' + oObj.aData[0] + '\');" class="sym-btn-remove-row"></a>'
                    }
                },
                 { "sName": "Code", "sWidth": "10%" },

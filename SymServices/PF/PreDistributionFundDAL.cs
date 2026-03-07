@@ -75,7 +75,9 @@ SELECT
  pdf.Id
 ,Code
 ,Format(cast(TransactionDate as datetime),'dd-MMM-yyyy')TransactionDate
+,Format(cast(TransactionDate as datetime),'dd-MMM-yyyy')FundingDate
 ,TotalValue
+,TotalValue FundingValue
 ,Remarks
 ,pdf.Post
 ,pdf.IsDistribute
@@ -195,6 +197,153 @@ WHERE  1=1 AND IsArchive = 0
             }
             #endregion
             return VMs;
+        }
+
+        public DataTable SelectAllForReport(int Id = 0, string[] conditionFields = null, string[] conditionValues = null, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
+        {
+            #region Variables
+            SqlConnection currConn = null;
+            SqlTransaction transaction = null;
+            string sqlText = "";
+            PreDistributionFundVM vm;
+            DataTable dt = new DataTable();
+
+            #endregion
+            try
+            {
+                #region open connection and transaction
+                #region New open connection and transaction
+                if (VcurrConn != null)
+                {
+                    currConn = VcurrConn;
+                }
+                if (Vtransaction != null)
+                {
+                    transaction = Vtransaction;
+                }
+                #endregion New open connection and transaction
+                if (currConn == null)
+                {
+                    currConn = _dbsqlConnection.GetConnection();
+                    if (currConn.State != ConnectionState.Open)
+                    {
+                        currConn.Open();
+                    }
+                }
+                if (transaction == null)
+                {
+                    transaction = currConn.BeginTransaction("");
+                }
+                #endregion open connection and transaction
+                #region sql statement
+                #region SqlText
+
+                sqlText = @"
+SELECT
+ pdf.Id
+,Code
+,Format(cast(TransactionDate as datetime),'dd-MMM-yyyy')TransactionDate
+,Format(cast(TransactionDate as datetime),'dd-MMM-yyyy')FundingDate
+,TotalValue
+,TotalValue FundingValue
+,Remarks
+,pdf.Post
+,pdf.IsDistribute
+,pdf.Remarks
+,pdf.IsActive
+,pdf.IsArchive
+,pdf.CreatedBy
+,pdf.CreatedAt
+,pdf.CreatedFrom
+,pdf.LastUpdateBy
+,pdf.LastUpdateAt
+,pdf.LastUpdateFrom
+,pdf.IsApprove
+,'PF' TransactionType 
+,TotalValue TotalFundingValue
+,TotalValue ReservedFundingValue
+FROM PreDistributionFunds pdf
+WHERE  1=1 AND IsArchive = 0
+";
+                //TotalFundingValue
+                //FundingValue
+                //ReservedFundingValue
+                //FundingReferenceIds
+
+                if (Id > 0)
+                {
+                    sqlText += @" and pdf.Id=@Id";
+                }
+
+                string cField = "";
+                if (conditionFields != null && conditionValues != null && conditionFields.Length == conditionValues.Length)
+                {
+                    for (int i = 0; i < conditionFields.Length; i++)
+                    {
+                        if (string.IsNullOrWhiteSpace(conditionFields[i]) || string.IsNullOrWhiteSpace(conditionValues[i]))
+                        {
+                            continue;
+                        }
+                        cField = conditionFields[i].ToString();
+                        cField = Ordinary.StringReplacing(cField);
+                        sqlText += " AND " + conditionFields[i] + "=@" + cField;
+                    }
+                }
+                #endregion SqlText
+                #region SqlExecution
+
+                SqlCommand objComm = new SqlCommand(sqlText, currConn, transaction);
+                if (conditionFields != null && conditionValues != null && conditionFields.Length == conditionValues.Length)
+                {
+                    for (int j = 0; j < conditionFields.Length; j++)
+                    {
+                        if (string.IsNullOrWhiteSpace(conditionFields[j]) || string.IsNullOrWhiteSpace(conditionValues[j]))
+                        {
+                            continue;
+                        }
+                        cField = conditionFields[j].ToString();
+                        cField = Ordinary.StringReplacing(cField);
+                        objComm.Parameters.AddWithValue("@" + cField, conditionValues[j]);
+                    }
+                }
+
+                if (Id > 0)
+                {
+                    objComm.Parameters.AddWithValue("@Id", Id);
+                }
+
+                SqlDataAdapter da = new SqlDataAdapter(objComm);
+
+                da.Fill(dt);
+
+                #endregion SqlExecution
+
+                if (Vtransaction == null && transaction != null)
+                {
+                    transaction.Commit();
+                }
+                #endregion
+            }
+            #region catch
+            catch (SqlException sqlex)
+            {
+                throw new ArgumentNullException("", "SQL:" + sqlText + FieldDelimeter + sqlex.Message.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException("", "SQL:" + sqlText + FieldDelimeter + ex.Message.ToString());
+            }
+            #endregion
+            #region finally
+            finally
+            {
+                if (VcurrConn == null && currConn != null && currConn.State == ConnectionState.Open)
+                {
+                    currConn.Close();
+                }
+            }
+            #endregion
+            return dt;
         }
 
         //==================Insert =================

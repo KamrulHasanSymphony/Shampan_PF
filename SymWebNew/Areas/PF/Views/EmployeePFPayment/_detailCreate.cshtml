@@ -75,7 +75,7 @@
                             @Html.LabelFor(model => model.empPFPaymentVM.EmployeeContribution)
                         </div>
                         <div class="editor-field">
-                            @Html.TextBoxFor(model => model.empPFPaymentVM.EmployeeContribution, new { @placeholder = "Employee Contribution", @class = "cEmployeeContribution NumberCheck form-control" })
+                            @Html.TextBoxFor(model => model.empPFPaymentVM.EmployeeContribution, new { @placeholder = "Employee Contribution", @class = "cEmployeeContribution NumberCheck required form-control" })
                             @Html.ValidationMessageFor(model => model.empPFPaymentVM.EmployeeContribution)
                         </div>
                     </div>
@@ -85,7 +85,7 @@
                             @Html.LabelFor(model => model.empPFPaymentVM.EmployerContribution)
                         </div>
                         <div class="editor-field">
-                            @Html.TextBoxFor(model => model.empPFPaymentVM.EmployerContribution, new { @placeholder = "Employer Contribution", @class = "cEmployerContribution NumberCheck form-control" })
+                            @Html.TextBoxFor(model => model.empPFPaymentVM.EmployerContribution, new { @placeholder = "Employer Contribution", @class = "cEmployerContribution NumberCheck required form-control" })
                             @Html.ValidationMessageFor(model => model.empPFPaymentVM.EmployerContribution)
                         </div>
                     </div>
@@ -218,7 +218,7 @@
             return;
         }
         if (OpeningDate == "") {
-            ShowResult("Fail", "Please Select Opening Date!");
+            ShowResult("Fail", "Please Select Payment Date!");
             return;
         }
         var myData = $('#afrmEmployeeEdit').serialize();

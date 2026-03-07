@@ -72,7 +72,7 @@
                     <div class="col-md-3">
                         <div class="editor-label">
                               @Html.LabelFor(model => model.empPFOpeinigVM.EmployeeContribution)                        </div>
- <div class="editor-field"> @Html.TextBoxFor(model => model.empPFOpeinigVM.EmployeeContribution, new { @placeholder = "Employee Contribution", @class = "cEmployeeContribution  form-control" })
+ <div class="editor-field"> @Html.TextBoxFor(model => model.empPFOpeinigVM.EmployeeContribution, new { @placeholder = "Employee Contribution", @class = "cEmployeeContribution required form-control" })
                   @Html.ValidationMessageFor(model => model.empPFOpeinigVM.EmployeeContribution)
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                             @Html.LabelFor(model => model.empPFOpeinigVM.EmployerContribution)
                         </div>
                         <div class="editor-field">
-                            @Html.TextBoxFor(model => model.empPFOpeinigVM.EmployerContribution, new { @placeholder = "Employer Contribution", @class = "cEmployerContribution  form-control" })
+                            @Html.TextBoxFor(model => model.empPFOpeinigVM.EmployerContribution, new { @placeholder = "Employer Contribution", @class = "cEmployerContribution required form-control" })
                             @Html.ValidationMessageFor(model => model.empPFOpeinigVM.EmployerContribution)
                         </div>
                     </div>
@@ -144,7 +144,9 @@
     </div>
 }
 <script>
- 
+    $(function () {
+        valiDation("afrmEmployeeEdit");
+    });
     $(function () {
         InitDateTimePickers();
     });
@@ -166,9 +168,7 @@
         submit(url, myData);
         $('.EarningAmount').val('0');
     });
-    $(function () {
-        valiDation("afrmEmployeeEdit");
-    });
+
     function checkvalue() {
         var empPFOpeinigId = '@Model.empPFOpeinigVM.Id';
         if (empPFOpeinigId == 0 || empPFOpeinigId == "") {
@@ -199,14 +199,17 @@
             ShowResult("Fail", "Please Select Code!");
             return;
         }
+        
         if (PFOpeningValue == "" || PFOpeningValue == "0" || PFOpeningValue == "0.0" || PFOpeningValue == "0.00") {
             ShowResult("Fail", "Please Enter PF Opening Value!");
             return;
         }
+
         if (OpeningDate == "") {
             ShowResult("Fail", "Please Select Opening Date!");
             return;
         }
+
         var myData = $('#afrmEmployeeEdit').serialize();
         var url = "/@ViewBag.TransType/EmployeePFOpeinig/Create";
         //submit(url, myData);

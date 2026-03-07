@@ -87,7 +87,8 @@ namespace SymWebUI.Areas.PF.Controllers
             var totalAmountFilter = Convert.ToString(Request["sSearch_6"]);
             var startDateFilter = Convert.ToString(Request["sSearch_7"]);
             var PrincipalAmountFilter = Convert.ToString(Request["sSearch_8"]);
-            var InterestAmountFilter = Convert.ToString(Request["sSearch_9"]);          
+            var InterestAmountFilter = Convert.ToString(Request["sSearch_9"]);
+            var IsApproved = Convert.ToString(Request["sSearch_10"]);          
             DateTime fromDate = DateTime.MinValue;
             DateTime toDate = DateTime.MaxValue;
             if (startDateFilter.Contains('~'))
@@ -128,6 +129,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 var isSearchable7 = Convert.ToBoolean(Request["bSearchable_7"]);
                 var isSearchable8 = Convert.ToBoolean(Request["bSearchable_8"]);
                 var isSearchable9 = Convert.ToBoolean(Request["bSearchable_9"]);
+                var isSearchable10 = Convert.ToBoolean(Request["bSearchable_10"]);
                 filteredData = getAllData
                    .Where(c =>
                           isSearchable1 && c.Code.ToLower().Contains(param.sSearch.ToLower())
@@ -139,6 +141,7 @@ namespace SymWebUI.Areas.PF.Controllers
                        || isSearchable7 && c.PrincipalAmount.ToString().ToLower().Contains(param.sSearch.ToLower())
                        || isSearchable8 && c.InterestAmount.ToString().ToLower().Contains(param.sSearch.ToLower())
                        || isSearchable9 && c.TotalAmount.ToString().ToLower().Contains(param.sSearch.ToLower())
+                       || isSearchable10 && c.IsApproved.ToString().ToLower().Contains(param.sSearch.ToLower())
                     );
             }
             else
@@ -147,7 +150,7 @@ namespace SymWebUI.Areas.PF.Controllers
             }
             #endregion Search and Filter Data
             #region Column Filtering
-            if (codeFilter != "" || empNameFilter != "" || departmentFilter != "" || designationFilter != "" || loanTypeFilter != "" || (totalAmountFilter != "" && totalAmountFilter != "~") || (startDateFilter != "" && startDateFilter != "~"))
+            if (codeFilter != "" || empNameFilter != "" || departmentFilter != "" || designationFilter != "" || loanTypeFilter != "" || (totalAmountFilter != "" && totalAmountFilter != "~") || (startDateFilter != "" && startDateFilter != "~") || IsApproved != "")
             {
                 filteredData = filteredData
                                 .Where(c =>
@@ -168,6 +171,8 @@ namespace SymWebUI.Areas.PF.Controllers
                                     (amountFrom == 0 || amountFrom <= Convert.ToInt32(c.TotalAmount))
                                     &&
                                     (amountTo == 0 || amountTo >= Convert.ToInt32(c.TotalAmount))
+                                     &&
+                                    (IsApproved == "" || c.IsApproved)
                                 );
             }
             #endregion Column Filtering
@@ -180,6 +185,7 @@ namespace SymWebUI.Areas.PF.Controllers
             var isSortable_7 = Convert.ToBoolean(Request["bSortable_7"]);
             var isSortable_8 = Convert.ToBoolean(Request["bSortable_8"]);
             var isSortable_9 = Convert.ToBoolean(Request["bSortable_9"]);
+            var isSortable_10 = Convert.ToBoolean(Request["bSortable_10"]);
             var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
             Func<EmployeeLoanVM, string> orderingFunction = (c =>
                 sortColumnIndex == 1 && isSortable_1 ? c.Code :
@@ -191,6 +197,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 sortColumnIndex == 7 && isSortable_7 ? c.PrincipalAmount.ToString() :
                 sortColumnIndex == 8 && isSortable_8 ? c.InterestAmount.ToString() :
                 sortColumnIndex == 9 && isSortable_9 ? c.TotalAmount.ToString() :
+                sortColumnIndex == 10 && isSortable_10 ? c.IsApproved.ToString() :
                 "");
             var sortDirection = Request["sSortDir_0"]; // asc or desc
             if (sortDirection == "asc")
@@ -203,11 +210,13 @@ namespace SymWebUI.Areas.PF.Controllers
                 , c.Code //+ "~" + Convert.ToString(c.Id) 
                 , c.EmpName 
                 , c.Department 
-                , c.Designation , c.LoanType// + "~" + Convert.ToString(c.Id)
+                , c.Designation  
+                , c.LoanType// + "~" + Convert.ToString(c.Id)
                 , c.PrincipalAmount.ToString()
                 , c.InterestAmount.ToString()
                 , c.TotalAmount.ToString()
                 , c.StartDate
+                , c.IsApproved ? "Approved" : "Not Approved"
                 //, c.Remarks 
             };
             return Json(new
@@ -1468,7 +1477,7 @@ namespace SymWebUI.Areas.PF.Controllers
 
 
                     string[] cFields = { "PaymentScheduleDate>", "PaymentScheduleDate<" };
-                    string[] cValues = { FromDate, ToDate, codeFParam, codeTParam };
+                    string[] cValues = {  codeFParam, codeTParam };
 
                     dt = _repo.GetSummeryLoanData(cFields, cValues);
 
@@ -2032,6 +2041,20 @@ namespace SymWebUI.Areas.PF.Controllers
             workSheet.Cells[GrandTotalRow, 1].LoadFromText("Grand Total");
 
             #endregion
-        }   
+        }
+
+        public ActionResult Approved(string loanId)
+        {
+            Session["permission"] = _reposur.SymRoleSession(identity.UserId, "10003", "delete").ToString();
+            EmployeeLoanVM vm = new EmployeeLoanVM();
+            EmployeeLoanRepo _repo = new EmployeeLoanRepo();
+            string[] result = new string[6];
+            vm.LastUpdateAt = DateTime.Now.ToString("yyyyMMddHHmmss");
+            vm.LastUpdateBy = identity.Name;
+            vm.LastUpdateFrom = identity.WorkStationIP;
+            result = _repo.Approved(vm, loanId);
+            Session["result"] = result[0] + "~" + result[1];
+            return Redirect("/PF/Loan/AllLoan");
+        }
     }
 }

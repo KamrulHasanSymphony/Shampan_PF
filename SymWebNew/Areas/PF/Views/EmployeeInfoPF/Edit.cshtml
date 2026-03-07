@@ -82,6 +82,7 @@
                             </div>
                             <div class="editor-field">
                                 @Html.TextBoxFor(model => model.Name, new { @placeholder = "Name", @class = "required form-control" })
+                                @Html.ValidationMessageFor(model => model.Name)
                             </div>
                         </div>
                         <div class="col-sm-2">

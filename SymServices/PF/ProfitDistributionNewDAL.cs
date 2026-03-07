@@ -296,7 +296,6 @@ FROM ProfitDistributionNew pd
                 string IsWeightedAverageMonth = _settingDal.settingValue("PF", "IsWeightedAverageMonth").Trim();
                 if (IsWeightedAverageMonth == "N")
                 {
-
                     sqlText = @"
 
   SELECT 
@@ -319,10 +318,11 @@ FROM ProfitDistributionNew pd
         ISNULL([11], 0) + ISNULL([12], 0)
     ) AS [TotalValue],
 	(
-	   (ISNULL([1], 0)*11 +ISNULL([2], 0)*10+ISNULL([3], 0)*9+ISNULL([4], 0)*8+ISNULL([5], 0)*7+ISNULL([6], 0)*6+ISNULL([7], 0)*5+ISNULL([8], 0)*4+ISNULL([9], 0)*3+ISNULL([10], 0)*2+ISNULL([11], 0)*1+ISNULL([12], 0)*0)/
-	   ( ISNULL([1], 0) + ISNULL([2], 0) + ISNULL([3], 0) + ISNULL([4], 0) + ISNULL([5], 0) +
-        ISNULL([6], 0) + ISNULL([7], 0) + ISNULL([8], 0) + ISNULL([9], 0) + ISNULL([10], 0) +
-        ISNULL([11], 0) + ISNULL([12], 0)
+	   (ISNULL([1], 0)*11 +ISNULL([2], 0)*10+ISNULL([3], 0)*9+ISNULL([4], 0)*8+ISNULL([5], 0)*7+ISNULL([6], 0)*6+ISNULL([7], 0)*5+ISNULL([8], 0)*4+ISNULL([9], 0)*3+ISNULL([10], 0)*2+ISNULL([11], 0)*1
+	   + ISNULL([12], 0)*0)/
+	    ( ISNULL([1], 1) + ISNULL([2], 1) + ISNULL([3], 1) + ISNULL([4], 1) + ISNULL([5],1) +
+        ISNULL([6], 1) + ISNULL([7], 1) + ISNULL([8], 1) + ISNULL([9], 1) + ISNULL([10], 1) +
+        ISNULL([11], 1) + ISNULL([12], 1)
 		)
 	) AS Month
 FROM
@@ -342,6 +342,12 @@ PIVOT
 ORDER BY EmployeeId;
 
 ";
+
+
+
+
+
+
                     //                    sqlText = @"
                     //                    with cat as (
                     //                    select EmployeeId

@@ -262,5 +262,17 @@ namespace SymRepository.Loan
                 throw ex;
             }
         }
+
+        public string[] Approved(EmployeeLoanVM vm, string ids)
+        {
+            try
+            {
+                return new EmployeeLoanDAL().Approved(vm, ids);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

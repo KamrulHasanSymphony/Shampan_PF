@@ -92,6 +92,21 @@ namespace SymServices.PF
                     transaction = currConn.BeginTransaction("");
                 }
                 #endregion open connection and transaction
+
+                #region Check if the Code already exists in the database
+                sqlText = "SELECT COUNT(*) FROM EmployeeInfo WHERE Code = @Code";
+                SqlCommand cmdCheck = new SqlCommand(sqlText, currConn, transaction);
+                cmdCheck.Parameters.AddWithValue("@Code", vm.Code);
+                int count = Convert.ToInt32(cmdCheck.ExecuteScalar());
+
+                if (count > 0)
+                {
+                    retResults[0] = "Fail";
+                    retResults[1] = "Code already exists!";
+                    return retResults;
+                }
+                #endregion
+
                 #region Save
 
                 if (vm != null)
@@ -823,122 +838,241 @@ namespace SymServices.PF
         /// </summary>
         /// <param name="Id">The unique identifier of the employee to be updated.</param>
         /// <param name="VcurrConn">An optional existing SQL connection to use; if null, a new connection is created and managed 
-        public string[] DeleteEmployeeInfoForPF(int Id, SqlConnection VcurrConn, SqlTransaction Vtransaction)
-        {
+        /// 
 
-            #region Initializ
-            string sqlText = "";
+
+//        public string[] DeleteEmployeeInfoForPF(int Id, SqlConnection VcurrConn, SqlTransaction Vtransaction)
+//        {
+
+//            #region Initializ
+//            string sqlText = "";
+//            string[] retResults = new string[6];
+//            retResults[0] = "Fail";//Success or Fail
+//            retResults[1] = "Fail";// Success or Fail Message
+//            retResults[2] = Id.ToString();// Return Id
+//            retResults[3] = sqlText; //  SQL Query
+//            retResults[4] = "ex"; //catch ex
+//            retResults[5] = "DeleteEmployeeInfoForPF"; //Method Name
+//            SqlConnection currConn = null;
+//            SqlTransaction transaction = null;
+//            #endregion
+//            #region Try
+//            try
+//            {
+//                #region Validation
+
+//                #endregion Validation
+//                #region open connection and transaction
+//                #region New open connection and transaction
+//                if (VcurrConn != null)
+//                {
+//                    currConn = VcurrConn;
+//                }
+//                if (Vtransaction != null)
+//                {
+//                    transaction = Vtransaction;
+//                }
+//                #endregion New open connection and transaction
+//                if (currConn == null)
+//                {
+//                    currConn = _dbsqlConnection.GetConnection();
+//                    if (currConn.State != ConnectionState.Open)
+//                    {
+//                        currConn.Open();
+//                    }
+//                }
+//                if (transaction == null)
+//                {
+//                    transaction = currConn.BeginTransaction("");
+//                }
+//                #endregion open connection and transaction
+//                #region Save
+
+//                if (Id != null)
+//                {
+//                    sqlText = "  ";
+//                    sqlText += @"Update EmployeeInfo  set                        
+//                          IsActive =@IsActive,
+//                          IsArchive =@IsArchive
+//                          ";
+//                    sqlText += " where Id=@Id ";
+
+//                    SqlCommand cmdInsert = new SqlCommand(sqlText, currConn, transaction);
+//                    cmdInsert.Parameters.AddWithValue("@Id", Id);
+//                    cmdInsert.Parameters.AddWithValue("@IsActive", false);
+//                    cmdInsert.Parameters.AddWithValue("@IsArchive", true);
+//                    cmdInsert.ExecuteNonQuery();
+//                }
+//                #endregion User Create
+
+//                #region Commit
+//                if (Vtransaction == null)
+//                {
+//                    if (transaction != null)
+//                    {
+//                        transaction.Commit();
+//                    }
+//                }
+//                #endregion Commit
+//                #region SuccessResult
+//                retResults[0] = "Success";
+//                retResults[1] = "DeleteEmployeeInfoForPF has been Deleted Successfully";
+//                #endregion SuccessResult
+//            }
+//            #endregion try
+//            #region Catch and Finall
+//            catch (Exception ex)
+//            {
+//                retResults[0] = "Fail";//Success or Fail
+//                retResults[4] = ex.Message.ToString(); //catch ex
+//                if (Vtransaction != null)
+//                {
+//                    try
+//                    {
+//                        if (Vtransaction == null) { transaction.Rollback(); }
+//                    }
+//                    catch (Exception)
+//                    {
+//                        retResults[1] = "Unexpected error to update DeleteEmployeeInfoForPF.";
+//                        return retResults;
+//                    }
+//                }
+//                return retResults;
+//            }
+//            finally
+//            {
+//                if (VcurrConn == null)
+//                {
+//                    if (currConn != null)
+//                    {
+//                        if (currConn.State == ConnectionState.Open)
+//                        {
+//                            currConn.Close();
+//                        }
+//                    }
+//                }
+//            }
+//            #endregion
+//            #region Results
+//            return retResults;
+//            #endregion
+//        }
+
+        public string[] DeleteEmployeeInfoForPF(EmployeeInfoForPFVM vm, string[] ids, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
+        {
+            #region Variables
             string[] retResults = new string[6];
-            retResults[0] = "Fail";//Success or Fail
-            retResults[1] = "Fail";// Success or Fail Message
-            retResults[2] = Id.ToString();// Return Id
-            retResults[3] = sqlText; //  SQL Query
-            retResults[4] = "ex"; //catch ex
-            retResults[5] = "DeleteEmployeeInfoForPF"; //Method Name
+            retResults[0] = "Fail"; // Success or Fail
+            retResults[1] = "Fail"; // Success or Fail Message
+            retResults[2] = "0"; // Return Id
+            retResults[3] = ""; // SQL Query
+            retResults[4] = "ex"; // Catch ex
+            retResults[5] = "DeleteEmployeeInfoForPF"; // Method Name
+            int transResult = 0;
+            string sqlText = "";
             SqlConnection currConn = null;
             SqlTransaction transaction = null;
             #endregion
-            #region Try
+
             try
             {
-                #region Validation
-
-                #endregion Validation
-                #region open connection and transaction
-                #region New open connection and transaction
+                #region Open connection and transaction
                 if (VcurrConn != null)
                 {
                     currConn = VcurrConn;
                 }
+
                 if (Vtransaction != null)
                 {
                     transaction = Vtransaction;
                 }
-                #endregion New open connection and transaction
+
                 if (currConn == null)
                 {
-                    currConn = _dbsqlConnection.GetConnection();
+                    currConn = _dbsqlConnection.GetConnection();  // Assuming _dbsqlConnection is initialized somewhere in your code
                     if (currConn.State != ConnectionState.Open)
                     {
                         currConn.Open();
                     }
                 }
+
                 if (transaction == null)
                 {
-                    transaction = currConn.BeginTransaction("");
+                    transaction = currConn.BeginTransaction("DeleteEmployeeInfoForPF");
                 }
-                #endregion open connection and transaction
-                #region Save
+                #endregion
 
-                if (Id != null)
+                #region Update Settings
+                if (ids.Length >= 1)
                 {
-                    sqlText = "  ";
-                    sqlText += @"Update EmployeeInfo  set                        
-                          IsActive =@IsActive,
-                          IsArchive =@IsArchive
-                          ";
-                    sqlText += " where Id=@Id ";
-
-                    SqlCommand cmdInsert = new SqlCommand(sqlText, currConn, transaction);
-                    cmdInsert.Parameters.AddWithValue("@Id", Id);
-                    cmdInsert.Parameters.AddWithValue("@IsActive", false);
-                    cmdInsert.Parameters.AddWithValue("@IsArchive", true);
-                    cmdInsert.ExecuteNonQuery();
-                }
-                #endregion User Create
-
-                #region Commit
-                if (Vtransaction == null)
-                {
-                    if (transaction != null)
+                    // Loop through each id in the ids array and perform the update operation
+                    for (int i = 0; i < ids.Length; i++)
                     {
-                        transaction.Commit();
+                        sqlText = "UPDATE EmployeeInfo SET " +
+                                  "IsActive=@IsActive, " +
+                                  "IsArchive=@IsArchive, " +
+                                  "LastUpdateBy=@LastUpdateBy, " +
+                                  "LastUpdateAt=@LastUpdateAt, " +
+                                  "LastUpdateFrom=@LastUpdateFrom " +
+                                  "WHERE Id=@Id";
+
+                        SqlCommand cmdUpdate = new SqlCommand(sqlText, currConn, transaction);
+                        cmdUpdate.Parameters.AddWithValue("@Id", ids[i]);
+                        cmdUpdate.Parameters.AddWithValue("@IsActive", false);
+                        cmdUpdate.Parameters.AddWithValue("@IsArchive", true);
+                        cmdUpdate.Parameters.AddWithValue("@LastUpdateBy", vm.LastUpdateBy);
+                        cmdUpdate.Parameters.AddWithValue("@LastUpdateAt", vm.LastUpdateAt);
+                        cmdUpdate.Parameters.AddWithValue("@LastUpdateFrom", vm.LastUpdateFrom);
+
+                       
+                        var exeRes = cmdUpdate.ExecuteNonQuery();
+                        transResult = Convert.ToInt32(exeRes);
                     }
+
+                    retResults[2] = string.Join(",", ids); // Return the IDs that were processed
+                    retResults[3] = sqlText; // Return the SQL Query executed
                 }
-                #endregion Commit
-                #region SuccessResult
-                retResults[0] = "Success";
-                retResults[1] = "DeleteEmployeeInfoForPF has been Deleted Successfully";
-                #endregion SuccessResult
+                else
+                {
+                    throw new ArgumentNullException("EmployeeInfo Delete", "No items found to delete.");
+                }
+                #endregion
+
+                #region Commit Transaction
+                //if (transResult <= 0)
+                //{
+                //    throw new ArgumentNullException("EmployeeInfo Delete", "Delete failed.");
+                //}
+
+                if (Vtransaction == null && transaction != null)
+                {
+                    transaction.Commit();
+                    retResults[0] = "Success";
+                    retResults[1] = "Data Deleted Successfully.";
+                }
+                #endregion
             }
-            #endregion try
-            #region Catch and Finall
+            #region Catch
             catch (Exception ex)
             {
-                retResults[0] = "Fail";//Success or Fail
-                retResults[4] = ex.Message.ToString(); //catch ex
-                if (Vtransaction != null)
-                {
-                    try
-                    {
-                        if (Vtransaction == null) { transaction.Rollback(); }
-                    }
-                    catch (Exception)
-                    {
-                        retResults[1] = "Unexpected error to update DeleteEmployeeInfoForPF.";
-                        return retResults;
-                    }
-                }
+                retResults[0] = "Fail"; // Success or Fail
+                retResults[4] = ex.Message; // Capture Exception Message
+                if (Vtransaction == null) { transaction.Rollback(); }
                 return retResults;
             }
             finally
             {
-                if (VcurrConn == null)
+                if (VcurrConn == null && currConn != null && currConn.State == ConnectionState.Open)
                 {
-                    if (currConn != null)
-                    {
-                        if (currConn.State == ConnectionState.Open)
-                        {
-                            currConn.Close();
-                        }
-                    }
+                    currConn.Close();
                 }
             }
             #endregion
-            #region Results
+
             return retResults;
-            #endregion
         }
+
+
         public string[] ReActiveEmployeeInfoForPF(string Id, SqlConnection VcurrConn, SqlTransaction Vtransaction)
         {
 

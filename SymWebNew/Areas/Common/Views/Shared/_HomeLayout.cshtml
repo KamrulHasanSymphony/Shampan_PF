@@ -344,6 +344,20 @@
             $(".loading").fadeOut(200).hide("slow")
         });
 
+        $(document).on('keydown', 'input.NumberCheck, input[type="number"]', function (e) {
+            if (e.key === "-" || e.keyCode === 189 || e.keyCode === 109) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        $(document).on('input', 'input.NumberCheck, input[type="number"]', function () {
+
+            if (!this.value) return;
+            if (this.value.indexOf('-') !== -1) {
+                this.value = this.value.replace(/-/g, '');
+            }
+        });
 
     </script>
 </head>

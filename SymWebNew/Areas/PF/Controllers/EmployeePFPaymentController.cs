@@ -166,10 +166,10 @@ namespace SymWebUI.Areas.PF.Controllers
                 empPFPaymentvm = _eaRepo.SelectByIdAll(PFPaymentId);
             EmployeeInfoVM vm = new EmployeeInfoVM();
             EmployeeInfoRepo repo = new EmployeeInfoRepo();
-            //if (!string.IsNullOrWhiteSpace(PFPaymentId) && !string.IsNullOrWhiteSpace(empPFPaymentvm.Id))
-            //{
+            if (!string.IsNullOrWhiteSpace(PFPaymentId) && !string.IsNullOrWhiteSpace(empPFPaymentvm.Id))
+            {
             vm = repo.SelectById(empPFPaymentvm.EmployeeId);
-            //}
+            }
             vm.empPFPaymentVM = empPFPaymentvm;
             Session["PFPaymentId"] = empPFPaymentvm.Id;
             return View(vm);

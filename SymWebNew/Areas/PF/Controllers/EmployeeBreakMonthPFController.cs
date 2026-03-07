@@ -222,7 +222,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 }
                 else
                 {
-                    EmployeeId = vm.Id;
+                    EmployeeId = vm.EmployeeId;
                 }
 
                 //svms = arerepo.SingleEmployeeEntry(EmployeeId, FiscalYearDetailId);
