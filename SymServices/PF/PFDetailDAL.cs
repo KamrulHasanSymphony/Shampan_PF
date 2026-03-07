@@ -2695,7 +2695,8 @@ order by SectionOrderNo ";
                 cmd2.Transaction = transaction;
                 var exeRes = cmd2.ExecuteScalar();
                 int nextId = Convert.ToInt32(exeRes);
-
+                decimal EmployeeContribution = 0;
+                decimal EmployerContribution = 0;
 
                 if (retResults[0] == "Success")
                 {
@@ -2715,51 +2716,66 @@ order by SectionOrderNo ";
                             }
                             else
                             {
-                                if (!Ordinary.IsNumeric(item["Amount"].ToString()))
+                                string IsContributionNotSame = new SettingDAL().settingValue("PF", "IsContributionNotSame");
+                                if (IsContributionNotSame == "Y")
                                 {
-                                    throw new ArgumentNullException("Please input the Numeric Value in Amount", "Please input the Numeric Value in Amount");
+                                    EmployeeContribution = Convert.ToInt32(item["Amount"].ToString());
+                                    EmployerContribution = Convert.ToInt32(item["Amount"].ToString());
                                 }
                                 else
                                 {
-                                    vm.PFHeaderId = nextId.ToString();
-                                    vm.FiscalYearDetailId = FYDVM.Id;
-                                    vm.PFStructureId = empVM.PFStructureId;
-                                    vm.ProjectId = PId;
-                                    vm.DepartmentId = empVM.DepartmentId;
-                                    vm.SectionId = empVM.SectionId;
-                                    vm.DesignationId = empVM.DesignationId;
-                                    vm.EmployeeId = empVM.EmployeeId;
-                                    vm.EmployeePFValue = Convert.ToInt32(item["Amount"].ToString());
-                                    vm.EmployeerPFValue = Convert.ToInt32(item["Amount"].ToString());
-                                    vm.Post = false;
-                                    vm.Remarks = "";
-                                    vm.IsActive = true;
-                                    vm.IsArchive = false;
-                                    vm.CreatedBy = avm.CreatedAt;
-                                    vm.CreatedAt = avm.CreatedBy;
-                                    vm.CreatedFrom = avm.CreatedFrom;
-                                    vm.LastUpdateBy = avm.CreatedBy;
-                                    vm.LastUpdateAt = avm.CreatedAt;
-                                    vm.LastUpdateFrom = avm.CreatedFrom;
-                                    vm.BasicSalary = empVM.BasicSalary;
-                                    vm.GrossSalary = empVM.GrossSalary;
-                                    vm.IsDistribute = false;
-                                    vm.IsBankDeposited = false;
-                                    vm.TransType = "PF";
-
-                                    retResults = InsertPFDetails(vm, currConn, transaction);
-
-                                    if (retResults[0] != "Success")
-                                    {
-                                        throw new ArgumentNullException("PF details not saved");
-                                    }
-
-                                    #region SuccessResult
-                                    retResults[0] = "Success";
-                                    retResults[1] = "Data Save Successfully.";
-                                    #endregion SuccessResult
-
+                                    EmployeeContribution = Convert.ToDecimal(item["EmployeeContribution"].ToString());
+                                    EmployerContribution = Convert.ToDecimal(item["EmployerContribution"].ToString());
                                 }
+
+                                vm.PFHeaderId = nextId.ToString();
+                                vm.FiscalYearDetailId = FYDVM.Id;
+                                vm.PFStructureId = empVM.PFStructureId;
+                                vm.ProjectId = PId;
+                                vm.DepartmentId = empVM.DepartmentId;
+                                vm.SectionId = empVM.SectionId;
+                                vm.DesignationId = empVM.DesignationId;
+                                vm.EmployeeId = empVM.EmployeeId;
+                                vm.EmployeePFValue = EmployeeContribution;
+                                vm.EmployeerPFValue = EmployerContribution;
+                                vm.Post = false;
+                                vm.Remarks = "";
+                                vm.IsActive = true;
+                                vm.IsArchive = false;
+                                vm.CreatedBy = avm.CreatedAt;
+                                vm.CreatedAt = avm.CreatedBy;
+                                vm.CreatedFrom = avm.CreatedFrom;
+                                vm.LastUpdateBy = avm.CreatedBy;
+                                vm.LastUpdateAt = avm.CreatedAt;
+                                vm.LastUpdateFrom = avm.CreatedFrom;
+                                vm.BasicSalary = empVM.BasicSalary;
+                                vm.GrossSalary = empVM.GrossSalary;
+                                vm.IsDistribute = false;
+                                vm.IsBankDeposited = false;
+                                vm.TransType = "PF";
+
+                                retResults = InsertPFDetails(vm, currConn, transaction);
+
+                                if (retResults[0] != "Success")
+                                {
+                                    throw new ArgumentNullException("PF details not saved");
+                                }
+
+                                #region SuccessResult
+                                retResults[0] = "Success";
+                                retResults[1] = "Data Save Successfully.";
+                                #endregion SuccessResult
+
+                                //if (!Ordinary.IsNumeric(item["Amount"].ToString()))
+                                //{                                   
+
+                                //    throw new ArgumentNullException("Please input the Numeric Value in Amount", "Please input the Numeric Value in Amount");
+                                //}
+                                //else
+                                //{
+                                   
+
+                                //}
                             }
                         }
                     }

@@ -84,9 +84,14 @@ SELECT DISTINCT
 ,ve.Project
 ,ve.ResignDate
 ";
+<<<<<<< HEAD
                 sqlText += " FROM ViewEmployeeInformation ve";
                 sqlText += @" left join EmployeeLeftInformation b on ve.EmployeeId = b.EmployeeId";
                 sqlText += @" WHERE  1=1 AND b.IsActive = 1";
+=======
+                sqlText += "  FROM EmployeeLeftInformation el ";
+                sqlText += @" Left Join [dbo].ViewEmployeeInformation ve on ve.EmployeeId=el.EmployeeId WHERE  1=1 ";
+>>>>>>> 9a6fcd59b40ca244752983abf05c314858aa40a7
                 sqlText += @" 
 AND ve.EmployeeId NOT IN (
 SELECT EmployeeId FROM PFSettlements WHERE 1=1 AND Post = 1
@@ -449,7 +454,7 @@ GROUP BY
         /// <param name="VcurrConn">An optional SQL connection. If not provided, a new connection is established.</param>
         /// <param name="Vtransaction">An optional SQL transaction. If not provided, a new transaction is created and committed.</param>
         /// <returns>A list of <see cref="BankBranchVM"/> representing the PF Settlement matching the criteria.</returns>
-        public List<PFSettlementVM> SelectAll(int Id = 0, string[] conditionFields = null, string[] conditionValues = null, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
+        public List<PFSettlementVM> SelectAll(string BranchId, int Id = 0, string[] conditionFields = null, string[] conditionValues = null, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Variables
             SqlConnection currConn = null;
@@ -552,12 +557,16 @@ FROM  PFSettlements  pfs
 
 ";
                 sqlText += " LEFT OUTER JOIN [dbo].ViewEmployeeInformation ve ON pfs.EmployeeId=ve.EmployeeId";
-                sqlText += " WHERE  1=1 ";
+                sqlText += " WHERE  1=1  ";
 
 
                 if (Id > 0)
                 {
                     sqlText += @" and pfs.Id=@Id";
+                }
+                if (BranchId != "0")
+                {
+                    sqlText += @" and ve.BranchId=@BranchId";
                 }
 
                 string cField = "";
@@ -597,6 +606,10 @@ FROM  PFSettlements  pfs
                 if (Id > 0)
                 {
                     objComm.Parameters.AddWithValue("@Id", Id);
+                }
+                if (BranchId != "0")
+                {
+                    objComm.Parameters.AddWithValue("@BranchId", BranchId);
                 }
 
                 SqlDataReader dr;
@@ -1477,7 +1490,7 @@ Id
                     PFSettlementVM newPFSettlementVM = new PFSettlementVM();
                     string[] cFields = { "pfs.EmployeeId" };
                     string[] cValues = { vm.EmployeeId };
-                    newPFSettlementVM = SelectAll(0, cFields, cValues, currConn, transaction).FirstOrDefault();
+                    newPFSettlementVM = SelectAll("",0, cFields, cValues, currConn, transaction).FirstOrDefault();
 
                     #endregion
 

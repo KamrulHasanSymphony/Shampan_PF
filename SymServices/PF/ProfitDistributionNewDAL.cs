@@ -329,9 +329,10 @@ FROM
 (
     SELECT 
         EmployeeId,
-        FiscalYearDetailId,
-        (EmployeePFValue + EmployeerPFValue) AS TotalPF
-    FROM PFDetails
+        pd.FiscalYearDetailId,
+        (pd.EmployeePFValue + pd.EmployeerPFValue) AS TotalPF
+   FROM PFDetails pd
+	Left Join PFHeader ph on ph.Id=pd.PFHeaderId where BranchId=@BranchId
 ) AS SourceTable
 PIVOT
 (

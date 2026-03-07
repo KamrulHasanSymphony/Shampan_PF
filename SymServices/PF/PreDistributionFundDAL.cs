@@ -1136,9 +1136,10 @@ FROM PreDistributionFunds pdf
             string Journal = @"SELECT
                                 JournalName,COAID
                                 FROM AutoJournalSetup
-                                WHERE  1=1 AND JournalFor = @JournalFor and IsActive=1";
+                                WHERE  1=1 AND JournalFor = @JournalFor and IsActive=1 and BranchId=@BranchId";
             SqlCommand cmdj = new SqlCommand(Journal, currConn, transaction);
             cmdj.Parameters.AddWithValue("JournalFor", "3");
+            cmdj.Parameters.AddWithValue("@BranchId", BranchId);
             SqlDataAdapter adapterj = new SqlDataAdapter(cmdj);
             DataTable dtj = new DataTable();
             adapterj.Fill(dtj);

@@ -198,6 +198,7 @@ WHERE  1=1
 ,[User].FullName
 ,[User].Email
 ,[User].EmployeeId
+,[User].IsApprove
 ,isnull(ug.IsAdmin,0)IsAdmin
 ,isnull(ug.IsESS,0)IsESS
 ,isnull(ug.IsHRM,0)IsHRM
@@ -206,7 +207,6 @@ WHERE  1=1
 ,isnull(ug.IsTAX,0)IsTAX
 ,isnull(ug.IsPF,0)IsPF
 ,isnull(ug.IsGF,0)IsGF
-
 
 ,EmployeeInfo.Code EmployeeCode
 ,EmployeeInfo.PhotoName PhotoName
@@ -243,6 +243,7 @@ where  [User].LogId=@LogId and [User].Password=@Password and [User].IsActive=@Is
                     userLogsVM.IsTAX = Convert.ToBoolean(dr["IsTAX"]);
                     userLogsVM.IsPF = Convert.ToBoolean(dr["IsPF"]);
                     userLogsVM.IsGF = Convert.ToBoolean(dr["IsGF"]);
+                    userLogsVM.IsApprove = Convert.ToBoolean(dr["IsApprove"]);
                     isLogin = true;
                 }
                 dr.Close();

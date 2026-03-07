@@ -65,7 +65,6 @@ a.Id
 ,(b.Name) as JournalFor
 ,a.JournalName
 ,a.Nature
-,a.GroupName
 ,('[ '+c.Code+' ] '+ c.Name) as COAName
 ,a.IsActive
 ,a.IsArchive
@@ -75,10 +74,12 @@ a.Id
 ,a.LastUpdateBy
 ,a.LastUpdateAt
 ,a.LastUpdateFrom
+,cg.Name As GroupName
 from AutoJournalSetup a
 
 left join EnumJournalFor b on a.JournalFor = b.Id
 left join COAs c on a.COAID = c.Id
+Left Join COAGroups cg on cg.id = c.COAGroupId 
 WHERE  1=1 and a.IsActive=1 and a.BranchId= @BranchId
 ";
 
@@ -111,6 +112,7 @@ WHERE  1=1 and a.IsActive=1 and a.BranchId= @BranchId
                     vm.LastUpdateAt = Ordinary.StringToDate(dr["LastUpdateAt"].ToString());
                     vm.LastUpdateBy = dr["LastUpdateBy"].ToString();
                     vm.LastUpdateFrom = dr["LastUpdateFrom"].ToString();
+                    vm.GroupName = dr["GroupName"].ToString();
                     vm.BranchId = branchId;
                     VMs.Add(vm);
                 }

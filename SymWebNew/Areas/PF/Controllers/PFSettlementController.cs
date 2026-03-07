@@ -52,9 +52,9 @@ namespace SymWebUI.Areas.PF.Controllers
         /// <returns>View containing PF Settlement</returns>
         public ActionResult _index(JQueryDataTableParamModel param)
         {
-           
+            string BranchId = Session["BranchId"].ToString();
             #region Search and Filter Data
-            var getAllData = _repo.SelectAll();
+            var getAllData = _repo.SelectAll(BranchId);
             IEnumerable<PFSettlementVM> filteredData;
             if (!string.IsNullOrEmpty(param.sSearch))
             {
@@ -280,7 +280,7 @@ namespace SymWebUI.Areas.PF.Controllers
                     vm.LastUpdateFrom = identity.WorkStationIP;
                     result = _repo.Update(vm);
                     Session["result"] = result[0] + "~" + result[1];
-                    return RedirectToAction("Edit", new { id = result[2] });
+                    return RedirectToAction("Create", new { id = result[2] });
                 }
                 else
                 {
@@ -315,7 +315,7 @@ namespace SymWebUI.Areas.PF.Controllers
         {
             Session["permission"] = _repoSUR.SymRoleSession(identity.UserId, "10003", "edit").ToString();
             PFSettlementVM vm = new PFSettlementVM();
-            vm = _repo.SelectAll(Convert.ToInt32(id)).FirstOrDefault();
+            vm = _repo.SelectAll("",Convert.ToInt32(id)).FirstOrDefault();
             vm.detailVMs = _repoDetail.SelectByMasterId(Convert.ToInt32(id));
 
             vm.Operation = "update";
@@ -340,7 +340,7 @@ namespace SymWebUI.Areas.PF.Controllers
             string[] conditionFields = new string[5];
             string[] conditionValues = new string[5];
             string[] id = ids.Split('~');
-            var getAllData = _repo.SelectAll(Convert.ToInt32(id[0]), conditionFields, conditionValues);
+            var getAllData = _repo.SelectAll("",Convert.ToInt32(id[0]), conditionFields, conditionValues);
             if (getAllData != null && getAllData[0].Post == true)
             {
                 string[] resultdata = new string[6];
@@ -377,7 +377,7 @@ namespace SymWebUI.Areas.PF.Controllers
             Session["permission"] = _repoSUR.SymRoleSession(identity.UserId, "10010", "edit").ToString();
 
             PFSettlementVM vm = new PFSettlementVM();
-            vm = _repo.SelectAll(Convert.ToInt32(id)).FirstOrDefault();
+            vm = _repo.SelectAll("",Convert.ToInt32(id)).FirstOrDefault();
 
             return Json(vm, JsonRequestBehavior.AllowGet);
         }
