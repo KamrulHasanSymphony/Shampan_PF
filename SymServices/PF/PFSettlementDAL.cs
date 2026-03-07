@@ -86,7 +86,7 @@ SELECT DISTINCT
                 sqlText += @" Left Join [dbo].ViewEmployeeInformation ve on ve.EmployeeId=el.EmployeeId WHERE  1=1 ";
                 sqlText += @" 
 AND ve.EmployeeId NOT IN (
-SELECT EmployeeId FROM PFSettlements WHERE 1=1 AND Post = 1
+SELECT EmployeeId FROM PFSettlements WHERE 1=1 
 UNION ALL
 SELECT EmployeeId FROM ForfeitureAccounts WHERE 1=1 AND Post = 1
 )
@@ -1898,9 +1898,10 @@ AND PFSettlements.EmployeeId=@EmployeeId
             string Journal = @"SELECT
                                 JournalName,COAID
                                 FROM AutoJournalSetup
-                                WHERE  1=1 AND JournalFor = @JournalFor and IsActive=1";
+                                WHERE  1=1 AND JournalFor = @JournalFor and IsActive=1 and BranchId=@BranchId";
             SqlCommand cmdj = new SqlCommand(Journal, currConn, transaction);
-            cmdj.Parameters.AddWithValue("JournalFor", TransactionForm);
+            cmdj.Parameters.AddWithValue("@JournalFor", TransactionForm);
+            cmdj.Parameters.AddWithValue("@BranchId", BranchId);
             SqlDataAdapter adapterj = new SqlDataAdapter(cmdj);
             DataTable dtj = new DataTable();
             adapterj.Fill(dtj);
@@ -1912,7 +1913,12 @@ AND PFSettlements.EmployeeId=@EmployeeId
                 EmployerProfitCOAID = dtj.Rows[3]["COAID"].ToString();
                 BankCOAID = dtj.Rows[4]["COAID"].ToString();
             }
-
+            else
+            {
+                retResults[0] = "Fail";
+                retResults[1] = "Please set Chart of Account for Auto Journal";
+                return retResults;
+            }
             SettingDAL _settingDal = new SettingDAL();
             string IsAutoJournal = _settingDal.settingValue("PF", "IsAutoJournal").Trim();
 
