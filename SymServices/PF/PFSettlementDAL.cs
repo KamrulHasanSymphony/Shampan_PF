@@ -84,9 +84,20 @@ SELECT DISTINCT
 ,ve.Project
 ,ve.ResignDate
 ";
+
+
                 sqlText += " FROM ViewEmployeeInformation ve";
                 sqlText += @" left join EmployeeLeftInformation b on ve.EmployeeId = b.EmployeeId";
                 sqlText += @" WHERE  1=1 AND b.IsActive = 1";
+
+                sqlText += "  FROM EmployeeLeftInformation el ";
+                sqlText += @" Left Join [dbo].ViewEmployeeInformation ve on ve.EmployeeId=el.EmployeeId WHERE  1=1 ";
+
+
+                sqlText += " FROM ViewEmployeeInformation ve";
+                sqlText += @" left join EmployeeLeftInformation b on ve.EmployeeId = b.EmployeeId";
+                sqlText += @" WHERE  1=1 AND b.IsActive = 1";
+
                 sqlText += @" 
 AND ve.EmployeeId NOT IN (
 SELECT EmployeeId FROM PFSettlements WHERE 1=1 
