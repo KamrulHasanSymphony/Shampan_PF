@@ -2226,7 +2226,7 @@ namespace SymWebUI.Areas.PF.Controllers
                  doc.DataDefinition.FormulaFields["DateTo"].Text = "'" + vm.DateTo + "'";
                  doc.DataDefinition.FormulaFields["Address"].Text = "'" + cvm.Address + "'";
                  doc.DataDefinition.FormulaFields["CompanyName"].Text = "'" + cvm.Name + "'";
-                 //doc.DataDefinition.FormulaFields["BranchName"].Text = "'" + Session["BranchName"].ToString() + "'";
+                 doc.DataDefinition.FormulaFields["BranchName"].Text = "'" + Session["BranchName"].ToString() + "'";
 
                  //doc.DataDefinition.FormulaFields["frmGroupBy"].Text = "'" + groupBy + "'";
                  var rpt = RenderReportAsPDF(doc);
