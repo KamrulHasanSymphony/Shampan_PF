@@ -1074,6 +1074,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 string[] conditionValues = { };
                 DateTime startdate = Convert.ToDateTime(vm.DateFrom);
                 DateTime enddate = Convert.ToDateTime(vm.DateTo);
+                vm.BranchId = Session["BranchId"].ToString();
                 string ReportHead = "Member’s Fund Position (" + startdate.ToString("yyyy") + "-"+enddate.ToString("yy")+")";
                 DataTable dt = _repo.PFEmployeeLedger(vm, conditionFields, conditionValues);
                 if (vm.ReportType == "Excel")

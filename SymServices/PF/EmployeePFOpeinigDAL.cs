@@ -28,7 +28,7 @@ namespace SymServices.PF
         /// </summary>
         /// <param name="empid">Optional employee ID to filter the provident fund records.</param>
         /// <returns>A list of EmployeePFOpeinigVM instances containing provident fund and employee information.</returns>
-        public List<EmployeePFOpeinigVM> SelectAll(string empid = null)
+        public List<EmployeePFOpeinigVM> SelectAll(string BranchId, string empid = null)
         {
 
             #region Variables
@@ -89,9 +89,12 @@ From EmployeePFOpeinig pfo
 
                 if (!string.IsNullOrEmpty(empid))
                 {
-                    sqlText += @" and pfo.EmployeeId=@EmployeeId ";
+                    sqlText += @" and pfo.EmployeeId=@EmployeeId";
                 }
-
+                if (!string.IsNullOrEmpty(BranchId))
+                {
+                    sqlText += @" and e.BranchId=@BranchId";
+                }
 
                 sqlText += @" ORDER BY pfo.EmployeeId";
 
@@ -102,7 +105,12 @@ From EmployeePFOpeinig pfo
 
                 if (!string.IsNullOrEmpty(empid))
                 {
-                    objComm.Parameters.AddWithValue("@EmployeeId", empid);
+                    objComm.Parameters.AddWithValue("@EmployeeId", empid);                
+                }
+                if (!string.IsNullOrEmpty(BranchId))
+                {
+                    
+                    objComm.Parameters.AddWithValue("@BranchId", BranchId);
                 }
 
                 SqlDataReader dr;
