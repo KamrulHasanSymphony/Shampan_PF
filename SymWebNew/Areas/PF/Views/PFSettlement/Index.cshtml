@@ -52,13 +52,23 @@
                                 "sClass": "center",
                                 "fnRender": function (oObj) {
                                     var Code = encodeURIComponent(oObj.aData[1]);
-                                    return ' <input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">'
-                                        @*+ '&nbsp; <a id=""  title="Click on for Edit"    href=\"/@ViewBag.TransType/PFSettlement/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></a>'*@
-                                        @*+ '&nbsp; <a id=""  title="Click to view GL Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/PFSettlement/PFSettlement_GLTransactionReport?id=' + oObj.aData[0] + '\" class="  sym-btn-detail-row"></a>'*@
-                                        + '&nbsp; <a title="Click on for Report" target="_blank" href="/@ViewBag.TransType/PFSettlement/ReportView?Id=' + oObj.aData[0] + '\" class="sym-btn-report-row"></a>'
-                                        + '&nbsp; <a title="Click on for Post"   data-url="/@ViewBag.TransType/PFSettlement/Post"   onclick=btnPostNew(this);       data-Post="' + oObj.aData[7] + '" data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
-                                        + '<a title="Journal" class="sym-btn-bank-row" href="/@ViewBag.TransType/PFSettlement/JournalEntry/?Code=' + Code + '"></a>';
-                                     
+                                    var result = '<input onclick="CheckAll(this)" type="checkbox" data-Id="' + oObj.aData[0] + '">';
+
+                                    result += '&nbsp; <a title="Click on for Report" target="_blank" href="/@ViewBag.TransType/PFSettlement/ReportView?Id=' + oObj.aData[0] + '" class="sym-btn-report-row"></a>';
+
+                                    if (oObj.aData[8] == "Posted" || oObj.aData[8] == true) {
+                                        result += '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/PFSettlement/Post" onclick="btnPostNew(this);" data-Post="' + oObj.aData[7] + '" data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row" style="opacity:0.45;pointer-events:none;cursor:default;"></a>';
+                                    } else {
+                                        result += '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/PFSettlement/Post" onclick="btnPostNew(this);" data-Post="' + oObj.aData[7] + '" data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row"></a>';
+                                    }
+
+                                    if (oObj.aData[9] == "Yes" || oObj.aData[9] == true) {
+                                        result += '<a title="Journal" class="sym-btn-bank-row" style="opacity:0.45;pointer-events:none;cursor:default;" href="/@ViewBag.TransType/PFSettlement/JournalEntry/?Code=' + Code + '"></a>';
+                                    } else {
+                                        result += '<a title="Journal" class="sym-btn-bank-row" href="/@ViewBag.TransType/PFSettlement/JournalEntry/?Code=' + Code + '"></a>';
+                                    }
+
+                                    return result;
                                 }
                             }
                             , { "sName": "Code", "sWidth": "10%" }
@@ -84,7 +94,7 @@
 
         $.getJSON(getURL, function (vm) {
 
-            if (vm.Post) {
+            if (vm.Post == true) {
                 ShowResult("Fail", "Data Already Posted!");
                 return true;
             }

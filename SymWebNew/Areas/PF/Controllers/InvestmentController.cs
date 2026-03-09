@@ -133,7 +133,8 @@ namespace SymWebUI.Areas.PF.Controllers
                 , c.MaturityDate              
                 , c.InvestmentValue.ToString()
                 , c.Post ? "Posted" : "Not Posted"               
-                , c.IsEncashed ? "Encashed" : "Not Encashed"               
+                , c.IsEncashed ? "Encashed" : "Not Encashed"
+                , c.IsJournal ? "Yes" : "No"
      
             };
             return Json(new

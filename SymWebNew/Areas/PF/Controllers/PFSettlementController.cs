@@ -121,6 +121,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 , c.AlreadyPaidAmount.ToString()
                 , c.NetPayAmount.ToString()
                 , c.Post ? "Posted" : "Not Posted"
+                , c.IsJournal ? "Yes":"No"
      
             };
             return Json(new
@@ -211,6 +212,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 , c.Designation
                 , c.Department
                 , c.EmpResignDate
+                , c.Post ? "Posted" : "Not Posted"
      
             };
             return Json(new

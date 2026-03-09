@@ -83,6 +83,7 @@
                                 var code = oObj.aData[1];
                                 var fiscalMonth = oObj.aData[3];
                                 var postStatus = oObj.aData[7];
+                                var isJournal = oObj.aData[9];
 
                                 var isPosted = (postStatus === "Posted" || postStatus === true);
 
@@ -101,13 +102,20 @@
                                                         ' data-Id="' + id + "~" + postStatus + '"' +
                                                         ' class="sym-btn-post-row"></a>';
                                         }
+                                        if (isJournal == "Yes") {
+                                            var journalLink = '&nbsp; <a title="Click on for Journal" style="opacity:0.45;pointer-events:none;cursor:default;" href="/@ViewBag.TransType/PFDetail/InsertAutoJournal?TransactionMonth=' + fiscalMonth + '&TransactionForm=Contribution&TransactionCode=' + code + ' &TransactionId=' + id + '" class="sym-btn-bank-row"></a>';
+                                        }
+                                        else {
+                                            var journalLink = '&nbsp; <a title="Click on for Journal" href="/@ViewBag.TransType/PFDetail/InsertAutoJournal?TransactionMonth=' + fiscalMonth + '&TransactionForm=Contribution&TransactionCode=' + code + ' &TransactionId=' + id + '" class="sym-btn-bank-row"></a>';
+                                        }
                                     }
                                     else
                                     {
                                         var postLink = '';
                                     }
-                                var reportLink = '&nbsp; <a id="lnkEdit1" title="Click on for Report" style="text-decoration:none;" href="/@ViewBag.TransType/PFDetail/reportVeiw/' + id + '" class=" linkReport sym-btn-report-row"></a>';
-                                    var journalLink = '&nbsp; <a title="Click on for Journal" href="/@ViewBag.TransType/PFDetail/InsertAutoJournal?TransactionMonth=' + fiscalMonth + '&TransactionForm=Contribution&TransactionCode=' + code + ' &TransactionId=' + id + '" class="sym-btn-bank-row"></a>';
+                                    var reportLink = '&nbsp; <a id="lnkEdit1" title="Click on for Report" style="text-decoration:none;" href="/@ViewBag.TransType/PFDetail/reportVeiw/' + id + '" class=" linkReport sym-btn-report-row"></a>';
+                                  
+                                    
 
                                 return detailLink + postLink + reportLink + journalLink;
                             }
@@ -133,6 +141,7 @@
                             }
                             , { "sName": "Post", "sWidth": "10%" }
                             , { "sName": "Approve", "sWidth": "12%" }
+                           
             ]
         });
 

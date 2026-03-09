@@ -70,29 +70,33 @@
                                 "sClass": "left",
                                 "fnRender": function (oObj) {
 
-                                    if (oObj.aData[7] == "Posted")
-                                    {
-                                        return '  '
-                                       + '&nbsp; <a id=""  title="Click on for Journal"   href=\"/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '\" class=" sym-btn-bank-row"></a>'
-                                       + '&nbsp; <a id=""  title="Click on for Edit"   href=\"/@ViewBag.TransType/Investment/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></a>'
-                                       + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/Investment/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
-                                       + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Investment/Post"  onclick=btnPostNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
-                                   //+ '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=2' + '&TransactionForm=Investment' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
-                                       + '&nbsp; <a title="Click on for Renew" target="_blank"  href="/@ViewBag.TransType/InvestmentRenew/Index?investmentId=' + oObj.aData[0] + '\" class="sym-btn-add-row"></a>'
-                                    }
-                            else
-                                    {
-                                        return '  '
-                                      + '&nbsp; <a id=""  title="Click on for Journal"   href=\"/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '\" class=" sym-btn-bank-row"></a>'
-                                      + '&nbsp; <a id=""  title="Click on for Edit"   href=\"/@ViewBag.TransType/Investment/Edit/' + oObj.aData[0] + '\" class=" sym-btn-edit-row"></a>'
-                                      + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/Investment/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
-                                      + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Investment/Post"  onclick=btnPostNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row"></a>'
-                                  //+ '&nbsp; <a title="Click on for Journal"   href="#'+ '\" class="sym-btn-bank-row"></a>'
-                                      + '&nbsp; <a title="Click on for Renew/Encash" target="_blank"  href="/@ViewBag.TransType/InvestmentRenew/Index?investmentId=' + oObj.aData[0] + '\" class="sym-btn-add-row"></a>'
-                                    }
-                                                           
+                                    var isJournal = oObj.aData[10];
+                                    var html = '';
 
-                                    ;
+                                    html += '&nbsp; <a title="Click on for Edit" href="/@ViewBag.TransType/Investment/Edit/' + oObj.aData[0] + '" class="sym-btn-edit-row"></a>';
+
+                                    html += '&nbsp; <a id="lnkEdit1" title="Click on for Report" href="/@ViewBag.TransType/Investment/reportVeiw/' + oObj.aData[0] + '" class="linkReport sym-btn-report-row"></a>';
+
+                                    // Post Button
+                                    if (oObj.aData[7] == "Posted" || true) {
+                                        html += '&nbsp; <a title="Click on for Post" style="opacity:0.45;pointer-events:none;cursor:default;" data-url="/@ViewBag.TransType/Investment/Post" onclick="btnPostNew(this);" data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row"></a>';
+                                    }
+                                    else {
+                                        html += '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/Investment/Post" onclick="btnPostNew(this);" data-Id="' + oObj.aData[0] + '" class="sym-btn-post-row"></a>';
+                                    }
+
+                                    // Renew Button
+                                    html += '&nbsp; <a title="Click on for Renew" target="_blank" href="/@ViewBag.TransType/InvestmentRenew/Index?investmentId=' + oObj.aData[0] + '" class="sym-btn-add-row"></a>';
+
+                                    // Journal Button
+                                    if (isJournal == "Yes") {
+                                        html += '&nbsp; <a title="Click on for Journal" style="opacity:0.45;pointer-events:none;cursor:default;" href="/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '" class="sym-btn-bank-row"></a>';
+                                    }
+                                    else {
+                                        html += '&nbsp; <a title="Click on for Journal" href="/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '" class="sym-btn-bank-row"></a>';
+                                    }
+
+                                    return html;
                                 }
                             }
 

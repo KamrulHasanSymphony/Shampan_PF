@@ -53,11 +53,11 @@
                                     {
                                     return ''
                                         + '&nbsp; <a id=""  title="Click on for Edit"  style="text-decoration:none;"  href=\"/@ViewBag.TransType/PFBankDeposit/Edit/' + oObj.aData[0] + '\" class="  sym-btn-edit-row"></a>'
-                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/PFBankDeposit/Post"  onclick=btnPostNew(this);  data-Id="' + oObj.aData[0] + '\" class="sym-btn-reject-row" style="opacity:0.45;pointer-events:none;cursor:default;"></a>'
+                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/PFBankDeposit/Post"  onclick=btnPostNew(this);  data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row" style="opacity:0.45;pointer-events:none;cursor:default;"></a>'
                                         //+ '&nbsp; <a id=""  title="Click to view Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/PFBankDeposit/GLTransactionReport?id=' + oObj.aData[0] + '\" class="  sym-btn-report-row"></a>'
                                         + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/PFBankDeposit/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
 
-                                        + '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=3' + '&TransactionForm=BankDeposit' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
+                                        @*+ '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=3' + '&TransactionForm=BankDeposit' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'*@
                                     }
                                     else {
                                         return ''

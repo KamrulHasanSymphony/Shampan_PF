@@ -430,12 +430,13 @@ pfd.Id
 ,pfd.EmployeePFValue EmployeePFValue
 ,pfd.EmployeerPFValue EmployerPFValue
 ,pfd.EmployeePFValue + pfd.EmployeerPFValue TotalPF
-
+,case when ISNULL(gl.Source,0)='0' then 0 else 1 end AS IsJournal
 FROM PFHeader pfd
 ";
 
                 sqlText += "  LEFT OUTER JOIN [dbo].Project p ON pfd.ProjectId=p.Id";
                 sqlText += "  LEFT OUTER JOIN [dbo].[FiscalYearDetail] fyd ON pfd.FiscalYearDetailId=fyd.Id";
+                sqlText += "  Left Join GLJournals gl on gl.Source = pfd.code";
                 sqlText += @" WHERE  1=1  AND pfd.IsArchive = 0
 ";
                 string cField = "";
@@ -489,7 +490,7 @@ FROM PFHeader pfd
                     vm.TotalEmployerValue = Convert.ToDecimal(dr["EmployerPFValue"]);
                     vm.TotalPF = Convert.ToDecimal(dr["TotalPF"]);
                     vm.Post = Convert.ToBoolean(dr["Post"]);
-
+                    vm.IsJournal = Convert.ToBoolean(dr["IsJournal"]);
                     VMs.Add(vm);
                 }
                 dr.Close();
@@ -961,7 +962,7 @@ WHERE  1=1
 
                 if (chkAll == "true")
                 {
-                    string fyid = @"Select Id from dbo.Project";
+                    string fyid = @"Select Id from dbo.Project Where Isactive = 1";
                     SqlCommand cmdfyid = new SqlCommand(fyid, currConn, transaction);
                     SqlDataAdapter da = new SqlDataAdapter(cmdfyid);
                     DataTable dt = new DataTable();
@@ -1088,6 +1089,8 @@ WHERE  1=1
                             ,[LastUpdateBy]
                             ,[LastUpdateAt]
                             ,[LastUpdateFrom]
+                            ,BranchId
+                            ,TransType
                             )
                             select 
                             @code
@@ -1106,6 +1109,8 @@ WHERE  1=1
                             ,@LastUpdateBy
                             ,@LastUpdateAt
                             ,@LastUpdateFrom
+                            ,@BranchId
+                            ,@TransType
                             FROM ViewEmployeeInformation ei
                 ";
 
@@ -1140,6 +1145,9 @@ WHERE  1=1
                 cmd.Parameters.AddWithValue("@LastUpdateBy", "");
                 cmd.Parameters.AddWithValue("@LastUpdateAt", "");
                 cmd.Parameters.AddWithValue("@LastUpdateFrom", "");
+                cmd.Parameters.AddWithValue("@BranchId", auditvm.BranchId);
+                cmd.Parameters.AddWithValue("@TransType", "PF");
+                
                 cmd.ExecuteNonQuery();
 
                 ResultVM resultvm = InsertPFDetails(FiscalYearDetailId, ProjectId, currConn, transaction, nextId.ToString());
@@ -1240,30 +1248,30 @@ WHERE  1=1
                 ,PFHeaderId
                 ) 
                 select 
-                1
-                ,1
-                ,Vei.ProjectId
-                ,Vei.DepartmentId
-                ,Vei.SectionId
-                ,Vei.DesignationId
-                ,Vei.EmployeeId
-                ,(Vei.BasicSalary *.10) PFValue
-                ,(Vei.BasicSalary *.10) PFValuee
-                ,0
-                ,Vei.Remarks
-                ,Vei.IsActive
-                ,Vei.IsArchive
-                ,Vei.CreatedBy
-                ,Vei.CreatedAt
-                ,Vei.CreatedFrom
-                ,Vei.LastUpdateBy
-                ,Vei.LastUpdateAt
-                ,Vei.LastUpdateFrom
-                ,Vei.BasicSalary
-                ,Vei.GrossSalary
-                ,1
-                ,1
-                FROM ViewEmployeeInformation Vei";
+@FiscalYearDetailId
+,1
+,@ProjectId
+,Vei.DepartmentId
+,Vei.SectionId
+,Vei.DesignationId
+,Vei.EmployeeId
+,(Vei.BasicSalary *.10)
+,(Vei.BasicSalary *.10)
+,0
+,Vei.Remarks
+,Vei.IsActive
+,Vei.IsArchive
+,Vei.CreatedBy
+,Vei.CreatedAt
+,Vei.CreatedFrom
+,Vei.LastUpdateBy
+,Vei.LastUpdateAt
+,Vei.LastUpdateFrom
+,Vei.BasicSalary
+,Vei.GrossSalary
+,@Post
+,@PFHeaderId
+FROM ViewEmployeeInformation Vei";
                 #endregion SqlText
 
                 #region SqlExecution

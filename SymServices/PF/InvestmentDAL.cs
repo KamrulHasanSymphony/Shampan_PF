@@ -104,9 +104,11 @@ inv.Id
 , DATEDIFF(month, CONVERT(DATE, CONVERT(CHAR(8), inv.FromDate), 112), CONVERT(DATE, CONVERT(CHAR(8), inv.ToDate), 112)) AS InvestmenMonths
 ,FORMAT((inv.InvestmentValue * inv.InvestmentRate) / 100.00, 'N2') AS TotalInterest
 ,FORMAT((inv.InvestmentValue + ((inv.InvestmentValue * inv.InvestmentRate) / 100.00)), 'N2') AS TotalAmount
+,case when ISNULL(gl.Source,0)='0' then 0 else 1 end AS IsJournal
 from Investments inv
 LEFT OUTER JOIN EnumInvestmentTypes eit ON inv.InvestmentTypeId = eit.Id
 LEFT OUTER JOIN InvestmentNames ina ON inv.InvestmentNameId = ina.Id
+Left Join GLJournals gl on gl.Source = inv.TransactionCode
 WHERE  1=1 AND inv.IsArchive = 0
 ";
                 //InvestmentType
@@ -179,6 +181,7 @@ WHERE  1=1 AND inv.IsArchive = 0
                     vm.InvestmentRate = Convert.ToDecimal(dr["InvestmentRate"]);
                     vm.InvestmentValue = Convert.ToDecimal(dr["InvestmentValue"]);
                     vm.Post = Convert.ToBoolean(dr["Post"]);
+                    vm.IsJournal = Convert.ToBoolean(dr["IsJournal"]);
 
 
                     decimal dateDiff = (Convert.ToDateTime(vm.ToDate) - Convert.ToDateTime(vm.FromDate)).Days;
@@ -1582,7 +1585,7 @@ WHERE  1=1 AND  inv.IsArchive = 0
                     CreatedFrom = "",
                     TransactionDate = DateTime.Now.ToString(),
                     TransactionType = 31,
-                    JournalType = 1,
+                    JournalType = 4,
                     TransType = "PF",
                     TransactionValue = Convert.ToDecimal(dtpf.Rows[0]["InvestmentValue"].ToString()),
 
@@ -1613,7 +1616,7 @@ WHERE  1=1 AND  inv.IsArchive = 0
 
                 #region SuccessResult
                 retResults[0] = "Success";
-                retResults[1] = "Data Save Successfully.";
+                retResults[1] = "Journal Save Successfully.";
                 #endregion SuccessResult
             }
 

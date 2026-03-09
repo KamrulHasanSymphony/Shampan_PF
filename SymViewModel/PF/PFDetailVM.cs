@@ -136,5 +136,6 @@ namespace SymViewModel.PF
         public string TransType { get; set; }
 
         public bool IsApprove { get; set; }
+        public bool IsJournal { get; set; }
     }
 }
