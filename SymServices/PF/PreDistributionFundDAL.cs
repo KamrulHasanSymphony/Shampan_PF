@@ -73,12 +73,12 @@ namespace SymServices.PF
                 sqlText = @"
 SELECT
  pdf.Id
-,Code
-,Format(cast(TransactionDate as datetime),'dd-MMM-yyyy')TransactionDate
-,Format(cast(TransactionDate as datetime),'dd-MMM-yyyy')FundingDate
-,TotalValue
-,TotalValue FundingValue
-,Remarks
+,pdf.Code
+,Format(cast(pdf.TransactionDate as datetime),'dd-MMM-yyyy')TransactionDate
+,Format(cast(pdf.TransactionDate as datetime),'dd-MMM-yyyy')FundingDate
+,pdf.TotalValue
+,pdf.TotalValue FundingValue
+,pdf.Remarks
 ,pdf.Post
 ,pdf.IsDistribute
 ,pdf.Remarks
@@ -91,8 +91,10 @@ SELECT
 ,pdf.LastUpdateAt
 ,pdf.LastUpdateFrom
 ,pdf.IsApprove
+,case when ISNULL(gl.Source,0)='0' then 0 else 1 end AS IsJournal
 FROM PreDistributionFunds pdf
-WHERE  1=1 AND IsArchive = 0
+Left Join GLJournals gl on gl.Source = pdf.code
+WHERE  1=1 AND pdf.IsArchive = 0
 ";
                 //TotalFundingValue
                 //FundingValue
@@ -164,7 +166,7 @@ WHERE  1=1 AND IsArchive = 0
                     vm.LastUpdateBy = dr["LastUpdateBy"].ToString();
                     vm.LastUpdateFrom = dr["LastUpdateFrom"].ToString();
                     vm.IsApprove = dr["IsApprove"] == DBNull.Value ? false : Convert.ToBoolean(dr["IsApprove"]);
-
+                    vm.IsJournal = Convert.ToBoolean(dr["IsJournal"]);
 
                     VMs.Add(vm);
                 }

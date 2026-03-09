@@ -288,6 +288,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 ,c.TotalPF.ToString()
                 , c.Post?"Posted":"Not Posted"
                 , c.IsApprove?"Approve":"Not Approve"
+                , c.IsJournal?"Yes":"No"
             };
             return Json(new
             {
@@ -325,7 +326,8 @@ namespace SymWebUI.Areas.PF.Controllers
             {
                 CreatedAt = DateTime.Now.ToString("yyyyMMddHHmmss"),
                 CreatedBy = identity.Name,
-                CreatedFrom = identity.WorkStationIP
+                CreatedFrom = identity.WorkStationIP,
+                BranchId = Session["BranchId"].ToString()
             };
 
             // Initialize the PFDetailRepo and call the PFProcess method

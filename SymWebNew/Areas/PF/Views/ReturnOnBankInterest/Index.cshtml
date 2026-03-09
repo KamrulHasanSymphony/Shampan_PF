@@ -73,11 +73,9 @@
                                     {
                                         return '  '
                                         + '&nbsp; <a id="lnkEdit1"  title="Click on for Edit" style="text-decoration:none;"    href=\"/@ViewBag.TransType/ReturnOnBankInterest/Edit/' + oObj.aData[0] + '\" class=" innerListLink sym-btn-edit-row"></a>'
-                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/ReturnOnBankInterest/Post"  onclick=btnPostNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-reject-row" style="opacity:0.45;pointer-events:none;cursor:default;"></a>'
+                                        + '&nbsp; <a title="Click on for Post" data-url="/@ViewBag.TransType/ReturnOnBankInterest/Post"  onclick=btnPostNew(this); data-Id="' + oObj.aData[0] + '\" class="sym-btn-post-row" style="opacity:0.45;pointer-events:none;cursor:default;"></a>'
                                         //+ '&nbsp; <a id=""  title="Click to view Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/ReturnOnBankInterest/ROB_GLTransactionReport?id=' + oObj.aData[0] + '\" class="  sym-btn-report-row"></a>'
                                         + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/ReturnOnBankInterest/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
-
-                                    + '&nbsp; <a title="Click on for Journal" target="_blank"  href="/@ViewBag.TransType/Journal/Create?JournalType=3' + '&TransactionForm=BankInterest(ROBI)' + '&TransactionId=' + oObj.aData[0] + '\" class="sym-btn-bank-row"></a>'
                                     }
                                   else
                                      {

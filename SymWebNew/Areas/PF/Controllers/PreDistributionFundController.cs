@@ -109,7 +109,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 , c.Remarks.ToString()
                 , c.Post ? "Posted" : "Not Posted"
                 , c.IsApprove ? "Approve" : "Not Approve"
-
+                , c.IsJournal ? "Yes":"No"
             };
             return Json(new
             {

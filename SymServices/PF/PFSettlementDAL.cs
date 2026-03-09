@@ -559,10 +559,13 @@ SELECT
 ,pfs.Post
 
 ,pfs.Remarks,pfs.IsActive,pfs.IsArchive,pfs.CreatedBy,pfs.CreatedAt,pfs.CreatedFrom,pfs.LastUpdateBy,pfs.LastUpdateAt,pfs.LastUpdateFrom
+
+,case when ISNULL(gl.Source,0)='0' then 0 else 1 end AS IsJournal
 FROM  PFSettlements  pfs
 
 ";
                 sqlText += " LEFT OUTER JOIN [dbo].ViewEmployeeInformation ve ON pfs.EmployeeId=ve.EmployeeId";
+                sqlText += " Left Join GLJournals gl on gl.Source = pfs.TransactionCode";
                 sqlText += " WHERE  1=1  ";
 
 
@@ -691,7 +694,7 @@ FROM  PFSettlements  pfs
                     vm.LastUpdateBy = Convert.ToString(dr["LastUpdateBy"]);
                     vm.LastUpdateAt = Convert.ToString(dr["LastUpdateAt"]);
                     vm.LastUpdateFrom = Convert.ToString(dr["LastUpdateFrom"]);
-
+                    vm.IsJournal = Convert.ToBoolean(dr["IsJournal"]);
 
                     VMs.Add(vm);
                 }

@@ -406,7 +406,13 @@ WHERE  1=1
                 cmd2.Parameters.AddWithValue("@TransactionType", vm.TransactionType);
                 var idExecuteScalar = cmd2.ExecuteScalar();
                 int nextId = Convert.ToInt32(idExecuteScalar);
-                if (vm.SourceId == 0) { vm.SourceId = nextId; vm.Source = "From Journal"; }
+                if (vm.SourceId == 0) { vm.SourceId = nextId; vm.Source = vm.Code; }
+
+                if (vm.JournalType == 4)
+                {
+                    string NewCode = new CommonDAL().CodeGenerationPF(vm.TransType, "JournalVoucher", vm.TransactionDate, currConn, transaction);
+                    vm.Code = NewCode;
+                }
 
                 if (vm.Code == null || vm.Code == "0")
                 {
@@ -425,7 +431,8 @@ WHERE  1=1
                     {
                         string NewCode = new CommonDAL().CodeGenerationPF(vm.TransType, "ReceiptVoucher", vm.TransactionDate, currConn, transaction);
                         vm.Code = NewCode;
-                    }
+                    }                  
+                   
                 }
                 if (vm != null)
                 {

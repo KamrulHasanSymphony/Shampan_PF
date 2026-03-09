@@ -52,7 +52,8 @@ namespace SymViewModel.PF
          [Display(Name = "Total Amount")]
         public decimal TotalAmount { get; set; }
 
-        public bool Post { get; set; }
+         public bool Post { get; set; }
+         public bool IsJournal { get; set; }
         [StringLength(450, ErrorMessage = "Remarks cannot be longer than 450 characters.")]
         public string Remarks { get; set; }
         [Display(Name = "Active")]
