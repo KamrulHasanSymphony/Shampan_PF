@@ -61,7 +61,7 @@
                          "fnRender": function (oObj) {
                              if (oObj.aData[8] == "Posted") {
                                  return '   &nbsp;  <a title="Click on for Edit" id="lnkEdit1" style="text-decoration:none;" Onclick="otherearningEdit(this);"  class=" sym-btn-edit-row"  data-Id="' + oObj.aData[0] + '"></a>'
-                                + '&nbsp; <a title="Click on for Post" style="text-decoration:none;" data-url="/@ViewBag.TransType/EmployeeBreakMonthPF/MultiplePost" onclick="postedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-post-row"></a>'
+                                + '&nbsp; <a title="Click on for Post" style="text-decoration:none; opacity:0.45; pointer-events:none; cursor:default;" data-url="/@ViewBag.TransType/EmployeeBreakMonthPF/MultiplePost" onclick="postedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-post-row"></a>'
                                //+ '&nbsp; <a id=""  title="Click to view Transaction Report" target="_blank"    href=\"/@ViewBag.TransType/EmployeeBreakMonthPF/EmployeeBreakMonthPFReport?id=' + oObj.aData[0] + '\" class="  sym-btn-report-row"></a>'
                                        + '&nbsp; <a id="lnkEdit1"  title="Click on for Report" style="text-decoration:none;"    href=\"/@ViewBag.TransType/EmployeeBreakMonthPF/reportVeiw/' + oObj.aData[0] + '\" class=" linkReport sym-btn-report-row"></a>'
 

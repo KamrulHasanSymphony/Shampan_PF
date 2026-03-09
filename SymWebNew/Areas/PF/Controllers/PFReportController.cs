@@ -1074,6 +1074,7 @@ namespace SymWebUI.Areas.PF.Controllers
                 string[] conditionValues = { };
                 DateTime startdate = Convert.ToDateTime(vm.DateFrom);
                 DateTime enddate = Convert.ToDateTime(vm.DateTo);
+                vm.BranchId = Session["BranchId"].ToString();
                 string ReportHead = "Member’s Fund Position (" + startdate.ToString("yyyy") + "-"+enddate.ToString("yy")+")";
                 DataTable dt = _repo.PFEmployeeLedger(vm, conditionFields, conditionValues);
                 if (vm.ReportType == "Excel")
@@ -2226,7 +2227,7 @@ namespace SymWebUI.Areas.PF.Controllers
                  doc.DataDefinition.FormulaFields["DateTo"].Text = "'" + vm.DateTo + "'";
                  doc.DataDefinition.FormulaFields["Address"].Text = "'" + cvm.Address + "'";
                  doc.DataDefinition.FormulaFields["CompanyName"].Text = "'" + cvm.Name + "'";
-                 //doc.DataDefinition.FormulaFields["BranchName"].Text = "'" + Session["BranchName"].ToString() + "'";
+                 doc.DataDefinition.FormulaFields["BranchName"].Text = "'" + Session["BranchName"].ToString() + "'";
 
                  //doc.DataDefinition.FormulaFields["frmGroupBy"].Text = "'" + groupBy + "'";
                  var rpt = RenderReportAsPDF(doc);

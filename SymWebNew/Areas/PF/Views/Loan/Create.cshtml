@@ -180,7 +180,7 @@
                     @Html.LabelFor(model => model.EndDate)
                 </div>
                 <div class="editor-field">
-                    @Html.TextBoxFor(model => model.EndDate, new { @disabled = "disabled", @placeholder = "End Date", @class = "customDatePicker required form-control" })
+                    @Html.TextBoxFor(model => model.EndDate, new {  @placeholder = "End Date", @class = "customDatePicker required form-control" })
                     @Html.ValidationMessageFor(model => model.EndDate)
                 </div>
             </div>

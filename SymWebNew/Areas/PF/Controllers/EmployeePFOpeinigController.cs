@@ -59,7 +59,8 @@ namespace SymWebUI.Areas.PF.Controllers
             #endregion
             //ShampanIdentity identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
             EmployeePFOpeinigRepo arerepo = new EmployeePFOpeinigRepo();
-            var getAllData = arerepo.SelectAll();
+            string BranchId = Session["BranchId"].ToString();
+            var getAllData = arerepo.SelectAll(BranchId);
             IEnumerable<EmployeePFOpeinigVM> filteredData;
             //Check whether the companies should be filtered by keyword
             if (!string.IsNullOrEmpty(param.sSearch))

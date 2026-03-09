@@ -429,6 +429,10 @@ namespace SymWebUI.Areas.PF.Controllers
                 CompanyRepo companyRepo = new CompanyRepo();
                 CompanyVM company = companyRepo.SelectAll().FirstOrDefault();
 
+                   // Load company logo and details for report
+                string companyLogo = AppDomain.CurrentDomain.BaseDirectory + "Images\\COMPANYLOGO.png";
+                CompanyVM cvm = new CompanyRepo().SelectAll().FirstOrDefault();
+
                 // Initialize repository for PFDetail report generation
                 PFDetailRepo pfRepo = new PFDetailRepo();
 
@@ -454,10 +458,12 @@ namespace SymWebUI.Areas.PF.Controllers
                 doc.SetDataSource(ds);
 
                 // Set formula fields (company information, transaction type, etc.)
-                string companyLogo = AppDomain.CurrentDomain.BaseDirectory + "Images\\COMPANYLOGO.png";
-                doc.DataDefinition.FormulaFields["TransType"].Text = "'{AreaTypePFVM.TransType}'";
-                doc.DataDefinition.FormulaFields["Address"].Text = "'{company.Address}'";
-                doc.DataDefinition.FormulaFields["CompanyName"].Text = "'{company.Name}'";
+      
+                doc.DataDefinition.FormulaFields["CompanyName"].Text = "'" + cvm.Name + "'";
+                doc.DataDefinition.FormulaFields["Address"].Text = "'" + cvm.Address + "'";
+                doc.DataDefinition.FormulaFields["ReportHead"].Text = "'" + reportHead + "'";
+                doc.DataDefinition.FormulaFields["ReportHeaderA4"].Text = "'" + companyLogo + "'";
+               
 
                 // Render and return the PDF report
                 var rpt = RenderReportAsPDF(doc);
@@ -516,11 +522,12 @@ namespace SymWebUI.Areas.PF.Controllers
                 CompanyVM cvm = new CompanyRepo().SelectAll().FirstOrDefault();
 
                 // Set formula fields (company information, report header, transaction type)
-                doc.DataDefinition.FormulaFields["ReportHeaderA4"].Text = "'{companyLogo}'";
-                doc.DataDefinition.FormulaFields["ReportHead"].Text = "'{reportHead}'";
-                doc.DataDefinition.FormulaFields["TransType"].Text = "'{AreaTypePFVM.TransType}'";
-                doc.DataDefinition.FormulaFields["Address"].Text = "'{cvm.Address}'";
-                doc.DataDefinition.FormulaFields["CompanyName"].Text = "'{cvm.Name}'";
+            
+                doc.DataDefinition.FormulaFields["CompanyName"].Text = "'" + cvm.Name + "'";
+                doc.DataDefinition.FormulaFields["Address"].Text = "'" + cvm.Address + "'";
+                doc.DataDefinition.FormulaFields["ReportHead"].Text = "'" + reportHead + "'";
+                doc.DataDefinition.FormulaFields["ReportHeaderA4"].Text = "'" + companyLogo + "'";
+                doc.DataDefinition.FormulaFields["TransType"].Text = AreaTypePFVM.TransType;
 
                 // Render and return PDF report
                 var rpt = RenderReportAsPDF(doc);
@@ -576,10 +583,11 @@ namespace SymWebUI.Areas.PF.Controllers
                 CompanyVM cvm = new CompanyRepo().SelectAll().FirstOrDefault();
 
                 // Set formula fields for the report
-                doc.DataDefinition.FormulaFields["ReportHeaderA4"].Text = "'{companyLogo}'";
-                doc.DataDefinition.FormulaFields["ReportHead"].Text = "'{reportHead}'";
-                doc.DataDefinition.FormulaFields["Address"].Text = "'{cvm.Address}'";
-                doc.DataDefinition.FormulaFields["CompanyName"].Text = "'{cvm.Name}'";
+           
+                doc.DataDefinition.FormulaFields["CompanyName"].Text = "'" + cvm.Name + "'";
+                doc.DataDefinition.FormulaFields["Address"].Text = "'" + cvm.Address + "'";
+                doc.DataDefinition.FormulaFields["ReportHead"].Text = "'" + reportHead + "'";
+                doc.DataDefinition.FormulaFields["ReportHeaderA4"].Text = "'" + companyLogo + "'";        
 
                 // Render and return PDF
                 var rpt = RenderReportAsPDF(doc);

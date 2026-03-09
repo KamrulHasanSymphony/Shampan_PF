@@ -56,11 +56,31 @@
                          "bSortable": false,
                          "sWidth": "12%",
                          "sClass": "center",
-                         "fnRender": function (oObj) {
-                             return '  &nbsp;  <a title="Click on for Edit" id="lnkEdit1" style="text-decoration:none;" Onclick="otherearningEdit(this);"  class=" sym-btn-edit-row"  data-Id="' + oObj.aData[0] + '"></a>'
-                                 + '&nbsp; <a title="Click on for Post" style="text-decoration:none;" data-url="/@ViewBag.TransType/EmployeePFOpeinig/MultiplePost" onclick="postedData(this, myDataTable,\'' + oObj.aData[0] + '\');"  class="sym-btn-post-row"></a>'
-                             ;
-                         }
+                        "fnRender": function (oObj) {
+
+                            var postStatus = oObj.aData[8];
+                            var isPosted = (postStatus === "Posted" || postStatus === true);
+
+                            var html = '';
+
+                            // Edit Button
+                            html += '&nbsp; <a title="Click on for Edit" id="lnkEdit1" style="text-decoration:none;" ' +
+                                    'onclick="otherearningEdit(this);" class="sym-btn-edit-row" data-Id="' + oObj.aData[0] + '"></a>';
+
+                            // Post Button
+                            if (isPosted) {
+                                html += '&nbsp; <a title="Click on for Post" style="text-decoration:none; opacity:0.45; pointer-events:none; cursor:default;" ' +
+                                        'data-url="/@ViewBag.TransType/EmployeePFOpeinig/MultiplePost" ' +
+                                        'onclick="postedData(this, myDataTable,\'' + oObj.aData[0] + '\');" class="sym-btn-post-row"></a>';
+                            }
+                            else {
+                                html += '&nbsp; <a title="Click on for Post" style="text-decoration:none;" ' +
+                                        'data-url="/@ViewBag.TransType/EmployeePFOpeinig/MultiplePost" ' +
+                                        'onclick="postedData(this, myDataTable,\'' + oObj.aData[0] + '\');" class="sym-btn-post-row"></a>';
+                            }
+
+                            return html;
+                        }
                      }
                       , { "sName": "Code", "sWidth": "10%" }
                                 , { "sName": "Name", "sWidth": "14%" }
@@ -72,9 +92,9 @@
                                 , { "sName": "Post", "sClass": "right", "sWidth": "18%" }
                 ]
             });
-            
+
         });
         function otherearningEdit(sender) {
             window.location = "/@ViewBag.TransType/EmployeePFOpeinig/SingleEmployeePFOpeinigEdit?PFOpeinigId=" + $(sender).attr('data-Id');
-        }
+    }
 </script>

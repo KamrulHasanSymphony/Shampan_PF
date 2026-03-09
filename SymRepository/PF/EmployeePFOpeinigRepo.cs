@@ -13,11 +13,11 @@ namespace SymRepository.PF
     public class EmployeePFOpeinigRepo
     {
 
-        public List<EmployeePFOpeinigVM> SelectAll(string empid = null)
+        public List<EmployeePFOpeinigVM> SelectAll(string BranchId, string empid = null)
         {
             try
             {
-                return new EmployeePFOpeinigDAL().SelectAll(empid);
+                return new EmployeePFOpeinigDAL().SelectAll(BranchId,empid);
             }
             catch (Exception ex)
             {

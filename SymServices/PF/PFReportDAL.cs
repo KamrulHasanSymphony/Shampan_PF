@@ -4062,7 +4062,7 @@ left outer join ViewEmployeeInformation e  on pf.EmployeeId=e.EmployeeId
 left outer join   ViewEmployeeInformation eOld  on pf.EmployeeId=eold.EmployeeId
 
 --where pf.EmployeeId=@EmployeeId
- where 1=1 
+ where 1=1  and e.BranchId=@BranchId
 
 
 ";
@@ -4093,6 +4093,7 @@ left outer join   ViewEmployeeInformation eOld  on pf.EmployeeId=eold.EmployeeId
                 da.SelectCommand.Transaction = transaction;
                 da.SelectCommand.Parameters.AddWithValue("@DateFrom", Ordinary.DateToString(vm.DateFrom == null ? "1900/Jan/31" : vm.DateFrom));
                 da.SelectCommand.Parameters.AddWithValue("@DatTo", Ordinary.DateToString(vm.DateTo == null ? "2029/Dec/31" : vm.DateTo));
+                da.SelectCommand.Parameters.AddWithValue("@BranchId", vm.BranchId);
                 if (vm.EmployeeId != null)
                 {
                     da.SelectCommand.Parameters.AddWithValue("@EmployeeId", vm.EmployeeId);
