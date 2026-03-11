@@ -99,14 +99,7 @@
                         @Html.ValidationMessageFor(model => model.Designation)
                     </div>
                 </div>
-                <div class="col-sm-2 hidden">
-                    <div class="editor-label">
-                        @Html.LabelFor(model => model.Project)
-                    </div>
-                    <div class="editor-field">
-                        @Html.SimpleDropDownFor(model => model.Project, "/Config/DropDown/Project", new { @placeholder = "Project", @class = "required form-control " })
-                    </div>
-                </div>
+               
                 <div class="col-sm-2 hidden">
                     <div class="editor-label">
                         @Html.LabelFor(model => model.Section)
@@ -272,7 +265,7 @@
                         @Html.TextAreaFor(model => model.ParmanentAdderss, new { @placeholder = "Parmanent Adderss", @class = "form-control" })
                     </div>
                 </div>
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                     <div class="editor-label">
                         @Html.LabelFor(model => model.Remarks)
                     </div>
@@ -288,7 +281,14 @@
                         @Html.CheckBoxFor(model => model.IsActive, new { @placeholder = "IsActive", @class = "form-control" })
                     </div>
                 </div>
-
+                <div class="col-sm-2">
+                    <div class="editor-label">
+                        @Html.LabelFor(model => model.Project)
+                    </div>
+                    <div class="editor-field">
+                        @Html.SimpleDropDownFor(model => model.Project, "/Config/DropDown/Project", new { @placeholder = "Project", @class = "required form-control " })
+                    </div>
+                </div>
             </div>
 
 

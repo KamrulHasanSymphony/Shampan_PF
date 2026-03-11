@@ -288,7 +288,14 @@
                                 @Html.CheckBoxFor(model => model.IsNoInterest, new { @class = "form-control", id = "IsNoInterest" })
                             </div>
                         </div>
-
+                        <div class="col-sm-2">
+                            <div class="editor-label">
+                                @Html.LabelFor(model => model.Project)
+                            </div>
+                            <div class="editor-field">
+                                @Html.SimpleDropDownFor(model => model.Project, "/Config/DropDown/Project", new { @placeholder = "Project", @class = "required form-control " })
+                            </div>
+                        </div>
                     </div>
                 </div>
 
