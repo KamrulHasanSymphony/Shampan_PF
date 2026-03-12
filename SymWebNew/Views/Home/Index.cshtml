@@ -22,7 +22,7 @@
             <div id="login" class="col-md-4 col-sm-12 col-xs-12">
                 <div class="login">
                     <div style="color: white;" class="">
-                        <img src="~/Images/ShampanlogoPF.png" />
+                        <img src="~/Images/ShampanlogoPF.png" style=" width:40%; margin-left:110px;" />
                     </div>
                     <div class="col-md-1">
                         &nbsp;
@@ -38,7 +38,7 @@
                             @Html.LabelFor(model => model.Password, new { @class = "" })
                             @Html.PasswordFor(model => model.Password, new { placeholder = "Password", required = "required", @class = "form-control" })
                                @Html.LabelFor(model => model.BranchId, new { @class = "" })
-                            @Html.SimpleDropDownFor(model => model.BranchId,"/Config/DropDown/Branch",new {required = "required",@class = "form-control",oninvalid = "this.setCustomValidity('Please Select Branch Name')",oninput = "this.setCustomValidity('')"})
+                            @Html.SimpleDropDownFor(model => model.BranchId, "/Config/DropDown/Branch", new { required = "required", @class = "form-control " })
                             <label>&nbsp;</label>
                             @Html.HiddenFor(model => model.ComputerIPAddress, new { @id = "ip1", @class = "ipAdd required form-control" })
                             @Html.HiddenFor(model => model.Location, new { @id = "Location", @class = "Location required form-control" })
