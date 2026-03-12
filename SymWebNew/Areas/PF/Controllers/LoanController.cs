@@ -1639,7 +1639,14 @@ namespace SymWebUI.Areas.PF.Controllers
             EmployeeLoanRepo loanRepo = new EmployeeLoanRepo();
             dt = loanRepo.getBalance(date, emploanId);
 
-
+            if (dt.Rows.Count > 0)
+            {
+                vm.PFBalance = Convert.ToDecimal(dt.Rows[0]["Balance"].ToString());
+            }
+            else
+            {
+                vm.PFBalance = 999999999;
+            }
             bool FromSetting = Convert.ToBoolean(sRepo.settingValue("PFLoanRate", "FromSetting") == "Y" ? true : false);
             int Upto12Month = Convert.ToInt32(sRepo.settingValue("PFLoanRate", "Upto12Month"));
             int GetterThen12Month = Convert.ToInt32(sRepo.settingValue("PFLoanRate", "GetterThen12Month"));
@@ -1655,9 +1662,6 @@ namespace SymWebUI.Areas.PF.Controllers
             vm.FromSetting = FromSetting;
             vm.InterestRate = Upto12Month;
             vm.InterestRate1 = GetterThen12Month;
-
-            vm.PFBalance = 999999999;
-
 
             return Json(vm, JsonRequestBehavior.AllowGet);
         }
