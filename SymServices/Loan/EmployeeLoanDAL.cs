@@ -62,7 +62,7 @@ ve.EmpName,ve.Department ,ve.Designation
 ,t.Name LoanType
 ,l.Id
 ,l.IsApproved
-,l.IsEarlySellte
+,IsNull(l.IsEarlySellte,0) IsEarlySellte
  from EmployeeLoan l
 left outer join ViewEmployeeInformation ve on l.EmployeeId=ve.EmployeeId
 left outer join EnumLoanType t on t.Id=l.LoanType_E
