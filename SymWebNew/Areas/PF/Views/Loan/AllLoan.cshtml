@@ -46,7 +46,8 @@
                             <th>Loan Type</th>
                             <th style="text-align:left!important">Principal Amount</th>
                             <th style="text-align:left!important">Interest Amount</th>
-                            <th style="text-align:left!important">Total Amount</th>                       
+                            <th style="text-align:left!important">Total Amount</th>  
+                            <th>Early Sellte</th>                     
                         </tr>
                         <tr>
                             <th class="center">Actions</th>
@@ -57,7 +58,8 @@
                             <th>Loan Type</th>
                             <th style="text-align:left!important">Principal Amount</th>
                             <th style="text-align:left!important">Interest Amount</th>
-                            <th style="text-align:left!important">Total Amount</th>                        
+                            <th style="text-align:left!important">Total Amount</th>  
+                            <th>Early Sellte</th>                      
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -106,7 +108,13 @@
                                     var isApproved = oObj.aData[10]; // adjust index if needed
 
                                     var checkbox = '<input onclick="CheckAll(this)" type="checkbox" data-Id="' + loanId + '">';
-                                    var editBtn = '<a title="Edit" class="sym-btn-edit-row" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                    if (oObj.aData[9] == "Yes" || oObj.aData[9] == true) {
+                                        var editBtn = '<a title="Edit" class="sym-btn-edit-row" style="opacity:0.45;pointer-events:none;cursor:default;" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                    }
+                                    else {
+                                        var editBtn = '<a title="Edit" class="sym-btn-edit-row" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                    }
+                                   
                                     var reportBtn = '<a title="Report" data-url="/PF/Loan/ReportView" onclick="reportData(this);" data-Id="' + loanId + '" class="sym-btn-report-row"></a>';
                                     var deleteBtn = '<a title="Delete" data-url="/PF/Loan/Delete" onclick="deletedData(this, myDataTable, \'' + loanId + '\');" class="sym-btn-remove-row"></a>';
                                     var settlementBtn = '<a title="Settlement" class="sym-btn-add-row" href="/PF/Loan/Settlement?loanId=' + loanId + '"></a>';
@@ -128,7 +136,12 @@
                                         editBtn = '<a title="settlement" target="_blank" href="#" class="sym-btn-edit-row" style="pointer-events: none; opacity: 0.5;"></a>';  // Disabled state
                                     } else {
                                         settlementBtn = '<a title="settlement" target="_blank" href="/PF/Loan/Settlement?loanId=' + loanId + '" class="sym-btn-add-row"></a>';  // Enabled state
-                                        editBtn = '<a title="Edit" class="sym-btn-edit-row" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                        if (oObj.aData[9] == "Yes" || oObj.aData[9] == true) {
+                                            editBtn = '<a title="Edit" class="sym-btn-edit-row" style="opacity:0.45;pointer-events:none;cursor:default;" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                        }
+                                        else {
+                                            editBtn = '<a title="Edit" class="sym-btn-edit-row" href="/PF/Loan/Edit?loanId=' + loanId + '"></a>';
+                                        }
                                         reportBtn = '<a title="Report" data-url="/PF/Loan/ReportView" onclick="reportData(this);" data-Id="' + loanId + '" class="sym-btn-report-row"></a>';
                                     }
                                         if ('@identity.IsAdmin'.toLowerCase() == "true") {
@@ -167,6 +180,7 @@
                                        return formatNumberWithCommas(oObj.aData[8]);
                                    }
                                }
+                                , { "sName": "IsEarlySellte", "sWidth": "10%" }
                           
             ]
         });
@@ -181,7 +195,6 @@
                        , { type: "text" }
                        , { type: "text" }
                        , { type: "text" }
-                       , { type: "date-range" }
                        , { type: "text" }
 
             ]

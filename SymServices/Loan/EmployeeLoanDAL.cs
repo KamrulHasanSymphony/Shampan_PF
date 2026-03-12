@@ -62,6 +62,7 @@ ve.EmpName,ve.Department ,ve.Designation
 ,t.Name LoanType
 ,l.Id
 ,l.IsApproved
+,l.IsEarlySellte
  from EmployeeLoan l
 left outer join ViewEmployeeInformation ve on l.EmployeeId=ve.EmployeeId
 left outer join EnumLoanType t on t.Id=l.LoanType_E
@@ -104,6 +105,7 @@ WHERE l.IsArchive=0  and l.BranchId=@BranchId
                     vm.Designation = dr["Designation"].ToString();
                     vm.Department = dr["Department"].ToString();
                     vm.IsApproved = Convert.ToBoolean(dr["IsApproved"]);
+                    vm.IsEarlySellte = Convert.ToBoolean(dr["IsEarlySellte"]);
                     VMs.Add(vm);
                 }
                 #endregion
@@ -3382,13 +3384,14 @@ EXEC sp_executesql @query, N'@StartDate DATE, @EndDate DATE @BranchId INT', @Sta
                 if (loanId.Length >= 1)
                 {
                     sqlText = " ";
-                    sqlText += "Update EmployeeLoan set EarlySelltePrincipleAmount=@EarlySelltePrincipleAmount,EarlySellteInterestAmount=@EarlySellteInterestAmount,EarlySellteDate=@EarlySellteDate";
+                    sqlText += "Update EmployeeLoan set EarlySelltePrincipleAmount=@EarlySelltePrincipleAmount,EarlySellteInterestAmount=@EarlySellteInterestAmount,EarlySellteDate=@EarlySellteDate, IsEarlySellte=@IsEarlySellte";
                     sqlText += " WHERE Id=@Id";
                     SqlCommand cmdDelete = new SqlCommand(sqlText, currConn, transaction);
                     cmdDelete.Parameters.AddWithValue("@Id", loanId);
                     cmdDelete.Parameters.AddWithValue("@EarlySelltePrincipleAmount", TotalDuePrincipalAmount);
                     cmdDelete.Parameters.AddWithValue("@EarlySellteInterestAmount", TotalDueInterestAmount);
                     cmdDelete.Parameters.AddWithValue("@EarlySellteDate", EarlySellteDate);
+                    cmdDelete.Parameters.AddWithValue("@IsEarlySellte", true);
                     var exeRes = cmdDelete.ExecuteNonQuery();
                     transResult = Convert.ToInt32(exeRes);                  
                     if (transResult <= 0)

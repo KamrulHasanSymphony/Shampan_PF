@@ -53,7 +53,7 @@
             <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/Journal/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Report</button>
             <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Journal?JournalType=@Model.JournalType" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
             <a title="Delete Journal Entry" href="/@ViewBag.TransType/Journal/Create?JournalType=@Model.JournalType" id="" class="sym-btn-add">&nbsp;New</a>
-            if (@identity.HaveApproval == true)
+            if (@identity.HaveApproval == true && @identity.IsAdmin == true)
             {
                 if (@Model.Post == true && @Model.IsApprove == false)
                 {
@@ -288,7 +288,7 @@
             <button type="button" title="Click for Report" data-url="/@ViewBag.TransType/Journal/ReportView" onclick="reportData(this);" id="" class="sym-btn-report">&nbsp;Report</button>
             <button type="button" title="Go To Index" data-url="/@ViewBag.TransType/Journal?JournalType=@Model.JournalType" onclick="GoTo(this)" class="sym-btn-detail">&nbsp;Index</button>
             <a title="Delete Journal Entry" href="/@ViewBag.TransType/Journal/Create?JournalType=@Model.JournalType" id="" class="sym-btn-add">&nbsp;New</a>
-            if (@identity.HaveApproval == true)
+            if (@identity.HaveApproval == true && @identity.IsAdmin == true)
             {
                 if (@Model.Post == true && @Model.IsApprove == false)
                 {
