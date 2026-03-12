@@ -4062,7 +4062,7 @@ left outer join ViewEmployeeInformation e  on pf.EmployeeId=e.EmployeeId
 left outer join   ViewEmployeeInformation eOld  on pf.EmployeeId=eold.EmployeeId
 
 --where pf.EmployeeId=@EmployeeId
- where 1=1  and e.BranchId=@BranchId
+ where 1=1  and e.BranchId=@BranchId and e.IsActive=1
 
 
 ";
