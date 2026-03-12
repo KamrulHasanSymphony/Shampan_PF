@@ -342,7 +342,7 @@
 
         //alert(AvailableBalance);
 
-        if (AvailableBalance > PFPrincipalAmount) {
+        if (AvailableBalance < PFPrincipalAmount) {
 
             ShowResult("Fail", "Balance Not Available");
             $('#PrincipalAmount').val(0);
