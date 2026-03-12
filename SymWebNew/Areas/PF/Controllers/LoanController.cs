@@ -215,8 +215,10 @@ namespace SymWebUI.Areas.PF.Controllers
                 , c.PrincipalAmount.ToString()
                 , c.InterestAmount.ToString()
                 , c.TotalAmount.ToString()
+                , c.IsEarlySellte ? "Yes" : "No"
                 , c.StartDate
                 , c.IsApproved ? "Approved" : "Not Approved"
+               
                 //, c.Remarks 
             };
             return Json(new

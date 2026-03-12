@@ -311,10 +311,12 @@ namespace SymServices.Common
                 #endregion
 
                 #region SQL statement
-                sqlText = @"SELECT COUNT(FiscalYearDetailId) AS TotalPerson
-                              , ISNULL(SUM(PFValue),0) AS PFValue    
-                          FROM SalaryPFDetail
-                          where [FiscalYearDetailId] = (Select MAX([FiscalYearDetailId]) from SalaryPFDetail) and PFValue>0";
+                sqlText = @"SELECT COUNT(Id) AS TotalPerson,
+ISNULL(SUM(EmployeePFValue), 0) + ISNULL(SUM(EmployeerPFValue), 0) AS PFValue
+FROM PFDetails
+WHERE FiscalYearDetailId = (SELECT MAX(FiscalYearDetailId) FROM PFHeader)
+GROUP BY FiscalYearDetailId
+HAVING ISNULL(SUM(EmployeePFValue), 0) + ISNULL(SUM(EmployeerPFValue), 0) > 0";
 
                 using (SqlCommand objComm = new SqlCommand(sqlText, currConn))
                 {
