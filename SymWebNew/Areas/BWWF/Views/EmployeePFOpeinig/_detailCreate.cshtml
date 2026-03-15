@@ -42,7 +42,7 @@
                         @Html.ValidationMessageFor(model => model.Designation)
                     </div>
                     <div class="editor-label col-md-4">
-                        <label>@Session["DepartmentLabel"]</label>
+                        <label> @Session["DepartmentLabel"] </label>
                     </div>
                     <div class="editor-field col-md-8">
                         @Html.TextBoxFor(model => model.Department, new { @placeholder = "Employee Department", @class = "  form-control", @disabled = "disabled" })

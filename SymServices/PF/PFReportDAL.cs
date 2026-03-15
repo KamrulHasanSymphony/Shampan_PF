@@ -6192,7 +6192,7 @@ WHERE  1=1
                     }
 
                     decimal difference = totalDrAmount - totalCrAmount;
-
+                    jvm.BranchId = vm.BranchId.ToString();
                     glvm = new GLJournalDetailVM();
                     glvm.COAId = Convert.ToInt32(dt.Rows[0][0].ToString());
                     glvm.CrAmount = difference;

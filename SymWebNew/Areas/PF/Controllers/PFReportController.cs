@@ -602,6 +602,7 @@ namespace SymWebUI.Areas.PF.Controllers
                  vm.BaseEntity.CreatedBy = identity.Name;
                  vm.BaseEntity.CreatedFrom = identity.WorkStationIP;
                  vm.TransType = AreaTypePFVM.TransType;
+                 vm.BranchId = Session["BranchId"].ToString();
 
                  PFReportRepo _repo = new PFReportRepo();
                 result = _repo.YearClosing(vm);

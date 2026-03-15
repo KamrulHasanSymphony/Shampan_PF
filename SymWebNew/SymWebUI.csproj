@@ -4023,7 +4023,8 @@
     <Content Include="Areas\Common\Views\Designation\Create.cshtml" />
     <Content Include="Areas\Common\Views\Designation\Edit.cshtml" />
     <Content Include="Images\hr.png" />
-    <Content Include="Images\pf.png" />
+    <Content Include="Images\LOGO_Sym.png" />
+    <Content Include="Images\LOGO_Sym1.png" />
     <Content Include="Images\sage.png" />
     <Content Include="Images\tax.png" />
     <Content Include="Images\vat.png" />

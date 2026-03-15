@@ -982,11 +982,11 @@ namespace SymWebUI.Areas.PF.Controllers
                 string IsContributionNotSame = new SettingDAL().settingValue("PF", "IsContributionNotSame");
                 if (IsContributionNotSame == "Y")
                 {
-                    dt = _repo.ExportExcelFile_PF(fullPath, FileName, ProjectId, DepartmentId, SectionId, DesignationId, CodeF, CodeT, fid, Orderby, BranchId);
+                    dt = _repo.ExportExcelFilePF(fullPath, FileName, ProjectId, DepartmentId, SectionId, DesignationId, CodeF, CodeT, fid, Orderby, BranchId);                   
                 }
                 else
                 {
-                    dt = _repo.ExportExcelFilePF(fullPath, FileName, ProjectId, DepartmentId, SectionId, DesignationId, CodeF, CodeT, fid, Orderby, BranchId);
+                    dt = _repo.ExportExcelFile_PF(fullPath, FileName, ProjectId, DepartmentId, SectionId, DesignationId, CodeF, CodeT, fid, Orderby, BranchId);
                 }
 
                 ExcelPackage excel = new ExcelPackage();

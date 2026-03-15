@@ -406,7 +406,7 @@ WHERE  1=1
                 cmd2.Parameters.AddWithValue("@TransactionType", vm.TransactionType);
                 var idExecuteScalar = cmd2.ExecuteScalar();
                 int nextId = Convert.ToInt32(idExecuteScalar);
-                if (vm.SourceId == 0) { vm.SourceId = nextId; vm.Source = vm.Code; }
+                if (vm.SourceId == 0) { vm.SourceId = nextId; vm.Source = vm.Code?? ""; }
 
                 if (vm.JournalType == 4)
                 {
@@ -621,6 +621,7 @@ WHERE  1=1
             #region Try
             try
             {
+                string hrmDB = _dbsqlConnection.GetConnection().Database;
                 #region Validation
                 #endregion Validation
                 #region open connection and transaction
@@ -662,7 +663,7 @@ select @RetainedEarningsCOAId=id from COAs  where isnull(IsRetainedEarning,0)=1 
 create table #FiscalYear(Id int identity(1,1),[Year] varchar(100),YearStart varchar(100),YearEnd varchar(100))
 
 insert into #FiscalYear([Year],YearStart,YearEnd)
-select [Year],YearStart,YearEnd from HRMDB.dbo.FiscalYear
+select [Year],YearStart,YearEnd from " + hrmDB + @".dbo.FiscalYear
 
 
 

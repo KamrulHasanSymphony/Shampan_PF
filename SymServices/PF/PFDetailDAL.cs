@@ -2584,14 +2584,13 @@ order by SectionOrderNo ";
 
                 #region SqlText
 
-                sqlText = @"Update PFHeader set [EmployeePFValue]=@EmployeePFValue,[EmployeerPFValue] =@EmployeerPFValue where FiscalYearDetailId=@FiscalYearDetailId and ProjectId=@ProjectId ";
+                sqlText = @"Update PFHeader set [EmployeePFValue]=@EmployeePFValue,[EmployeerPFValue] =@EmployeerPFValue where FiscalYearDetailId=@FiscalYearDetailId and ProjectId=@ProjectId and BranchId=@BranchId ";
                 cmd = new SqlCommand(sqlText, currConn, transaction);
                 cmd.Parameters.AddWithValue("@FiscalYearDetailId", FiscalYearDetailId);
                 cmd.Parameters.AddWithValue("@ProjectId", PId);
                 cmd.Parameters.AddWithValue("@EmployeePFValue", dtid.Rows[0]["EmployeePFValue"].ToString());
                 cmd.Parameters.AddWithValue("@EmployeerPFValue", dtid.Rows[0]["EmployeerPFValue"].ToString());
-
-
+                cmd.Parameters.AddWithValue("@BranchId", BranchId);
 
                 var exeRes = cmd.ExecuteNonQuery();
                 transResult = Convert.ToInt32(exeRes);
