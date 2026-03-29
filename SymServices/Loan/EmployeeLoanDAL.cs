@@ -2614,7 +2614,7 @@ emp.Code
 ";
              if (JobDay >= bothContributionJobAge)
              {
-                 sqlText += @" select EmployeeId, ((EmployeeContribution*2)-LoanAmount+PaymentAmount) Balance";
+                 sqlText += @" select EmployeeId, ((EmployeeContribution)-LoanAmount+PaymentAmount) Balance";
 
              }
              else
@@ -2631,13 +2631,16 @@ from
 select EmployeeId, Sum(EmployeeContribution)EmployeeContribution, Sum(LoanAmount)LoanAmount, Sum(PaymentAmount)PaymentAmount
 from
 (
-select fyd.PeriodEnd TransactionDate, pfd.EmployeeId, pfd.EmployeePFValue EmployeeContribution
-,0 LoanAmount, 0 PaymentAmount, 'Contribution' TransactionType
-from PFDetails pfd
-left outer join FiscalYearDetail fyd on pfd.FiscalYearDetailId=fyd.Id
-where 1=1 and EmployeeId=@EmployeeId and fyd.PeriodEnd <=@ToDate
-
-
+SELECT
+    TransactionDate,
+    EmployeeId,
+    Total EmployeeContribution,
+    0 AS LoanAmount,
+    0 AS PaymentAmount,
+    'PreviousBalance' AS TransactionType
+FROM ViewEmployeeStatementPF
+WHERE TransactionDate < @ToDate
+AND EmployeeId = @EmployeeId
 
 union all
 select StartDate, EmployeeId, 0 EmployeeContribution

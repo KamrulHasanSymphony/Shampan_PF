@@ -1647,7 +1647,7 @@ namespace SymWebUI.Areas.PF.Controllers
             }
             else
             {
-                vm.PFBalance = 999999999;
+                vm.PFBalance = 0;
             }
             bool FromSetting = Convert.ToBoolean(sRepo.settingValue("PFLoanRate", "FromSetting") == "Y" ? true : false);
             int Upto12Month = Convert.ToInt32(sRepo.settingValue("PFLoanRate", "Upto12Month"));
