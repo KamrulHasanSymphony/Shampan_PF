@@ -1923,6 +1923,7 @@ Id
 ,CreatedBy
 ,CreatedAt
 ,CreatedFrom
+,IsApprove
 ) 
                                 VALUES (
  @Id
@@ -1941,6 +1942,7 @@ Id
 ,@CreatedBy
 ,@CreatedAt
 ,@CreatedFrom
+,@IsApprove
 ) 
                                        ";
                     SqlCommand cmdInsert = new SqlCommand(sqlText, currConn);
@@ -1960,6 +1962,7 @@ Id
                     cmdInsert.Parameters.AddWithValue("@CreatedBy", vm.CreatedBy);
                     cmdInsert.Parameters.AddWithValue("@CreatedAt", Ordinary.DateToString(vm.CreatedAt));
                     cmdInsert.Parameters.AddWithValue("@CreatedFrom", vm.CreatedFrom);
+                    cmdInsert.Parameters.AddWithValue("@IsApprove", true);
                     cmdInsert.Transaction = transaction;
                     cmdInsert.ExecuteNonQuery();
                 }
