@@ -1467,10 +1467,20 @@ namespace SymWebUI.Areas.PF.Controllers
                 DataSet ds = new DataSet();
                 List<EmployeeLoanDetailVM> getAllData = new List<EmployeeLoanDetailVM>();
                 string companyLogo = "";
-                //string BranchId = Session["BranchId"].ToString();
+                string BranchId = Session["BranchId"].ToString();
+                string[] result = new string[6];
 
                 CompanyRepo _CompanyRepo = new CompanyRepo();
                 CompanyVM cvm = _CompanyRepo.SelectAll().FirstOrDefault();
+
+                if(DateFrom==null || DateFrom=="")
+                {
+                    DateFrom = "1900 Jan 01";
+                }
+                if (DateTo == null || DateTo == "")
+                {
+                    DateTo = DateTime.Now.ToString() ;
+                }
 
                 if (Rtype == "Summary")
                 {
@@ -1495,6 +1505,15 @@ namespace SymWebUI.Areas.PF.Controllers
                         }
                         ReportHead = "Loan Summary Report (" + startdatte.ToString("yyyy") + "-" + enddatte.ToString("yy") + ")";                       
                     }
+                    else
+                    {
+                        result[0] = "Fail";
+                        result[1] = "No Data Found";
+                        Session["result"] = result[0] + "~" + result[1];
+
+                        return RedirectToAction("EmployeeLoanStatementReport","Loan", new { view = "Y", area = "PF" } );
+                    }
+
                     rptLocation = AppDomain.CurrentDomain.BaseDirectory + @"Files\ReportFiles\PF\rptAllLoanSummary.rpt";
 
                     doc.Load(rptLocation);
@@ -1513,8 +1532,8 @@ namespace SymWebUI.Areas.PF.Controllers
                     string FromDate = (Convert.ToDateTime(DateFrom.ToString())).ToString("yyyyMMdd");
                     string ToDate = (Convert.ToDateTime(DateTo.ToString())).ToString("yyyyMMdd");
 
-                    string[] cFields = { "PaymentScheduleDate>", "PaymentScheduleDate<" };
-                    string[] cValues = { FromDate, ToDate, codeFParam, codeTParam };
+                    string[] cFields = { "PaymentScheduleDate>", "PaymentScheduleDate<", "BranchId" };
+                    string[] cValues = { FromDate, ToDate, codeFParam, codeTParam, BranchId };
                     
                     dt = _repo.GetIndividualLoanData(cFields, cValues);
 
@@ -1530,6 +1549,14 @@ namespace SymWebUI.Areas.PF.Controllers
                             enddatte = Convert.ToDateTime(DateTo);
                         }
                         ReportHead = "Loan Individual Report (" + startdatte.ToString("yyyy") + "-" + enddatte.ToString("yy") + ")";
+                    }
+                    else
+                    {
+                        result[0] = "Fail";
+                        result[1] = "No Data Found";
+                        Session["result"] = result[0] + "~" + result[1];
+
+                        return RedirectToAction("EmployeeLoanStatementReport", "Loan", new { view = "Y", area = "PF" });
                     }
                     doc.Load(rptLocation);
                     doc.SetDataSource(dt);
@@ -1562,7 +1589,14 @@ namespace SymWebUI.Areas.PF.Controllers
                         }                       
                         ReportHead = "Loan Statement Report ("+startdatte.ToString("yyyy")+"-"+enddatte.ToString("yy")+")";
                     }
+                    else
+                    {
+                        result[0] = "Fail";
+                        result[1] = "No Data Found";
+                        Session["result"] = result[0] + "~" + result[1];
 
+                        return RedirectToAction("EmployeeLoanStatementReport", "Loan", new { view = "Y", area = "PF" });
+                    }
                     ds = new DataSet();
                     ds.Tables.Add(dt);
                     ds.Tables[0].TableName = "dtEmpLoan";
