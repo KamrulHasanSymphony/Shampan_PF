@@ -1,129 +1,76 @@
-﻿@model IEnumerable<SymViewModel.Common.CompanyVM>
-
-@{
-    ViewBag.Title = "Index";
+﻿@{
+    ViewBag.Title = "Company";
 }
 
-<p style="font-size: large; color: #007bff;">
-    @Html.ActionLink("Create New", "Create")
-</p>
+<div class="headrow">
+    <button type="button" title="Add New Company" data-url="/Common/Company/Create" onclick="GoTo(this)"class="sym-btn-add"> &nbsp;New </button>
+    <label class="pull-right">Company List</label>
+</div>
 
-<style>
-    table.custom-table {
-        width: 60%; /* Adjust table width */
-        border-collapse: collapse;
-        margin: 20px 0;
-        font-size: 14px;
-        font-family: Arial, sans-serif;
-    }
+<div class="thinbox">
+    <div class="th_thinbox">
+        <p>Company List</p>
+    </div>
 
-        table.custom-table th,
-        table.custom-table td {
-            border: 1px solid #ddd; /* Thin border */
-            padding: 8px; /* Space inside cell */
-            text-align: left;
-        }
-
-        table.custom-table th {
-            background-color: #4CAF50; /* Green header */
-            color: white;
-        }
-
-        table.custom-table tr:nth-child(even) {
-            background-color: #f9f9f9; /* Zebra effect */
-        }
-
-        table.custom-table tr:hover {
-            background-color: #f1f1f1; /* Hover effect */
-        }
-
-        table.custom-table a {
-            color: #007bff;
-            text-decoration: none;
-        }
-
-            table.custom-table a:hover {
-                text-decoration: underline;
-            }
-</style>
-<center>
-    <table class="custom-table">
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Code)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-
-            <th>
-                @Html.DisplayNameFor(model => model.City)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.PostalCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Mobile)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fax)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Remarks)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th></th>
-        </tr>
-
-        @foreach (var item in Model)
-    {
+    <table id="myDataTable" class="display">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Code)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-
-                <td>
-                    @Html.DisplayFor(modelItem => item.City)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.PostalCode)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Phone)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Mobile)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Fax)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Remarks)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.IsActive)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-
-                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-                </td>
+                <th class="center">Action</th>
+                <th class="center">Code</th>
+                <th class="center">Name</th>
+                <th class="center">Address</th>
+                <th class="center">City</th>
+                <th class="center">Postal Code</th>
+                <th class="center">Phone</th>
+                <th class="center">Mobile</th>
+                <th class="center">Fax</th>
+                <th class="center">Remarks</th>
+                <th class="center">Active</th>
             </tr>
-    }
-
+        </thead>
+        <tbody></tbody>
     </table>
-</center>
+
+    <br />
+</div>
+
+<div class="headrow">
+    <button type="button" title="Add New Company" data-url="/Common/Company/Create" onclick="GoTo(this)" class="sym-btn-add"> &nbsp;New </button>
+</div>
+<script>
+    $(document).ready(function () {
+        var myDataTable = $('#myDataTable').dataTable({
+
+            "bServerSide": true,
+            "sAjaxSource": "/Common/Company/_index",
+            "bProcessing": true,
+            "aLengthMenu": tablelength(),
+            "bJqueryUI": true,
+            "bAutoWidth": false,
+
+            "aoColumns": [
+                            {
+                                "sName": "Id",
+                                "bSearchable": false,
+                                "bSortable": false,
+                                "sWidth": "10%",
+                                "sClass": "center",
+                                "fnRender": function (oObj) {
+                                    return '<a title="Edit" href="/Common/Company/Edit/' + oObj.aData[0] + '" class="sym-btn-edit-row"></a>';
+                                }
+                            },
+                { "sName": "Code" },
+                { "sName": "Name" },
+                { "sName": "Address" },
+                { "sName": "City" },
+                { "sName": "PostalCode" },
+                { "sName": "Phone" },
+                { "sName": "Mobile" },
+                { "sName": "Fax" },
+                { "sName": "Remarks" },
+                { "sName": "IsActive" }
+            ]
+        });
+
+    });
+</script>
