@@ -2226,9 +2226,9 @@ SELECT
                 if (DesignationId != "0_0")
                     sqlText += " and emp.DesignationId=@DesignationId ";
                 if (CodeF != "0_0")
-                    sqlText += " and emp.Code>= @CodeF";
+                    sqlText += " and Code>= @CodeF";
                 if (CodeT != "0_0")
-                    sqlText += " and emp.Code<= @CodeT";
+                    sqlText += " and Code<= @CodeT";
                 //if (BranchId != "")
                 //{
                 //    sqlText += " and BranchId=@BranchId";

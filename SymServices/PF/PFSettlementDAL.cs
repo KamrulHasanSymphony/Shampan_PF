@@ -90,22 +90,6 @@ SELECT DISTINCT
                 sqlText += @" left join EmployeeLeftInformation b on ve.EmployeeId = b.EmployeeId";
                 sqlText += @" WHERE  1=1 AND b.IsActive = 1";
 
-                sqlText += "  FROM EmployeeLeftInformation el ";
-                sqlText += @" Left Join [dbo].ViewEmployeeInformation ve on ve.EmployeeId=el.EmployeeId WHERE  1=1 ";
-
-
-                sqlText += " FROM ViewEmployeeInformation ve";
-                sqlText += @" left join EmployeeLeftInformation b on ve.EmployeeId = b.EmployeeId";
-                sqlText += @" WHERE  1=1 AND b.IsActive = 1";
-
-                sqlText += @" 
-AND ve.EmployeeId NOT IN (
-SELECT EmployeeId FROM PFSettlements WHERE 1=1 
-UNION ALL
-SELECT EmployeeId FROM ForfeitureAccounts WHERE 1=1 AND Post = 1
-)
-";
-
                 //////LeftDate BETWEEN 20180101 AND 20991231
                 string cField = "";
                 if (conditionFields != null && conditionValues != null && conditionFields.Length == conditionValues.Length)

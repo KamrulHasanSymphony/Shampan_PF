@@ -108,6 +108,8 @@
             var DepartmentId = null;
             var SectionId = null;
             var DesignationId = null;
+            var CodeF = $("#CodeF").val();
+            var CodeT = $("#CodeT").val();
             var DateFrom = $("#DateFrom").val();
             var DateTo = $("#DateTo").val();
             var Rtype = "Statement";
@@ -119,6 +121,8 @@
                             + '&DesignationId=' + DesignationId
                             + '&DateFrom=' + DateFrom
                             + '&DateTo=' + DateTo
+                            + '&CodeF=' + CodeF
+                            + '&CodeT=' + CodeT
                             + '&view=N'
                             + '&Rtype=' + Rtype
                         
@@ -130,8 +134,8 @@
             var DepartmentId = null;
             var SectionId = null;
             var DesignationId = null;
-            var CodeF = null;
-            var CodeT = null;
+            var CodeF = $("#CodeF").val();
+            var CodeT = $("#CodeT").val();
             var Rtype = "Summary";
             var DateFrom = $("#DateFrom").val();
             var DateTo = $("#DateTo").val();
@@ -150,7 +154,7 @@
 
         }
         function reportInduviduals(sender) {
-            
+            debugger;
             var ProjectId = $("#ProjectId").val();
             var DepartmentId = $("#DepartmentId").val();
             var SectionId = $("#SectionId").val();
