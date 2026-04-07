@@ -1,4 +1,5 @@
-﻿using SymOrdinary;
+﻿using JQueryDataTables.Models;
+using SymOrdinary;
 using SymRepository.Common;
 using SymViewModel.Common;
 using System;
@@ -27,10 +28,61 @@ namespace SymWebUI.Areas.Common.Controllers
         /// <returns>View containing Company</returns>
         public ActionResult Index()
         {
-            List<CompanyVM> company = compRepo.SelectAll();
-            return View(company);
-            
-         // return  RedirectToAction("Edit");
+            return View(); 
+        }
+
+        public ActionResult _index(JQueryDataTableParamModel param)
+        {
+            var getAllData = compRepo.SelectAll();
+            IEnumerable<CompanyVM> filteredData;
+
+            if (!string.IsNullOrEmpty(param.sSearch))
+            {
+                filteredData = getAllData.Where(c =>
+                    (c.Code ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.Name ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.Address ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.City ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.PostalCode ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.Phone ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.Mobile ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.Fax ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    (c.Remarks ?? "").ToLower().Contains(param.sSearch.ToLower()) ||
+                    c.IsActive.ToString().ToLower().Contains(param.sSearch.ToLower())
+                );
+            }
+            else
+            {
+                filteredData = getAllData;
+            }
+
+            var displayedData = filteredData
+                .Skip(param.iDisplayStart)
+                .Take(param.iDisplayLength);
+
+            var result = from c in displayedData
+                         select new[]
+                 {
+                     Convert.ToString(c.Id),
+                     c.Code,
+                     c.Name,
+                     c.Address,
+                     c.City,
+                     c.PostalCode,
+                     c.Phone,
+                     c.Mobile,
+                     c.Fax,
+                     c.Remarks,
+                     c.IsActive ? "Yes" : "No"
+                 };
+
+            return Json(new
+            {
+                sEcho = param.sEcho,
+                iTotalRecords = getAllData.Count(),
+                iTotalDisplayRecords = filteredData.Count(),
+                aaData = result
+            }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -74,7 +126,7 @@ namespace SymWebUI.Areas.Common.Controllers
         /// </remarks>
         [Authorize(Roles = "Master,Admin,Account")]
         [HttpPost]
-        public ActionResult Create(CompanyVM company)
+        public ActionResult CreateData(CompanyVM company)
         {
             string[] result = new string[6];
             company.CreatedAt = DateTime.Now.ToString("yyyyMMddHHmmss");
@@ -82,7 +134,45 @@ namespace SymWebUI.Areas.Common.Controllers
             company.CreatedFrom = Ordinary.WorkStationIP;
             try
             {
-                result = compRepo.Insert(company);
+
+                FiscalYearRepo fiscalYearRepo = new FiscalYearRepo();
+                List<FiscalYearVM> fiscalYearLists = new List<FiscalYearVM>();
+                fiscalYearLists = fiscalYearRepo.SelectAll(Convert.ToInt32(identity.BranchId));
+                CompanyRepo compRepo = new CompanyRepo();          
+                string yearStartDate = "";
+
+                if (fiscalYearLists.Count > 0)
+                {
+                    yearStartDate = DateTime.Parse(fiscalYearLists.LastOrDefault().YearEnd).AddDays(1).ToString("dd-MMM-yyyy");
+                    ViewBag.YearStart = "disabled";
+                }
+                else
+                {
+                    DateTime newDate = Convert.ToDateTime(Ordinary.StringToDate(company.YearStart));
+                    yearStartDate = newDate.ToString("dd-MMM-yyyy");
+                    ViewBag.YearStart = "";
+                }
+
+                FiscalYearVM vm = new FiscalYearVM();
+                List<FiscalYearDetailVM> dvms = new List<FiscalYearDetailVM>();
+                FiscalYearDetailVM dvm;
+                for (int i = 1; i < 13; i++)
+                {
+                    dvm = new FiscalYearDetailVM();
+
+                    dvms.Add(dvm);
+                }
+                vm.FiscalYearDetailVM = dvms;
+                vm.YearStart = yearStartDate;
+                FiscalYearVM newVM = DesignFiscalYear(vm);
+
+                result = compRepo.Insert(company);               
+
+                if(result[0]=="Success")
+                {
+                    result = new FiscalYearRepo().FiscalYearInsert(newVM);
+                }
+               
                 Session["result"] = result[0] + "~" + result[1];
                 return RedirectToAction("Index");
             }
@@ -93,6 +183,43 @@ namespace SymWebUI.Areas.Common.Controllers
                 return View(company);
             }
         }
+
+        private FiscalYearVM DesignFiscalYear(FiscalYearVM vm)
+        {
+            var date = Ordinary.DateToString(vm.YearStart);
+            DateTime start_date = new DateTime(Convert.ToInt32(date.Substring(0, 4)), Convert.ToInt32(date.Substring(4, 2)), Convert.ToInt32(date.Substring(6, 2)));
+            vm.YearEnd = start_date.AddYears(1).AddDays(-1).ToString("dd-MMM-yyyy");
+            vm.Year = Convert.ToInt32(start_date.AddYears(1).AddDays(-1).ToString("yyyy"));
+
+            List<FiscalYearDetailVM> fvms = new List<FiscalYearDetailVM>();
+            FiscalYearDetailVM fvm = new FiscalYearDetailVM();
+            for (int i = 0; i < 12; i++)
+            {
+                fvm = new FiscalYearDetailVM();
+                fvm.PeriodName = start_date.AddMonths(i).ToString("MMM-yy"); // start_date.AddMonths(i).ToString("MMMM") + "-" + vm.Year;
+                fvm.PeriodStart = start_date.AddMonths(i).ToString("dd-MMM-yyyy");
+                fvm.PeriodEnd = start_date.AddMonths(i + 1).AddDays(-1).ToString("dd-MMM-yyyy");
+                fvms.Add(fvm);
+            }
+            //foreach (var item in vm.FiscalYearDetailVM)
+            //{
+            //    item.PeriodName = start_date.AddMonths(i).ToString("MMMM-yyyy"); // start_date.AddMonths(i).ToString("MMMM") + "-" + vm.Year;
+            //    item.PeriodStart = start_date.AddMonths(i).ToString("dd-MMM-yyyy");
+            //    item.PeriodEnd = start_date.AddMonths(i + 1).AddDays(-1).ToString("dd-MMM-yyyy");
+            //    i++;
+            //}
+            vm.FiscalYearDetailVM = fvms;
+            ShampanIdentity identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+            vm.CreatedAt = DateTime.Now.ToString("yyyyMMddHHmmss");
+            vm.CreatedBy = identity.Name;
+            vm.CreatedFrom = identity.WorkStationIP;
+            vm.LastUpdateAt = DateTime.Now.ToString("yyyyMMddHHmmss");
+            vm.LastUpdateBy = identity.Name;
+            vm.LastUpdateFrom = identity.WorkStationIP;
+            vm.BranchId = Convert.ToInt32(identity.BranchId);
+            return vm;
+        }
+
         /// <summary>
         /// Handles the HTTP GET request to load the edit view for a specific department.
         /// Checks user permission and retrieves Company data by ID.
@@ -103,10 +230,9 @@ namespace SymWebUI.Areas.Common.Controllers
         /// </returns>
         [Authorize(Roles = "Master,Admin,Account")]
         [HttpGet]
-        public ActionResult Edit()
+        public ActionResult Edit(int id)
         {
-            ShampanIdentity identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
-            CompanyVM company = compRepo.SelectById(Convert.ToInt32(identity.CompanyId));
+            CompanyVM company = compRepo.SelectById(id);
             return View(company);
         }
 
