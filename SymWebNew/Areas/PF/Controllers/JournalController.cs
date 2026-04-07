@@ -20,6 +20,7 @@ using SymServices.Common;
 
 namespace SymWebUI.Areas.PF.Controllers
 {
+    [SessionCheck("User", "BranchId")]
     public class JournalController : Controller
     {
         public JournalController()

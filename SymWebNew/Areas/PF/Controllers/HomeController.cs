@@ -8,6 +8,8 @@ using System.Web.Mvc;
 
 namespace SymWebUI.Areas.PF.Controllers
 {
+    [SessionCheck("BranchName", "BranchId")]
+
     public class HomeController : Controller
     {
         //

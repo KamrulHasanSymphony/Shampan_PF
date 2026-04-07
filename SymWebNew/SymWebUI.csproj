@@ -885,7 +885,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>rptWPPFReport.rpt</DependentUpon>
     </Compile>
-    <Compile Include="Filters\InitializeSimpleMembershipAttribute.cs" />
+    <Compile Include="Filters\SessionCheckAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

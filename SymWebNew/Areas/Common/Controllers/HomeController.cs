@@ -14,6 +14,7 @@ using System.Web.Mvc;
 
 namespace SymWebUI.Areas.Common.Controllers
 {
+    [SessionCheck("User", "BranchId")]
     [Authorize]
     public class HomeController : Controller
     {

@@ -13,6 +13,7 @@ using System.Web.Mvc;
 
 namespace SymWebUI.Areas.PF.Controllers
 {
+     [SessionCheck("User", "BranchId", "permission")]
     public class AutoJournalSetupController : Controller
     {
         public AutoJournalSetupController()
