@@ -134,7 +134,45 @@ namespace SymWebUI.Areas.Common.Controllers
             company.CreatedFrom = Ordinary.WorkStationIP;
             try
             {
-                result = compRepo.Insert(company);
+
+                FiscalYearRepo fiscalYearRepo = new FiscalYearRepo();
+                List<FiscalYearVM> fiscalYearLists = new List<FiscalYearVM>();
+                fiscalYearLists = fiscalYearRepo.SelectAll(Convert.ToInt32(identity.BranchId));
+                CompanyRepo compRepo = new CompanyRepo();          
+                string yearStartDate = "";
+
+                if (fiscalYearLists.Count > 0)
+                {
+                    yearStartDate = DateTime.Parse(fiscalYearLists.LastOrDefault().YearEnd).AddDays(1).ToString("dd-MMM-yyyy");
+                    ViewBag.YearStart = "disabled";
+                }
+                else
+                {
+                    DateTime newDate = Convert.ToDateTime(Ordinary.StringToDate(company.YearStart));
+                    yearStartDate = newDate.ToString("dd-MMM-yyyy");
+                    ViewBag.YearStart = "";
+                }
+
+                FiscalYearVM vm = new FiscalYearVM();
+                List<FiscalYearDetailVM> dvms = new List<FiscalYearDetailVM>();
+                FiscalYearDetailVM dvm;
+                for (int i = 1; i < 13; i++)
+                {
+                    dvm = new FiscalYearDetailVM();
+
+                    dvms.Add(dvm);
+                }
+                vm.FiscalYearDetailVM = dvms;
+                vm.YearStart = yearStartDate;
+                FiscalYearVM newVM = DesignFiscalYear(vm);
+
+                result = compRepo.Insert(company);               
+
+                if(result[0]=="Success")
+                {
+                    result = new FiscalYearRepo().FiscalYearInsert(newVM);
+                }
+               
                 Session["result"] = result[0] + "~" + result[1];
                 return RedirectToAction("Index");
             }
@@ -145,6 +183,43 @@ namespace SymWebUI.Areas.Common.Controllers
                 return View(company);
             }
         }
+
+        private FiscalYearVM DesignFiscalYear(FiscalYearVM vm)
+        {
+            var date = Ordinary.DateToString(vm.YearStart);
+            DateTime start_date = new DateTime(Convert.ToInt32(date.Substring(0, 4)), Convert.ToInt32(date.Substring(4, 2)), Convert.ToInt32(date.Substring(6, 2)));
+            vm.YearEnd = start_date.AddYears(1).AddDays(-1).ToString("dd-MMM-yyyy");
+            vm.Year = Convert.ToInt32(start_date.AddYears(1).AddDays(-1).ToString("yyyy"));
+
+            List<FiscalYearDetailVM> fvms = new List<FiscalYearDetailVM>();
+            FiscalYearDetailVM fvm = new FiscalYearDetailVM();
+            for (int i = 0; i < 12; i++)
+            {
+                fvm = new FiscalYearDetailVM();
+                fvm.PeriodName = start_date.AddMonths(i).ToString("MMM-yy"); // start_date.AddMonths(i).ToString("MMMM") + "-" + vm.Year;
+                fvm.PeriodStart = start_date.AddMonths(i).ToString("dd-MMM-yyyy");
+                fvm.PeriodEnd = start_date.AddMonths(i + 1).AddDays(-1).ToString("dd-MMM-yyyy");
+                fvms.Add(fvm);
+            }
+            //foreach (var item in vm.FiscalYearDetailVM)
+            //{
+            //    item.PeriodName = start_date.AddMonths(i).ToString("MMMM-yyyy"); // start_date.AddMonths(i).ToString("MMMM") + "-" + vm.Year;
+            //    item.PeriodStart = start_date.AddMonths(i).ToString("dd-MMM-yyyy");
+            //    item.PeriodEnd = start_date.AddMonths(i + 1).AddDays(-1).ToString("dd-MMM-yyyy");
+            //    i++;
+            //}
+            vm.FiscalYearDetailVM = fvms;
+            ShampanIdentity identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
+            vm.CreatedAt = DateTime.Now.ToString("yyyyMMddHHmmss");
+            vm.CreatedBy = identity.Name;
+            vm.CreatedFrom = identity.WorkStationIP;
+            vm.LastUpdateAt = DateTime.Now.ToString("yyyyMMddHHmmss");
+            vm.LastUpdateBy = identity.Name;
+            vm.LastUpdateFrom = identity.WorkStationIP;
+            vm.BranchId = Convert.ToInt32(identity.BranchId);
+            return vm;
+        }
+
         /// <summary>
         /// Handles the HTTP GET request to load the edit view for a specific department.
         /// Checks user permission and retrieves Company data by ID.
