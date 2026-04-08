@@ -64,10 +64,10 @@
                         result += '&nbsp; <a id="lnkEdit1" title="Click on for Report" style="text-decoration:none;" href="/@ViewBag.TransType/PreDistributionFund/reportVeiw/' + oObj.aData[0] + '" class="linkReport sym-btn-report-row"></a>';
                         result += '&nbsp; <a id="lnkEdit1" title="Click on for Distribution" style="text-decoration:none;" target="_blank" href="/@ViewBag.TransType/ProfitDistributionNew/Process?PreDistributionFundId=' + oObj.aData[0] + '" class="innerListLink sym-btn-add-row"></a>';
                         if (oObj.aData[7] == "Yes") {
-                            result += '<a title="Journal" class="sym-btn-bank-row" style="opacity:0.45;pointer-events:none;cursor:default;" href="/@ViewBag.TransType/PreDistributionFund/JournalEntry/?Code=' + Code + '&Id=' + oObj.aData[0] + '"></a>';
+                            result += '<a title="Journal" class="sym-btn-journal-row" style="opacity:0.45;pointer-events:none;cursor:default;" href="/@ViewBag.TransType/PreDistributionFund/JournalEntry/?Code=' + Code + '&Id=' + oObj.aData[0] + '"><i class="fa fa-book"></i></a>';
                         }
                         else {
-                            result += '<a title="Journal" class="sym-btn-bank-row" href="/@ViewBag.TransType/PreDistributionFund/JournalEntry/?Code=' + Code + '&Id=' + oObj.aData[0] + '"></a>';
+                            result += '<a title="Journal" href="/@ViewBag.TransType/PreDistributionFund/JournalEntry/?Code=' + Code + '&Id=' + oObj.aData[0] + '"> class="sym-btn-journal-row"><i class="fa fa-book"></i></a>';
                         }
 
                        

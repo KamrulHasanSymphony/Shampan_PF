@@ -771,6 +771,16 @@ tbody tr td #lnkEdit1 {
         text-decoration: none !important;
     }
 
+
+    .sym-btn-journal-row{
+    background-color: #4c9ab0;
+    padding: 2px;
+    border-radius: 4px;
+}
+.sym-btn-journal-row i {
+    font-size: 19px;
+    color: white;
+}
 .sym-btn-approve {
     font-family: FontAwesome;
     padding: 6px 12px;

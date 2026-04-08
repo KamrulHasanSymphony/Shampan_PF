@@ -15,7 +15,7 @@
             <a id="" onclick="AccruedDelete(this);" data-id="@Model.Id"  class="sym-btn-remove-row "></a>&nbsp;
             <a id="" href="/@ViewBag.TransType/InvestmentName/AccruedProcessView?InvestmentNameId=@Model.InvestmentNameId&AccruedId=@Model.Id" class="sym-btn-edit-row lnkEdit"></a>
             <a id=""  onclick="btnPostNew(this);" data-id="@Model.Id" class="sym-btn-post-row"></a>
-            <a id="" href="/@ViewBag.TransType/InvestmentName/JournalEntry?InvestmentNameId=@Model.InvestmentNameId&InterestAmount=@Model.NetInterest&TransactionDate=@Model.TransactionDate" class="sym-btn-bank-row"></a>
+            <a id="" href="/@ViewBag.TransType/InvestmentName/JournalEntry?InvestmentNameId=@Model.InvestmentNameId&InterestAmount=@Model.NetInterest&TransactionDate=@Model.TransactionDate" class="sym-btn-journal-row"><i class="fa fa-book"></i></a>
         </div>
         <div class="col-md-1">
             <div class="editor-field">

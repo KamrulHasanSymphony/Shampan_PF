@@ -90,10 +90,10 @@
 
                                     // Journal Button
                                     if (isJournal == "Yes") {
-                                        html += '&nbsp; <a title="Click on for Journal" style="opacity:0.45;pointer-events:none;cursor:default;" href="/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '" class="sym-btn-bank-row"></a>';
+                                        html += '&nbsp; <a title="Click on for Journal" style="opacity:0.45;pointer-events:none;cursor:default;" href="/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '"  class="sym-btn-journal-row"><i class="fa fa-book"></i></a>';
                                     }
                                     else {
-                                        html += '&nbsp; <a title="Click on for Journal" href="/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '" class="sym-btn-bank-row"></a>';
+                                        html += '&nbsp; <a title="Click on for Journal" href="/@ViewBag.TransType/Investment/JournalEntry/?Code=' + oObj.aData[2] + '"  class="sym-btn-journal-row"><i class="fa fa-book"></i></a>';
                                     }
 
                                     return html;
