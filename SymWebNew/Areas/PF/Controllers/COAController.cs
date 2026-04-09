@@ -20,8 +20,6 @@ namespace SymWebUI.Areas.PF.Controllers
         {
             ViewBag.TransType = AreaTypePFVM.TransType;
         }
-        //
-        // GET: /PF/COAs/
 
         SymUserRoleRepo _repoSUR = new SymUserRoleRepo();
         ShampanIdentity identity = (ShampanIdentity)Thread.CurrentPrincipal.Identity;
@@ -37,12 +35,6 @@ namespace SymWebUI.Areas.PF.Controllers
             return View("~/Areas/PF/Views/COA/Index.cshtml");
         }
 
-        /// <summary>
-        /// Created: 10 Feb 2025  
-        /// Created By: Md Torekul Islam  
-        /// Retrieves all Chart of Accounts information.
-        /// </summary>      
-        /// <returns>View containing Chart of Accounts Name</returns>
         public ActionResult _index(JQueryDataTableParamModel param)
         {           
             #region Search and Filter Data
@@ -145,14 +137,6 @@ namespace SymWebUI.Areas.PF.Controllers
             return View("~/Areas/PF/Views/COA/Create.cshtml", vm);
         }
 
-        /// <summary>
-        /// Handles creation or update of a Chart of Accounts (COA) record.
-        /// </summary>
-        /// <param name="vm">The COA view model containing form data and operation type.</param>
-        /// <returns>
-        /// Redirects to the Index view after successful operation. 
-        /// If an exception occurs, logs the error and also redirects to Index.
-        /// </returns>
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public ActionResult CreateEdit(COAVM vm)
@@ -197,13 +181,6 @@ namespace SymWebUI.Areas.PF.Controllers
             }
         }
 
-        /// <summary>
-        /// Loads the COA record for editing based on the given ID.
-        /// </summary>
-        /// <param name="id">The unique identifier of the COA record to edit.</param>
-        /// <returns>
-        /// Returns the Create view pre-populated with the selected COA data in update mode.
-        /// </returns>
         [Authorize(Roles = "Admin")]
         [HttpGet]
         public ActionResult Edit(string id)
@@ -216,14 +193,6 @@ namespace SymWebUI.Areas.PF.Controllers
             return View("~/Areas/PF/Views/COA/Create.cshtml", vm);
         }
 
-        /// <summary>
-        /// Deletes settlement policies based on the provided IDs. 
-        /// Checks the user's permission before performing the delete operation.
-        /// </summary>
-        /// <param name="ids">A string containing the IDs of the settlement policies to be deleted, separated by a '~' character.</param>
-        /// <returns>
-        /// A JSON result containing the status message (e.g., success or failure) of the delete operation.
-        /// </returns>
         [Authorize(Roles = "Admin")]
         public JsonResult Delete(string ids)
         {

@@ -10,14 +10,14 @@ namespace SymViewModel.PF
    public class COAVM
     {
         public int Id { get; set; }
- [Display(Name = "COA Group")]
- public string COAGroupId          { get; set; }
- public string Code                { get; set; }
- public string Name { get; set; }
+         [Display(Name = "COA Group")]
+         public string COAGroupId          { get; set; }
+         public string Code                { get; set; }
+         public string Name { get; set; }
 
- //public decimal OpeningBalance { get; set; }
- public string Nature              { get; set; }
- [StringLength(450, ErrorMessage = "Remarks cannot be longer than 450 characters.")]
+         //public decimal OpeningBalance { get; set; }
+         public string Nature              { get; set; }
+         [StringLength(450, ErrorMessage = "Remarks cannot be longer than 450 characters.")]
         public string Remarks { get; set; }
         [Display(Name = "Active")]
         public bool IsActive { get; set; }
@@ -43,9 +43,6 @@ namespace SymViewModel.PF
         public bool IsDepreciation { get; set; }
         [Display(Name = "Type")]
         public string COAType { get; set; }
-
-
-
         public string BranchId { get; set; }
     }
 }

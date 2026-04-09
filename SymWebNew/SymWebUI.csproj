@@ -5596,6 +5596,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Common\Models\" />
     <Folder Include="Areas\Config\Models\" />
+    <Folder Include="Areas\PF\Views\COANew\" />
     <Folder Include="assets\css\image\Gallary\" />
     <Folder Include="assets\plugins\jQuery-File-Upload\server\node\public\files\thumbnail\" />
     <Folder Include="Files\Asset\" />

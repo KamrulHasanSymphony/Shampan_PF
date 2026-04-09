@@ -17,19 +17,7 @@ namespace SymServices.PF
         #endregion
         #region Methods
         //==================DropDown=================
-
-        /// <summary>
-        /// Retrieves a list of Chart of Accounts (COA) entries filtered by the specified transaction type.
-        /// Each entry includes the COA ID and a formatted name (e.g., "[Code] Name").
-        /// </summary>
-        /// <param name="TransType">The transaction type to filter COA records by (e.g., "PF"). Defaults to "PF".</param>
-        /// <returns>
-        /// A list of <see cref="COAVM"/> objects containing the ID and formatted name of COA entries matching the specified transaction type.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown when a SQL or general exception occurs during data retrieval, including the SQL query in the message.
-        /// </exception>
-
+         
         public List<COAVM> DropDown(string TransType = "PF", string BranchId="")
         {
             #region Variables
@@ -98,18 +86,7 @@ WHERE  1=1 and TransType=@TransType and BranchId=@BranchId
             #endregion
             return VMs;
         }
-        /// <summary>
-        /// Retrieves a list of Chart of Accounts COAType entries filtered by the specified transaction type.
-        /// Each entry includes the COA ID and a formatted name (e.g., "[Code] Name").
-        /// </summary>
-        /// <param name="TransType">The transaction type to filter COA records by (e.g., "PF"). Defaults to "PF".</param>
-        /// <returns>
-        /// A list of <see cref="COAVM"/> objects containing the ID and formatted name of COAType entries matching the specified transaction type.
-        /// </returns>
-        /// <exception cref="ArgumentNullException">
-        /// Thrown when a SQL or general exception occurs during data retrieval, including the SQL query in the message.
-        /// </exception>
-
+      
         public List<COAVM> COATypeDropDown()
         {
             #region Variables
@@ -179,17 +156,6 @@ WHERE  1=1
         }
 
         //==================SelectAll=================
-
-        /// <summary>
-        /// Retrieves a list of COA from the database, optionally filtered by ID or additional conditions.
-        /// Supports external SQL connection and transaction handling for reuse within larger operations.
-        /// </summary>
-        /// <param name="Id">Optional ID to filter a specific bank branch.</param>
-        /// <param name="conditionFields">Array of column names to be used as additional filter conditions.</param>
-        /// <param name="conditionValues">Array of values corresponding to each filter condition.</param>
-        /// <param name="VcurrConn">An optional SQL connection. If not provided, a new connection is established.</param>
-        /// <param name="Vtransaction">An optional SQL transaction. If not provided, a new transaction is created and committed.</param>
-        /// <returns>A list of <see cref="COAVM"/> representing the bank branches matching the criteria.</returns>
         public List<COAVM> SelectAll(string branchId, int Id = 0, string[] conditionFields = null, string[] conditionValues = null, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Variables
@@ -363,22 +329,6 @@ WHERE COAs.IsArchive=0 and BranchId=@BranchId
         }
         //==================Insert =================
 
-        /// <summary>
-        /// Inserts a new COA record into the database with the provided details from the view model.
-        /// Handles optional SQL connection and transaction management for use in broader transactional operations.
-        /// </summary>
-        /// <param name="vm">The <see cref="COAVM"/> containing the COA data to insert.</param>
-        /// <param name="VcurrConn">An optional external SQL connection. If null, a new connection is created.</param>
-        /// <param name="Vtransaction">An optional SQL transaction. If null, a new transaction is created and committed.</param>
-        /// <returns>
-        /// A string array with the following structure:
-        /// [0] = "Success" or "Fail",  
-        /// [1] = Message describing the result,  
-        /// [2] = Inserted record ID (if successful),  
-        /// [3] = Executed SQL query,  
-        /// [4] = Exception message (if any),  
-        /// [5] = Method name ("InsertBankBranch").
-        /// </returns>
         public string[] Insert(COAVM vm, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Initializ
@@ -549,22 +499,6 @@ VALUES (
         }
         //==================Update =================
 
-        /// <summary>
-        /// Updates an existing COA record in the database with values from the provided view model.
-        /// Handles optional SQL connection and transaction to allow for usage in broader transaction scopes.
-        /// </summary>
-        /// <param name="vm">The <see cref="BankBranchVM"/> containing the updated COA information.</param>
-        /// <param name="VcurrConn">Optional external SQL connection. If null, a new connection will be created.</param>
-        /// <param name="Vtransaction">Optional external SQL transaction. If null, a new transaction will be created and committed.</param>
-        /// <returns>
-        /// A string array containing:
-        /// [0] = "Success" or "Fail",  
-        /// [1] = Message describing the result,  
-        /// [2] = Updated record ID,  
-        /// [3] = The executed SQL query,  
-        /// [4] = Exception message if any occurred,  
-        /// [5] = Method name ("COAUpdate").
-        /// </returns>
         public string[] Update(COAVM vm, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Variables
@@ -721,24 +655,6 @@ VALUES (
         }
         //==================Delete =================
 
-        /// <summary>
-        /// Performs a soft delete (archives) of one or more COA records based on the provided IDs.
-        /// Sets <c>IsActive</c> to false and <c>IsArchive</c> to true without removing data from the database.
-        /// Allows optional use of an external SQL connection and transaction for transactional consistency.
-        /// </summary>
-        /// <param name="vm">The <see cref="COAVM"/> containing metadata such as user and timestamp for the update.</param>
-        /// <param name="ids">An array of string IDs identifying the records to be soft-deleted.</param>
-        /// <param name="VcurrConn">Optional SQL connection. If null, a new connection is created.</param>
-        /// <param name="Vtransaction">Optional SQL transaction. If null, a new transaction is started and committed.</param>
-        /// <returns>
-        /// A string array containing:
-        /// [0] = "Success" or "Fail",  
-        /// [1] = Message describing the result,  
-        /// [2] = Unused or empty string for return ID,  
-        /// [3] = The last executed SQL query,  
-        /// [4] = Exception message if any occurred,  
-        /// [5] = Method name ("DeleteCOA").
-        /// </returns>
         public string[] Delete(COAVM vm, string[] ids, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Variables
