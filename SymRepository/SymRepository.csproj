@@ -63,6 +63,7 @@
     <Compile Include="Common\SageRepo.cs" />
     <Compile Include="Common\SymUserRoleRepo.cs" />
     <Compile Include="Common\UserGroupRepo.cs" />
+    <Compile Include="DbCreateRepo.cs" />
     <Compile Include="Enum\EnumReportRepo.cs" />
     <Compile Include="Enum\EnumOderByRepo.cs" />
     <Compile Include="Loan\EmployeeLoanRepo.cs" />

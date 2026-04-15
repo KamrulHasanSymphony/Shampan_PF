@@ -461,6 +461,7 @@
     <Compile Include="Areas\WWF\WWFAreaRegistration.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
+    <Compile Include="Controllers\DbCreateController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Files\ReportFiles\PF\PFEmployeeContributionSummary.cs">
       <AutoGen>True</AutoGen>
@@ -5262,6 +5263,8 @@
     <None Include="Properties\PublishProfiles\SymphonyHRM_New.pubxml" />
     <Content Include="Views\Home\ForgotPasswordView.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
+    <Content Include="Views\Home\DbCreate.cshtml" />
+    <Content Include="Views\DbCreate\Index.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
