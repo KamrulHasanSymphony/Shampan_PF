@@ -29,41 +29,57 @@ namespace SymWebUI.Controllers
         [AllowAnonymous]
         public ActionResult Index(string returnUrl)
         {
-            string project = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
-            //return RedirectToAction("Login", "Home", new { area = "Acc" });
+            string filePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Files/SuperInformation.xml");
 
-            if (project.ToLower() == "acc")
+            if (System.IO.File.Exists(filePath))
             {
-                return RedirectToAction("Login", "Home", new { area = "Acc" });
-            }
+                string project = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
+                //return RedirectToAction("Login", "Home", new { area = "Acc" });
 
-            else if (project.ToLower() == "gdic" || project.ToLower() == "gdicbde")
+                if (project.ToLower() == "acc")
+                {
+                    return RedirectToAction("Login", "Home", new { area = "Acc" });
+                }
+
+                else if (project.ToLower() == "gdic" || project.ToLower() == "gdicbde")
+                {
+                    return RedirectToAction("Login", "Home", new { area = "Sage" });
+                }
+                else if (project.ToLower() == "todo")
+                {
+                    return RedirectToAction("Login", "Home", new { area = "ToDo" });
+                }
+
+                UserLogsVM vm = new UserLogsVM();
+                Session["User"] = "";
+                Session["FullName"] = "";
+                Session["UserType"] = "";
+                Session["EmployeeId"] = "";
+                Session["SessionDate"] = "";
+                Session["SessionYear"] = "";
+                ViewBag.ReturnUrl = returnUrl;
+                vm.ReturnUrl = returnUrl;
+                vm.SessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
+
+                string[] result = new string[6];
+                result[0] = "Fail1";
+                result[1] = "Fail1";
+
+                CommonRepo _cRepo = new CommonRepo();
+
+                return View(vm);
+
+               
+            }           
+            else
             {
-                return RedirectToAction("Login", "Home", new { area = "Sage" });
-            }
-            else if (project.ToLower() == "todo")
-            {
-                return RedirectToAction("Login", "Home", new { area = "ToDo" });
-            }
-          
-            UserLogsVM vm = new UserLogsVM();
-            Session["User"] = "";
-            Session["FullName"] = "";
-            Session["UserType"] = "";
-            Session["EmployeeId"] = "";
-            Session["SessionDate"] = "";
-            Session["SessionYear"] = "";
-            ViewBag.ReturnUrl = returnUrl;
-            vm.ReturnUrl = returnUrl;
-            vm.SessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
+                return RedirectToAction("Index", "DbCreate");
+            }         
+        }
 
-            string[] result = new string[6];
-            result[0] = "Fail1";
-            result[1] = "Fail1";
-
-            CommonRepo _cRepo = new CommonRepo();
-
-            return View(vm);
+        public ActionResult DbCreate()
+        {
+            return View();
         }
         [AllowAnonymous]
         public ActionResult CheckConnectionDb()
