@@ -33,5 +33,19 @@ namespace SymRepository
                 throw ex;
             }
         }
+
+        public List<DbCreateVM> CompanyList()
+        {
+            try
+            {
+                return new DbCreateDAL().CompanyList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+
     }
 }

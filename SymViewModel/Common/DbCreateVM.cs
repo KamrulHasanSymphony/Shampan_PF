@@ -18,5 +18,6 @@ namespace SymViewModel.Common
         public string ServerName { get; set; }
         [Display(Name = "Database Name")]
         public string DatabaseName { get; set; }
+        public string Name { get; set; }
     }
 }
