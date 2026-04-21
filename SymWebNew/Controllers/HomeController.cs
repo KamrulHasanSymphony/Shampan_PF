@@ -196,12 +196,18 @@ namespace SymWebUI.Controllers
         [HttpPost]
         public ActionResult SetBranch(string branchId)
         {
-            Session["BranchId"] = branchId;
+            int parsedBranchId;
+            if (!int.TryParse(branchId, out parsedBranchId))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid branch.");
+            }
 
-            Session["User"] = Session["TempUserLogId"];
-            Session["FullName"] = Session["TempFullName"];
-            Session["UserType"] = Session["TempIsAdmin"];
-            Session["EmployeeId"] = Session["TempEmployeeId"];
+            string errorMessage;
+            if (!LoginContextHelper.TryCompleteBranchSelection(this, parsedBranchId, out errorMessage))
+            {
+                Session["result"] = "Fail~" + errorMessage;
+                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized, errorMessage);
+            }
 
             return Content("success");
         }
@@ -623,6 +629,9 @@ namespace SymWebUI.Controllers
 
                 if (result.Item1)
                 {
+                    LoginContextHelper.InitializeAppSessions(this);
+                    LoginContextHelper.StorePendingLogin(this, result.Item2, vm.ComputerIPAddress, vm.Location, DateTime.Now.ToString("dd-MMM-yyyy"));
+
                     Session["TempUserId"] = result.Item2.Id;
                     Session["TempUserLogId"] = result.Item2.LogID;
                     Session["TempFullName"] = result.Item2.FullName;
@@ -648,12 +657,46 @@ namespace SymWebUI.Controllers
 
         public ActionResult LogOut()
         {
+            string logId = Convert.ToString(Session["User"]);
+            if (string.IsNullOrWhiteSpace(logId))
+            {
+                logId = Convert.ToString(Session["TempUserLogId"]);
+            }
+
             HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null && authCookie.Value != "")
             {
                 FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
                 authCookie.Expires = DateTime.Now.AddDays(-1);
                 HttpContext.Response.Cookies.Add(authCookie);
+            }
+
+            FormsAuthentication.SignOut();
+
+            string companyName = "";
+            try
+            {
+                companyName = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
+            }
+            catch
+            {
+                companyName = "";
+            }
+
+            if (!string.IsNullOrWhiteSpace(companyName))
+            {
+                HttpCookie companyCookie = Request.Cookies[companyName];
+                if (companyCookie != null)
+                {
+                    companyCookie.Expires = DateTime.Now.AddDays(-1);
+                    HttpContext.Response.Cookies.Add(companyCookie);
+                }
+            }
+
+            if (!string.IsNullOrWhiteSpace(logId))
+            {
+                HttpContext.Application["BasicTicket" + logId] = null;
+                HttpContext.Application["RoleTicket" + logId] = null;
             }
 
             Session["User"] = "";
@@ -663,6 +706,16 @@ namespace SymWebUI.Controllers
             Session["SessionDate"] = "";
             Session["SessionYear"] = "";
             Session["mgs"] = "";
+            Session["TempUserInfo"] = null;
+            Session["TempUserId"] = null;
+            Session["TempUserLogId"] = null;
+            Session["TempFullName"] = null;
+            Session["TempIsAdmin"] = null;
+            Session["TempEmployeeId"] = null;
+            Session["TempComputerIPAddress"] = null;
+            Session["TempLocation"] = null;
+            Session["TempSessionDate"] = null;
+            Session["TempCompanyId"] = null;
             //////Session.Abandon();
 
 
@@ -680,5 +733,223 @@ namespace SymWebUI.Controllers
             }
         }
 
+    }
+}
+
+internal static class LoginContextHelper
+{
+    public static void InitializeAppSessions(Controller controller)
+    {
+        var settings = new AppSettingsReader();
+
+        controller.Session["DepartmentLabel"] = ReadSetting(settings, "DepartmentLabel");
+        controller.Session["SectionLabel"] = ReadSetting(settings, "SectionLabel");
+        controller.Session["ProjectLabel"] = ReadSetting(settings, "ProjectLabel");
+        controller.Session["LabelOther1"] = ReadSetting(settings, "LabelOther1");
+        controller.Session["LabelOther2"] = ReadSetting(settings, "LabelOther2");
+        controller.Session["LabelOther3"] = ReadSetting(settings, "LabelOther3");
+        controller.Session["LabelOther4"] = ReadSetting(settings, "LabelOther4");
+        controller.Session["LabelOther5"] = ReadSetting(settings, "LabelOther5");
+        controller.Session["AttendanceSystem"] = ReadSetting(settings, "AttendanceSystem");
+
+        Ordinary.CompanyLogoPath = ReadSetting(settings, "CompanyLogoPath");
+    }
+
+    public static void StorePendingLogin(Controller controller, UserLogsVM user, string computerIpAddress, string location, string sessionDate)
+    {
+        controller.Session["TempUserInfo"] = user;
+        controller.Session["TempComputerIPAddress"] = computerIpAddress ?? "";
+        controller.Session["TempLocation"] = location ?? "";
+        controller.Session["TempSessionDate"] = string.IsNullOrWhiteSpace(sessionDate)
+            ? DateTime.Now.ToString("dd-MMM-yyyy")
+            : sessionDate;
+        controller.Session["TempCompanyId"] = user.CompanyId;
+    }
+
+    public static bool TryCompleteBranchSelection(Controller controller, int branchId, out string errorMessage)
+    {
+        var user = controller.Session["TempUserInfo"] as UserLogsVM;
+        if (user == null)
+        {
+            errorMessage = "Your login session has expired. Please log in again.";
+            return false;
+        }
+
+        var branch = new BranchRepo().SelectById(branchId);
+        if (branch == null || branch.Id <= 0)
+        {
+            errorMessage = "The selected branch was not found.";
+            return false;
+        }
+
+        SetActiveSessionValues(controller, user, branch);
+        ApplyAuthenticationTickets(controller, user, branch);
+
+        errorMessage = null;
+        return true;
+    }
+
+    private static void SetActiveSessionValues(Controller controller, UserLogsVM user, BranchVM branch)
+    {
+        string sessionDate = GetSessionDate(controller);
+
+        controller.Session["BranchId"] = branch.Id.ToString();
+        controller.Session["BranchName"] = branch.Name;
+        controller.Session["User"] = user.LogID;
+        controller.Session["FullName"] = user.FullName;
+        controller.Session["UserType"] = user.IsAdmin.ToString();
+        controller.Session["EmployeeId"] = user.EmployeeId;
+        controller.Session["SessionDate"] = sessionDate;
+        controller.Session["SessionYear"] = Convert.ToDateTime(sessionDate).ToString("yyyy");
+        controller.Session["mgs"] = "";
+
+        string employeeDirectory = controller.HttpContext.Server.MapPath(@"~/Files/EmployeeInfo\");
+        string photoName = user.PhotoName;
+        if (string.IsNullOrWhiteSpace(photoName) || !System.IO.File.Exists(System.IO.Path.Combine(employeeDirectory, photoName)))
+        {
+            photoName = "0-mini.jpg";
+        }
+
+        controller.Session["PhotoName"] = photoName;
+    }
+
+    private static void ApplyAuthenticationTickets(Controller controller, UserLogsVM user, BranchVM branch)
+    {
+        CompanyRepo companyRepo = new CompanyRepo();
+        CompanyVM company = null;
+        if (branch.CompanyId > 0)
+        {
+            company = companyRepo.SelectById(branch.CompanyId);
+        }
+
+        if (company == null || company.Id <= 0)
+        {
+            int tempCompanyId;
+            if (int.TryParse(Convert.ToString(controller.Session["TempCompanyId"]), out tempCompanyId) && tempCompanyId > 0)
+            {
+                company = companyRepo.SelectById(tempCompanyId);
+            }
+        }
+
+        if (company == null)
+        {
+            company = companyRepo.SelectAll().FirstOrDefault() ?? new CompanyVM { Id = 0, Name = "" };
+        }
+
+        List<UserRolesVM> roles = new UserRoleRepo().SelectAll(user.Id, branch.Id) ?? new List<UserRolesVM>();
+        string[] permittedRoles = roles.Select(x => x.RoleInfoId).ToArray();
+        string roleTicket = ShampanIdentity.CreateRoleTicket(permittedRoles);
+
+        bool isEssEditPermission = false;
+        try
+        {
+            isEssEditPermission = new SettingRepo().settingValue("HRM", "IsESSEditPermission") == "Y";
+        }
+        catch
+        {
+            isEssEditPermission = false;
+        }
+
+        string basicTicket = ShampanIdentity.CreateBasicTicket(
+            user.LogID ?? "",
+            (user.FullName ?? "").Trim(),
+            company.Id.ToString(),
+            (company.Name ?? "").Trim(),
+            branch.Id.ToString(),
+            (branch.Name ?? "").Trim(),
+            Convert.ToString(controller.Session["TempComputerIPAddress"]) ?? "",
+            "symphony.com",
+            "BDT",
+            Convert.ToDateTime(GetSessionDate(controller)).ToString("yyyyMMdd"),
+            "HRM",
+            (user.EmployeeId ?? "").Trim(),
+            (user.EmployeeCode ?? "").Trim(),
+            (user.Id ?? "").Trim(),
+            user.IsAdmin,
+            user.IsESS,
+            user.IsHRM,
+            user.IsAttenance,
+            user.IsPayroll,
+            user.IsTAX,
+            user.IsPF,
+            user.IsGF,
+            Convert.ToString(controller.Session["TempLocation"]) ?? "",
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            user.IsApprove,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            isEssEditPermission
+        );
+
+        int timeOut;
+        if (!int.TryParse(ReadSetting(new AppSettingsReader(), "COOKIE_TIMEOUT"), out timeOut))
+        {
+            timeOut = 100;
+        }
+
+        FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
+            1,
+            FormsAuthentication.FormsCookieName,
+            DateTime.Now,
+            DateTime.Now.AddMinutes(timeOut),
+            true,
+            basicTicket);
+
+        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
+        string companyName = ReadSetting(new AppSettingsReader(), "CompanyName");
+
+        controller.HttpContext.Response.Cookies.Add(new HttpCookie(companyName, encryptedTicket));
+        controller.HttpContext.Application["BasicTicket" + user.LogID] = basicTicket;
+        controller.HttpContext.Application["RoleTicket" + user.LogID] = roleTicket;
+
+        DataTable sessionRoles = new SymUserRoleRepo().RollByUserId(user.Id);
+        string sessionRoleKey = user.Id + "-SymRoll";
+        if (controller.Session[sessionRoleKey] != null)
+        {
+            controller.Session.Remove(sessionRoleKey);
+        }
+
+        controller.Session.Add(sessionRoleKey, sessionRoles);
+
+        var identity = new ShampanIdentity(basicTicket);
+        identity.SetRoles(roleTicket);
+        var principal = new ShampanPrincipal(identity);
+
+        controller.HttpContext.User = principal;
+        Thread.CurrentPrincipal = principal;
+    }
+
+    private static string GetSessionDate(Controller controller)
+    {
+        string sessionDate = Convert.ToString(controller.Session["TempSessionDate"]);
+        if (string.IsNullOrWhiteSpace(sessionDate))
+        {
+            sessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
+        }
+
+        return sessionDate;
+    }
+
+    private static string ReadSetting(AppSettingsReader settings, string key)
+    {
+        try
+        {
+            return Convert.ToString(settings.GetValue(key, typeof(string))) ?? "";
+        }
+        catch
+        {
+            return "";
+        }
     }
 }
