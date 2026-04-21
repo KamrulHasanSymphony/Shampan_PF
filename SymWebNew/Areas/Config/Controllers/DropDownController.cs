@@ -11,6 +11,7 @@ using SymOrdinary;
 using System.Threading;
 using SymRepository.PF;
 using SymServices.Enum;
+using SymRepository;
 
 namespace SymWebUI.Areas.Config.Controllers
 {
@@ -177,6 +178,11 @@ namespace SymWebUI.Areas.Config.Controllers
         public JsonResult Branch()
         {
             return Json(new SelectList(new EmployeeInfoRepo().Branch(), "Id", "Name"), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult CompanyList()
+        {
+            return Json(new SelectList(new DbCreateRepo().CompanyList(), "Id", "Name"), JsonRequestBehavior.AllowGet);
         }
        
         public JsonResult DropDownPeriodByYear()

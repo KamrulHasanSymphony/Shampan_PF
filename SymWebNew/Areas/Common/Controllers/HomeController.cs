@@ -23,6 +23,13 @@ namespace SymWebUI.Areas.Common.Controllers
 
         public ActionResult Index()
         {
+            var User = Session["User"];
+            var Branch = Session["BranchId"];
+
+            if (Session["BranchId"] == null)
+            {
+                return RedirectToAction("Branch", "Home");
+            }
             AdminInfoDashboardVM vm = new AdminInfoDashboardVM();         
             PfInfoDashboardVM vmPf = new PfInfoDashboardVM();  
          
@@ -38,8 +45,10 @@ namespace SymWebUI.Areas.Common.Controllers
             vmPf = _Repo.GetPfInfoDashboard();
             vm.PfInfoDashboardVMS = vmPf;
             Session["BranchName"] = vm.BranchVM.Name;
-                              
+
             return View("Index", vm);
+
+            //return RedirectToAction("Index", "Home", new { area = "Common" });
         }
 
         public ActionResult PFInfo()

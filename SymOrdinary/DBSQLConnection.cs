@@ -100,6 +100,13 @@ namespace SymOrdinary
             }      
         }
 
+        public SqlConnection GetSysDBConnection()
+        {
+            string ConnectionString = new AppSettingsReader().GetValue("dbConnectionStrings", typeof(string)).ToString();
+            SqlConnection conn = new SqlConnection(ConnectionString);
+            return conn;
+        }
+
         public SqlConnection GetConnectionSys(DbCreateVM connTemp = null)
         {
             string ConnectionString = "";

@@ -17,6 +17,7 @@ namespace SymServices
     public class DbCreateDAL
     {
         private DBSQLConnection _dbsqlConnection = new DBSQLConnection();
+        private const string FieldDelimeter = DBConstant.FieldDelimeter;
 
         public string[] Insert(DbCreateVM vm, SqlConnection VcurrConn, SqlTransaction Vtransaction)
         {
@@ -4286,56 +4287,6 @@ INSERT [dbo].[Withdraws] ([Id], [IsInvested], [Code], [WithdrawAmount], [Withdra
         private static string PassPhrase = DBConstant.PassPhrase;
         private static string EnKey = DBConstant.EnKey;
 
-        public static bool SaveToSuperFile(DbCreateVM vm)
-        {
-            bool result = false;
-
-
-
-            try
-            {
-                string filePath = HostingEnvironment.MapPath("~/Files/SuperInformation.xml");
-
-                XDocument xDoc;
-
-                // যদি file থাকে
-                if (File.Exists(filePath))
-                {
-                    xDoc = XDocument.Load(filePath);
-                }
-                else
-                {
-                    // Root create
-                    xDoc = new XDocument(new XElement("Super"));
-                }
-                              
-
-                // New Node
-                XElement newNode = new XElement("SuperInfo",
-                    new XAttribute("tom", Converter.DESEncrypt(PassPhrase, EnKey, vm.LogIN)),
-                    new XElement("jery", Converter.DESEncrypt(PassPhrase, EnKey, vm.Password)),
-                    new XElement("mini", Converter.DESEncrypt(PassPhrase, EnKey, vm.ServerName)),
-                    new XElement("doremon", Converter.DESEncrypt(PassPhrase, EnKey, vm.DatabaseName)),
-                    new XElement("DateTime", DateTime.Now.ToString("yyyy-MMM-dd HH:mm:ss"))
-                );
-
-                // Add to root
-                xDoc.Root.Add(newNode);
-
-                // Save
-                xDoc.Save(filePath);
-
-                result = true;
-            }
-            catch (Exception ex)
-            {
-                // logging করতে পারো
-                result = false;
-            }
-
-            return result;
-        }
-
         public string[] TestConnection(DbCreateVM vm, SqlConnection VcurrConn, SqlTransaction Vtransaction)
         {
             string sqlText = "";
@@ -4396,6 +4347,250 @@ INSERT [dbo].[Withdraws] ([Id], [IsInvested], [Code], [WithdrawAmount], [Withdra
                     }
                 }
             }
+        }
+
+//        public static bool SaveToSuperFile(DbCreateVM vm)
+//        {
+
+//            DBSQLConnection _dbsqlConnection = new DBSQLConnection();
+
+//            bool result = false;
+//            try
+//            {
+//                string fileName = vm.DatabaseName + ".xml";
+//                //string filePath = HostingEnvironment.MapPath("~/Files/SuperInformation.xml");
+//                string filePath = HostingEnvironment.MapPath("~/Files/" + fileName);
+
+//                XDocument xDoc;
+
+//                // যদি file থাকে
+//                if (File.Exists(filePath))
+//                {
+//                    xDoc = XDocument.Load(filePath);
+//                }
+//                else
+//                {
+//                    // Root create
+//                    xDoc = new XDocument(new XElement("Super"));
+//                }
+
+
+//                // New Node
+//                XElement newNode = new XElement("SuperInfo",
+//                    new XAttribute("tom", Converter.DESEncrypt(PassPhrase, EnKey, vm.LogIN)),
+//                    new XElement("jery", Converter.DESEncrypt(PassPhrase, EnKey, vm.Password)),
+//                    new XElement("mini", Converter.DESEncrypt(PassPhrase, EnKey, vm.ServerName)),
+//                    new XElement("doremon", Converter.DESEncrypt(PassPhrase, EnKey, vm.DatabaseName)),
+//                    new XElement("DateTime", DateTime.Now.ToString("yyyy-MMM-dd HH:mm:ss"))
+//                );
+
+//                // Add to root
+//                xDoc.Root.Add(newNode);
+
+//                // Save
+//                xDoc.Save(filePath);
+
+//                result = true;
+
+//                string sqlText = "";
+//                SqlConnection currConn = null;
+//                SqlTransaction transaction = null;
+//                currConn = _dbsqlConnection.GetSysDBConnection();
+
+
+//                sqlText = @"
+//INSERT [SymphonyHRMSys_DB].[dbo].[CompanyInformations] (CompanySl, CompanyID, CompanyName, DatabaseName, ActiveStatus, Serial, SysVersion, Bin, CompanyIDV2, DatabaseNameV2, ActiveStatusV2, LocationV2, UIDV2, PWDV2) VALUES (1, N'1', N'Contribution Employee', N'Cr', N'2', 18, 1, 0, N'admin', N'20250928', N'', N'admin', N'20260201105557', N'', N'10')";
+
+//                using (SqlCommand cmd = new SqlCommand(sqlText, currConn, transaction))
+//                {
+//                    cmd.ExecuteNonQuery();
+//                }
+
+//            }
+//            catch (Exception ex)
+//            {
+//                // logging করতে পারো
+//                result = false;
+//            }
+
+//            return result;
+//        }
+
+        public static bool SaveToSuperFile(DbCreateVM vm)
+        {
+            DBSQLConnection _dbsqlConnection = new DBSQLConnection();
+            bool result = false;
+
+            SqlConnection currConn = null;
+            SqlTransaction transaction = null;
+
+            try
+            {
+                #region ===== XML SAVE =====
+
+                string safeDbName = string.Concat(vm.DatabaseName.Split(Path.GetInvalidFileNameChars()));
+                string fileName = safeDbName + ".xml";
+                string filePath = HostingEnvironment.MapPath("~/Files/" + fileName);
+
+                XDocument xDoc;
+
+                if (File.Exists(filePath))
+                {
+                    xDoc = XDocument.Load(filePath);
+                }
+                else
+                {
+                    xDoc = new XDocument(new XElement("Super"));
+                }
+
+                XElement newNode = new XElement("SuperInfo",
+                    new XAttribute("tom", Converter.DESEncrypt(PassPhrase, EnKey, vm.LogIN)),
+                    new XElement("jery", Converter.DESEncrypt(PassPhrase, EnKey, vm.Password)),
+                    new XElement("mini", Converter.DESEncrypt(PassPhrase, EnKey, vm.ServerName)),
+                    new XElement("doremon", Converter.DESEncrypt(PassPhrase, EnKey, vm.DatabaseName)),
+                    new XElement("DateTime", DateTime.Now.ToString("yyyy-MMM-dd HH:mm:ss"))
+                );
+
+                xDoc.Root.Add(newNode);
+                xDoc.Save(filePath);
+
+                #endregion
+
+                #region ===== DATABASE INSERT =====
+
+                currConn = _dbsqlConnection.GetSysDBConnection();
+                currConn.Open();
+                transaction = currConn.BeginTransaction();
+
+                string insertSql = @" INSERT INTO [SymphonyHRMSys_DB].[dbo].[CompanyInformations](CompanyID, CompanyName, DatabaseName, ActiveStatus, Serial, SysVersion, Bin, CompanyIDV2, CompanyNameV2, DatabaseNameV2, ActiveStatusV2, LocationV2, UIDV2, PWDV2) SELECT '', @CompanyName, @DatabaseName, '', ISNULL(MAX(Serial),0)+1, @SysVersion, '', '', '',
+                  '', '','','','' FROM [SymphonyHRMSys_DB].[dbo].[CompanyInformations];
+                 SELECT SCOPE_IDENTITY();";
+
+                int newId = 0;
+
+                using (SqlCommand cmd = new SqlCommand(insertSql, currConn, transaction))
+                {
+                    cmd.Parameters.AddWithValue("@CompanyName", Converter.DESEncrypt(PassPhrase, EnKey, vm.DatabaseName));
+                    cmd.Parameters.AddWithValue("@DatabaseName", Converter.DESEncrypt(PassPhrase, EnKey, vm.DatabaseName + "_DB"));
+                    cmd.Parameters.AddWithValue("@SysVersion", DateTime.Now.Year);
+
+                    object obj = cmd.ExecuteScalar();
+                    newId = Convert.ToInt32(obj);
+                }
+                string updateSql = @" UPDATE [SymphonyHRMSys_DB].[dbo].[CompanyInformations] SET CompanyID = @CompanyID, ActiveStatus = @ActiveStatus WHERE CompanySl = @CompanySl";
+
+                using (SqlCommand cmd2 = new SqlCommand(updateSql, currConn, transaction))
+                {
+                    cmd2.Parameters.AddWithValue("@CompanyID",Converter.DESEncrypt(PassPhrase, EnKey, newId.ToString()));
+
+                    cmd2.Parameters.AddWithValue("@ActiveStatus",Converter.DESEncrypt(PassPhrase, EnKey, "Active"));
+
+                    cmd2.Parameters.AddWithValue("@CompanySl", newId);
+
+                    cmd2.ExecuteNonQuery();
+                }
+
+                transaction.Commit();
+
+                #endregion
+
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                if (transaction != null)
+                {
+                    transaction.Rollback();
+                }
+
+                result = false;
+            }
+            finally
+            {
+                if (currConn != null && currConn.State == ConnectionState.Open)
+                {
+                    currConn.Close();
+                }
+            }
+
+            return result;
+        }
+
+        public List<DbCreateVM> CompanyList()
+        {
+            #region Variables
+
+            SqlConnection currConn = null;
+            string sqlText = "";
+            List<DbCreateVM> VMs = new List<DbCreateVM>();
+            DbCreateVM vm;
+            #endregion
+            try
+            {
+                #region open connection and transaction
+
+                currConn = _dbsqlConnection.GetConnection();
+                if (currConn.State != ConnectionState.Open)
+                {
+                    currConn.Open();
+                }
+
+                #endregion open connection and transaction
+
+                #region sql statement
+
+                sqlText = @"SELECT CompanyID, CompanyName FROM [SymphonyHRMSys_DB].[dbo].[CompanyInformations]";
+
+                SqlCommand _objComm = new SqlCommand();
+                _objComm.Connection = currConn;
+                _objComm.CommandText = sqlText;
+                _objComm.CommandType = CommandType.Text;
+
+                SqlDataReader dr;
+                dr = _objComm.ExecuteReader();
+                while (dr.Read())
+                {
+                    vm = new DbCreateVM();
+
+                    vm.Id = Converter.DESDecrypt(PassPhrase, EnKey, dr["CompanyID"].ToString());
+                    vm.Name = Converter.DESDecrypt(PassPhrase, EnKey, dr["CompanyName"].ToString());
+
+                    VMs.Add(vm);
+                }
+                dr.Close();
+
+
+                #endregion
+            }
+            #region catch
+
+
+            catch (SqlException sqlex)
+            {
+                throw new ArgumentNullException("", "SQL:" + sqlText + FieldDelimeter + sqlex.Message.ToString());
+            }
+            catch (Exception ex)
+            {
+                throw new ArgumentNullException("", "SQL:" + sqlText + FieldDelimeter + ex.Message.ToString());
+            }
+
+            #endregion
+            #region finally
+
+            finally
+            {
+                if (currConn != null)
+                {
+                    if (currConn.State == ConnectionState.Open)
+                    {
+                        currConn.Close();
+                    }
+                }
+            }
+
+            #endregion
+
+            return VMs;
         }
     }
 }

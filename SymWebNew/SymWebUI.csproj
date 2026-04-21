@@ -5269,6 +5269,7 @@
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\Home\DbCreate.cshtml" />
     <Content Include="Views\DbCreate\Index.cshtml" />
+    <Content Include="Views\Home\Branch.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
