@@ -113,6 +113,7 @@
     <Compile Include="Common\CompanyDAL.cs" />
     <Compile Include="PF\AutoJournalSetupDAL.cs" />
     <Compile Include="PF\COACategoryDAL.cs" />
+    <Compile Include="PF\COANewDAL.cs" />
     <Compile Include="PF\COASubCategoryDAL.cs" />
     <Compile Include="PF\COASubGroupDAL.cs" />
     <Compile Include="PF\EmployeeInfoForPFDAL.cs" />

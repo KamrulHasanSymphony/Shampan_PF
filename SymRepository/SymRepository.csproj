@@ -72,6 +72,7 @@
     <Compile Include="Common\BankRepo.cs" />
     <Compile Include="PF\AutoJournalSetupRepo.cs" />
     <Compile Include="PF\COACategoryRepo.cs" />
+    <Compile Include="PF\COANewRepo.cs" />
     <Compile Include="PF\COASubCategoryRepo.cs" />
     <Compile Include="PF\COASubGroupRepo.cs" />
     <Compile Include="PF\EmployeeInfoForPFRepo.cs" />
