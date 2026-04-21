@@ -214,11 +214,11 @@
         return false;
     });
 
-    $("#BranchId").on("invalid", function () {
-        this.setCustomValidity("Please Select Branch Name");
+    $("#CompanyId").on("invalid", function () {
+        this.setCustomValidity("Please Select Company Name");
     });
 
-    $("#BranchId").on("input change", function () {
+    $("#CompanyId").on("input change", function () {
         this.setCustomValidity("");
     });
 
