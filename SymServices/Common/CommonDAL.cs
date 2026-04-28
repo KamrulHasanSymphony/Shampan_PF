@@ -6670,7 +6670,7 @@ AND TransactionType=@TransactionType and TransactionTypeGroup=@TransactionTypeGr
 if	(@id is NULL) begin 
 insert into CodeGenerations(CYear,	TransactionTypeGroup,	TransactionType,	Prefix,	LastNumber,	TransType)
   Select top 1 @CYear,TransactionTypeGroup,TransactionType, Prefix ,0 ,TransactionTypeGroup FROM CodeGenerations WHERE 1=1
-AND TransactionType='JournalVoucher' and TransactionTypeGroup='PF'
+AND TransactionType=@TransactionType and TransactionTypeGroup=@TransactionTypeGroup
   end
 ";
 
