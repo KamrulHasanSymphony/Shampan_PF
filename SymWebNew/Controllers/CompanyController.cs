@@ -25,19 +25,12 @@ namespace SymWebUI.Controllers
         }
         public ActionResult Select(string Id)
         {
-            int branchId;
-            if (!int.TryParse(Id, out branchId))
-            {
-                Session["result"] = "Fail~Invalid branch.";
-                return RedirectToAction("Index", "Home");
-            }
+            Session["BranchId"] = Id;
+            vm.BranchId = Id;
 
-            string errorMessage;
-            if (!LoginContextHelper.TryCompleteBranchSelection(this, branchId, out errorMessage))
-            {
-                Session["result"] = "Fail~" + errorMessage;
-                return RedirectToAction("Index", "Home");
-            }
+            BranchRepo BranchRepo = new BranchRepo();
+            BranchVM branch = BranchRepo.SelectById(Convert.ToInt32(vm.BranchId));
+            Session["BranchName"] = branch.Name;
 
             return Redirect("/Common/Home");
         }

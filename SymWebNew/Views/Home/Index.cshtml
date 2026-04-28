@@ -37,15 +37,14 @@
                             @Html.TextBoxFor(model => model.LogID, new { placeholder = "User Name", required = "required", @class = "uid form-control" })
                             @Html.LabelFor(model => model.Password, new { @class = "" })
                             @Html.PasswordFor(model => model.Password, new { placeholder = "Password", required = "required", @class = "form-control" })
-                            @Html.LabelFor(model => model.CompanyId, new { @class = "" })
-                            @Html.SimpleDropDownFor(model => model.CompanyId, "/Config/DropDown/CompanyList", new { required = "required", @class = "form-control " })
+                               @Html.LabelFor(model => model.BranchId, new { @class = "" })
+                            @Html.SimpleDropDownFor(model => model.BranchId, "/Config/DropDown/Branch", new { required = "required", @class = "form-control " })
                             <label>&nbsp;</label>
                             @Html.HiddenFor(model => model.ComputerIPAddress, new { @id = "ip1", @class = "ipAdd required form-control" })
                             @Html.HiddenFor(model => model.Location, new { @id = "Location", @class = "Location required form-control" })
 
                             <button type="submit" class="btn btn-primary btn-block btn-large">Log In.</button>
                             <a href="/Home/ForgotPasswordView">Forgot Password</a>
-                            <a href="/DbCreate/Index" style="float:right;">Company Create</a>
                         }
                     </div>
                 </div>
@@ -214,11 +213,11 @@
         return false;
     });
 
-    $("#CompanyId").on("invalid", function () {
-        this.setCustomValidity("Please Select Company Name");
+    $("#BranchId").on("invalid", function () {
+        this.setCustomValidity("Please Select Branch Name");
     });
 
-    $("#CompanyId").on("input change", function () {
+    $("#BranchId").on("input change", function () {
         this.setCustomValidity("");
     });
 
