@@ -276,6 +276,7 @@
     <Compile Include="PF\AutoJournalSetupVM.cs" />
     <Compile Include="PF\BranchVM.cs" />
     <Compile Include="PF\COAGroupVM.cs" />
+    <Compile Include="PF\COANewVM.cs" />
     <Compile Include="PF\EmployeeBreakMonthPFVM.cs" />
     <Compile Include="PF\EmployeeInfoForPFVM.cs" />
     <Compile Include="PF\EmployeeNomineeVM.cs" />
