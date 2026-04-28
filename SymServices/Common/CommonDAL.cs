@@ -6655,10 +6655,10 @@ WHERE TABLE_NAME = N'" + tableName + "'";
                 {
                     int CODEGENID = 0;
                     int transResultCodeGen = 0;
-                    TransactionDate = Convert.ToDateTime(Date);
+                   // TransactionDate = Convert.ToDateTime(Date);
                     //new FiscalYearDAL().SelectAll_FiscalYearDetailByDate(TransactionDate, currConn, transaction).Year;
-                    year = new FiscalYearDAL().SelectAll_FiscalYearDetailByDate(Ordinary.DateToString( TransactionDate.ToString()), currConn, transaction).Year.ToString();
-
+                    year = new FiscalYearDAL().SelectAll_FiscalYearDetailByDate(Ordinary.DateToString(Date), currConn, transaction).Year.ToString();
+            
                     string getMaxIdSql = "";
 
                     getMaxIdSql = @"     declare @id as varchar(10);

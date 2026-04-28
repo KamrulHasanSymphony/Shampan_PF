@@ -5257,17 +5257,11 @@
     <Content Include="Areas\PF\Views\left\_leftDetail.cshtml" />
     <Content Include="Areas\PF\Views\EmployeeInfoPF\_nominee.cshtml" />
     <Content Include="Areas\PF\Views\EmployeeInfoPF\_editNominee.cshtml" />
-    <Content Include="Areas\PF\Views\COANew\Create.cshtml" />
-    <Content Include="Areas\PF\Views\COANew\Details.cshtml" />
-    <Content Include="Areas\PF\Views\COANew\Edit.cshtml" />
-    <Content Include="Areas\PF\Views\COANew\Index.cshtml" />
     <None Include="Properties\PublishProfiles\PFEGCB.pubxml" />
     <None Include="Properties\PublishProfiles\ShampanPF.pubxml" />
     <None Include="Properties\PublishProfiles\SymphonyHRM_New.pubxml" />
     <Content Include="Views\Home\ForgotPasswordView.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
-    <Content Include="Views\Home\DbCreate.cshtml" />
-    <Content Include="Views\Home\Branch.cshtml" />
     <None Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
