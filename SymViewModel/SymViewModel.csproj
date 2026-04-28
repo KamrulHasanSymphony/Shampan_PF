@@ -119,6 +119,7 @@
     <Compile Include="Common\CompanyVM.cs" />
     <Compile Include="Common\ConnectionTest.cs" />
     <Compile Include="Common\DatabaseTableVM.cs" />
+    <Compile Include="Common\DbCreateVM.cs" />
     <Compile Include="Common\DepartmentVM.cs" />
     <Compile Include="Common\EducationVM.cs" />
     <Compile Include="Common\EmailSenderVM.cs" />
