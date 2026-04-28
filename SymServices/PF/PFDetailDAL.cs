@@ -2715,13 +2715,21 @@ order by SectionOrderNo ";
 
                             if (empVM == null)
                             {
-                                throw new ArgumentNullException("Employee Code " + item["EmpCode"].ToString() + " Not in System", "Employee Code " + item["EmpCode"].ToString() + " Not in System");
+                                retResults[0] = "Fail";
+                                retResults[1] = "Employee Code " + item["EmpCode"].ToString() + " Not in System";
+                                return retResults;
+
+                               // throw new ArgumentNullException("Employee Code " + item["EmpCode"].ToString() + " Not in System", "Employee Code " + item["EmpCode"].ToString() + " Not in System");
                             }
                             else
                             {
                                 if (FYDVM == null)
                                 {
-                                    throw new ArgumentNullException("Fiscal Period" + item["FYDId"].ToString() + " Not in System", "Fiscal Period " + item["FYDId"].ToString() + " Not in System");
+                                    retResults[0] = "Fail";
+                                    retResults[1] = "Fiscal Period" + item["FYDId"].ToString() + " Not in System";
+                                    return retResults;
+
+                                  //  throw new ArgumentNullException("Fiscal Period" + item["FYDId"].ToString() + " Not in System", "Fiscal Period " + item["FYDId"].ToString() + " Not in System");
                                 }
                                 else
                                 {
