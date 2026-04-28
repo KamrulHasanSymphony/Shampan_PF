@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SymViewModel.Common;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -65,6 +66,7 @@ namespace SymOrdinary
         private static string PassPhrase = DBConstant.PassPhrase;
         private static string EnKey = DBConstant.EnKey;
 
+
         public SqlConnection GetConnection()
         {
 
@@ -80,7 +82,7 @@ namespace SymOrdinary
             try
             {
                 doc.Load(filePath);
-                XmlNode superInfoNode = doc.SelectSingleNode("/Super/SuperInfo");
+                XmlNode superInfoNode = doc.SelectSingleNode("//SuperInfo");
 
                 sysUserName = Converter.DESDecrypt(PassPhrase, EnKey, superInfoNode.Attributes["tom"].Value);
                 sysPassword = Converter.DESDecrypt(PassPhrase, EnKey, superInfoNode["jery"].InnerText);
@@ -96,6 +98,35 @@ namespace SymOrdinary
             {
                 return null;
             }      
+        }
+
+        public SqlConnection GetSysDBConnection()
+        {
+            string ConnectionString = new AppSettingsReader().GetValue("dbConnectionStrings", typeof(string)).ToString();
+            SqlConnection conn = new SqlConnection(ConnectionString);
+            return conn;
+        }
+
+        public SqlConnection GetConnectionSys(DbCreateVM connTemp = null)
+        {
+            string ConnectionString = "";
+            if (connTemp != null)
+            {
+                //SysDBInfoVM.SysdataSource = connTemp.SysdataSource;
+                //SysDBInfoVM.SysPassword = connTemp.SysPassword;
+                //SysDBInfoVM.SysUserName = connTemp.SysUserName;
+            }
+
+            ConnectionString = "Data Source=" + connTemp.ServerName + ";" +
+                                    "Initial Catalog=master;" +
+                                    "user id=" + connTemp.LogIN + ";" +
+                                    "password=" + connTemp .Password+ ";" +
+                                    "connect Timeout=60;";
+
+            SqlConnection conn = new SqlConnection(ConnectionString);
+
+
+            return conn;
         }
     }
 }

@@ -2718,8 +2718,12 @@ order by SectionOrderNo ";
                                 retResults[0] = "Fail";
                                 retResults[1] = "Employee Code " + item["EmpCode"].ToString() + " Not in System";
                                 return retResults;
+<<<<<<< HEAD
 
                                // throw new ArgumentNullException("Employee Code " + item["EmpCode"].ToString() + " Not in System", "Employee Code " + item["EmpCode"].ToString() + " Not in System");
+=======
+                                //throw new ArgumentNullException("Employee Code " + item["EmpCode"].ToString() + " Not in System", "Employee Code " + item["EmpCode"].ToString() + " Not in System"); 
+>>>>>>> aabadc53eeb1b8032ed034b3639572c10e4a9358
                             }
                             else
                             {
@@ -2728,8 +2732,12 @@ order by SectionOrderNo ";
                                     retResults[0] = "Fail";
                                     retResults[1] = "Fiscal Period" + item["FYDId"].ToString() + " Not in System";
                                     return retResults;
+<<<<<<< HEAD
 
                                   //  throw new ArgumentNullException("Fiscal Period" + item["FYDId"].ToString() + " Not in System", "Fiscal Period " + item["FYDId"].ToString() + " Not in System");
+=======
+                                    //throw new ArgumentNullException("Fiscal Period" + item["FYDId"].ToString() + " Not in System", "Fiscal Period " + item["FYDId"].ToString() + " Not in System");
+>>>>>>> aabadc53eeb1b8032ed034b3639572c10e4a9358
                                 }
                                 else
                                 {

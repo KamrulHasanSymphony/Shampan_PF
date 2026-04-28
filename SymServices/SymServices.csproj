@@ -106,6 +106,7 @@
     <Compile Include="Common\BankDAL.cs" />
     <Compile Include="Common\SymUserRollDAL.cs" />
     <Compile Include="Common\UserGroupDAL.cs" />
+    <Compile Include="DbCreateDAL.cs" />
     <Compile Include="Enum\EnumOderByDAL.cs" />
     <Compile Include="Enum\EnumReportDAL.cs" />
     <Compile Include="Loan\EmployeeLoanDAL.cs" />
