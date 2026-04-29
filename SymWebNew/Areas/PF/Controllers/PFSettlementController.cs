@@ -229,6 +229,7 @@ namespace SymWebUI.Areas.PF.Controllers
         public ActionResult Create(PFSettlementVM vm)
         {
             Session["permission"] = _repoSUR.SymRoleSession(identity.UserId, "10003", "add").ToString();
+            vm.BranchId = Session["BranchId"].ToString();
 
             vm = _repo.PreInsert(vm);
 
@@ -318,9 +319,10 @@ namespace SymWebUI.Areas.PF.Controllers
             Session["permission"] = _repoSUR.SymRoleSession(identity.UserId, "10003", "edit").ToString();
             PFSettlementVM vm = new PFSettlementVM();
             vm = _repo.SelectAll("",Convert.ToInt32(id)).FirstOrDefault();
-            vm.detailVMs = _repoDetail.SelectByMasterId(Convert.ToInt32(id));
-
+           // vm.detailVMs = _repoDetail.SelectByMasterId(Convert.ToInt32(id));
             vm.Operation = "update";
+          
+
             return View("Create", vm);
         }
 

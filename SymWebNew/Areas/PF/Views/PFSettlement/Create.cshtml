@@ -185,7 +185,16 @@
                 </div>
             </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-2">
+                        <div class="editor-label">
+                            @Html.LabelFor(model => model.Loan)
+                        </div>
+                        <div class="editor-field">
+                            @Html.TextBoxFor(model => model.Loan, new { @placeholder = "Loan", @class = " NumberCheck right form-control", @readonly = "readonly" })
+                            @Html.ValidationMessageFor(model => model.EmployerProfitValue)
+                        </div>
+                    </div>
+                    <div class="col-md-4">
                         <div class="editor-label">
                             @Html.LabelFor(model => model.Remarks)
                         </div>

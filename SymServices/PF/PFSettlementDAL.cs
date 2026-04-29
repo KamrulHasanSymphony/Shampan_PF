@@ -542,7 +542,7 @@ SELECT
 
 ,pfs.Post
 
-,pfs.Remarks,pfs.IsActive,pfs.IsArchive,pfs.CreatedBy,pfs.CreatedAt,pfs.CreatedFrom,pfs.LastUpdateBy,pfs.LastUpdateAt,pfs.LastUpdateFrom
+,pfs.Remarks,pfs.IsActive,pfs.IsArchive,pfs.CreatedBy,pfs.CreatedAt,pfs.CreatedFrom,pfs.LastUpdateBy,pfs.LastUpdateAt,pfs.LastUpdateFrom,pfs.Loan
 
 ,case when ISNULL(gl.Source,0)='0' then 0 else 1 end AS IsJournal
 FROM  PFSettlements  pfs
@@ -838,7 +838,7 @@ Id
 ,ProvidentFundAmount
 
 ,Post
-,Remarks,IsActive,IsArchive,CreatedBy,CreatedAt,CreatedFrom
+,Remarks,IsActive,IsArchive,CreatedBy,CreatedAt,CreatedFrom,Loan
 
 ) VALUES (
 @Id
@@ -883,7 +883,7 @@ Id
 
 
 ,@Post
-,@Remarks,@IsActive,@IsArchive,@CreatedBy,@CreatedAt,@CreatedFrom
+,@Remarks,@IsActive,@IsArchive,@CreatedBy,@CreatedAt,@CreatedFrom,@Loan
 ) 
 ";
 
@@ -926,7 +926,7 @@ Id
                     cmdInsert.Parameters.AddWithValue("@EmployerContributionForfeitValue", vm.EmployerContributionForfeitValue);
                     cmdInsert.Parameters.AddWithValue("@EmployerProfitForfeitValue ", vm.EmployerProfitForfeitValue);
                     cmdInsert.Parameters.AddWithValue("@TotalForfeitValue", vm.TotalForfeitValue);
-                    cmdInsert.Parameters.AddWithValue("@TotalPayableAmount", vm.EmployeeTotalContribution + vm.EmployerTotalContribution + vm.EmployeeProfitValue + vm.EmployerProfitValue);
+                    cmdInsert.Parameters.AddWithValue("@TotalPayableAmount", vm.EmployeeTotalContribution + vm.EmployerTotalContribution + vm.EmployeeProfitValue + vm.EmployerProfitValue + vm.Loan);
                     cmdInsert.Parameters.AddWithValue("@AlreadyPaidAmount", vm.AlreadyPaidAmount);
                     cmdInsert.Parameters.AddWithValue("@NetPayAmount", vm.NetPayAmount);
                     cmdInsert.Parameters.AddWithValue("@ProvidentFundAmount", vm.ProvidentFundAmount);
@@ -940,6 +940,7 @@ Id
                     cmdInsert.Parameters.AddWithValue("@CreatedBy", vm.CreatedBy);
                     cmdInsert.Parameters.AddWithValue("@CreatedAt", vm.CreatedAt);
                     cmdInsert.Parameters.AddWithValue("@CreatedFrom", vm.CreatedFrom);
+                    cmdInsert.Parameters.AddWithValue("@Loan", vm.Loan);
 
 
 
@@ -1414,7 +1415,7 @@ Id
                 PFSettlementVM varPFDetailVM = new PFSettlementVM();
                 PFDetailDAL _PFDetailDAL = new PFDetailDAL();
 
-                varPFDetailVM = _PFDetailDAL.SelectDetailContribution_TillMonth(vm.FiscalYearDetailId, vm.EmployeeId, currConn, transaction).FirstOrDefault();
+                varPFDetailVM = _PFDetailDAL.SelectDetailContribution_TillMonth(vm, currConn, transaction).FirstOrDefault();
 
 
                 #endregion
@@ -1428,12 +1429,13 @@ Id
                     vm.EmpName = varPFDetailVM.EmpName;
                     vm.Department = varPFDetailVM.Department;
                     vm.NetPayAmount = varPFDetailVM.EmployeeTotalContribution;
-                    vm.TotalForfeitValue = varPFDetailVM.EmployerTotalContribution;
+                    //vm.TotalForfeitValue = varPFDetailVM.EmployerTotalContribution;
                     vm.ProvidentFundAmount = varPFDetailVM.EmployeeTotalContribution + varPFDetailVM.EmployerTotalContribution;
                     vm.EmployerProfitValue = varPFDetailVM.EmployerProfitValue;
                     vm.EmployeeProfitValue = varPFDetailVM.EmployeeProfitValue;
                     vm.EmployeeTotalContribution = varPFDetailVM.EmployeeTotalContribution;
                     vm.EmployerTotalContribution = varPFDetailVM.EmployerTotalContribution;
+                    vm.Loan = varPFDetailVM.Loan;
                     #endregion
 
                 }

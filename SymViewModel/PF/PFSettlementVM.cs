@@ -39,6 +39,10 @@ namespace SymViewModel.PF
         [Display(Name = "Employee")] public string EmployeeId { get; set; }
         [Display(Name = "Employee Profit Value")] public decimal EmployeeProfitValue { get; set; }
         [Display(Name = "Employer Profit Value")] public decimal EmployerProfitValue { get; set; }
+        //[Display(Name = "Employer Profit Value")]
+        //public decimal EmployerProfitValue { get; set; }
+        [Display(Name = "Loan")]
+        public decimal Loan { get; set; }
         [Display(Name = "Employee Total Contribution")] public decimal EmployeeTotalContribution { get; set; }
         [Display(Name = "Employer TotalContribution")] public decimal EmployerTotalContribution { get; set; }
         [Display(Name = "Employee Date of Join")] public string EmpDOJ { get; set; }

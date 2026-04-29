@@ -1810,14 +1810,14 @@ FROM ViewEmployeeInformation Vei";
         }
 
         //==================SelectDetailContribution=================
-        public List<PFSettlementVM> SelectDetailContribution_TillMonth(int FiscalYearDetailIdTo, string EmployeeId = "", SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
+        public List<PFSettlementVM> SelectDetailContribution_TillMonth(PFSettlementVM vm, SqlConnection VcurrConn = null, SqlTransaction Vtransaction = null)
         {
             #region Variables
             SqlConnection currConn = null;
             SqlTransaction transaction = null;
             string sqlText = "";
             List<PFSettlementVM> VMs = new List<PFSettlementVM>();
-            PFSettlementVM vm;
+          
             #endregion
             try
             {
@@ -1855,155 +1855,143 @@ FROM ViewEmployeeInformation Vei";
 
 
                 sqlText = @"
-                    --------declare @FiscalYearDetailIdTo as int
-                    --------declare @EmployeeId as nvarchar(100)
-                    --------
-                    --------set @FiscalYearDetailIdTo = 1042
-                    --------set @EmployeeId = '1_1'
+                    ---declare @DateFrom   varchar(100)='20210702'
+---declare @DatTo varchar(100)='20220701'
+---declare @Employeeid varchar(100)='20220701'
 
-                    ---------------------PF Summary Contribution--------------------
-                    ----------------------------------------------------------------
-                    ;WITH PFSummaryContribution AS
-                    (
-                    SELECT
-                     pfd.ProjectId
-                    ,pfd.DepartmentId
-                    ,pfd.SectionId
-                    ,pfd.DesignationId
-                    ,pfd.EmployeeId
-                    ,SUM(pfd.EmployeePFValue) EmployeeTotalContribution
-                    ,SUM(pfd.EmployeerPFValue) EmployerTotalContribution
-                    ,0 EmployerProfit
-                    ,0 EmployeeProfit
+select distinct pf.Employeeid
+,CASE
+    WHEN e.Code is null THEN eOld.Code
+    WHEN e.Code = 'NA' THEN eOld.Code
+    ELSE e.Code
+END Code
+,CASE
+    WHEN e.EmpName is null THEN eOld.EmpName
+    WHEN e.EmpName = 'NA' THEN eOld.EmpName
+    ELSE e.EmpName
+END EmpName
 
-                    FROM PFDetails pfd
-                    WHERE  1=1
-                    AND pfd.Post = 1
-                    --------AND pfd.IsDistribute = 0
-                    AND pfd.FiscalYearDetailId <= @FiscalYearDetailIdTo
-                    AND pfd.EmployeeId=@EmployeeId
+,CASE
+    WHEN e.Designation is null THEN eOld.Designation
+    WHEN e.Designation = 'NA' THEN eOld.Designation
+    ELSE e.Designation
+END Designation
 
-                    GROUP BY pfd.EmployeeId
-                    ,pfd.ProjectId
-                    ,pfd.DepartmentId
-                    ,pfd.SectionId
-                    ,pfd.DesignationId
+,CASE
+    WHEN e.Department is null THEN eOld.Department
+    WHEN e.Department = 'NA' THEN eOld.Department
+    ELSE e.Department
+END Department
 
-                    HAVING 1=1
-                    AND SUM(pfd.EmployeePFValue) > 0
-                    AND SUM(pfd.EmployeerPFValue) > 0
+,CASE
+    WHEN e.JoinDate is null THEN eOld.JoinDate
+    WHEN e.JoinDate = 'NA' THEN eOld.JoinDate
+    ELSE e.JoinDate
+END JoinDate
+,isnull(OP.OP_EmployeeContribution	,0)OP_EmployeeContribution
+,isnull(OP.OP_EmployerContribution	,0)OP_EmployerContribution
+,isnull(OP.OP_EmployeeProfit		,0)OP_EmployeeProfit
+,isnull(OP.OP_EmployerProfit		,0)OP_EmployerProfit
+,isnull(MC.MC_EmployeeContribution	,0)MC_EmployeeContribution
+,isnull(MC.MC_EmployerContribution	,0)MC_EmployerContribution
+,isnull(pd.PD_EmployeeProfit		,0)PD_EmployeeProfit
+,isnull(pd.PD_EmployerProfit		,0)PD_EmployerProfit
+,isnull(PY.PY_EmployeeContribution	,0)PY_EmployeeContribution
+,isnull(PY.PY_EmployerContribution	,0)PY_EmployerContribution
+,isnull(PY.PY_EmployeeProfit		,0)PY_EmployeeProfit
+,isnull(PY.PY_EmployerProfit		,0)PY_EmployerProfit
 
-                    UNION ALL
-
-                    SELECT
-                     '' ProjectId
-                    ,'' DepartmentId
-                    ,'' SectionId
-                    ,'' DesignationId
-                    ,pfd.EmployeeId
-                    ,pfd.EmployeeContribution EmployeeTotalContribution
-                    ,pfd.EmployerContribution EmployerTotalContribution
-                    ,pfd.EmployerProfit
-                    ,pfd.EmployeeProfit
-                    FROM EmployeePFOpeinig pfd
-                    WHERE  1=1
-                    AND pfd.EmployeeId=@EmployeeId
-                    )
+,isnull(OP.OP_EmployeeContribution	,0)
++isnull(MC.MC_EmployeeContribution	,0)
++isnull(-1*PY.PY_EmployeeContribution	,0) CL_EmployeeContribution
 
 
----------------------PFStatus-----------------------------------
-----------------------------------------------------------------
-                    , PFStatus AS
-                    (
-                    SELECT 
-                    ROW_NUMBER() OVER (PARTITION BY pf.EmployeeId ORDER BY pf.FiscalYearDetailId ASC) AS RowNumber
-                    , pf.* 
-                    FROM PFDetails pf
-                    WHERE 1=1
-                    AND pf.EmployeePFValue > 0
-                    )
+,isnull(OP.OP_EmployerContribution	,0)
++isnull(MC.MC_EmployerContribution	,0)
++isnull(-1*PY.PY_EmployerContribution	,0)CL_EmployerContribution
+
+,isnull(OP.OP_EmployeeProfit		,0)
++isnull(pd.PD_EmployeeProfit		,0)
++isnull(-1*PY.PY_EmployeeProfit		,0)CL_EmployeeProfit
 
 
-                    , PFStart AS
-                    (
-                    SELECT * FROM PFStatus
-                    WHERE RowNumber = 1
-                    )
+,isnull(OP.OP_EmployerProfit		,0)
++isnull(pd.PD_EmployerProfit		,0)
++isnull(-1*PY.PY_EmployerProfit		,0)CL_EmployerProfit
 
+,isnull(OP.OP_EmployeeContribution	,0)
++isnull(OP.OP_EmployerContribution	,0)
++isnull(OP.OP_EmployeeProfit		,0)
++isnull(OP.OP_EmployerProfit		,0)
++isnull(MC.MC_EmployeeContribution	,0)
++isnull(MC.MC_EmployerContribution	,0)
++isnull(pd.PD_EmployeeProfit		,0)
++isnull(pd.PD_EmployerProfit		,0)
++isnull(-1*PY.PY_EmployeeContribution	,0)
++isnull(-1*PY.PY_EmployerContribution	,0)
++isnull(-1*PY.PY_EmployeeProfit		,0)
++isnull(-1*PY.PY_EmployerProfit		,0)Total
+,isnull(loan.OutStandingLoanAmount,0) Loan
 
-                    ---------------------PFEndStatus--------------------------------
-                    ----------------------------------------------------------------
-                    , PFEndStatus AS
-                    (
-                    SELECT 
+from ViewEmployeeStatementPF PF
+left outer join 
+(select distinct EmployeeId,SUM(EmployeeContribution)OP_EmployeeContribution,SUM(EmployerContribution)OP_EmployerContribution,SUM(EmployeeProfit)OP_EmployeeProfit,SUM(EmployerProfit)OP_EmployerProfit
+,'Opening'TransType
+  from ViewEmployeeStatementPF
+group by EmployeeId) OP on pf.EmployeeId=op.EmployeeId
+left outer join 
+(
+select distinct EmployeeId,SUM(EmployeeContribution)MC_EmployeeContribution,SUM(EmployerContribution)MC_EmployerContribution
+,'MonthlyContribution'TransType
+  from ViewEmployeeStatementPF
+where TransType in('MonthlyContribution' ,'BreakMonth' )
+group by EmployeeId) MC on pf.EmployeeId=MC.EmployeeId
+left outer join 
+(
+select distinct EmployeeId
+,SUM(EmployeeProfit)PD_EmployeeProfit
+,SUM(EmployerProfit)PD_EmployerProfit
+,'ProfitDistribution'TransType
+  from ViewEmployeeStatementPF
+where TransType='ProfitDistribution' 
 
-                    ROW_NUMBER() OVER (PARTITION BY pf.EmployeeId ORDER BY pf.FiscalYearDetailId DESC) AS RowNumber
-                    , pf.* 
+group by EmployeeId)PD on pf.EmployeeId=PD.EmployeeId
+left outer join 
+(
+select distinct EmployeeId
+,SUM(EmployeeContribution) PY_EmployeeContribution
+,SUM(EmployerContribution) PY_EmployerContribution
+,SUM(EmployeeProfit)       PY_EmployeeProfit
+,SUM(EmployerProfit)       PY_EmployerProfit
+,'Payment'TransType
+  from ViewEmployeeStatementPF
+where TransType='Payment' 
+group by EmployeeId
+)PY  on pf.EmployeeId=PY.EmployeeId
 
-                    from PFDetails pf
+left outer join 
+(select distinct EmployeeId,sum(PrincipalAmount)PrincipalAmount
+,sum(InterestAmount)InterestAmount
+,sum(PrincipalAmount)OutStandingLoanAmount
+--+InterestAmount
+from EmployeeLoanDetail
+where 1=1
+and IsPaid=0
 
-                    WHERE 1=1
+group by EmployeeId) loan on pf.EmployeeId=loan.EmployeeId
+left outer join ViewEmployeeInformation e  on pf.EmployeeId=e.EmployeeId
+left outer join   ViewEmployeeInformation eOld  on pf.EmployeeId=eold.EmployeeId
 
-                    AND pf.EmployeePFValue > 0
-                    )
+--where pf.EmployeeId=@EmployeeId
+ where 1=1  and e.BranchId=@BranchId and e.IsActive=1 And e.EmployeeId=@EmployeeId
 
-                    , PFEnd AS
-                    (
-                    SELECT * FROM PFEndStatus
-                    WHERE RowNumber = 1
-                    )
-
-
-----------------------------------------------------------------
-----------------------------------------------------------------
-                SELECT 
-                 ve.EmpName 
-                ,ve.Code 
-                ,ve.Designation
-                ,ve.Department
-                ,ve.Section
-                ,ve.Project
-                ,ve.JoinDate
-                ,ve.ResignDate LeftDate
-                , fyd.PeriodStart PFStartDate
-                , fyd.PeriodName
-
-                , fydEnd.PeriodEnd PFEndDate
-                , fydEnd.PeriodName PFEndPeriodName
-
-                ,pfsc.ProjectId
-                ,pfsc.DepartmentId
-                ,pfsc.SectionId
-                ,pfsc.DesignationId
-                ,pfsc.EmployeeId
-                ,IsNull(pfsc.EmployeeTotalContribution,0)   EmployeeTotalContribution
-                ,IsNull(pfsc.EmployerTotalContribution,0)  EmployerTotalContribution
-                ,IsNull(pd.EmployerProfit,0)+pfsc.EmployerProfit  EmployerProfit 
-                ,IsNull(pd.EmployeeProfit,0)+pfsc.EmployeeProfit EmployeeProfit
-
-                FROM PFSummaryContribution pfsc
-                LEFT OUTER JOIN PFStart pfs ON pfs.EmployeeId = pfsc.EmployeeId
-                LEFT OUTER JOIN PFEnd pfe ON pfe.EmployeeId = pfsc.EmployeeId
-                ";
-                sqlText += " LEFT OUTER JOIN [dbo].ViewEmployeeInformation ve ON pfsc.EmployeeId=ve.EmployeeId";
-                sqlText += " LEFT OUTER JOIN [dbo].FiscalYearDetail fyd ON pfs.FiscalYearDetailId = fyd.Id";
-                sqlText += " LEFT OUTER JOIN [dbo].FiscalYearDetail fydEnd ON pfe.FiscalYearDetailId = fydEnd.Id";
-                sqlText += "  LEFT OUTER JOIN ProfitDistributionNew pd on pd.EmployeeId=ve.EmployeeId";
-
-
-                if (!string.IsNullOrWhiteSpace(EmployeeId))
-                {
-                    sqlText += " where pfsc.EmployeeId=@EmployeeId";
-                }
-                sqlText += " ORDER BY ve.Code";
+";
+              
                 #endregion SqlText
                 #region SqlExecution
                 SqlCommand objComm = new SqlCommand(sqlText, currConn, transaction);
-
-                objComm.Parameters.AddWithValue("@FiscalYearDetailIdTo", FiscalYearDetailIdTo);
-                objComm.Parameters.AddWithValue("@EmployeeId", EmployeeId);
-
-
+                objComm.Parameters.AddWithValue("@EmployeeId",vm.EmployeeId);
+                objComm.Parameters.AddWithValue("@BranchId", vm.BranchId);
                 SqlDataReader dr;
                 dr = objComm.ExecuteReader();
                 while (dr.Read())
@@ -2013,19 +2001,20 @@ FROM ViewEmployeeInformation Vei";
                     vm.Code = dr["Code"].ToString();
                     vm.Designation = dr["Designation"].ToString();
                     vm.Department = dr["Department"].ToString();
-                    vm.Section = dr["Section"].ToString();
-                    vm.Project = dr["Project"].ToString();
-                    vm.PFStartDate = Ordinary.StringToDate(dr["PFStartDate"].ToString());
-                    vm.PFEndDate = Ordinary.StringToDate(dr["PFEndDate"].ToString());
-                    vm.ProjectId = Convert.ToString(dr["ProjectId"]);
-                    vm.DepartmentId = Convert.ToString(dr["DepartmentId"]);
-                    vm.SectionId = Convert.ToString(dr["SectionId"]);
-                    vm.DesignationId = Convert.ToString(dr["DesignationId"]);
+                    //vm.Section = dr["Section"].ToString();
+                    //vm.Project = dr["Project"].ToString();
+                    //vm.PFStartDate = Ordinary.StringToDate(dr["PFStartDate"].ToString());
+                    //vm.PFEndDate = Ordinary.StringToDate(dr["PFEndDate"].ToString());
+                    //vm.ProjectId = Convert.ToString(dr["ProjectId"]);
+                    //vm.DepartmentId = Convert.ToString(dr["DepartmentId"]);
+                    //vm.SectionId = Convert.ToString(dr["SectionId"]);
+                    //vm.DesignationId = Convert.ToString(dr["DesignationId"]);
                     vm.EmployeeId = Convert.ToString(dr["EmployeeId"]);
-                    vm.EmployeeTotalContribution = Convert.ToDecimal(dr["EmployeeTotalContribution"]);
-                    vm.EmployerTotalContribution = Convert.ToDecimal(dr["EmployerTotalContribution"]);
-                    vm.EmployeeProfitValue = Convert.ToDecimal(dr["EmployeeProfit"]);
-                    vm.EmployerProfitValue = Convert.ToDecimal(dr["EmployerProfit"]);
+                    vm.EmployeeTotalContribution = Convert.ToDecimal(dr["OP_EmployeeContribution"]);
+                    vm.EmployerTotalContribution = Convert.ToDecimal(dr["OP_EmployerContribution"]);
+                    vm.EmployeeProfitValue = Convert.ToDecimal(dr["PD_EmployeeProfit"]);
+                    vm.EmployerProfitValue = Convert.ToDecimal(dr["PD_EmployerProfit"]);
+                    vm.Loan = Convert.ToDecimal(dr["Loan"]);
 
                     VMs.Add(vm);
                 }
