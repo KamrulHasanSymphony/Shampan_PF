@@ -94,9 +94,15 @@ namespace SymServices.PF
                 #endregion open connection and transaction
 
                 #region Check if the Code already exists in the database
-                sqlText = "SELECT COUNT(*) FROM EmployeeInfo WHERE Code = @Code";
+                sqlText = vm.Id > 0
+                    ? "SELECT COUNT(*) FROM EmployeeInfo WHERE Code = @Code AND Id <> @Id"
+                    : "SELECT COUNT(*) FROM EmployeeInfo WHERE Code = @Code";
                 SqlCommand cmdCheck = new SqlCommand(sqlText, currConn, transaction);
                 cmdCheck.Parameters.AddWithValue("@Code", vm.Code);
+                if (vm.Id > 0)
+                {
+                    cmdCheck.Parameters.AddWithValue("@Id", vm.Id);
+                }
                 int count = Convert.ToInt32(cmdCheck.ExecuteScalar());
 
                 if (count > 0)
@@ -119,6 +125,8 @@ namespace SymServices.PF
                                      ,Name=@Name
                                      ,Department=@Department
                                      ,Designation =@Designation
+                                     ,Project=@Project
+                                     ,Section=@Section
                                      ,DateOfBirth=@DateOfBirth   
                                      ,JoinDate=@JoinDate                                                       
                                      ,IsActive=@IsActive
@@ -166,6 +174,7 @@ namespace SymServices.PF
                                         NomineeShare = @NomineeShare,
                                         EmployeeBankNameId = @EmployeeBankNameId,
                                         NomineeBankNameId = @NomineeBankNameId
+                                    
                                      where Id=@Id   
                                  ";
                         SqlCommand cmdInsert = new SqlCommand(sqlText, currConn, transaction);
@@ -174,6 +183,8 @@ namespace SymServices.PF
                         cmdInsert.Parameters.AddWithValue("@Name", vm.Name);
                         cmdInsert.Parameters.AddWithValue("@Department", vm.Department);
                         cmdInsert.Parameters.AddWithValue("@Designation", vm.Designation);
+                        cmdInsert.Parameters.AddWithValue("@Project", vm.Project ?? "");
+                        cmdInsert.Parameters.AddWithValue("@Section", vm.Section ?? "");
                         cmdInsert.Parameters.AddWithValue("@DateOfBirth", vm.DateOfBirth);
                         cmdInsert.Parameters.AddWithValue("@JoinDate", vm.JoinDate);
 
@@ -243,6 +254,8 @@ namespace SymServices.PF
                                     , [Name]
                                     , [Department]
                                     , [Designation]
+                                    , [Project]
+                                    , [Section]
                                     , [DateOfBirth]
                                     , [JoinDate]
                                     , [ResignDate]
@@ -297,6 +310,8 @@ namespace SymServices.PF
                                     , @Name
                                     , @Department
                                     , @Designation
+                                    , @Project
+                                    , @Section
                                     , @DateOfBirth
                                     , @JoinDate
                                     , @ResignDate
@@ -350,6 +365,8 @@ namespace SymServices.PF
                         cmdInsert.Parameters.AddWithValue("@Name", vm.Name);
                         cmdInsert.Parameters.AddWithValue("@Department", vm.Department ?? "1_18");
                         cmdInsert.Parameters.AddWithValue("@Designation", vm.Designation);
+                        cmdInsert.Parameters.AddWithValue("@Project", vm.Project ?? "");
+                        cmdInsert.Parameters.AddWithValue("@Section", vm.Section ?? "");
                         cmdInsert.Parameters.AddWithValue("@DateOfBirth", vm.DateOfBirth);
                         cmdInsert.Parameters.AddWithValue("@JoinDate", vm.JoinDate);
                         cmdInsert.Parameters.AddWithValue("@ResignDate", vm.ResignDate ?? "1990101");

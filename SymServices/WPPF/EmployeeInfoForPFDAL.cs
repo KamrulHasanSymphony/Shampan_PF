@@ -103,6 +103,8 @@ namespace SymServices.WPPF
                                      ,Name=@Name
                                      ,Department=@Department
                                      ,Designation =@Designation
+                                     ,Project=@Project
+                                     ,Section=@Section
                                      ,DateOfBirth=@DateOfBirth   
                                      ,JoinDate=@JoinDate                                                       
                                      ,IsActive=@IsActive 
@@ -156,6 +158,8 @@ namespace SymServices.WPPF
                         cmdInsert.Parameters.AddWithValue("@Name", vm.Name);
                         cmdInsert.Parameters.AddWithValue("@Department", vm.Department);
                         cmdInsert.Parameters.AddWithValue("@Designation", vm.Designation);
+                        cmdInsert.Parameters.AddWithValue("@Project", vm.Project ?? "");
+                        cmdInsert.Parameters.AddWithValue("@Section", vm.Section ?? "");
                         cmdInsert.Parameters.AddWithValue("@DateOfBirth", vm.DateOfBirth);
                         cmdInsert.Parameters.AddWithValue("@JoinDate", vm.JoinDate);
 
@@ -223,6 +227,8 @@ namespace SymServices.WPPF
                                     , [Name]
                                     , [Department]
                                     , [Designation]
+                                    , [Project]
+                                    , [Section]
                                     , [DateOfBirth]
                                     , [JoinDate]
                                     , [ResignDate]
@@ -277,6 +283,8 @@ namespace SymServices.WPPF
                                     , @Name
                                     , @Department
                                     , @Designation
+                                    , @Project
+                                    , @Section
                                     , @DateOfBirth
                                     , @JoinDate
                                     , @ResignDate
@@ -330,6 +338,8 @@ namespace SymServices.WPPF
                         cmdInsert.Parameters.AddWithValue("@Name", vm.Name);
                         cmdInsert.Parameters.AddWithValue("@Department", vm.Department ?? "1_18");
                         cmdInsert.Parameters.AddWithValue("@Designation", vm.Designation);
+                        cmdInsert.Parameters.AddWithValue("@Project", vm.Project ?? "");
+                        cmdInsert.Parameters.AddWithValue("@Section", vm.Section ?? "");
                         cmdInsert.Parameters.AddWithValue("@DateOfBirth", vm.DateOfBirth);
                         cmdInsert.Parameters.AddWithValue("@JoinDate", vm.JoinDate);
                         cmdInsert.Parameters.AddWithValue("@ResignDate", vm.ResignDate ?? "1990101");

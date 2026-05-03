@@ -2858,10 +2858,10 @@ order by SectionOrderNo ";
 
 
 
-            string Journal = @"Select JournalFor, JournalName,Nature,GroupName,COAID from AutoJournalSetup where BranchId=@BranchId";
+            string Journal = @"Select JournalFor, JournalName,Nature,GroupName,COAID from AutoJournalSetup where BranchId=@BranchId and JournalFor=@JournalFor";
             SqlCommand cmdj = new SqlCommand(Journal, currConn, transaction);
-            cmdj.Parameters.AddWithValue("JournalFor", TransactionForm);
-            cmdj.Parameters.AddWithValue("BranchId", BranchId);
+            cmdj.Parameters.AddWithValue("@JournalFor", 1);
+            cmdj.Parameters.AddWithValue("@BranchId", BranchId);
             SqlDataAdapter adapterj = new SqlDataAdapter(cmdj);
             DataTable dtj = new DataTable();
             adapterj.Fill(dtj);
