@@ -658,6 +658,8 @@ FROM  PFSettlements  pfs
                     vm.EmployeeProfitRatio = Convert.ToDecimal(dr["EmployeeProfitRatio"]);
                     vm.EmployerProfitRatio = Convert.ToDecimal(dr["EmployerProfitRatio"]);
 
+                    vm.Loan = dr["Loan"] == DBNull.Value ? 0 : Convert.ToDecimal(dr["Loan"]);
+
 
                     vm.EmpName = dr["EmpName"].ToString();
                     vm.Code = dr["Code"].ToString();
@@ -885,7 +887,8 @@ Id
 ,@Post
 ,@Remarks,@IsActive,@IsArchive,@CreatedBy,@CreatedAt,@CreatedFrom,@Loan
 ) 
-";
+
+UPDATE EmployeeLeftInformation SET IsActive = 0 , IsArchive = 1 WHERE EmployeeId = @EmployeeId";
 
                     #endregion SqlText
                     #region SqlExecution

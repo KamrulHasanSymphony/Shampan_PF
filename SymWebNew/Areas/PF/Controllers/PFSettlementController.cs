@@ -269,7 +269,7 @@ namespace SymWebUI.Areas.PF.Controllers
                     Session["result"] = result[0] + "~" + result[1];
                     if (result[0].ToLower() == "success")
                     {
-                        return RedirectToAction("Edit", new { id = result[2] });
+                        return RedirectToAction("Index");
                     }
                     else
                     {
