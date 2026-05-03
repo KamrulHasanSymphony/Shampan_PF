@@ -769,7 +769,7 @@ namespace SymServices.PF
                     EmployeeInfoForPFVM.Name = dr["Name"].ToString();
                     EmployeeInfoForPFVM.Department = dr["Department"].ToString();
                     EmployeeInfoForPFVM.Designation = dr["Designation"].ToString();
-                    //EmployeeInfoForPFVM.Project = dr["Project"].ToString();
+                    EmployeeInfoForPFVM.Project = dr["Project"].ToString();
                     //EmployeeInfoForPFVM.Section = dr["Section"].ToString();
                     EmployeeInfoForPFVM.DateOfBirth = dr["DateOfBirth"].ToString();
                     EmployeeInfoForPFVM.JoinDate = dr["JoinDate"].ToString();
