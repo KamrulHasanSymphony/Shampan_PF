@@ -2357,8 +2357,8 @@ order by SectionOrderNo ";
                  Grade,Designation,Department,ve.UnitName,ve.BasicSalary, ISNULL((ve.BasicSalary*.1),0) Amount,0 FYDId 
                  from ViewEmployeeInformation ve Left Outer Join PFDetails pd on pd.EmployeeId=ve.EmployeeId and FiscalYearDetailId=@FiscalYearDetailId  where 1=1 AND ve.IsActive=1 AND ve.IsArchive=0 ";
 
-                //if (ProjectId != "0_0" && ProjectId != "0" && ProjectId != "" && ProjectId != "null" && ProjectId != null)
-                //    sqlText += @" and ve.ProjectId='" + ProjectId + "'";
+                if (ProjectId != "0_0" && ProjectId != "0" && ProjectId != "" && ProjectId != "null" && ProjectId != null)
+                    sqlText += @" and ve.ProjectId='" + ProjectId + "'";
                 if (DepartmentId != "0_0" && DepartmentId != "0" && DepartmentId != "" && DepartmentId != "null" && DepartmentId != null)
                     sqlText += @" and ve.DepartmentId='" + DepartmentId + "'";
                 //if (SectionId != "0_0" && SectionId != "0" && SectionId != "" && SectionId != "null" && SectionId != null)
@@ -2382,6 +2382,8 @@ order by SectionOrderNo ";
                 objComm.CommandType = CommandType.Text;
                 SqlDataAdapter da = new SqlDataAdapter(objComm);
                 da.SelectCommand.Parameters.AddWithValue("@FiscalYearDetailId", fid);
+                if (ProjectId != "0_0" && ProjectId != "0" && ProjectId != "" && ProjectId != "null" && ProjectId != null)
+                    da.SelectCommand.Parameters.AddWithValue("@ProjectId", ProjectId);
 
                 da.Fill(dt);
                 dt.Columns.Add("Fiscal Period");
