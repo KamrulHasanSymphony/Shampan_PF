@@ -186,7 +186,7 @@ namespace SymWebUI.Areas.PF.Controllers
             {
                 //Convert.ToString(c.Id)
                 "", c.Code, c.EmpName, c.Designation, c.Department, c.BasicSalary.ToString(), c.EmployeePFValue.ToString(),
-                c.EmployeerPFValue.ToString(),
+                c.EmployeerPFValue.ToString(),c.Remarks
             });
             return Json(new
             {

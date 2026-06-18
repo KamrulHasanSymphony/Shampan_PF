@@ -116,6 +116,7 @@ namespace SymServices.PF
             ,pfd.GrossSalary
             ,pfd.EmployeePFValue
             ,pfd.EmployeerPFValue
+            ,pfd.Remarks
             FROM PFDetails pfd
             LEFT OUTER JOIN PFHeader pf ON pf.Id = pfd.PFHeaderId 
 ";
@@ -173,6 +174,7 @@ namespace SymServices.PF
                     vm.Section = dr["Section"].ToString();
                     vm.Project = dr["Project"].ToString();
                     vm.PeriodName = dr["PeriodName"].ToString();
+                    vm.Remarks = dr["Remarks"].ToString();
                     vm.BasicSalary = Convert.ToDecimal(dr["BasicSalary"]);
                     vm.EmployeePFValue = Convert.ToDecimal(dr["EmployeePFValue"]);
                     vm.EmployeerPFValue = Convert.ToDecimal(dr["EmployeerPFValue"]);
