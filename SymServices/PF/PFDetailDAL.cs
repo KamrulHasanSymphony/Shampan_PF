@@ -2354,7 +2354,7 @@ order by SectionOrderNo ";
                 #region sql statement
                 sqlText = @"
                  Select ve.Code EmpCode, ve.EmpName, JoinDate, 0 GradeSL,0 
-                 Grade,Designation,Department,ve.UnitName,ve.BasicSalary, ISNULL((ve.BasicSalary*.1),0) Amount,0 FYDId 
+                 Grade,Designation,Department,ve.UnitName,ve.BasicSalary, ISNULL((ve.BasicSalary*.1),0) Amount,0 FYDId, pd.Remarks
                  from ViewEmployeeInformation ve Left Outer Join PFDetails pd on pd.EmployeeId=ve.EmployeeId and FiscalYearDetailId=@FiscalYearDetailId  where 1=1 AND ve.IsActive=1 AND ve.IsArchive=0 ";
 
                 if (ProjectId != "0_0" && ProjectId != "0" && ProjectId != "" && ProjectId != "null" && ProjectId != null)
@@ -2743,7 +2743,7 @@ order by SectionOrderNo ";
                                     vm.EmployeePFValue = EmployeeContribution;
                                     vm.EmployeerPFValue = EmployerContribution;
                                     vm.Post = false;
-                                    vm.Remarks = "";
+                                    vm.Remarks = item["Remarks"].ToString();
                                     vm.IsActive = true;
                                     vm.IsArchive = false;
                                     vm.CreatedBy = avm.CreatedAt;
@@ -3100,7 +3100,7 @@ order by SectionOrderNo ";
                 #region sql statement
                 sqlText = @"
                  Select ve.Code EmpCode, ve.EmpName, JoinDate, 0 GradeSL,0 
-                 Grade,Designation,Department,ve.UnitName,ve.BasicSalary, ISNULL((ve.BasicSalary*.1),0) EmployeeContribution,ISNULL((ve.BasicSalary*.1),0) EmployerContribution,ISNULL((ve.BasicSalary*.1),0) Loan,0 FYDId 
+                 Grade,Designation,Department,ve.UnitName,ve.BasicSalary, ISNULL((ve.BasicSalary*.1),0) EmployeeContribution,ISNULL((ve.BasicSalary*.1),0) EmployerContribution,ISNULL((ve.BasicSalary*.1),0) Loan,0 FYDId, Remarks
                  from ViewEmployeeInformation ve Left Outer Join PFDetails pd on pd.EmployeeId=ve.EmployeeId and FiscalYearDetailId=@FiscalYearDetailId  where 1=1 AND ve.IsActive=1 AND ve.IsArchive=0 ";
 
                 //if (ProjectId != "0_0" && ProjectId != "0" && ProjectId != "" && ProjectId != "null" && ProjectId != null)
